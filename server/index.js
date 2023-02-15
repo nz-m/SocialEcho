@@ -2,7 +2,11 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const morgan = require("morgan");
+
 dotenv.config();
 
 // internal imports
@@ -21,7 +25,8 @@ mongoose
   })
   .then(() => console.log("Connected to DB!"))
   .catch((err) => console.log(err));
-
+app.use(cors());
+app.use(morgan("dev"));
 // request parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -29,6 +34,14 @@ app.use(express.urlencoded({ extended: true }));
 // user routes
 const userRouter = require("./routes/userRouter");
 app.use("/users", userRouter);
+
+// post routes
+const postRouter = require("./routes/postRouter");
+app.use("/posts", postRouter);
+
+//body parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //parse cookies
 app.use(cookieParser(process.env.COOKIE_SECRET));
