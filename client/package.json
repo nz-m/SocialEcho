@@ -18,6 +18,11 @@
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
     "redux": "^4.2.1",
+    "react-icons": "^4.7.1",
+    "animate.css": "^4.1.1",
+    "daisyui": "^2.50.1",
+    "@headlessui/react": "^1.7.11",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
