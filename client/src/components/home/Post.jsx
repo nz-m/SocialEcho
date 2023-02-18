@@ -1,7 +1,7 @@
 import React from "react";
-import {AiOutlineLike} from 'react-icons/ai'
 import {MdOutlineReport} from 'react-icons/md'
-import {AiOutlineComment,AiOutlineSave} from 'react-icons/ai'
+
+import { HiOutlineHandThumbUp,HiOutlineChatBubbleOvalLeft,HiOutlineBookmarkSquare} from "react-icons/hi2";
 const Post = ({
   username,
   avatarUrl,
@@ -44,12 +44,12 @@ const Post = ({
           // add slow loading image
         />
         <div className="flex items-center justify-between mt-4">
-          <div className="flex gap-2">
-          <p className="flex items-center text-xl cursor-pointer gap-1"> <AiOutlineLike/> 2</p>
-          <p className="flex items-center text-xl cursor-pointer gap-1"> <AiOutlineComment/> 2</p>
+          <div className="flex items-center gap-2">
+          <p className="flex items-center text-xl cursor-pointer gap-1"> <HiOutlineHandThumbUp/> 2</p>
+          <p className="flex items-center text-xl cursor-pointer gap-1"> <HiOutlineChatBubbleOvalLeft/> 2</p>
           </div>
-          <div className="flex gap-2">
-          <p className="flex items-center text-xl cursor-pointer gap-1"> <AiOutlineSave/>Save</p>
+          <div className="flex items-center gap-2">
+          <p className="flex items-center text-xl cursor-pointer gap-1"> <HiOutlineBookmarkSquare/>Save</p>
           <p className="flex items-center text-xl cursor-pointer gap-1"> <MdOutlineReport/>Report</p>
          
           </div>
