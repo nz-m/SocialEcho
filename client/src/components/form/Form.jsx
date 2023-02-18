@@ -36,7 +36,7 @@ const Form = () => {
 
   return (
     <div>
-      <h1>Create post</h1>
+     
       <form>
         <label htmlFor="title">Title</label>
         <input

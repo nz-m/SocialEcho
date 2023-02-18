@@ -34,7 +34,7 @@ const Post = ({
      
       <div>
         <p className="text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin</p>
-        <img className="w-full rounded-xl mt-3"
+        <img className="w-[1200px] h-[300px] rounded-xl mt-3"
           src={
             "https://a-static.besthdwallpaper.com/alone-in-unknown-world-wallpaper-1600x900-33874_47.jpg"
           }

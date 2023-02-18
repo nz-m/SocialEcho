@@ -1,4 +1,5 @@
 import React from "react";
+import PostCreate from "../auth/PostCreate";
 import Form from "../form/Form";
 import Post from "../home/Post";
 
@@ -12,13 +13,13 @@ const MainSection = ({ communityName }) => {
         </h1>
         <div className="flex flex-col mt-4">
           <div className="mb-4">
-            Post creation form goes here
-            <Form />
+            
+           <PostCreate/>
           </div>
 
-          <div className="mt-4">
-
-            Recent post form this community
+          <div className="mt-4 flex flex-col gap-4">
+<p className="text-xl font-semibold my-5"> Recent post form this community</p>
+           
 
             {/* Add other community components */}
             <Post />
