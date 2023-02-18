@@ -8,7 +8,8 @@ import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
-    <Routes>
+    <div className="bg-[#f6f7f9]">
+       <Routes>
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/" element={<Home />} />
       <Route path="/community" element={<CommunityPage />} />
@@ -18,6 +19,8 @@ const App = () => {
 
       <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
+    </div>
+ 
   );
 };
 

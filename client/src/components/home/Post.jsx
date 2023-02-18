@@ -13,7 +13,7 @@ const Post = ({
   dislikes,
 }) => {
   return (
-    <div className="px-6 py-6  mx-auto rounded-xl shadow-md border border-gray-100">
+    <div className="px-6 py-6  mx-auto rounded-xl shadow-xl bg-white border border-gray-100">
       <div className="flex justify-between">
       <div className="flex gap-2">
         <img className="rounded-full overflow-hidden"
@@ -34,7 +34,7 @@ const Post = ({
      
       <div>
         <p className="text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin</p>
-        <img className="w-full object-cover rounded-xl mt-3"
+        <img className="w-full rounded-xl mt-3"
           src={
             "https://a-static.besthdwallpaper.com/alone-in-unknown-world-wallpaper-1600x900-33874_47.jpg"
           }
