@@ -15,7 +15,7 @@ const PostCreate = () => {
     setIsOpen(true);
   }
   return (
-    <div className="w-[800px] items-start mt-10 border border-gray-200 shadow-md px-4 py-4 rounded-xl">
+    <div className="w-[900px] items-start  bg-white border border-gray-200 shadow-md px-4 py-4 rounded-xl">
       <img className="w-10" src={rownok} alt="user image" />
       <div className="flex gap-5 items-center">
         <textarea
