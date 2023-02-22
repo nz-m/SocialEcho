@@ -8,19 +8,18 @@ const API = axios.create({
 });
 
 API.interceptors.request.use((req) => {
-  if (localStorage.getItem("profile")) {
-    req.headers.Authorization = `Bearer ${
-      JSON.parse(localStorage.getItem("profile")).token
-    }`;
+  const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
+  if (accessToken) {
+    req.headers.Authorization = `Bearer ${accessToken}`;
   }
   return req;
 });
 
+// remove later
 export const fetchPosts = () => API.get("/posts");
 export const createPost = (newPost) => API.post("/posts", newPost);
 
 // sign in
-
 export const signIn = (formData) => {
   return API.post("/users/signin", formData)
     .then((res) => {
@@ -34,6 +33,17 @@ export const signIn = (formData) => {
 // Sign Up
 export const signUp = (formData) => {
   return API.post("/users/signup", formData)
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};
+
+// logout
+export const logout = (refreshToken) => {
+  return API.post("/users/logout", { refreshToken })
     .then((res) => {
       return { error: null, data: res.data };
     })

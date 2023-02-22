@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import { signUpAction } from "../../actions/signUpAction";
+import { signUpAction } from "../../actions/authActions";
 import { useSelector } from "react-redux";
 
 const SignupForm = () => {
