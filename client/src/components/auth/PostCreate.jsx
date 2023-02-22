@@ -20,7 +20,7 @@ const PostCreate = () => {
       <div className="flex gap-5 items-center">
         <textarea
           className="px-2 py-2 outline-none font-medium"
-          placeholder="What happen to you ?"
+          placeholder="What's on your mind"
           name=""
           id=""
           cols="100"
@@ -110,7 +110,9 @@ const PostCreate = () => {
           <RiFileGifFill className="text-3xl cursor-pointer" />
           <FiSmile className="text-3xl cursor-pointer" />
         </div>
-        <button className="btn btn-sm btn-primary capitalize rounded-full">Create Post</button>
+        <button className="btn btn-sm btn-primary capitalize rounded-full">
+          Create Post
+        </button>
       </div>
     </div>
   );

@@ -3,24 +3,26 @@ import Home from "./pages/Home";
 import CommunityPage from "./pages/CommunityPage";
 import Moderator from "./pages/Moderator";
 import SignupForm from "./components/auth/SignupForm";
+import SignIn from "./components/auth/SignIn";
 import ProfilePage from "./pages/ProfilePage";
 import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
     <div className="bg-[#f6f7f9]">
-       <Routes>
-      <Route path="/signup" element={<SignupForm />} />
-      <Route path="/" element={<Home />} />
-      <Route path="/community" element={<CommunityPage />} />
-      <Route path="/profile" element={<ProfilePage />} />
-      <Route path="/community/:id" element={<CommunityPage />} />
-      <Route path="/community/moderator" element={<Moderator />} />
+      <Routes>
+        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/community" element={<CommunityPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/community/:id" element={<CommunityPage />} />
+        <Route path="/community/moderator" element={<Moderator />} />
 
-      <Route path="*" element={<h1>404 Not Found</h1>} />
-    </Routes>
+        <Route path="*" element={<h1>404 Not Found</h1>} />
+      </Routes>
     </div>
- 
   );
 };
 
