@@ -1,8 +1,8 @@
 const { check, validationResult } = require("express-validator");
 const User = require("../../models/User");
-const { unlink } = require("fs");
 const createError = require("http-errors");
-
+const path = require("path");
+const fs = require("fs");
 // add user
 
 const addUserValidator = [
@@ -23,7 +23,7 @@ const addUserValidator = [
           throw new Error("Email already in use");
         }
       } catch (err) {
-        throw new Error(err.message);
+        throw err;
       }
     }),
   check(
@@ -42,21 +42,25 @@ const addUserValidatorHandler = (req, res, next) => {
   if (Object.keys(mappedErrors).length === 0) {
     next();
   } else {
-    // // remove uploaded file
-    // if (req.files.length > 0) {
-    //   const { filename } = req.files[0];
-    //   unlink.join(
-    //     __dirname,
-    //     `../../public/uploads/avatars/${filename}`,
-    //     (err) => {
-    //       if (err) {
-    //         console.log(err);
-    //       }
-    //     }
-    //   );
-    // }
-    // return errors
-    res.status(400).json({ errors: mappedErrors });
+    // remove uploaded file
+    if (req.files && req.files.length > 0) {
+      const { filename } = req.files[0];
+      const filePath = path.join(
+        __dirname,
+        `../../assets/userAvatars/${filename}`
+      );
+      // delete file from server if validation fails
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error(err);
+        }
+        console.log(`${filePath} was deleted`);
+      });
+    }
+
+    res
+      .status(400)
+      .json({ errors: Object.values(mappedErrors).map((error) => error.msg) });
   }
 };
 

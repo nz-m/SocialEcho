@@ -1,4 +1,4 @@
-import * as api from "../api";
+import * as api from "../api/authAPI";
 
 // action creators
 
@@ -10,4 +10,3 @@ export const getPosts = () => async (dispatch) => {
     console.log(error.message);
   }
 };
-
