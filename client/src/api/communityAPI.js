@@ -15,8 +15,48 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const getCommunity = (name) => {
-  return API.get(`/communities/${name}`)
+export const getCommunity = (communityName) => {
+  return API.get(`/communities/${communityName}`)
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};
+
+export const getJoinedCommunities = () => {
+  return API.get("/communities/member")
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};
+
+export const getNotJoinedCommunities = () => {
+  return API.get("/communities/notmember")
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};
+
+export const joinCommunity = (communityName) => {
+  return API.post(`/communities/${communityName}/join`)
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};
+
+export const leaveCommunity = (communityName) => {
+  return API.post(`/communities/${communityName}/leave`)
     .then((res) => {
       return { error: null, data: res.data };
     })

@@ -6,13 +6,13 @@ export const tokenMiddleware = (store) => (next) => async (action) => {
     const state = store.getState();
     const token = state.auth.accessToken;
     const expiresIn = token ? jwt_decode(token).exp * 1000 - Date.now() : 0;
-    if (!token || expiresIn < 3570000) {
+    if (!token || expiresIn < 300000) {
       // Refresh token if it does not exist or expires in less than 5 minutes
       const refreshToken = state.auth.refreshToken;
       try {
         await store.dispatch(refreshTokenAction(refreshToken));
       } catch (error) {
-        store.dispatch({ type: "REFRESH_TOKEN_FAIL" });
+        store.dispatch({ type: "LOGOUT" });
       }
     }
   }

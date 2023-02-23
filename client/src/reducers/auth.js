@@ -44,6 +44,7 @@ const authReducer = (state = initialState, action) => {
       };
 
     case REFRESH_TOKEN_FAIL:
+      localStorage.clear();
       return {
         ...state,
       };

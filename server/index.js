@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const passport = require("passport");
+const bodyParser = require("body-parser");
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ mongoose
 // use middlewares
 app.use(cors());
 app.use(morgan("dev"));
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
