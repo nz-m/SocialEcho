@@ -50,7 +50,7 @@ async function signin(req, res) {
     res.status(200).json({
       accessToken,
       refreshToken,
-      // send users id, name and email
+      accessTokenUpdatedAt: new Date().toLocaleString(),
       user: {
         id: existingUser._id,
         name: existingUser.name,
@@ -176,9 +176,9 @@ async function refreshToken(req, res) {
 
     // Return new access token
     return res.status(200).json({
-      success: true,
       accessToken,
       refreshToken: existingToken.refreshToken,
+      accessTokenUpdatedAt: new Date().toLocaleString(),
     });
   } catch (err) {
     console.error(err);

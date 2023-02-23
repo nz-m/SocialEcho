@@ -43,6 +43,9 @@ app.use("/users", userRouter);
 const postRouter = require("./routes/postRouter");
 app.use("/posts", postRouter);
 
+const communityRouter = require("./routes/communityRouter");
+app.use("/community", communityRouter);
+
 // 404 error handling
 app.use(notFoundHandler);
 

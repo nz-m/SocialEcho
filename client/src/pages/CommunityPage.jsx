@@ -7,9 +7,11 @@ import { useEffect } from "react";
 import Leftbar from "../components/home/LeftBar";
 import MainSection from "../components/community/MainSection";
 import RightBar from "../components/community/RightBar";
+import { useParams } from "react-router-dom";
 
 const CommunityPage = () => {
   const dispatch = useDispatch();
+  const { name } = useParams();
 
   useEffect(() => {
     dispatch(getPosts());
@@ -30,19 +32,12 @@ const CommunityPage = () => {
       </div>
       <h1>Community Page</h1>
       <Form /> */}
-      <div className=" mx-6">
-      <div className="flex justify-between">
-         
-          
-              <Leftbar />
-           
-        
-              <MainSection />
-         
-          
-              <RightBar />
-           
-         
+      <div className="mx-6">
+        <div className="flex justify-between">
+          This is the community page for {name}
+          <Leftbar />
+          <MainSection />
+          <RightBar />
         </div>
       </div>
     </div>
