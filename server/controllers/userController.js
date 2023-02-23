@@ -168,12 +168,6 @@ async function refreshToken(req, res) {
       expiresIn: "1h",
     });
 
-    // Update expiry time of existing refresh token
-    existingToken.refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, {
-      expiresIn: "7d",
-    });
-    await existingToken.save();
-
     // Return new access token
     return res.status(200).json({
       accessToken,

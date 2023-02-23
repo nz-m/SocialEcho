@@ -28,8 +28,7 @@ export const signUpAction = (formData, navigate) => async (dispatch) => {
         type: SIGNUP,
         data,
       });
-      console.log(data.message);
-      // navigate("/");
+      navigate("/signin");
     }
   } catch (error) {
     console.log(error);
@@ -44,7 +43,6 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
       console.log(error.response.data.errors);
       // handle error
     } else {
-      console.log(data);
       dispatch({
         type: SIGNIN,
         data,

@@ -20,9 +20,9 @@ const Leftbar = () => {
   };
 
   const communityLinks = [
-    { href: "/community/education", label: "Education" },
-    { href: "/community/tech", label: "Tech" },
-    { href: "/community/music", label: "Music" },
+    { href: "/community/Education", label: "Education" },
+    { href: "/community/Technology", label: "Technology" },
+    { href: "/community/Music", label: "Music" },
   ];
 
   const links = [

@@ -8,7 +8,6 @@ const SIGNUP = "SIGNUP";
 const SIGNIN = "SIGNIN";
 const LOGOUT = "LOGOUT";
 
-const SET_REFRESH_TOKEN = "SET_REFRESH_TOKEN";
 const REFRESH_TOKEN_SUCCESS = "REFRESH_TOKEN_SUCCESS";
 const REFRESH_TOKEN_FAIL = "REFRESH_TOKEN_FAIL";
 
@@ -32,23 +31,21 @@ const authReducer = (state = initialState, action) => {
         accessToken: null,
         refreshToken: null,
       };
-    case SET_REFRESH_TOKEN || REFRESH_TOKEN_SUCCESS:
+    case REFRESH_TOKEN_SUCCESS:
       const profile = JSON.parse(localStorage.getItem("profile"));
-      profile.refreshToken = action?.data?.refreshToken;
-      profile.accessToken = action?.data?.accessToken;
+      profile.refreshToken = action?.payload?.refreshToken;
+      profile.accessToken = action?.payload?.accessToken;
+      profile.accessTokenUpdatedAt = action?.payload?.accessTokenUpdatedAt;
       localStorage.setItem("profile", JSON.stringify(profile));
       return {
         ...state,
-        refreshToken: action?.data?.refreshToken,
-        accessToken: action?.data?.accessToken,
+        refreshToken: action?.payload?.refreshToken,
+        accessToken: action?.payload?.accessToken,
       };
 
     case REFRESH_TOKEN_FAIL:
-      localStorage.clear();
       return {
         ...state,
-        refreshToken: action?.data?.refreshToken,
-        accessToken: action?.data?.accessToken,
       };
     default:
       return state;

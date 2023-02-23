@@ -1,23 +1,21 @@
 import React from "react";
 import Form from "../components/form/Form";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { getPosts } from "../actions/posts";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import Leftbar from "../components/home/LeftBar";
 import MainSection from "../components/community/MainSection";
 import RightBar from "../components/community/RightBar";
 import { useParams } from "react-router-dom";
+import { getCommunityAction } from "../actions/communityAction";
 
 const CommunityPage = () => {
   const dispatch = useDispatch();
   const { name } = useParams();
-
   useEffect(() => {
-    dispatch(getPosts());
-  }, [dispatch]);
+    dispatch(getCommunityAction(name));
+  }, [dispatch, name]);
 
-  const posts = useSelector((state) => state.posts);
+  const communityData = useSelector((state) => state.communityData);
 
   return (
     <div>
