@@ -3,6 +3,10 @@ const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const morgan = require("morgan");
+const passport = require("passport");
+
 dotenv.config();
 
 // internal imports
@@ -22,16 +26,25 @@ mongoose
   .then(() => console.log("Connected to DB!"))
   .catch((err) => console.log(err));
 
-// request parser
+// use middlewares
+app.use(cors());
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(passport.initialize());
+require("./config/passport.js");
 
 // user routes
 const userRouter = require("./routes/userRouter");
 app.use("/users", userRouter);
 
-//parse cookies
-app.use(cookieParser(process.env.COOKIE_SECRET));
+// post routes
+const postRouter = require("./routes/postRouter");
+app.use("/posts", postRouter);
+
+const communityRouter = require("./routes/communityRouter");
+app.use("/community", communityRouter);
 
 // 404 error handling
 app.use(notFoundHandler);
