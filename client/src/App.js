@@ -17,8 +17,9 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/community" element={<CommunityPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/community/:id" element={<CommunityPage />} />
-        <Route path="/community/moderator" element={<Moderator />} />
+        <Route path="/community/:name" element={<CommunityPage />} />
+
+        <Route path="/community/:name/moderator" element={<Moderator />} />
 
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>

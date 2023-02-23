@@ -1,6 +1,4 @@
 import React from "react";
-// import ProfilePicture from "../components/profile/ProfilePicture";
-// import Posts from "../components/profile/Posts";
 import Post from "../components/home/Post";
 import Leftbar from "../components/home/LeftBar";
 import UserProfile from "../components/home/UserProfile";
