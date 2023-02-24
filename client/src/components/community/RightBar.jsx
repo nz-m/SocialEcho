@@ -1,14 +1,10 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getCommunityAction,
-  leaveCommunityAction,
-  getJoinedCommunitiesAction,
-  getNotJoinedCommunitiesAction,
-} from "../../actions/communityActions";
+import { getCommunityAction } from "../../actions/communityActions";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { leaveFetchData } from "../../middlewares/joinLeaveFetch";
 
 const RightBar = () => {
   const dispatch = useDispatch();
@@ -29,9 +25,7 @@ const RightBar = () => {
   const { name, _id, description, posts, members, moderators, image, rules } =
     communityData;
   const leaveCommunityHandler = (communityName) => {
-    dispatch(leaveCommunityAction(communityName));
-    dispatch(getJoinedCommunitiesAction());
-    dispatch(getNotJoinedCommunitiesAction());
+    dispatch(leaveFetchData(communityName));
     navigate("/");
   };
 

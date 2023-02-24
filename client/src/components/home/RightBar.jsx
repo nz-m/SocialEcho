@@ -1,13 +1,8 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import {
-  getNotJoinedCommunitiesAction,
-  joinCommunityAction,
-  getJoinedCommunitiesAction,
-} from "../../actions/communityActions";
-
+import { getNotJoinedCommunitiesAction } from "../../actions/communityActions";
+import { joinFetchData } from "../../middlewares/joinLeaveFetch";
 const RightBar = () => {
   const dispatch = useDispatch();
 
@@ -25,9 +20,7 @@ const RightBar = () => {
   }
 
   const joinCommumityHandler = (communityName) => {
-    dispatch(joinCommunityAction(communityName));
-    dispatch(getNotJoinedCommunitiesAction());
-    dispatch(getJoinedCommunitiesAction());
+    dispatch(joinFetchData(communityName));
   };
 
   return (

@@ -3,29 +3,25 @@ const Schema = mongoose.Schema;
 
 const postSchema = new Schema(
   {
-    title: {
+    body: {
       type: String,
       required: true,
       trim: true,
     },
-    description: {
+    fileUrl: {
       type: String,
-      required: true,
       trim: true,
     },
-    image: {
-      type: String,
-    },
-    video: {
-      type: String,
-    },
+
     community: {
       type: Schema.Types.ObjectId,
       ref: "Community",
+      required: true,
     },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     comments: [
       {
