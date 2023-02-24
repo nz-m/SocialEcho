@@ -30,6 +30,7 @@ mongoose
 // use middlewares
 app.use(cors());
 app.use(morgan("dev"));
+app.use("/assets/userFiles", express.static(__dirname + "/assets/userFiles"));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

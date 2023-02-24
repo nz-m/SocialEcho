@@ -73,7 +73,6 @@ function getUsers(req, res, next) {
 
 // add user
 async function addUser(req, res, next) {
-  console.log(req.body);
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 

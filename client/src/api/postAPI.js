@@ -12,24 +12,8 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-// sign in
-export const signIn = (formData) => {
-  return API.post("/users/signin", formData, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
-};
-
-// Sign Up
-export const signUp = (formData) => {
-  return API.post("/users/signup", formData, {
+export const createPost = (formData) => {
+  return API.post("/posts", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -42,17 +26,8 @@ export const signUp = (formData) => {
     });
 };
 
-// logout
-export const logout = (refreshToken) => {
-  return API.post(
-    "/users/logout",
-    { refreshToken },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+export const getPosts = () => {
+  return API.get("/posts")
     .then((res) => {
       return { error: null, data: res.data };
     })

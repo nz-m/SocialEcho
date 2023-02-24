@@ -1,3 +1,6 @@
+//userData : {id: 'd8daff4ab66', name: 'Name', email: 'name@gmail.com', role: 'general'}
+
+
 const initialState = {
   userData: null,
   refreshToken: null,

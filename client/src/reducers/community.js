@@ -1,3 +1,6 @@
+// communityData : {_id: '614f07ec51a4c7',
+// name: 'Technology', description: 'A community for discussing technology and gadgets', ......}
+
 const initialState = {
   communityData: null,
   joinedCommunities: [],
@@ -15,33 +18,33 @@ const communityReducer = (state = initialState, action) => {
     case GET_COMMUNITY:
       return {
         ...state,
-        communityData: action?.payload,
+        communityData: action.payload || null,
       };
     case GET_JOINED_COMMUNITIES:
       return {
         ...state,
-        joinedCommunities: action?.payload,
+        joinedCommunities: action.payload || [],
       };
     case GET_NOT_JOINED_COMMUNITIES:
       return {
         ...state,
-        notJoinedCommunities: action?.payload,
+        notJoinedCommunities: action.payload || [],
       };
     case JOIN_COMMUNITY:
       return {
         ...state,
-        joinedCommunities: [...state.joinedCommunities, action?.payload],
+        joinedCommunities: [...state.joinedCommunities, action.payload],
         notJoinedCommunities: state.notJoinedCommunities.filter(
-          (community) => community.name !== action?.payload.name
+          (community) => community.name !== action.payload.name
         ),
       };
     case LEAVE_COMMUNITY:
       return {
         ...state,
         joinedCommunities: state.joinedCommunities.filter(
-          (community) => community.name !== action?.payload.name
+          (community) => community.name !== action.payload.name
         ),
-        notJoinedCommunities: [...state.notJoinedCommunities, action?.payload],
+        notJoinedCommunities: [...state.notJoinedCommunities, action.payload],
       };
 
     default:

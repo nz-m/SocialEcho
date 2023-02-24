@@ -30,15 +30,12 @@ const SignupForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
     formData.append("avatar", avatar);
     formData.append("role", "general");
-
-    console.log(formData);
 
     dispatch(signUpAction(formData, navigate));
   };
