@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const RefreshToken = require("../models/RefreshToken");
-
+// TODO - Invalidate old tokens/JTI
 // sign in
 async function signin(req, res) {
   const { email, password } = req.body;
@@ -78,12 +78,15 @@ async function addUser(req, res, next) {
 
   if (req.files && req.files.length > 0) {
     const { filename } = req.files[0];
+    const fileUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/assets/userAvatars/${filename}`;
     newUser = new User({
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword,
       role: req.body.role,
-      avatar: filename,
+      avatar: fileUrl,
     });
   } else {
     newUser = new User({

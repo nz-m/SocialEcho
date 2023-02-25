@@ -7,7 +7,8 @@ import {
   HiOutlineBookmarkSquare,
 } from "react-icons/hi2";
 const Post = ({ post }) => {
-  const { body, fileUrl, user, community } = post;
+ 
+  const { body, fileUrl, user, community, createdAt } = post;
 
   return (
     <div className="px-6 py-6  mx-auto rounded-xl shadow-xl bg-white border border-gray-100">
@@ -15,31 +16,30 @@ const Post = ({ post }) => {
         <div className="flex gap-2">
           <img
             className="rounded-full overflow-hidden"
-            src={fileUrl} // add slow loading image & separate logic for image and video
-            alt={`Nz's avatar`}
-            style={{ width: "50px", height: "50px" }}
+            src={user.avatar}
+            alt="user avatar"
+            style={{ width: "50px" }}
+            loading="lazy"
           />
           <div className="">
-            <p className="text-lg font-semibold">{user}</p>
-            <p className="text-sm text-gray-500">{community}</p>
+            <p className="text-lg font-semibold">{user.name}</p>
+            <p className="text-sm text-gray-500">{community.name}</p>
           </div>
         </div>
-        <p>9h ago</p>
+        <p>{createdAt}</p>
       </div>
 
       <div>
-        <p className="text-lg">
-          {body} 
-        </p>
-        <img
-          className="w-[1200px] h-[300px] rounded-xl mt-3"
-          src={
-            "https://a-static.besthdwallpaper.com/alone-in-unknown-world-wallpaper-1600x900-33874_47.jpg"
-          }
-          alt={`Nz's avatar`}
+        <p className="text-lg">{body}</p>
+        {fileUrl && (
+          <img
+            className="w-[600px] h-auto rounded-xl mt-3"
+            src={fileUrl}
+            alt={body}
+            loading="lazy"
+          />
+        )}
 
-          // add slow loading image
-        />
         <div className="flex items-center justify-between mt-4">
           <div className="flex items-center gap-2">
             <p className="flex items-center text-xl cursor-pointer gap-1">

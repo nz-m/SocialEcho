@@ -1,3 +1,7 @@
+const dayjs = require("dayjs");
+const relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
+
 const Post = require("../models/Post");
 
 const createPost = async (req, res) => {
@@ -34,8 +38,15 @@ const createPost = async (req, res) => {
 // get all posts
 const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find();
-    res.status(200).json(posts);
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .populate("user", "name avatar")
+      .populate("community", "name");
+    const formattedPosts = posts.map((post) => ({
+      ...post._doc,
+      createdAt: dayjs(post.createdAt).fromNow(),
+    }));
+    res.status(200).json(formattedPosts);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

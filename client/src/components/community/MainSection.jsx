@@ -1,6 +1,5 @@
 import React from "react";
 import PostForm from "../form/PostForm";
-import Post from "../home/Post";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getPostsAction } from "../../actions/postActions";
@@ -12,7 +11,6 @@ const MainSection = () => {
   }, [dispatch]);
 
   const community = useSelector((state) => state.community.communityData);
-  const posts = useSelector((state) => state.posts?.posts);
   if (!community) return null;
 
   return (
@@ -31,10 +29,6 @@ const MainSection = () => {
               {" "}
               Recent post form this community
             </p>
-
-            {posts?.map((post) => (
-              <Post key={post._id} post={post} />
-            ))}
           </div>
         </div>
       </div>
