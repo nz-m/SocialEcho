@@ -15,7 +15,7 @@ export const getCommunityAction = (communityName) => async (dispatch) => {
   }
 };
 
-export const getJoinedCommunitiesAction = () => async (dispatch) => {
+export const getJoinedCommunitiesAction = (callback) => async (dispatch) => {
   try {
     const { data } = await api.getJoinedCommunities();
     dispatch({
@@ -25,12 +25,16 @@ export const getJoinedCommunitiesAction = () => async (dispatch) => {
         requiresAuth: true,
       },
     });
+
+    if (callback) {
+      callback();
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getNotJoinedCommunitiesAction = () => async (dispatch) => {
+export const getNotJoinedCommunitiesAction = (callback) => async (dispatch) => {
   try {
     const { data } = await api.getNotJoinedCommunities();
     dispatch({
@@ -40,25 +44,33 @@ export const getNotJoinedCommunitiesAction = () => async (dispatch) => {
         requiresAuth: true,
       },
     });
+
+    if (callback) {
+      callback();
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
-export const joinCommunityAction = (communityName) => async (dispatch) => {
-  try {
-    const { data } = await api.joinCommunity(communityName);
-    dispatch({
-      type: "JOIN_COMMUNITY",
-      payload: data,
-      meta: {
-        requiresAuth: true,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const joinCommunityAction =
+  (communityName, callback) => async (dispatch) => {
+    try {
+      const { data } = await api.joinCommunity(communityName);
+      dispatch({
+        type: "JOIN_COMMUNITY",
+        payload: data,
+        meta: {
+          requiresAuth: true,
+        },
+      });
+      if (callback) {
+        callback();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const leaveCommunityAction = (communityName) => async (dispatch) => {
   try {

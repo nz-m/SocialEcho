@@ -31,6 +31,10 @@ mongoose
 app.use(cors());
 app.use(morgan("dev"));
 app.use("/assets/userFiles", express.static(__dirname + "/assets/userFiles"));
+app.use(
+  "/assets/userAvatars",
+  express.static(__dirname + "/assets/userAvatars")
+);
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

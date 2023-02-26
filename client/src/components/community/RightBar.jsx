@@ -69,7 +69,7 @@ const RightBar = () => {
           <span className="font-bold">Community Guidelines:</span>
 
           <ul className="list-disc list-inside">
-            {rules.map((rule) => (
+            {rules?.map((rule) => (
               <li key={rule._id}>{rule.rule}</li>
             ))}
           </ul>

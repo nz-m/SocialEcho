@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createPostAction } from "../../actions/postActions";
+import {
+  createPostAction,
+  getPostsAction,
+  getComPostsAction,
+} from "../../actions/postActions";
 import { useSelector } from "react-redux";
-
 
 const PostForm = () => {
   const community = useSelector((state) => state.community.communityData);
@@ -23,16 +26,23 @@ const PostForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     const formData = new FormData();
     formData.append("body", body);
     formData.append("community", community._id);
     formData.append("user", user.id);
     formData.append("file", file);
-    dispatch(createPostAction(formData));
-    setBody("");
-    setFile(null);
-    event.target.reset();
+    dispatch(
+      createPostAction(formData, () => {
+        dispatch(
+          getPostsAction(() => {
+            dispatch(getComPostsAction(community._id));
+          })
+        );
+        setBody("");
+        setFile(null);
+        event.target.reset();
+      })
+    );
   };
 
   return (
