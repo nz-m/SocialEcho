@@ -46,3 +46,19 @@ export const getComPostsAction = (id) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const deletePostAction = (id, callback) => async (dispatch) => {
+  try {
+    await api.deletePost(id);
+    dispatch({
+      type: "DELETE_POST",
+      payload: id,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+    if (callback) callback();
+  } catch (error) {
+    console.log(error);
+  }
+};

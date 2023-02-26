@@ -46,3 +46,13 @@ export const getComPosts = (id) => {
     });
 };
 
+export const deletePost = (id) => {
+  return API.delete(`/posts/${id}`)
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+}
+

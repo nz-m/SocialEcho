@@ -1,5 +1,7 @@
 import React from "react";
 import { MdOutlineReport } from "react-icons/md";
+import { deletePostAction } from "../../actions/postActions";
+import { useDispatch } from "react-redux";
 
 import {
   HiOutlineHandThumbUp,
@@ -7,8 +9,11 @@ import {
   HiOutlineBookmarkSquare,
 } from "react-icons/hi2";
 const Post = ({ post }) => {
- 
+  const dispatch = useDispatch();
   const { body, fileUrl, user, community, createdAt } = post;
+  const deleteHandler = () => {
+    dispatch(deletePostAction(post._id));
+  };
 
   return (
     <div className="px-6 py-6  mx-auto rounded-xl shadow-xl bg-white border border-gray-100">
@@ -62,6 +67,14 @@ const Post = ({ post }) => {
               <MdOutlineReport />
               Report
             </p>
+
+            <button
+              onClick={deleteHandler}
+              className="flex items-center text-xl cursor-pointer gap-1"
+            >
+              <MdOutlineReport />
+              Delete
+            </button>
           </div>
         </div>
       </div>
