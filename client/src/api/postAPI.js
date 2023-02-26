@@ -35,3 +35,14 @@ export const getPosts = () => {
       return { error: err, data: null };
     });
 };
+
+export const getComPosts = (id) => {
+  return API.get(`posts/${id}`)
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};
+

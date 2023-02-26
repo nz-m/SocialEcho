@@ -1,8 +1,12 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getNotJoinedCommunitiesAction } from "../../actions/communityActions";
-import { joinFetchData } from "../../middlewares/joinLeaveFetch";
+import {
+  getNotJoinedCommunitiesAction,
+  joinCommunityAction,
+  getJoinedCommunitiesAction,
+} from "../../actions/communityActions";
+
 const RightBar = () => {
   const dispatch = useDispatch();
 
@@ -20,16 +24,23 @@ const RightBar = () => {
   }
 
   const joinCommumityHandler = (communityName) => {
-    dispatch(joinFetchData(communityName));
+    dispatch(
+      joinCommunityAction(communityName, () => {
+        dispatch(
+          getJoinedCommunitiesAction(() => {
+            dispatch(getNotJoinedCommunitiesAction());
+          })
+        );
+      })
+    );
   };
-
   return (
     <div className="w-1/4 h-screen bg-gray-100">
       <div className="card">
         <div className="card-body">
           <h5 className="card-title mb-3">Suggested Communities</h5>
           <ul className="list-group">
-            {notJoinedCommunities.map((community) => (
+            {notJoinedCommunities?.map((community) => (
               <li
                 key={community._id}
                 className="list-group-item d-flex align-items-center"

@@ -100,9 +100,7 @@ async function joinCommunity(req, res) {
       { $push: { members: userId } },
       { new: true }
     );
-    res
-      .status(200)
-      .json(`You have joined the community ${community.name} successfully`);
+    res.status(200).json(community);
   } catch (error) {
     res.status(500).json({ message: "Error joining community", error });
   }
@@ -119,9 +117,7 @@ async function leaveCommunity(req, res) {
       { $pull: { members: userId } },
       { new: true }
     );
-    res
-      .status(200)
-      .json(`You have left the community ${community.name} successfully`);
+    res.status(200).json(community);
   } catch (error) {
     res.status(500).json({ message: "Error leaving community", error });
   }

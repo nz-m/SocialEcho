@@ -5,5 +5,6 @@ const fileUpload = require("../middlewares/post/fileUpload");
 
 router.get("/", postController.getPosts);
 router.post("/", fileUpload, postController.createPost);
+router.get("/:id", postController.getComPosts);
 
 module.exports = router;

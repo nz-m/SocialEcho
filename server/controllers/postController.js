@@ -52,7 +52,29 @@ const getPosts = async (req, res) => {
   }
 };
 
+// get all posts from a community
+const getComPosts = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const posts = await Post.find({ community: id })
+      .sort({ createdAt: -1 })
+      .populate("user", "name avatar")
+      .populate("community", "name");
+
+    const formattedPosts = posts.map((post) => ({
+      ...post._doc,
+      createdAt: dayjs(post.createdAt).fromNow(),
+    }));
+
+    res.status(200).json(formattedPosts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPosts,
   createPost,
+  getComPosts,
 };

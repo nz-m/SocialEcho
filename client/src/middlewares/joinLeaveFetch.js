@@ -1,3 +1,5 @@
+// REPLACED BY CALLBACKS IN ACTIONS
+
 import {
   getNotJoinedCommunitiesAction,
   joinCommunityAction,
