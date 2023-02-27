@@ -10,12 +10,20 @@ const initialState = {
   userData: null,
   refreshToken: null,
   accessToken: null,
+  signupErr: null,
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case SIGNUP:
-      return { ...state, userData: action.data };
+      return {
+        ...state,
+        userData: action.data.data,
+        refreshToken: action.data.refreshToken,
+        accessToken: action.data.accessToken,
+        signupErr: action.data
+      };
+
     case SIGNIN:
       const { user, accessToken, refreshToken } = action.data;
       localStorage.setItem("profile", JSON.stringify(action.data));

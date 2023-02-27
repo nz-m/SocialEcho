@@ -24,9 +24,10 @@ export const signUpAction = (formData, navigate) => async (dispatch) => {
     const response = await api.signUp(formData);
     const { error, data } = response;
     if (error) {
-      console.log(error.response.data.errors);
-
-      // handle error
+      dispatch({
+        type: SIGNUP,
+        data: error.response.data.errors,
+      });
     } else {
       dispatch({
         type: SIGNUP,
