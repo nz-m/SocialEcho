@@ -46,25 +46,35 @@ const PostForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="body">Share something with your community:</label>
-      <textarea
-        name="body"
-        id="body"
-        value={body}
-        onChange={handleBodyChange}
-      />
+    <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 shadow-md">
+      <div className="mb-4">
+        <label htmlFor="body" className="block text-gray-700 font-bold mb-2">
+          Share something with your community:
+        </label>
+        <textarea
+          name="body"
+          id="body"
+          value={body}
+          onChange={handleBodyChange}
+          className="resize-none border rounded-md p-2 w-full"
+        />
+      </div>
 
-      <label htmlFor="file">Image/Video:</label>
-      <input
-        name="file"
-        type="file"
-        id="file"
-        accept="image/*, video/*"
-        onChange={handleFileChange}
-      />
+      <div className="mb-4">
+        <label htmlFor="file" className="block text-gray-700 font-bold mb-2">
+          Image/Video:
+        </label>
+        <input
+          name="file"
+          type="file"
+          id="file"
+          accept="image/*, video/*"
+          onChange={handleFileChange}
+          className="border rounded-md p-2 w-full"
+        />
+      </div>
 
-      <button className="btn-sm btn-primary" type="submit">
+      <button className="bg-blue-500 hover:bg-blue-600 btn-sm text-white font-bold rounded-sm">
         Post
       </button>
     </form>

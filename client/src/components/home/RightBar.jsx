@@ -42,7 +42,7 @@ const RightBar = () => {
     );
   };
   return (
-    <div className="w-1/4 h-screen bg-gray-100">
+    <div className="w-3/12 h-screen bg-white sticky top-0">
       <div className="card">
         <div className="card-body">
           <h5 className="card-title mb-3">Suggested Communities</h5>

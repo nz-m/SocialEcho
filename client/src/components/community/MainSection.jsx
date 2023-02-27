@@ -43,7 +43,9 @@ const MainSection = () => {
             {loading ? (
               <p>Loading posts...</p>
             ) : (
-              <div>
+                <div
+                  className="mt-4 flex flex-col gap-4"
+                >
                 {communityPosts?.map((post) => (
                   <Post key={post._id} post={post} />
                 ))}

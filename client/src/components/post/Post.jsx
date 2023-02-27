@@ -16,7 +16,7 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="px-6 py-6  mx-auto rounded-xl shadow-xl bg-white border border-gray-100">
+    <div className="px-6 py-6 rounded-xl shadow-xl bg-white border border-gray-100">
       <div className="flex justify-between">
         <div className="flex gap-2">
           <img
@@ -36,14 +36,16 @@ const Post = ({ post }) => {
 
       <div>
         <p className="text-lg">{body}</p>
-        {fileUrl && (
-          <img
-            className="w-[600px] h-auto rounded-xl mt-3"
-            src={fileUrl}
-            alt={body}
-            loading="lazy"
-          />
-        )}
+        <div className="flex justify-center">
+          {fileUrl && (
+            <img
+              className="w-[800px] h-auto rounded-xl mt-3"
+              src={fileUrl}
+              alt={body}
+              loading="lazy"
+            />
+          )}
+        </div>
 
         <div className="flex items-center justify-between mt-4">
           <div className="flex items-center gap-2">
@@ -51,7 +53,7 @@ const Post = ({ post }) => {
             <Like post={post} />
             <button className="flex items-center text-xl gap-1">
               {" "}
-              <HiOutlineChatBubbleOvalLeft /> 2
+              <HiOutlineChatBubbleOvalLeft /> 0
             </button>
           </div>
           <div className="flex items-center gap-2">

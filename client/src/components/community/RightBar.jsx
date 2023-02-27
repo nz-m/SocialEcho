@@ -22,16 +22,16 @@ const RightBar = () => {
     // later add a loading spinner
   }
 
-  const { name, _id, description, posts, members, moderators, image, rules } =
-    communityData;
+  const { name, description, members, moderators, rules } = communityData;
   const leaveCommunityHandler = (communityName) => {
     dispatch(leaveFetchData(communityName));
     navigate("/");
   };
 
   return (
-    <div className="w-1/4 p-4">
-      <div className="bg-white rounded-md shadow-md p-4">
+    <div
+      className="w-1/4 p-4 h-screen bg-white sticky top-0">
+      <div className="bg-white rounded-md  p-4">
         <h2>A banner goes here</h2>
         <h2 className="text-lg font-bold mb-4">{name}</h2>
         <h3>{description}</h3>

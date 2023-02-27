@@ -6,7 +6,6 @@ import { signInAction } from "../../actions/authActions";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -64,20 +63,6 @@ const SignIn = () => {
             </div>
           </div>
 
-          {errorMessage && (
-            <p className="mt-2 text-sm text-red-600">{errorMessage}</p>
-          )}
-
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot your password?
-              </a>
-            </div>
-          </div>
 
           <div>
             <button
