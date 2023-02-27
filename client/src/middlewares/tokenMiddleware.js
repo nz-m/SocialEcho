@@ -11,8 +11,6 @@ export const tokenMiddleware = (store) => (next) => async (action) => {
       const refreshToken = state.auth.refreshToken;
       try {
         await store.dispatch(refreshTokenAction(refreshToken));
-
-        //TODO: after refreshing the token, update the state(that ware preloaded) with the new token
       } catch (error) {
         store.dispatch({ type: "LOGOUT" });
       }

@@ -86,6 +86,7 @@ const getComPosts = async (req, res) => {
 };
 
 // delete a post
+// auth is done in the client side, need to add here as well
 const deletePost = async (req, res) => {
   const { id } = req.params;
   try {
@@ -101,24 +102,29 @@ const likePost = async (req, res) => {
   const { userId } = req.body;
 
   try {
-    const post = await Post.findOneAndUpdate(
-      id,
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: id, likes: { $ne: userId } },
       { $addToSet: { likes: userId } },
       { new: true }
     )
-      .sort({ createdAt: -1 })
       .populate("user", "name avatar")
       .populate("community", "name")
       .lean();
 
+    if (!updatedPost) {
+      return res
+        .status(404)
+        .json({ message: "Post not found or already liked" });
+    }
+
     const formattedPost = {
-      ...post,
-      createdAt: dayjs(post.createdAt).fromNow(),
+      ...updatedPost,
+      createdAt: dayjs(updatedPost.createdAt).fromNow(),
     };
 
     res.status(200).json(formattedPost);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -127,25 +133,27 @@ const unlikePost = async (req, res) => {
   const { userId } = req.body;
 
   try {
-    await Post.findOneAndUpdate(
-      id,
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: id, likes: userId },
       { $pull: { likes: userId } },
       { new: true }
-    );
-    const post = await Post.findById(id)
-      .sort({ createdAt: -1 })
+    )
       .populate("user", "name avatar")
       .populate("community", "name")
       .lean();
 
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
     const formattedPost = {
-      ...post,
-      createdAt: dayjs(post.createdAt).fromNow(),
+      ...updatedPost,
+      createdAt: dayjs(updatedPost.createdAt).fromNow(),
     };
 
     res.status(200).json(formattedPost);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 

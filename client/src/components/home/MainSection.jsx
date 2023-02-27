@@ -21,7 +21,7 @@ const MainSection = () => {
         <h1 className="text-2xl font-bold text-gray-700">Welcome to My App</h1>
       </div>
       <div className="mt-4 flex flex-col gap-4">
-        {posts?.map((post) => (
+        {posts.map((post) => (
           <Post key={post._id} post={post} />
         ))}
       </div>

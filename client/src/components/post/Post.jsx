@@ -1,7 +1,7 @@
 import React from "react";
 import { MdOutlineReport } from "react-icons/md";
 import { deletePostAction } from "../../actions/postActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Like from "./Like";
 import {
   HiOutlineChatBubbleOvalLeft,
@@ -9,7 +9,8 @@ import {
 } from "react-icons/hi2";
 const Post = ({ post }) => {
   const dispatch = useDispatch();
-  const { body, fileUrl, user, community, createdAt, likes } = post;
+  const userData = useSelector((state) => state.auth?.userData);
+  const { body, fileUrl, user, community, createdAt } = post;
   const deleteHandler = () => {
     dispatch(deletePostAction(post._id));
   };
@@ -65,13 +66,15 @@ const Post = ({ post }) => {
               Report
             </button>
 
-            <button
-              onClick={deleteHandler}
-              className="flex items-center text-xl gap-1"
-            >
-              <MdOutlineReport />
-              Delete
-            </button>
+            {userData?.id === post.user._id && (
+              <button
+                onClick={deleteHandler}
+                className="flex items-center text-xl gap-1"
+              >
+                <MdOutlineReport />
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
