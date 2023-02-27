@@ -103,15 +103,16 @@ const SignIn = () => {
             </button>
           </div>
         </form>
-        <div className="flex items-center justify-between">
-          <div className="text-sm">
+        <div className="mt-4 text-center">
+          <p className="text-sm text-gray-600">
+            Don't have an account ?{" "}
             <Link
               to="/signup"
               className="font-medium text-indigo-600 hover:text-indigo-500"
             >
-              Don't have an account? Sign Up
+              Sign Up
             </Link>
-          </div>
+          </p>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpAction } from "../../actions/authActions";
+import { Link } from "react-router-dom";
 
 const SignupForm = () => {
   const [name, setName] = useState("");
@@ -142,6 +143,18 @@ const SignupForm = () => {
             >
               Sign up
             </button>
+
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600">
+                Already have an account?{" "}
+                <Link
+                  to="/signin"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </div>
           </div>
         </form>
       </div>
