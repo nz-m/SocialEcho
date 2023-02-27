@@ -1,7 +1,11 @@
 import * as api from "../api/authAPI";
-const SIGNUP = "SIGNUP";
-const SIGNIN = "SIGNIN";
-const LOGOUT = "LOGOUT";
+
+export const SIGNUP = "SIGNUP";
+export const SIGNIN = "SIGNIN";
+export const LOGOUT = "LOGOUT";
+
+export const REFRESH_TOKEN_SUCCESS = "REFRESH_TOKEN_SUCCESS";
+export const REFRESH_TOKEN_FAIL = "REFRESH_TOKEN_FAIL";
 
 // action creators
 

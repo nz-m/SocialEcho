@@ -3,6 +3,7 @@ const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
 
 const Post = require("../models/Post");
+const Community = require("../models/Community");
 
 const createPost = async (req, res) => {
   let newPost;
@@ -37,15 +38,25 @@ const createPost = async (req, res) => {
 
 // get all posts
 const getPosts = async (req, res) => {
+  const userId = req.query.userId;
+
   try {
-    const posts = await Post.find()
+    // First, retrieve the list of communities where the user is a member
+    const communities = await Community.find({ members: userId });
+    const communityIds = communities.map((community) => community._id);
+
+    // Next, retrieve the posts that belong to those communities
+    const posts = await Post.find({ community: { $in: communityIds } })
       .sort({ createdAt: -1 })
       .populate("user", "name avatar")
-      .populate("community", "name");
+      .populate("community", "name")
+      .lean();
+
     const formattedPosts = posts.map((post) => ({
-      ...post._doc,
+      ...post,
       createdAt: dayjs(post.createdAt).fromNow(),
     }));
+
     res.status(200).json(formattedPosts);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -59,10 +70,11 @@ const getComPosts = async (req, res) => {
     const posts = await Post.find({ community: id })
       .sort({ createdAt: -1 })
       .populate("user", "name avatar")
-      .populate("community", "name");
+      .populate("community", "name")
+      .lean();
 
     const formattedPosts = posts.map((post) => ({
-      ...post._doc,
+      ...post,
       createdAt: dayjs(post.createdAt).fromNow(),
     }));
 
@@ -84,9 +96,64 @@ const deletePost = async (req, res) => {
   }
 };
 
+const likePost = async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+
+  try {
+    const post = await Post.findOneAndUpdate(
+      id,
+      { $addToSet: { likes: userId } },
+      { new: true }
+    )
+      .sort({ createdAt: -1 })
+      .populate("user", "name avatar")
+      .populate("community", "name")
+      .lean();
+
+    const formattedPost = {
+      ...post,
+      createdAt: dayjs(post.createdAt).fromNow(),
+    };
+
+    res.status(200).json(formattedPost);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+const unlikePost = async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+
+  try {
+    await Post.findOneAndUpdate(
+      id,
+      { $pull: { likes: userId } },
+      { new: true }
+    );
+    const post = await Post.findById(id)
+      .sort({ createdAt: -1 })
+      .populate("user", "name avatar")
+      .populate("community", "name")
+      .lean();
+
+    const formattedPost = {
+      ...post,
+      createdAt: dayjs(post.createdAt).fromNow(),
+    };
+
+    res.status(200).json(formattedPost);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPosts,
   createPost,
   getComPosts,
   deletePost,
+  likePost,
+  unlikePost,
 };

@@ -34,7 +34,7 @@ const PostForm = () => {
     dispatch(
       createPostAction(formData, () => {
         dispatch(
-          getPostsAction(() => {
+          getPostsAction(user.id, () => {
             dispatch(getComPostsAction(community._id));
           })
         );

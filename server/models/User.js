@@ -22,12 +22,12 @@ const userSchema = new Schema(
     avatar: {
       type: String,
     },
-    communities: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Community",
-      },
-    ],
+    // communities: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Community",
+    //   },
+    // ],
 
     role: {
       type: String,

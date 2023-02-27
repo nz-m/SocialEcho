@@ -1,5 +1,10 @@
-// communityData : {_id: '614f07ec51a4c7',
-// name: 'Technology', description: 'A community for discussing technology and gadgets', ......}
+import {
+  GET_COMMUNITY,
+  GET_JOINED_COMMUNITIES,
+  GET_NOT_JOINED_COMMUNITIES,
+  JOIN_COMMUNITY,
+  LEAVE_COMMUNITY,
+} from "../actions/communityActions";
 
 const initialState = {
   communityData: null,
@@ -7,46 +12,41 @@ const initialState = {
   notJoinedCommunities: [],
 };
 
-const GET_COMMUNITY = "GET_COMMUNITY";
-const GET_JOINED_COMMUNITIES = "GET_JOINED_COMMUNITIES";
-const GET_NOT_JOINED_COMMUNITIES = "GET_NOT_JOINED_COMMUNITIES";
-const JOIN_COMMUNITY = "JOIN_COMMUNITY";
-const LEAVE_COMMUNITY = "LEAVE_COMMUNITY";
-
 const communityReducer = (state = initialState, action) => {
-  switch (action.type) {
+  const { type, payload } = action;
+
+  switch (type) {
     case GET_COMMUNITY:
       return {
         ...state,
-        communityData: action.payload || null,
+        communityData: payload || null,
       };
     case GET_JOINED_COMMUNITIES:
       return {
         ...state,
-        joinedCommunities: action.payload || [],
+        joinedCommunities: payload || [],
       };
     case GET_NOT_JOINED_COMMUNITIES:
       return {
         ...state,
-        notJoinedCommunities: action.payload || [],
+        notJoinedCommunities: payload || [],
       };
     case JOIN_COMMUNITY:
       return {
         ...state,
-        joinedCommunities: [...state.joinedCommunities, action.payload],
+        joinedCommunities: [...state.joinedCommunities, payload],
         notJoinedCommunities: state.notJoinedCommunities.filter(
-          (community) => community.name !== action.payload.name
+          (community) => community.name !== payload.name
         ),
       };
     case LEAVE_COMMUNITY:
       return {
         ...state,
         joinedCommunities: state.joinedCommunities.filter(
-          (community) => community.name !== action.payload.name
+          (community) => community.name !== payload.name
         ),
-        notJoinedCommunities: [...state.notJoinedCommunities, action.payload],
+        notJoinedCommunities: [...state.notJoinedCommunities, payload],
       };
-
     default:
       return state;
   }

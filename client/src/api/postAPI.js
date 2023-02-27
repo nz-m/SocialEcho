@@ -26,8 +26,8 @@ export const createPost = (formData) => {
     });
 };
 
-export const getPosts = () => {
-  return API.get("/posts")
+export const getPosts = (userId) => {
+  return API.get(`/posts?userId=${userId}`)
     .then((res) => {
       return { error: null, data: res.data };
     })
@@ -54,5 +54,24 @@ export const deletePost = (id) => {
     .catch((err) => {
       return { error: err, data: null };
     });
-}
+};
 
+export const likePost = (id, userId) => {
+  return API.patch(`/posts/${id}/like`, { userId })
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};
+
+export const unlikePost = (id, userId) => {
+  return API.patch(`/posts/${id}/unlike`, { userId })
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};

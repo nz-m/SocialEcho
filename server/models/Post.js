@@ -36,18 +36,6 @@ const postSchema = new Schema(
         ref: "User",
       },
     ],
-
-    likeCount: {
-      type: Number,
-      default: 0,
-    },
-
-    dislikes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
   },
   {
     timestamps: true,

@@ -2,15 +2,14 @@ import React from "react";
 import { MdOutlineReport } from "react-icons/md";
 import { deletePostAction } from "../../actions/postActions";
 import { useDispatch } from "react-redux";
-
+import Like from "./Like";
 import {
-  HiOutlineHandThumbUp,
   HiOutlineChatBubbleOvalLeft,
   HiOutlineBookmarkSquare,
 } from "react-icons/hi2";
 const Post = ({ post }) => {
   const dispatch = useDispatch();
-  const { body, fileUrl, user, community, createdAt } = post;
+  const { body, fileUrl, user, community, createdAt, likes } = post;
   const deleteHandler = () => {
     dispatch(deletePostAction(post._id));
   };
@@ -47,30 +46,28 @@ const Post = ({ post }) => {
 
         <div className="flex items-center justify-between mt-4">
           <div className="flex items-center gap-2">
-            <p className="flex items-center text-xl cursor-pointer gap-1">
-              {" "}
-              <HiOutlineHandThumbUp /> 2
-            </p>
-            <p className="flex items-center text-xl cursor-pointer gap-1">
+            {/* like button here */}
+            <Like post={post} />
+            <button className="flex items-center text-xl gap-1">
               {" "}
               <HiOutlineChatBubbleOvalLeft /> 2
-            </p>
+            </button>
           </div>
           <div className="flex items-center gap-2">
-            <p className="flex items-center text-xl cursor-pointer gap-1">
+            <button className="flex items-center text-xl gap-1">
               {" "}
               <HiOutlineBookmarkSquare />
               Save
-            </p>
-            <p className="flex items-center text-xl cursor-pointer gap-1">
+            </button>
+            <button className="flex items-center text-xl gap-1">
               {" "}
               <MdOutlineReport />
               Report
-            </p>
+            </button>
 
             <button
               onClick={deleteHandler}
-              className="flex items-center text-xl cursor-pointer gap-1"
+              className="flex items-center text-xl gap-1"
             >
               <MdOutlineReport />
               Delete

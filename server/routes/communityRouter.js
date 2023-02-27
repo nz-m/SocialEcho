@@ -5,47 +5,25 @@ const passport = require("passport");
 // MAINTAIN THE ORDER OF THE ROUTES BY SPECIFICITY
 const communityController = require("../controllers/communityController");
 
+const requireAuth = passport.authenticate("jwt", { session: false });
+
 router.get(
   "/notmember",
-  passport.authenticate("jwt", { session: false }),
+  requireAuth,
   communityController.getNotMemberCommunities
 );
 
-router.get(
-  "/member",
-  passport.authenticate("jwt", { session: false }),
-  communityController.getMemberCommunities
-);
+router.get("/member", requireAuth, communityController.getMemberCommunities);
 
 // Join a community
-router.post(
-  "/:name/join",
-  passport.authenticate("jwt", { session: false }),
-  communityController.joinCommunity
-);
+router.post("/:name/join", requireAuth, communityController.joinCommunity);
 
 // Leave a community
-router.post(
-  "/:name/leave",
-  passport.authenticate("jwt", { session: false }),
-  communityController.leaveCommunity
-);
+router.post("/:name/leave", requireAuth, communityController.leaveCommunity);
 
-router.get(
-  "/:name",
-  passport.authenticate("jwt", { session: false }),
-  communityController.getCommunity
-);
-router.get(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  communityController.getCommunities
-);
-router.post(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  communityController.createCommunity
-);
+router.get("/:name", requireAuth, communityController.getCommunity);
+router.get("/", requireAuth, communityController.getCommunities);
+router.post("/", requireAuth, communityController.createCommunity);
 
 // add all rules to a community
 router.post("/:name/add-all-rules", communityController.addRulesToCommunity);

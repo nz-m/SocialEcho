@@ -1,6 +1,7 @@
-const Community = require("../models/community");
+const Community = require("../models/Community");
 const ModerationRules = require("../models/ModerationRules");
 const jwt = require("jsonwebtoken");
+
 async function getCommunities(req, res) {
   try {
     const communities = await Community.find();
@@ -12,10 +13,12 @@ async function getCommunities(req, res) {
 
 async function getCommunity(req, res) {
   try {
-    const community = await Community.findOne({
-      name: req.params.name,
-    }).populate("rules");
-    // need to populate the moderators later
+    const community = await Community.findOne({ name: req.params.name })
+      .populate("rules")
+      .lean();
+
+    // Need to populate the moderators later
+    // ...
 
     res.status(200).json(community);
   } catch (error) {

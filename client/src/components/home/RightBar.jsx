@@ -6,9 +6,12 @@ import {
   joinCommunityAction,
   getJoinedCommunitiesAction,
 } from "../../actions/communityActions";
+import { getPostsAction } from "../../actions/postActions";
 
 const RightBar = () => {
   const dispatch = useDispatch();
+
+  const userData = useSelector((state) => state.auth?.userData);
 
   useEffect(() => {
     dispatch(getNotJoinedCommunitiesAction());
@@ -28,7 +31,11 @@ const RightBar = () => {
       joinCommunityAction(communityName, () => {
         dispatch(
           getJoinedCommunitiesAction(() => {
-            dispatch(getNotJoinedCommunitiesAction());
+            dispatch(
+              getNotJoinedCommunitiesAction(() => {
+                if (userData) dispatch(getPostsAction(userData.id));
+              })
+            );
           })
         );
       })
