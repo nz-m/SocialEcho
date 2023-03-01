@@ -1,7 +1,11 @@
 import * as api from "../api/authAPI";
-const SIGNUP = "SIGNUP";
-const SIGNIN = "SIGNIN";
-const LOGOUT = "LOGOUT";
+
+export const SIGNUP = "SIGNUP";
+export const SIGNIN = "SIGNIN";
+export const LOGOUT = "LOGOUT";
+
+export const REFRESH_TOKEN_SUCCESS = "REFRESH_TOKEN_SUCCESS";
+export const REFRESH_TOKEN_FAIL = "REFRESH_TOKEN_FAIL";
 
 // action creators
 
@@ -20,16 +24,16 @@ export const signUpAction = (formData, navigate) => async (dispatch) => {
     const response = await api.signUp(formData);
     const { error, data } = response;
     if (error) {
-      console.log(error.response.data.errors);
-
-      // handle error
+      dispatch({
+        type: SIGNUP,
+        data: error.response.data.errors,
+      });
     } else {
       dispatch({
         type: SIGNUP,
         data,
       });
-      console.log(data.message);
-      // navigate("/");
+      navigate("/signin");
     }
   } catch (error) {
     console.log(error);
@@ -44,7 +48,6 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
       console.log(error.response.data.errors);
       // handle error
     } else {
-      console.log(data);
       dispatch({
         type: SIGNIN,
         data,

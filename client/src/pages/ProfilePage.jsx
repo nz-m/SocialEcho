@@ -1,5 +1,4 @@
 import React from "react";
-import Post from "../components/home/Post";
 import Leftbar from "../components/home/LeftBar";
 import UserProfile from "../components/home/UserProfile";
 import RightBar from "../components/home/RightBar";
@@ -11,11 +10,6 @@ const ProfilePage = () => {
       <Leftbar/>
       <div className="grid grid-cols-1 gap-4 mt-5">
         <UserProfile/>
-        <Post />
-
-        <Post />
-
-        <Post />
       </div>
       <RightBar/>
       </div>

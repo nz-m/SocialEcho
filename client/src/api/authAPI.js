@@ -2,9 +2,6 @@ import axios from "axios";
 
 const API = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 API.interceptors.request.use((req) => {
@@ -15,13 +12,13 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-// remove later
-export const fetchPosts = () => API.get("/posts");
-export const createPost = (newPost) => API.post("/posts", newPost);
-
 // sign in
 export const signIn = (formData) => {
-  return API.post("/users/signin", formData)
+  return API.post("/users/signin", formData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((res) => {
       return { error: null, data: res.data };
     })
@@ -32,7 +29,11 @@ export const signIn = (formData) => {
 
 // Sign Up
 export const signUp = (formData) => {
-  return API.post("/users/signup", formData)
+  return API.post("/users/signup", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  })
     .then((res) => {
       return { error: null, data: res.data };
     })
@@ -43,7 +44,15 @@ export const signUp = (formData) => {
 
 // logout
 export const logout = (refreshToken) => {
-  return API.post("/users/logout", { refreshToken })
+  return API.post(
+    "/users/logout",
+    { refreshToken },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((res) => {
       return { error: null, data: res.data };
     })

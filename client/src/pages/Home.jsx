@@ -5,14 +5,12 @@ import Rightbar from "../components/home/RightBar";
 
 const Home = () => {
   return (
-    <div className=" mx-6">
-      <div className="flex justify-between">
-        <Leftbar />
+    <div className="flex mx-6">
+      <Leftbar />
 
-        <MainSection />
+      <MainSection />
 
-        <Rightbar />
-      </div>
+      <Rightbar />
     </div>
   );
 };

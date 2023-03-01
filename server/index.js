@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const passport = require("passport");
+const bodyParser = require("body-parser");
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ const {
   notFoundHandler,
   errorHandler,
 } = require("./middlewares/common/errorHandler");
+
+const PORT = process.env.PORT || 5000;
 
 mongoose.set("strictQuery", false);
 
@@ -29,6 +32,12 @@ mongoose
 // use middlewares
 app.use(cors());
 app.use(morgan("dev"));
+app.use("/assets/userFiles", express.static(__dirname + "/assets/userFiles"));
+app.use(
+  "/assets/userAvatars",
+  express.static(__dirname + "/assets/userAvatars")
+);
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -44,7 +53,7 @@ const postRouter = require("./routes/postRouter");
 app.use("/posts", postRouter);
 
 const communityRouter = require("./routes/communityRouter");
-app.use("/community", communityRouter);
+app.use("/communities", communityRouter);
 
 // 404 error handling
 app.use(notFoundHandler);
@@ -52,6 +61,4 @@ app.use(notFoundHandler);
 //error handling
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () =>
-  console.log(`Server up and running on port ${process.env.PORT}!`)
-);
+app.listen(PORT, () => console.log(`Server up and running on port ${PORT}!`));

@@ -45,6 +45,12 @@ const communitySchema = new Schema(
         ref: "Post",
       },
     ],
+    rules: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "ModerationRule",
+      },
+    ],
   },
   {
     timestamps: true,

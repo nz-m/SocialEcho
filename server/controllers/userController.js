@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const RefreshToken = require("../models/RefreshToken");
-
+// TODO - Invalidate old tokens/JTI
 // sign in
 async function signin(req, res) {
   const { email, password } = req.body;
@@ -73,18 +73,20 @@ function getUsers(req, res, next) {
 
 // add user
 async function addUser(req, res, next) {
-  console.log(req.body);
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
   if (req.files && req.files.length > 0) {
     const { filename } = req.files[0];
+    const fileUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/assets/userAvatars/${filename}`;
     newUser = new User({
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword,
       role: req.body.role,
-      avatar: filename,
+      avatar: fileUrl,
     });
   } else {
     newUser = new User({
@@ -167,12 +169,6 @@ async function refreshToken(req, res) {
     const accessToken = jwt.sign(payload, process.env.SECRET, {
       expiresIn: "1h",
     });
-
-    // Update expiry time of existing refresh token
-    existingToken.refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, {
-      expiresIn: "7d",
-    });
-    await existingToken.save();
 
     // Return new access token
     return res.status(200).json({
