@@ -13,7 +13,7 @@ const Like = ({ post }) => {
 
   const { _id, likes } = post;
 
-  const toggleLike = () => {
+  const toggleLike = (e) => {
     if (liked) {
       dispatch(unlikePostAction(_id, userData.id));
       setLiked(false);

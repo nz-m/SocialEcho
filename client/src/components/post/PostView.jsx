@@ -2,17 +2,18 @@ import React from "react";
 import { MdOutlineReport } from "react-icons/md";
 import { deletePostAction } from "../../actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import Like from "./Like";
+import CommentForm from "../form/CommentForm";
 import {
   HiOutlineChatBubbleOvalLeft,
   HiOutlineBookmarkSquare,
 } from "react-icons/hi2";
-const Post = ({ post }) => {
+
+const PostView = ({ post }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);
   const { body, fileUrl, user, community, createdAt, comments } = post;
-  const deleteHandler = (e) => {
+  const deleteHandler = () => {
     dispatch(deletePostAction(post._id));
   };
 
@@ -34,59 +35,60 @@ const Post = ({ post }) => {
         </div>
         <p>{createdAt}</p>
       </div>
-      <div>
-        <Link to={`/post/${post._id}`}>
-          <p className="text-lg">{body}</p>
-          <div className="flex justify-center">
-            {fileUrl && (
-              <img
-                className="w-[800px] h-auto rounded-xl mt-3"
-                src={fileUrl}
-                alt={body}
-                loading="lazy"
-              />
-            )}
-          </div>
-        </Link>
-      </div>
 
-      <div className="flex items-center justify-between mt-4">
-        <div className="flex items-center gap-2">
-          {/* like button here */}
-          <Like post={post} />
-          <Link to={`/post/${post._id}`}>
+      <div>
+        <p className="text-lg">{body}</p>
+        <div className="flex justify-center">
+          {fileUrl && (
+            <img
+              className="w-[800px] h-auto rounded-xl mt-3"
+              src={fileUrl}
+              alt={body}
+              loading="lazy"
+            />
+          )}
+        </div>
+
+        <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center gap-2">
+            {/* like button here */}
+            <Like post={post} />
             <button className="flex items-center text-xl gap-1">
               {" "}
               <HiOutlineChatBubbleOvalLeft />
               {comments.length}
             </button>
-          </Link>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="flex items-center text-xl gap-1">
-            {" "}
-            <HiOutlineBookmarkSquare />
-            Save
-          </button>
-          <button className="flex items-center text-xl gap-1">
-            {" "}
-            <MdOutlineReport />
-            Report
-          </button>
-
-          {userData?.id === post.user._id && (
-            <button
-              onClick={deleteHandler}
-              className="flex items-center text-xl gap-1"
-            >
-              <MdOutlineReport />
-              Delete
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="flex items-center text-xl gap-1">
+              {" "}
+              <HiOutlineBookmarkSquare />
+              Save
             </button>
-          )}
+            <button className="flex items-center text-xl gap-1">
+              {" "}
+              <MdOutlineReport />
+              Report
+            </button>
+
+            {userData?.id === post.user._id && (
+              <button
+                onClick={deleteHandler}
+                className="flex items-center text-xl gap-1"
+              >
+                <MdOutlineReport />
+                Delete
+              </button>
+            )}
+          </div>
         </div>
+      </div>
+
+      <div>
+        <CommentForm communityId={community._id} />
       </div>
     </div>
   );
 };
 
-export default Post;
+export default PostView;

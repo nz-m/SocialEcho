@@ -75,3 +75,23 @@ export const unlikePost = (id, userId) => {
       return { error: err, data: null };
     });
 };
+
+export const addComment = (id, newComment) => {
+  return API.post(`/posts/${id}/comment`, { newComment })
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};
+
+export const getComments = (id) => {
+  return API.get(`/posts/${id}/comment`)
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};

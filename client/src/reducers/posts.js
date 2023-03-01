@@ -6,11 +6,14 @@ import {
   UPDATE_POST,
   LIKE_POST,
   UNLIKE_POST,
+  GET_COMMENTS,
+  DELETE_COMMENT,
 } from "../actions/postActions";
 
 const initialState = {
   posts: [],
   communityPosts: [],
+  comments: [],
 };
 
 const postReducer = (state = initialState, action) => {
@@ -58,6 +61,24 @@ const postReducer = (state = initialState, action) => {
         posts,
         communityPosts,
       };
+
+    case GET_COMMENTS:
+      return {
+        ...state,
+        comments: payload,
+      };
+    case DELETE_COMMENT:
+      const { postsUpdateD, communityPostsUpdateD } = updateComment(
+        state,
+        payload
+      );
+      return {
+        ...state,
+        comments: state.comments.filter((comment) => comment._id !== payload),
+        posts: postsUpdateD,
+        communityPosts: communityPostsUpdateD,
+      };
+
     default:
       return state;
   }
@@ -73,4 +94,17 @@ const updatePostLike = (state, updatedPost) => {
   return { posts, communityPosts };
 };
 
+const updateComment = (state, updatedComment) => {
+  const postsUpdate = state.posts.map((post) =>
+    post._id === updatedComment.post
+      ? { ...post, comments: [...post.comments, updatedComment] }
+      : post
+  );
+  const communityPostsUpdate = state.communityPosts.map((post) =>
+    post._id === updatedComment.post
+      ? { ...post, comments: [...post.comments, updatedComment] }
+      : post
+  );
+  return { postsUpdate, communityPostsUpdate };
+};
 export default postReducer;

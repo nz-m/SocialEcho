@@ -16,6 +16,8 @@ const {
   errorHandler,
 } = require("./middlewares/common/errorHandler");
 
+const PORT = process.env.PORT || 5000;
+
 mongoose.set("strictQuery", false);
 
 // Connect to DB
@@ -59,6 +61,4 @@ app.use(notFoundHandler);
 //error handling
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () =>
-  console.log(`Server up and running on port ${process.env.PORT}!`)
-);
+app.listen(PORT, () => console.log(`Server up and running on port ${PORT}!`));

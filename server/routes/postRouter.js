@@ -12,5 +12,7 @@ router.get("/:id", requireAuth, postController.getComPosts);
 router.delete("/:id", requireAuth, postController.deletePost);
 router.patch("/:id/like", requireAuth, postController.likePost);
 router.patch("/:id/unlike", requireAuth, postController.unlikePost);
+router.post("/:id/comment", requireAuth, postController.addComment);
+router.get("/:id/comment", requireAuth, postController.getComments);
 
 module.exports = router;

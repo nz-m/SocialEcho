@@ -21,7 +21,7 @@ const authReducer = (state = initialState, action) => {
         userData: action.data.data,
         refreshToken: action.data.refreshToken,
         accessToken: action.data.accessToken,
-        signupErr: action.data
+        signupErr: action.data,
       };
 
     case SIGNIN:
@@ -45,8 +45,8 @@ const authReducer = (state = initialState, action) => {
       );
       return {
         ...state,
-        refreshToken: payload.refreshToken,
         accessToken: payload.accessToken,
+        refreshToken: payload.refreshToken,
       };
 
     case REFRESH_TOKEN_FAIL:

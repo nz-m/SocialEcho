@@ -7,13 +7,7 @@ const Moderator = () => {
     <div className="flex mx-6">
       <Leftbar />
       <div className="w-6/12">
-        <ModeratorProfile
-          name="John Doe"
-          email="johndoe@example.com"
-          password="********"
-          role="Moderator"
-          joinedDate="January 1, 2022"
-        />
+        <ModeratorProfile />
         here goes the settings for the moderator to add/delete new rules and
         guidelines, and to add/delete new moderators // see reported posts and
         comments and delete them if necessary // see the list of members and

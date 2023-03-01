@@ -4,6 +4,7 @@ dayjs.extend(relativeTime);
 
 const Post = require("../models/Post");
 const Community = require("../models/Community");
+const Comment = require("../models/Comment");
 
 const createPost = async (req, res) => {
   let newPost;
@@ -157,6 +158,48 @@ const unlikePost = async (req, res) => {
   }
 };
 
+const addComment = async (req, res) => {
+  const { body, user, post } = req.body.newComment;
+  const newComment = new Comment({
+    body,
+    user,
+    post,
+  });
+
+  try {
+    await newComment.save();
+    await Post.findOneAndUpdate(
+      { _id: post },
+      { $addToSet: { comments: newComment._id } }
+    );
+    res.status(200).json({ message: "Comment added successfully" });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const getComments = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const comments = await Comment.find({ post: id })
+      .sort({ createdAt: -1 })
+      .populate("user", "name avatar")
+      .lean();
+
+    const formattedComments = comments.map((comment) => ({
+      ...comment,
+      createdAt: dayjs(comment.createdAt).fromNow(),
+    }));
+
+    res.status(200).json(formattedComments);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getPosts,
   createPost,
@@ -164,4 +207,6 @@ module.exports = {
   deletePost,
   likePost,
   unlikePost,
+  addComment,
+  getComments,
 };

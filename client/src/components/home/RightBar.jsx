@@ -73,7 +73,7 @@ const RightBar = () => {
       </div>
       <div className="card mt-4">
         <div className="card-body">
-          <h5 className="card-title mb-3">People to Follow</h5>
+          <h5 className="card-title mb-3">Here goes popular users to follow</h5>
           <ul className="list-group">
             <li className="list-group-item d-flex align-items-center">
               <img
@@ -81,23 +81,7 @@ const RightBar = () => {
                 className="rounded-circle me-2"
                 alt="User Avatar"
               />
-              <span>John Doe</span>
-            </li>
-            <li className="list-group-item d-flex align-items-center">
-              <img
-                src="https://via.placeholder.com/50"
-                className="rounded-circle me-2"
-                alt="User Avatar"
-              />
-              <span>Jane Doe</span>
-            </li>
-            <li className="list-group-item d-flex align-items-center">
-              <img
-                src="https://via.placeholder.com/50"
-                className="rounded-circle me-2"
-                alt="User Avatar"
-              />
-              <span>Bob Smith</span>
+              <span>User name</span>
             </li>
           </ul>
         </div>
