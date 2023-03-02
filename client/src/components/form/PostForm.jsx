@@ -12,6 +12,7 @@ const PostForm = () => {
   const user = useSelector((state) => state.auth.userData);
   const [body, setBody] = useState("");
   const [file, setFile] = useState(null);
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   if (!community || !user) return null;
@@ -21,11 +22,32 @@ const PostForm = () => {
   };
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    const selectedFile = event.target.files[0];
+    if (
+      selectedFile &&
+      (selectedFile.type === "image/jpeg" ||
+        selectedFile.type === "image/jpg" ||
+        selectedFile.type === "image/png" ||
+        selectedFile.type === "image/gif" ||
+        selectedFile.type === "image/webp" ||
+        selectedFile.type === "video/mpeg" ||
+        selectedFile.type === "video/mp4" ||
+        selectedFile.type === "video/avi") &&
+      selectedFile.size <= 50 * 1024 * 1024 // 50MB
+    ) {
+      setFile(selectedFile);
+      setError("");
+    } else {
+      setFile(null);
+      setError(
+        "Invalid file type or size. Please select an image or video file under 50MB."
+      );
+    }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (error) return;
     const formData = new FormData();
     formData.append("body", body);
     formData.append("community", community._id);
@@ -72,6 +94,7 @@ const PostForm = () => {
           onChange={handleFileChange}
           className="border rounded-md p-2 w-full"
         />
+        {error && <p className="text-red-500">{error}</p>}
       </div>
 
       <button className="bg-blue-500 hover:bg-blue-600 btn-sm text-white font-bold rounded-sm">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { MdOutlineReport } from "react-icons/md";
 import { deletePostAction } from "../../actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,12 @@ const PostView = ({ post }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);
   const { body, fileUrl, user, community, createdAt, comments } = post;
+  // Memoize the file extension check to avoid recomputing it unnecessarily
+  const isImageFile = useMemo(() => {
+    const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
+    const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
+    return validExtensions.includes(fileExtension);
+  }, [fileUrl]);
 
   const deleteHandler = () => {
     dispatch(
@@ -47,13 +53,21 @@ const PostView = ({ post }) => {
       <div>
         <p className="text-lg">{body}</p>
         <div className="flex justify-center">
-          {fileUrl && (
+          {fileUrl && isImageFile ? (
             <img
               className="w-[800px] h-auto rounded-xl mt-3"
               src={fileUrl}
               alt={body}
               loading="lazy"
             />
+          ) : (
+            fileUrl && (
+              <video
+                className="w-[800px] h-auto rounded-xl mt-3"
+                src={fileUrl}
+                controls
+              />
+            )
           )}
         </div>
 
