@@ -29,6 +29,23 @@ const userSchema = new Schema(
     //   },
     // ],
 
+    location: {
+      type: String,
+    },
+
+    bio: {
+      type: String,
+    },
+
+    profession: {
+      type: String,
+    },
+
+    interests: {
+      type: [String],
+      maxlength: 3,
+    },
+
     role: {
       type: String,
       enum: ["general", "moderator", "admin"],
@@ -41,18 +58,31 @@ const userSchema = new Schema(
         ref: "Post",
       },
     ],
-
-    comments: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Comment",
-      },
-    ],
   },
   {
     timestamps: true,
   }
 );
+
+userSchema.pre("remove", async function (next) {
+  try {
+    // Todo: user avatar delete (fs.unlink/ promisify)
+
+    // Remove all posts and comments by the user
+    await this.model("Post").deleteMany({ user: this._id });
+    await this.model("Comment").deleteMany({ user: this._id });
+
+    // Remove the user from all communities they belong to
+    await this.model("Community").updateMany(
+      { members: this._id },
+      { $pull: { members: this._id } }
+    );
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 const User = mongoose.model("User", userSchema);
 

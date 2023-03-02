@@ -76,31 +76,26 @@ async function addUser(req, res, next) {
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-  if (req.files && req.files.length > 0) {
-    const { filename } = req.files[0];
-    const fileUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/assets/userAvatars/${filename}`;
-    newUser = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword,
-      role: req.body.role,
-      avatar: fileUrl,
-    });
-  } else {
-    newUser = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword,
-      role: req.body.role,
-      avatar: null,
-    });
-  }
+  const { filename } =
+    req.files && req.files.length > 0 ? req.files[0] : { filename: null };
+  const fileUrl = filename
+    ? `${req.protocol}://${req.get("host")}/assets/userAvatars/${filename}`
+    : null;
+
+  const emailDomain = req.body.email.split("@")[1];
+  const role = emailDomain === "mod.socialecho.com" ? "moderator" : "general";
+
+  newUser = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: hashedPassword,
+    role: role,
+    avatar: fileUrl,
+  });
 
   // save user
   try {
-    const user = await newUser.save();
+    await newUser.save();
     res.status(200).json({
       success: true,
       message: "User added successfully",

@@ -91,7 +91,10 @@ const getComPosts = async (req, res) => {
 const deletePost = async (req, res) => {
   const { id } = req.params;
   try {
-    await Post.findByIdAndDelete(id);
+    const post = await Post.findById(id);
+    if (!post) throw new Error("Post not found");
+    // this will also trigger the pre-remove hook to delete comments
+    await post.remove();
     res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
     res.status(404).json({ message: error.message });

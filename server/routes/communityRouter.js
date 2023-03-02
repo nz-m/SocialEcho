@@ -31,6 +31,9 @@ router.post("/:name/add-all-rules", communityController.addRulesToCommunity);
 // add rules to the database
 router.post("/rules", communityController.addRules);
 
+// add moderators to a community
+router.patch("/:name/add-moderators", communityController.addModToCommunity);
+
 // add a rule single rule to database
 // router.post("/rule", communityController.addRule);
 

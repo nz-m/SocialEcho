@@ -2,6 +2,7 @@ import React from "react";
 import { MdOutlineReport } from "react-icons/md";
 import { deletePostAction } from "../../actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Like from "./Like";
 import {
@@ -9,10 +10,12 @@ import {
   HiOutlineBookmarkSquare,
 } from "react-icons/hi2";
 const Post = ({ post }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const userData = useSelector((state) => state.auth?.userData);
   const { body, fileUrl, user, community, createdAt, comments } = post;
-  const deleteHandler = (e) => {
+  const deleteHandler = () => {
     dispatch(deletePostAction(post._id));
   };
 
@@ -34,20 +37,25 @@ const Post = ({ post }) => {
         </div>
         <p>{createdAt}</p>
       </div>
-      <div>
-        <Link to={`/post/${post._id}`}>
-          <p className="text-lg">{body}</p>
-          <div className="flex justify-center">
-            {fileUrl && (
-              <img
-                className="w-[800px] h-auto rounded-xl mt-3"
-                src={fileUrl}
-                alt={body}
-                loading="lazy"
-              />
-            )}
-          </div>
-        </Link>
+      <div
+        className="cursor-pointer"
+        onClick={() => {
+          navigate(`/post/${post._id}`, {
+            state: { from: location.pathname },
+          });
+        }}
+      >
+        <p className="text-lg">{body}</p>
+        <div className="flex justify-center">
+          {fileUrl && (
+            <img
+              className="w-[800px] h-auto rounded-xl mt-3"
+              src={fileUrl}
+              alt={body}
+              loading="lazy"
+            />
+          )}
+        </div>
       </div>
 
       <div className="flex items-center justify-between mt-4">

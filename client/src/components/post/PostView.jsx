@@ -2,6 +2,7 @@ import React from "react";
 import { MdOutlineReport } from "react-icons/md";
 import { deletePostAction } from "../../actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import Like from "./Like";
 import CommentForm from "../form/CommentForm";
 import {
@@ -10,11 +11,18 @@ import {
 } from "react-icons/hi2";
 
 const PostView = ({ post }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);
   const { body, fileUrl, user, community, createdAt, comments } = post;
+
   const deleteHandler = () => {
-    dispatch(deletePostAction(post._id));
+    dispatch(
+      deletePostAction(post._id, () =>
+        navigate(location.state ? location.state.from : "/")
+      )
+    );
   };
 
   return (

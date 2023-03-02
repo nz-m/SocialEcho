@@ -17,7 +17,6 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/community" element={<CommunityPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/community/:communityName" element={<CommunityPage />} />
           <Route path="/post/:postId" element={<PostPage />} />

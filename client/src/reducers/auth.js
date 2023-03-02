@@ -5,12 +5,14 @@ import {
   REFRESH_TOKEN_SUCCESS,
   REFRESH_TOKEN_FAIL,
 } from "../actions/authActions";
+import { GET_COMMUNITY } from "../actions/communityActions";
 
 const initialState = {
   userData: null,
   refreshToken: null,
   accessToken: null,
-  signupErr: null,
+  signupErr: [],
+  isModerator: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -21,7 +23,7 @@ const authReducer = (state = initialState, action) => {
         userData: action.data.data,
         refreshToken: action.data.refreshToken,
         accessToken: action.data.accessToken,
-        signupErr: action.data,
+        signupErr: action.data ? action.data : [],
       };
 
     case SIGNIN:
@@ -54,6 +56,17 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
       };
+
+    case GET_COMMUNITY:
+      const moderators = action.payload?.moderators || [];
+      const isModerator = moderators.some(
+        (moderator) => moderator === state.userData?.id
+      );
+      return {
+        ...state,
+        isModerator,
+      };
+
     default:
       return state;
   }
