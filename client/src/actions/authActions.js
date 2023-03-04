@@ -6,6 +6,7 @@ export const LOGOUT = "LOGOUT";
 
 export const REFRESH_TOKEN_SUCCESS = "REFRESH_TOKEN_SUCCESS";
 export const REFRESH_TOKEN_FAIL = "REFRESH_TOKEN_FAIL";
+export const GET_MOD_PROFILE = "GET_MOD_PROFILE";
 
 // action creators
 
@@ -54,6 +55,18 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
       });
       navigate("/");
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getModProfileAction = () => async (dispatch) => {
+  try {
+    const { data } = await api.getModProfile();
+    dispatch({
+      type: GET_MOD_PROFILE,
+      payload: data,
+    });
   } catch (error) {
     console.log(error);
   }

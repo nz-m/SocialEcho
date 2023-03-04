@@ -100,7 +100,6 @@ const deletePost = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
-
 const likePost = async (req, res) => {
   const { id } = req.params;
   const { userId } = req.body;
@@ -122,12 +121,13 @@ const likePost = async (req, res) => {
     }
 
     const formattedPost = {
-      ...updatedPost,
+      ...updatedPost.toObject(),
       createdAt: dayjs(updatedPost.createdAt).fromNow(),
     };
 
     res.status(200).json(formattedPost);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -151,12 +151,13 @@ const unlikePost = async (req, res) => {
     }
 
     const formattedPost = {
-      ...updatedPost,
+      ...updatedPost.toObject(),
       createdAt: dayjs(updatedPost.createdAt).fromNow(),
     };
 
     res.status(200).json(formattedPost);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -177,8 +178,9 @@ const addComment = async (req, res) => {
     );
     res.status(200).json({ message: "Comment added successfully" });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
-      message: error.message,
+      message: "Server error",
     });
   }
 };
@@ -199,9 +201,35 @@ const getComments = async (req, res) => {
 
     res.status(200).json(formattedComments);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// With pagination
+
+// const getComments = async (req, res) => {
+//   const { id } = req.params;
+//   const { page = 1, limit = 10 } = req.query;
+
+//   try {
+//     const comments = await Comment.find({ post: id })
+//       .sort({ createdAt: -1 })
+//       .skip((page - 1) * limit)
+//       .limit(limit)
+//       .populate("user", "name avatar")
+//       .lean();
+
+//     const formattedComments = comments.map((comment) => ({
+//       ...comment,
+//       createdAt: dayjs(comment.createdAt).fromNow(),
+//     }));
+
+//     res.status(200).json(formattedComments);
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
 
 module.exports = {
   getPosts,

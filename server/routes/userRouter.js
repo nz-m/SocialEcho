@@ -9,6 +9,7 @@ const {
   signin,
   logout,
   refreshToken,
+  getModProfile,
 } = require("../controllers/userController");
 const {
   addUserValidator,
@@ -31,6 +32,14 @@ router.post(
   addUser
 );
 router.post("/signin", signin);
+
+// get moderator profile
+
+router.get(
+  "/moderator",
+  passport.authenticate("jwt", { session: false }),
+  getModProfile
+);
 
 // logout
 router.post("/logout", logout);

@@ -60,3 +60,14 @@ export const logout = (refreshToken) => {
       return { error: err, data: null };
     });
 };
+
+// get moderator profile
+export const getModProfile = () => {
+  return API.get("/users/moderator")
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};

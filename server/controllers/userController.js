@@ -93,7 +93,6 @@ async function addUser(req, res, next) {
     avatar: fileUrl,
   });
 
-  // save user
   try {
     await newUser.save();
     res.status(200).json({
@@ -114,13 +113,11 @@ async function logout(req, res) {
   const accessToken = req.headers.authorization?.split(" ")[1];
 
   try {
-    // Find the associated refresh token for the access token
     const tokenPair = await RefreshToken.findOne({ accessToken });
     if (!tokenPair || tokenPair.refreshToken !== refreshToken) {
       return res.status(401).json({ message: "Invalid refresh token" });
     }
 
-    // Remove the access and refresh tokens from the database
     await tokenPair.deleteOne();
 
     return res.status(200).json({
@@ -129,7 +126,9 @@ async function logout(req, res) {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ message: "Internal server error. Please try again later." });
   }
 }
 
@@ -137,13 +136,10 @@ async function refreshToken(req, res) {
   const { refreshToken } = req.body;
 
   try {
-    // Check if refresh token is valid
     const existingToken = await RefreshToken.findOne({ refreshToken });
     if (!existingToken) {
       return res.status(401).json({ message: "Invalid refresh token" });
     }
-
-    // Get the user associated with the refresh token
     const existingUser = await User.findById(existingToken.user);
     if (!existingUser) {
       return res.status(401).json({ message: "Invalid refresh token" });
@@ -177,10 +173,33 @@ async function refreshToken(req, res) {
   }
 }
 
+async function getModProfile(req, res) {
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.decode(token, { complete: true });
+  const userId = decodedToken.payload.id;
+
+  try {
+    const moderator = await User.findById(userId);
+    if (!moderator) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // exclude password from response
+    const moderatorInfo = { ...moderator._doc };
+    delete moderatorInfo.password;
+    moderatorInfo.createdAt = moderatorInfo.createdAt.toLocaleString();
+
+    return res.status(200).json({ moderatorInfo });
+  } catch (err) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 module.exports = {
   getUsers,
   addUser,
   signin,
   logout,
   refreshToken,
+  getModProfile,
 };
