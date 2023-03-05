@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const RefreshToken = require("../models/RefreshToken");
-const jwt = require("jsonwebtoken");
 
 // internal imports
 const {
@@ -11,12 +9,12 @@ const {
   signin,
   logout,
   refreshToken,
+  getModProfile,
 } = require("../controllers/userController");
 const {
   addUserValidator,
   addUserValidatorHandler,
 } = require("../middlewares/users/usersValidator");
-const authToken = require("../middlewares/users/auth");
 const avatarUpload = require("../middlewares/users/avatarUpload");
 
 //get all users
@@ -34,6 +32,14 @@ router.post(
   addUser
 );
 router.post("/signin", signin);
+
+// get moderator profile
+
+router.get(
+  "/moderator",
+  passport.authenticate("jwt", { session: false }),
+  getModProfile
+);
 
 // logout
 router.post("/logout", logout);

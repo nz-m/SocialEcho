@@ -5,12 +5,12 @@ import RightBar from "../components/home/RightBar";
 
 const ProfilePage = () => {
   return (
-    <div className="mx-6 ">
-      <div className="flex justify-between gap-5">
+    <div className="mx-6">
+      <div className="flex justify-between">
       <Leftbar/>
-      <div className="grid grid-cols-1 gap-4 mt-5">
+
         <UserProfile/>
-      </div>
+  
       <RightBar/>
       </div>
     </div>

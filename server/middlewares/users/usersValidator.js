@@ -7,10 +7,22 @@ const fs = require("fs");
 
 const addUserValidator = [
   check("name")
-    .isLength({ min: 3 })
+    .isLength({ min: 1 })
     .withMessage("Name is required")
     .isAlpha("en-US", { ignore: " -" })
     .withMessage("Name must not contain anything other than alphabet")
+    .custom((value, { req }) => {
+      switch (true) {
+        case value.length === 1:
+          throw new Error("How can your name be only 1 letter?");
+        case value.length === 2:
+          throw new Error("Are you sure your name is only 2 letters?");
+        case value.length > 20:
+          throw new Error("Seriously, your name is that long?");
+        default:
+          return true;
+      }
+    })
     .trim(),
   check("email")
     .isEmail()

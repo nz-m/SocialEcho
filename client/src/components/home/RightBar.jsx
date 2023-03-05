@@ -5,10 +5,13 @@ import {
   getNotJoinedCommunitiesAction,
   joinCommunityAction,
   getJoinedCommunitiesAction,
-} from "../../actions/communityActions";
+} from "../../redux/actions/communityActions";
+import { getPostsAction } from "../../redux/actions/postActions";
 
 const RightBar = () => {
   const dispatch = useDispatch();
+
+  const userData = useSelector((state) => state.auth?.userData);
 
   useEffect(() => {
     dispatch(getNotJoinedCommunitiesAction());
@@ -28,14 +31,18 @@ const RightBar = () => {
       joinCommunityAction(communityName, () => {
         dispatch(
           getJoinedCommunitiesAction(() => {
-            dispatch(getNotJoinedCommunitiesAction());
+            dispatch(
+              getNotJoinedCommunitiesAction(() => {
+                if (userData) dispatch(getPostsAction(userData.id));
+              })
+            );
           })
         );
       })
     );
   };
   return (
-    <div className="w-1/4 h-screen bg-gray-100">
+    <div className="w-3/12 h-screen bg-white sticky top-0">
       <div className="card">
         <div className="card-body">
           <h5 className="card-title mb-3">Suggested Communities</h5>
@@ -66,7 +73,7 @@ const RightBar = () => {
       </div>
       <div className="card mt-4">
         <div className="card-body">
-          <h5 className="card-title mb-3">People to Follow</h5>
+          <h5 className="card-title mb-3">Here goes popular users to follow</h5>
           <ul className="list-group">
             <li className="list-group-item d-flex align-items-center">
               <img
@@ -74,23 +81,7 @@ const RightBar = () => {
                 className="rounded-circle me-2"
                 alt="User Avatar"
               />
-              <span>John Doe</span>
-            </li>
-            <li className="list-group-item d-flex align-items-center">
-              <img
-                src="https://via.placeholder.com/50"
-                className="rounded-circle me-2"
-                alt="User Avatar"
-              />
-              <span>Jane Doe</span>
-            </li>
-            <li className="list-group-item d-flex align-items-center">
-              <img
-                src="https://via.placeholder.com/50"
-                className="rounded-circle me-2"
-                alt="User Avatar"
-              />
-              <span>Bob Smith</span>
+              <span>User name</span>
             </li>
           </ul>
         </div>

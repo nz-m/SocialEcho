@@ -1,13 +1,34 @@
 import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getModProfileAction } from "../../redux/actions/authActions";
 
-const ModeratorProfile = ({ name, email, password, role, joinedDate }) => {
+const ModeratorProfile = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getModProfileAction());
+  }, [dispatch]);
+
+  const moderator = useSelector((state) => state.moderation.modProfile);
+  if (!moderator) return null; // later add a loading spinner
+
+
   return (
-    <div className="flex flex-col items-center justify-center">
-      <h1 className="text-2xl font-semibold text-gray-900">{name}</h1>
-      <p className="mt-2 text-gray-600">{email}</p>
-      <p className="mt-2 text-gray-600">{password}</p>
-      <p className="mt-2 text-gray-600">{role}</p>
-      <p className="mt-2 text-gray-600">{`Joined on ${joinedDate}`}</p>
+    <div className="flex flex-col items-center justify-center bordered">
+      <img src={moderator.avatar} alt="user" />
+      <p>
+        <span className="font-bold">Moderator Profile</span>
+      </p>
+      <p>
+        <span className="font-bold">Name:</span> {moderator.name}
+      </p>
+      <p>
+        <span className="font-bold">Email:</span> {moderator.email}
+      </p>
+      <p>
+        <span className="font-bold">Joined:</span> {moderator.createdAt}
+      </p>
+      <p>Other infos here, will be added later</p>
     </div>
   );
 };

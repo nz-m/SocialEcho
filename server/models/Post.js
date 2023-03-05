@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const fs = require("fs");
+const path = require("path");
+const { promisify } = require("util");
+
 const postSchema = new Schema(
   {
     body: {
@@ -36,23 +40,35 @@ const postSchema = new Schema(
         ref: "User",
       },
     ],
-
-    likeCount: {
-      type: Number,
-      default: 0,
-    },
-
-    dislikes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
   },
   {
     timestamps: true,
   }
 );
+
+// when a post is deleted, delete all comments associated with it
+postSchema.pre("remove", async function (next) {
+  // Path may required to move to .env file/ config file
+  try {
+    if (this.fileUrl) {
+      const filename = path.basename(this.fileUrl);
+      console.log(filename);
+      const deleteFilePromise = promisify(fs.unlink)(
+        path.join(__dirname, "../assets/userFiles", filename)
+      );
+      console.log(path.join(__dirname, "../assets/userFiles", filename));
+      await deleteFilePromise;
+    }
+    const commentIds = this.comments.map((comment) => comment.toString());
+    await this.model("Comment").deleteMany({ _id: { $in: commentIds } });
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+
+  // Delete the uploaded file if it exists
+});
 
 const Post = mongoose.model("Post", postSchema);
 

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { logoutAction } from "../../actions/authActions";
+import { logoutAction } from "../../redux/actions/authActions";
 import { useEffect } from "react";
-import { getJoinedCommunitiesAction } from "../../actions/communityActions";
+import { getJoinedCommunitiesAction } from "../../redux/actions/communityActions";
 
 const Leftbar = () => {
   const dispatch = useDispatch();
@@ -41,7 +41,7 @@ const Leftbar = () => {
   const links = [
     { href: "/home", label: "Home" },
     { href: "/profile", label: "Profile" },
-    { href: "/saved", label: "Saved" },
+    { href: "/#", label: "Saved" },
     {
       href: "#",
       label: "Joined Communities",
@@ -51,37 +51,34 @@ const Leftbar = () => {
   ];
 
   return (
-    <div className="w-1/4 h-screen bg-gray-100 sticky top-0">
-      <div className="flex flex-col h-full justify-between py-8">
+    <div className="w-3/12 h-screen bg-white sticky top-0">
+      <div className="flex flex-col h-full justify-between py-8 pr-7">
         <div className="flex flex-col items-center justify-center">
-          <h1 className="text-4xl font-bold">Logo</h1>
+          <h1 className="text-4xl">Site Logo</h1>
           <h4>
             <div>
-              {user && (
-                <h1 className="font-bold text-blue-500">Welcome {user.name}</h1>
-              )}
+              {user && <h1 className="font-bold text-blue-500">{user.name}</h1>}
             </div>
-            ;
           </h4>
         </div>
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-center">
           {links.map((link) => {
             if (link.dropdown) {
               return (
                 <div key={link.label}>
                   <button
                     onClick={link.onClick}
-                    className="block py-2 px-4 hover:bg-gray-200"
+                    className="block py-2 px-4 hover:bg-[#E6F7FF] hover:rounded-md hover:text-[#000] text-right hover:font-bold"
                   >
                     {link.label} ▼
                   </button>
                   {dropdownVisible && (
-                    <div className="flex flex-col items-start">
+                    <div className="flex flex-col items-center">
                       {communityLinks.map((communityLink) => (
                         <Link
                           to={communityLink.href}
                           key={communityLink.href}
-                          className="block py-2 px-4 hover:bg-gray-200"
+                          className="block py-2 px-4 hover:bg-[#E6F7FF] hover:rounded-md hover:text-[#000] text-right"
                         >
                           {communityLink.label}
                         </Link>
@@ -95,7 +92,7 @@ const Leftbar = () => {
                 <Link
                   to={link.href}
                   key={link.href}
-                  className="block py-2 px-4 hover:bg-gray-200"
+                  className="block py-2 px-4 hover:bg-[#E6F7FF] hover:rounded-md hover:text-[#000] hover:font-bold text-right"
                 >
                   {link.label}
                 </Link>
@@ -104,10 +101,18 @@ const Leftbar = () => {
           })}
         </div>
         <div className="flex flex-col items-center justify-center">
+          <div className="flex">
+            <div>
+              <img src={user.avatar} alt="" />
+            </div>
+            <div>{user.name}</div>
+          </div>
+
           {user && (
             <button
               onClick={logout}
-              className="block py-2 px-4 hover:bg-gray-200"
+              type="button"
+              className="inline-block rounded bg-danger px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-danger-600 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-danger-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-danger-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
             >
               Logout
             </button>

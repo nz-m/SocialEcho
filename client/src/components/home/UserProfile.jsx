@@ -1,38 +1,36 @@
-import React from 'react'
-import { HiCamera, HiOutlinePencilSquare } from 'react-icons/hi2'
-import rownok1 from '../../assets/rownok.png'
+import React from "react";
+import rownok1 from "../../assets/rownok.png";
 const UserProfile = () => {
   return (
-    <div className='mx-auto'>
-        <div className="relative rounded-xl w-full shadow-lg">
-        <img className="w-[1200px] object-cover rounded-xl h-48"
-          src={
-            "https://a-static.besthdwallpaper.com/alone-in-unknown-world-wallpaper-1600x900-33874_47.jpg"
-          }
-          alt={`Nz's avatar`}
-         
-
-          // add slow loading image
-        />
-        <button className='btn btn-sm rounded-full shadow-2xl capitalize btn-primary absolute top-3 right-3 flex items-center gap-1'>
-            <HiCamera className='text-xl'/>
-             Edit Cover Photo</button>
-        </div>
-        <div className="flex justify-between mx-5 items-center">
-            <div className="flex gap-4">
-            <img className='w-32 shadow-lg rounded-full border-2 border-white -mt-10 z-20' src={rownok1} alt="rownok" />
-          <div className="flex flex-col mt-2">
-            <p className='text-3xl font-semibold'>Mehbubur Rahman (Rownok)</p>
-            <p className='text-lg'>3.k Follower</p>
+    <div className="w-6/12 mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center">
+          <img
+            className="w-16 h-16 rounded-full mr-4"
+            src={rownok1}
+            alt="Profile"
+          ></img>
+          <div>
+            <h2 className="text-2xl font-bold">User name</h2>
+            <p className="text-gray-600">Occupation</p>
+            <p className="text-gray-600">Location</p>
           </div>
-            </div>
-            <button className='btn rounded-full  btn-primary flex gap-2 items-center capitalize'>
-                <HiOutlinePencilSquare className='text-xl'/>
-                Edit Profile</button>
-         
         </div>
+        <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded-full">
+          Settings
+        </button>
+      </div>
+      <div className="mb-8">
+        <h3 className="text-lg font-bold mb-4">Interests</h3>
+        <ul className="list-disc list-inside">
+          <li>Interest 1</li>
+          <li>Interest 2</li>
+          <li>Interest 3</li>
+        </ul>
+      </div>
+      <div></div>
     </div>
-  )
-}
+  );
+};
 
-export default UserProfile
+export default UserProfile;
