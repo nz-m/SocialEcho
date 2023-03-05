@@ -111,8 +111,7 @@ const likePost = async (req, res) => {
       { new: true }
     )
       .populate("user", "name avatar")
-      .populate("community", "name")
-      .lean();
+      .populate("community", "name");
 
     if (!updatedPost) {
       return res
@@ -143,8 +142,7 @@ const unlikePost = async (req, res) => {
       { new: true }
     )
       .populate("user", "name avatar")
-      .populate("community", "name")
-      .lean();
+      .populate("community", "name");
 
     if (!updatedPost) {
       return res.status(404).json({ message: "Post not found" });

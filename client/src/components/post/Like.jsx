@@ -1,7 +1,10 @@
 import React from "react";
 import { HiOutlineHandThumbUp, HiHandThumbUp } from "react-icons/hi2";
 import { useDispatch } from "react-redux";
-import { likePostAction, unlikePostAction } from "../../actions/postActions";
+import {
+  likePostAction,
+  unlikePostAction,
+} from "../../redux/actions/postActions";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 

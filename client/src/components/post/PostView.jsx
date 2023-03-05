@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { MdOutlineReport } from "react-icons/md";
-import { deletePostAction } from "../../actions/postActions";
+import { deletePostAction } from "../../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import Like from "./Like";

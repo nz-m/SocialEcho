@@ -5,8 +5,8 @@ import {
   getNotJoinedCommunitiesAction,
   joinCommunityAction,
   getJoinedCommunitiesAction,
-} from "../../actions/communityActions";
-import { getPostsAction } from "../../actions/postActions";
+} from "../../redux/actions/communityActions";
+import { getPostsAction } from "../../redux/actions/postActions";
 
 const RightBar = () => {
   const dispatch = useDispatch();

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { logoutAction } from "../../actions/authActions";
+import { logoutAction } from "../../redux/actions/authActions";
 import { useEffect } from "react";
-import { getJoinedCommunitiesAction } from "../../actions/communityActions";
+import { getJoinedCommunitiesAction } from "../../redux/actions/communityActions";
 
 const Leftbar = () => {
   const dispatch = useDispatch();

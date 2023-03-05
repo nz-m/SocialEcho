@@ -23,7 +23,7 @@ router.post("/:name/leave", requireAuth, communityController.leaveCommunity);
 
 router.get("/:name", requireAuth, communityController.getCommunity);
 router.get("/", requireAuth, communityController.getCommunities);
-router.post("/", requireAuth, communityController.createCommunity);
+router.post("/", communityController.createCommunity);
 
 // add all rules to a community
 router.post("/:name/add-all-rules", communityController.addRulesToCommunity);
