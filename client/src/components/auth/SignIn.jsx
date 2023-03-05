@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { signInAction } from "../../actions/authActions";
+import { signInAction } from "../../redux/actions/authActions";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");

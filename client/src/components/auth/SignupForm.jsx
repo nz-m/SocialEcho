@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { signUpAction } from "../../actions/authActions";
+import { signUpAction } from "../..//redux/actions/authActions";
 import { Link } from "react-router-dom";
 
 const SignupForm = () => {

@@ -2,7 +2,7 @@ import React from "react";
 import Post from "../post/Post";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getPostsAction } from "../../actions/postActions";
+import { getPostsAction } from "../../redux/actions/postActions";
 const MainSection = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);

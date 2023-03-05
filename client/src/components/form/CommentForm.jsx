@@ -5,7 +5,7 @@ import {
   getCommentsAction,
   getPostsAction,
   getComPostsAction,
-} from "../../actions/postActions";
+} from "../../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 

@@ -4,7 +4,7 @@ import {
   createPostAction,
   getPostsAction,
   getComPostsAction,
-} from "../../actions/postActions";
+} from "../../redux/actions/postActions";
 import { useSelector } from "react-redux";
 
 const PostForm = () => {
