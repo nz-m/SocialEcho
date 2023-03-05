@@ -1,4 +1,4 @@
-import * as api from "../api/authAPI";
+import * as api from "../../api/authAPI";
 
 export const SIGNUP = "SIGNUP";
 export const SIGNIN = "SIGNIN";

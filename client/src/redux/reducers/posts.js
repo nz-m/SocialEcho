@@ -8,7 +8,7 @@ import {
   UNLIKE_POST,
   GET_COMMENTS,
   DELETE_COMMENT,
-} from "../actions/postActions";
+} from "../actions/postActions.js";
 
 const initialState = {
   posts: [],

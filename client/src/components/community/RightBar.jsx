@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getCommunityAction } from "../../actions/communityActions";
+import { getCommunityAction } from "../../redux/actions/communityActions";
 import { leaveFetchData } from "../../middlewares/joinLeaveFetch";
 
 const RightBar = () => {

@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers";
-import { tokenMiddleware } from "./middlewares/tokenMiddleware";
+import { tokenMiddleware } from "../middlewares/tokenMiddleware";
 
 const persistedState = {
   auth: {

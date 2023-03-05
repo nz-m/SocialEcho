@@ -5,7 +5,7 @@ import {
   joinCommunityAction,
   getJoinedCommunitiesAction,
   leaveCommunityAction,
-} from "../actions/communityActions";
+} from "../redux/actions/communityActions";
 
 // API CALL IN EACH ACTION CREATOR
 
