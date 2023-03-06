@@ -61,13 +61,15 @@ postSchema.pre("remove", async function (next) {
     }
     const commentIds = this.comments.map((comment) => comment.toString());
     await this.model("Comment").deleteMany({ _id: { $in: commentIds } });
-
+    // Delete the reported post entry from all communities
+    await this.model("Community").updateMany(
+      { "reportedPosts.post": this._id },
+      { $pull: { reportedPosts: { post: this._id } } }
+    );
     next();
   } catch (err) {
     next(err);
   }
-
-  // Delete the uploaded file if it exists
 });
 
 const Post = mongoose.model("Post", postSchema);

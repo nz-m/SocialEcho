@@ -15,4 +15,5 @@ router.patch("/:id/unlike", requireAuth, postController.unlikePost);
 router.post("/:id/comment", requireAuth, postController.addComment);
 router.get("/:id/comment", requireAuth, postController.getComments);
 
+
 module.exports = router;

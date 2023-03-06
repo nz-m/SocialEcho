@@ -93,11 +93,6 @@ const Post = ({ post }) => {
             <HiOutlineBookmarkSquare />
             Save
           </button>
-          <button className="flex items-center text-xl gap-1">
-            {" "}
-            <MdOutlineReport />
-            Report
-          </button>
 
           {userData?.id === post.user._id && (
             <button
