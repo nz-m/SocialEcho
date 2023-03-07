@@ -43,6 +43,15 @@ const communitySchema = new Schema(
         ref: "Post",
       },
     ],
+    reportedPosts: [
+      {
+        post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
+        reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        reportReason: { type: String },
+        reportDate: { type: Date, default: Date.now },
+      },
+    ],
+
     rules: [
       {
         type: Schema.Types.ObjectId,

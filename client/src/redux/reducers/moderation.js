@@ -1,4 +1,5 @@
 import { GET_MOD_PROFILE } from "../actions/authActions";
+const SET_MODERATOR = "SET_MODERATOR";
 
 const initialState = {
   isModerator: false,
@@ -9,7 +10,7 @@ const moderationReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case "SET_MODERATOR":
+    case SET_MODERATOR:
       return {
         ...state,
         isModerator: payload,

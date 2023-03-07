@@ -21,7 +21,6 @@ const checkTokens = async () => {
   )?.refreshToken;
   if (accessToken && refreshToken) {
     if (isValidToken(accessToken)) {
-      // isValidToken is a function that checks token validity
       persistedState.auth.accessToken = accessToken;
       persistedState.auth.refreshToken = refreshToken;
       persistedState.auth.userData = JSON.parse(

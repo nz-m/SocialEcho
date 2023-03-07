@@ -1,6 +1,10 @@
 const Community = require("../models/Community");
 const ModerationRules = require("../models/ModerationRules");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const dayjs = require("dayjs");
+const relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
 
 async function getCommunities(req, res) {
   try {
@@ -127,15 +131,19 @@ async function leaveCommunity(req, res) {
 }
 
 // add moderators to community
-
 const addModToCommunity = async (req, res) => {
   const userId = req.body.userId;
-  // const token = req.headers.authorization.split(" ")[1];
-  // const decodedToken = jwt.decode(token, { complete: true });
-  // const userId = decodedToken.payload.id;
   const communityName = req.params.name;
-  console.log(userId, communityName);
   try {
+    // Retrieve the user information from the database
+    const currentUser = await User.findById(userId);
+
+    // Check if the current user has the 'moderator' role
+    if (currentUser.role !== "moderator") {
+      return res.status(401).json({ message: "Only moderators can be added." });
+    }
+
+    // Update the community document with the new moderator
     await Community.findOneAndUpdate(
       { name: communityName },
       { $addToSet: { moderators: { $each: [userId] } } },
@@ -143,14 +151,132 @@ const addModToCommunity = async (req, res) => {
     );
     res
       .status(200)
-      .json(
-        `User was added to the moderators of ${communityName}`
-      );
+      .json(`User was added to the moderators of ${communityName}`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
   }
 };
+
+async function reportPost(req, res) {
+  const communityName = req.params.name;
+
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.decode(token, { complete: true });
+  const userId = decodedToken.payload.id;
+
+  try {
+    const community = await Community.findOneAndUpdate(
+      {
+        name: communityName,
+        reportedPosts: {
+          $not: {
+            $elemMatch: {
+              post: req.body.info.postId,
+              reportedBy: userId,
+            },
+          },
+        },
+      },
+      // if the user hasn't reported this post already, add the post to the reportedPosts array
+      {
+        $addToSet: {
+          reportedPosts: {
+            post: req.body.info.postId,
+            reportedBy: userId,
+            reportReason: req.body.info.reportReason,
+            reportDate: new Date(),
+          },
+        },
+      },
+      { new: true }
+    );
+    if (!community) {
+      // user has already reported the post, return an error
+      return res
+        .status(400)
+        .json({ message: "You have already reported this post." });
+    }
+
+    const latestReportedPost = community.reportedPosts.slice(-1)[0];
+    res.status(200).json(latestReportedPost);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+}
+
+async function getReportedPosts(req, res) {
+  const communityName = req.params.name;
+  try {
+    const community = await Community.findOne({ name: communityName })
+      .populate({
+        path: "reportedPosts.reportedBy",
+        model: "User",
+        select: ["name", "avatar"],
+      })
+      .populate({
+        path: "reportedPosts.post",
+        model: "Post",
+        select: ["_id", "body", "fileUrl", "createdAt", "user"],
+        populate: {
+          path: "user",
+          model: "User",
+          select: ["name", "avatar"],
+        },
+      })
+      .lean();
+
+    if (!community) {
+      return res.status(404).json({ message: "Community not found" });
+    }
+
+    const reportedPosts = community.reportedPosts;
+
+    reportedPosts.sort((a, b) => b.reportDate - a.reportDate);
+
+    reportedPosts.forEach((post) => {
+      post.reportDate = dayjs(post.reportDate).fromNow();
+    });
+
+    return res.status(200).json({ reportedPosts });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+}
+
+async function removeReportedPost(req, res) {
+  const communityName = req.params.name;
+  const postId = req.params.postId;
+
+  try {
+    // Find the community by name
+    const community = await Community.findOne({ name: communityName });
+
+    if (!community) {
+      return res.status(404).json({ message: "Community not found" });
+    }
+
+    // Remove the reported post from the reportedPosts array
+    const updatedCommunity = await Community.findOneAndUpdate(
+      { name: communityName },
+      { $pull: { reportedPosts: { post: postId } } },
+      { new: true }
+    );
+
+    if (!updatedCommunity) {
+      return res
+        .status(500)
+        .json({ message: "Failed to remove reported post" });
+    }
+
+    res.status(200).json({ message: "Reported post removed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+}
 
 module.exports = {
   getCommunities,
@@ -163,4 +289,7 @@ module.exports = {
   joinCommunity,
   leaveCommunity,
   addModToCommunity,
+  reportPost,
+  getReportedPosts,
+  removeReportedPost,
 };

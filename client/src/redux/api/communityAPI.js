@@ -64,3 +64,34 @@ export const leaveCommunity = (communityName) => {
       return { error: err, data: null };
     });
 };
+
+export const reportPost = (communityName, info) => {
+  return API.put(`/communities/${communityName}/report`, { info })
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};
+
+export const getReportedPosts = (communityName) => {
+  return API.get(`/communities/${communityName}/reported-posts`)
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+};
+
+export const removeReportedPost = (communityName, postId) => {
+  return API.delete(`/communities/${communityName}/reported-posts/${postId}`)
+    .then((res) => {
+      return { error: null, data: res.data };
+    })
+    .catch((err) => {
+      return { error: err, data: null };
+    });
+}
+

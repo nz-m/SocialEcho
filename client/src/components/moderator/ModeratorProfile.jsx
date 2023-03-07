@@ -12,10 +12,13 @@ const ModeratorProfile = () => {
   const moderator = useSelector((state) => state.moderation.modProfile);
   if (!moderator) return null; // later add a loading spinner
 
-
   return (
-    <div className="flex flex-col items-center justify-center bordered">
-      <img src={moderator.avatar} alt="user" />
+    <div className="flex flex-col items-center justify-center rounded-lg shadow-md p-4">
+      <img
+        src={moderator.avatar}
+        alt="user"
+        className="w-20 h-20 rounded-full object-cover"
+      />
       <p>
         <span className="font-bold">Moderator Profile</span>
       </p>
