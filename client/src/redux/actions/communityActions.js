@@ -81,20 +81,24 @@ export const joinCommunityAction =
     }
   };
 
-export const leaveCommunityAction = (communityName) => async (dispatch) => {
-  try {
-    const { data } = await api.leaveCommunity(communityName);
-    dispatch({
-      type: LEAVE_COMMUNITY,
-      payload: data,
-      meta: {
-        requiresAuth: true,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const leaveCommunityAction =
+  (communityName, callback) => async (dispatch) => {
+    try {
+      const { data } = await api.leaveCommunity(communityName);
+      dispatch({
+        type: LEAVE_COMMUNITY,
+        payload: data,
+        meta: {
+          requiresAuth: true,
+        },
+      });
+      if (callback) {
+        callback();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const reportPostAction =
   (communityName, info, callback) => async (dispatch) => {

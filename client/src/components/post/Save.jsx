@@ -54,7 +54,7 @@ const Save = ({ postId }) => {
           className="flex items-center text-xl gap-1"
         >
           <HiShoppingCart />
-          {saved ? "Unsave" : "Save"}
+          {saved ? "Remove from Saved" : "Save"}
         </button>
       )}
     </>

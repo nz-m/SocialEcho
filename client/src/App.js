@@ -10,6 +10,7 @@ import PrivateRoute from "./PrivateRoute";
 import PostPage from "./pages/PostPage";
 import ReportPost from "./components/community/ReportPost";
 import ReportedPostPage from "./pages/ReportedPostPage";
+import Saved from "./pages/Saved";
 const App = () => {
   return (
     <div className="bg-[#f6f7f9]">
@@ -34,6 +35,7 @@ const App = () => {
             path="/community/:communityName/moderator"
             element={<Moderator />}
           />
+          <Route path="/saved" element={<Saved />} />
         </Route>
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
