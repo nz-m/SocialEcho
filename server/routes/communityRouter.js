@@ -19,7 +19,10 @@ router.get("/member", requireAuth, communityController.getMemberCommunities);
 router.get("/:name/reported-posts", communityController.getReportedPosts);
 
 // delete a post from reported posts list
-router.delete("/:name/reported-posts/:postId", communityController.removeReportedPost);
+router.delete(
+  "/:name/reported-posts/:postId",
+  communityController.removeReportedPost
+);
 
 // Join a community
 router.post("/:name/join", requireAuth, communityController.joinCommunity);
@@ -28,7 +31,7 @@ router.post("/:name/join", requireAuth, communityController.joinCommunity);
 router.post("/:name/leave", requireAuth, communityController.leaveCommunity);
 
 // report a post
-router.put("/:name/report", communityController.reportPost);
+router.put("/:name/report", requireAuth, communityController.reportPost);
 
 router.get("/:name", requireAuth, communityController.getCommunity);
 router.get("/", requireAuth, communityController.getCommunities);

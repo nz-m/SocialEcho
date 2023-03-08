@@ -62,10 +62,9 @@ const leaveCommunity = async (communityName) => {
 
 const reportPost = async (communityName, info) => {
   try {
-    const { data } = await API.post(
-      `/communities/${communityName}/report`,
-      info
-    );
+    const { data } = await API.put(`/communities/${communityName}/report`, {
+      info,
+    });
     return { error: null, data };
   } catch (error) {
     return { error: error.message, data: null };

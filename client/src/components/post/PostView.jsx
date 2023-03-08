@@ -9,7 +9,7 @@ import Like from "./Like";
 import CommentForm from "../form/CommentForm";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 
-const PostView = ({ post, isSaved }) => {
+const PostView = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -105,7 +105,7 @@ const PostView = ({ post, isSaved }) => {
             </button>
           </div>
           <div className="flex items-center gap-2">
-            <Save postId={post._id} isSaved={isSaved} />
+            <Save postId={post._id} />
             {isReported === null ? null : isReported ? (
               <button disabled className="flex items-center text-xl gap-1">
                 {" "}
