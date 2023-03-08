@@ -46,7 +46,6 @@ const postSchema = new Schema(
   }
 );
 
-// when a post is deleted, delete all comments associated with it
 postSchema.pre("remove", async function (next) {
   // Path may required to move to .env file/ config file
   try {
@@ -66,6 +65,12 @@ postSchema.pre("remove", async function (next) {
       { "reportedPosts.post": this._id },
       { $pull: { reportedPosts: { post: this._id } } }
     );
+    // Delete the Saved post entry from all users
+    await this.model("User").updateMany(
+      { savedPosts: this._id },
+      { $pull: { savedPosts: this._id } }
+    );
+
     next();
   } catch (err) {
     next(err);

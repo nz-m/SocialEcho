@@ -15,83 +15,102 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const getCommunity = (communityName) => {
-  return API.get(`/communities/${communityName}`)
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
+const getCommunity = async (communityName) => {
+  try {
+    const { data } = await API.get(`/communities/${communityName}`);
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
 };
 
-export const getJoinedCommunities = () => {
-  return API.get("/communities/member")
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
+const getJoinedCommunities = async () => {
+  try {
+    const { data } = await API.get("/communities/member");
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
 };
 
-export const getNotJoinedCommunities = () => {
-  return API.get("/communities/notmember")
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
+const getNotJoinedCommunities = async () => {
+  try {
+    const { data } = await API.get("/communities/notmember");
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
 };
 
-export const joinCommunity = (communityName) => {
-  return API.post(`/communities/${communityName}/join`)
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
+const joinCommunity = async (communityName) => {
+  try {
+    const { data } = await API.post(`/communities/${communityName}/join`);
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
 };
 
-export const leaveCommunity = (communityName) => {
-  return API.post(`/communities/${communityName}/leave`)
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
+const leaveCommunity = async (communityName) => {
+  try {
+    const { data } = await API.post(`/communities/${communityName}/leave`);
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
 };
 
-export const reportPost = (communityName, info) => {
-  return API.put(`/communities/${communityName}/report`, { info })
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
+const reportPost = async (communityName, info) => {
+  try {
+    const { data } = await API.post(
+      `/communities/${communityName}/report`,
+      info
+    );
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
 };
 
-export const getReportedPosts = (communityName) => {
-  return API.get(`/communities/${communityName}/reported-posts`)
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
+const getCommunityPosts = async (communityName) => {
+  try {
+    const { data } = await API.get(`/communities/${communityName}/posts`);
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
 };
 
-export const removeReportedPost = (communityName, postId) => {
-  return API.delete(`/communities/${communityName}/reported-posts/${postId}`)
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
-}
+const getReportedPosts = async (communityName) => {
+  try {
+    const { data } = await API.get(
+      `/communities/${communityName}/reported-posts`
+    );
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
 
+const removeReportedPost = async (communityName, postId) => {
+  try {
+    const { data } = await API.delete(
+      `/communities/${communityName}/reported-posts/${postId}`
+    );
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
+
+export {
+  getCommunity,
+  getJoinedCommunities,
+  getNotJoinedCommunities,
+  joinCommunity,
+  leaveCommunity,
+  reportPost,
+  getCommunityPosts,
+  getReportedPosts,
+  removeReportedPost,
+};
