@@ -1,7 +1,7 @@
 const Community = require("../models/Community");
 const ModerationRules = require("../models/ModerationRules");
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
+const getUserFromToken = require("../utils/getUserFromToken");
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
@@ -67,9 +67,7 @@ async function addRulesToCommunity(req, res) {
 }
 
 async function getMemberCommunities(req, res) {
-  const token = req.headers.authorization.split(" ")[1];
-  const decodedToken = jwt.decode(token, { complete: true });
-  const userId = decodedToken.payload.id;
+  const userId = getUserFromToken(req);
   try {
     const communities = await Community.find({
       members: { $in: [userId] },
@@ -82,9 +80,7 @@ async function getMemberCommunities(req, res) {
 }
 
 async function getNotMemberCommunities(req, res) {
-  const token = req.headers.authorization.split(" ")[1];
-  const decodedToken = jwt.decode(token, { complete: true });
-  const userId = decodedToken.payload.id;
+  const userId = getUserFromToken(req);
   try {
     const communities = await Community.find({
       members: { $nin: [userId] },
@@ -98,9 +94,8 @@ async function getNotMemberCommunities(req, res) {
 
 async function joinCommunity(req, res) {
   const { name } = req.params;
-  const token = req.headers.authorization.split(" ")[1];
-  const decodedToken = jwt.decode(token, { complete: true });
-  const userId = decodedToken.payload.id;
+  const userId = getUserFromToken(req);
+
   try {
     const community = await Community.findOneAndUpdate(
       { name },
@@ -115,9 +110,7 @@ async function joinCommunity(req, res) {
 
 async function leaveCommunity(req, res) {
   const { name } = req.params;
-  const token = req.headers.authorization.split(" ")[1];
-  const decodedToken = jwt.decode(token, { complete: true });
-  const userId = decodedToken.payload.id;
+  const userId = getUserFromToken(req);
   try {
     const community = await Community.findOneAndUpdate(
       { name },
@@ -160,10 +153,7 @@ const addModToCommunity = async (req, res) => {
 
 async function reportPost(req, res) {
   const communityName = req.params.name;
-
-  const token = req.headers.authorization.split(" ")[1];
-  const decodedToken = jwt.decode(token, { complete: true });
-  const userId = decodedToken.payload.id;
+  const userId = getUserFromToken(req);
 
   try {
     const community = await Community.findOneAndUpdate(

@@ -12,62 +12,56 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-// sign in
-export const signIn = (formData) => {
-  return API.post("/users/signin", formData, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
-};
-
-// Sign Up
-export const signUp = (formData) => {
-  return API.post("/users/signup", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  })
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
-    });
-};
-
-// logout
-export const logout = (refreshToken) => {
-  return API.post(
-    "/users/logout",
-    { refreshToken },
-    {
+const signIn = async (formData) => {
+  try {
+    const res = await API.post("/users/signin", formData, {
       headers: {
         "Content-Type": "application/json",
       },
-    }
-  )
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
     });
+    return { error: null, data: res.data };
+  } catch (err) {
+    return { error: err, data: null };
+  }
 };
 
-// get moderator profile
-export const getModProfile = () => {
-  return API.get("/users/moderator")
-    .then((res) => {
-      return { error: null, data: res.data };
-    })
-    .catch((err) => {
-      return { error: err, data: null };
+const signUp = async (formData) => {
+  try {
+    const res = await API.post("/users/signup", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
+    return { error: null, data: res.data };
+  } catch (err) {
+    return { error: err, data: null };
+  }
 };
+
+const logout = async (refreshToken) => {
+  try {
+    const res = await API.post(
+      "/users/logout",
+      { refreshToken },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return { error: null, data: res.data };
+  } catch (err) {
+    return { error: err, data: null };
+  }
+};
+
+const getModProfile = async () => {
+  try {
+    const res = await API.get("/users/moderator");
+    return { error: null, data: res.data };
+  } catch (err) {
+    return { error: err, data: null };
+  }
+};
+
+export { signIn, signUp, logout, getModProfile };

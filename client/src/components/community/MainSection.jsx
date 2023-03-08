@@ -1,7 +1,7 @@
 import React from "react";
 import PostForm from "../form/PostForm";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { getComPostsAction } from "../../redux/actions/postActions";
 import Post from "../post/Post";
 
@@ -43,9 +43,7 @@ const MainSection = () => {
             {loading ? (
               <p>Loading posts...</p>
             ) : (
-                <div
-                  className="mt-4 flex flex-col gap-4"
-                >
+              <div className="mt-4 flex flex-col gap-4">
                 {communityPosts?.map((post) => (
                   <Post key={post._id} post={post} />
                 ))}

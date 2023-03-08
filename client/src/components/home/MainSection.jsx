@@ -8,7 +8,6 @@ const MainSection = () => {
   const userData = useSelector((state) => state.auth?.userData);
   const posts = useSelector((state) => state.posts?.posts);
 
-
   useEffect(() => {
     if (userData) {
       dispatch(getPostsAction(userData.id));

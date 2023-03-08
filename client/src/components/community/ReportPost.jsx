@@ -29,7 +29,7 @@ const ReportPost = () => {
           reportedBy: userId,
         },
         () => {
-          navigate(`/community/${communityName}`);
+          navigate(-1);
         }
       )
     );

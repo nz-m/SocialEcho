@@ -9,6 +9,11 @@ export const GET_COMMENTS = "GET_COMMENTS";
 export const UPDATE_POST = "UPDATE_POST";
 export const LIKE_POST = "LIKE_POST";
 export const UNLIKE_POST = "UNLIKE_POST";
+export const SAVE_POST = "SAVE_POST";
+export const UNSAVE_POST = "UNSAVE_POST";
+export const GET_SAVED_POSTS = "GET_SAVED_POSTS";
+
+//  TODO: Remove console.log(error) from all actions and replace with error handling
 
 export const createPostAction = (formData, callback) => async (dispatch) => {
   try {
@@ -42,7 +47,7 @@ export const getPostsAction = (userId, callback) => async (dispatch) => {
   }
 };
 
-export const getComPostsAction = (id) => async (dispatch) => {
+export const getComPostsAction = (id, callback) => async (dispatch) => {
   try {
     const { data } = await api.getComPosts(id);
     dispatch({
@@ -52,6 +57,7 @@ export const getComPostsAction = (id) => async (dispatch) => {
         requiresAuth: true,
       },
     });
+    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
@@ -123,6 +129,56 @@ export const getCommentsAction = (id, callback) => async (dispatch) => {
     const { data } = await api.getComments(id);
     dispatch({
       type: GET_COMMENTS,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+    if (callback) callback();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// save post
+export const savePostAction = (id, callback) => async (dispatch) => {
+  try {
+    const { data } = await api.savePost(id);
+    dispatch({
+      type: SAVE_POST,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+    if (callback) callback();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// unsave post
+export const unsavePostAction = (id, callback) => async (dispatch) => {
+  try {
+    const { data } = await api.unsavePost(id);
+    dispatch({
+      type: UNSAVE_POST,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+    if (callback) callback();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getSavedPostsAction = (callback) => async (dispatch) => {
+  try {
+    const { data } = await api.getSavedPosts();
+    dispatch({
+      type: GET_SAVED_POSTS,
       payload: data,
       meta: {
         requiresAuth: true,

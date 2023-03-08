@@ -4,13 +4,10 @@ import { deletePostAction } from "../../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCommunityAction } from "../../redux/actions/communityActions";
-
+import Save from "./Save";
 import Like from "./Like";
 import CommentForm from "../form/CommentForm";
-import {
-  HiOutlineChatBubbleOvalLeft,
-  HiOutlineBookmarkSquare,
-} from "react-icons/hi2";
+import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 
 const PostView = ({ post }) => {
   const navigate = useNavigate();
@@ -108,12 +105,7 @@ const PostView = ({ post }) => {
             </button>
           </div>
           <div className="flex items-center gap-2">
-            <button className="flex items-center text-xl gap-1">
-              {" "}
-              <HiOutlineBookmarkSquare />
-              Save
-            </button>
-
+            <Save postId={post._id} />
             {isReported === null ? null : isReported ? (
               <button disabled className="flex items-center text-xl gap-1">
                 {" "}

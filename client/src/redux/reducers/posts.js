@@ -8,12 +8,16 @@ import {
   UNLIKE_POST,
   GET_COMMENTS,
   DELETE_COMMENT,
+  SAVE_POST,
+  UNSAVE_POST,
+  GET_SAVED_POSTS,
 } from "../actions/postActions";
 
 const initialState = {
   posts: [],
   communityPosts: [],
   comments: [],
+  savedPosts: [],
 };
 
 const postReducer = (state = initialState, action) => {
@@ -77,6 +81,13 @@ const postReducer = (state = initialState, action) => {
         comments: state.comments.filter((comment) => comment._id !== payload),
         posts: postsUpdateD,
         communityPosts: communityPostsUpdateD,
+      };
+    case SAVE_POST:
+    case UNSAVE_POST:
+    case GET_SAVED_POSTS:
+      return {
+        ...state,
+        savedPosts: payload || [],
       };
 
     default:

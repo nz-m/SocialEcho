@@ -2,19 +2,16 @@ import React, { useMemo } from "react";
 import { MdOutlineReport } from "react-icons/md";
 import { deletePostAction } from "../../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import Like from "./Like";
-import {
-  HiOutlineChatBubbleOvalLeft,
-  HiOutlineBookmarkSquare,
-} from "react-icons/hi2";
 
 const Post = ({ post }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const userData = useSelector((state) => state.auth?.userData);
+
   const { body, fileUrl, user, community, createdAt, comments } = post;
 
   // Memoize the file extension check to avoid recomputing it unnecessarily
@@ -88,12 +85,6 @@ const Post = ({ post }) => {
           </Link>
         </div>
         <div className="flex items-center gap-2">
-          <button className="flex items-center text-xl gap-1">
-            {" "}
-            <HiOutlineBookmarkSquare />
-            Save
-          </button>
-
           {userData?.id === post.user._id && (
             <button
               onClick={deleteHandler}

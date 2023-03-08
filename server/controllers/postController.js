@@ -1,10 +1,14 @@
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
+const getUserFromToken = require("../utils/getUserFromToken");
 
 const Post = require("../models/Post");
 const Community = require("../models/Community");
 const Comment = require("../models/Comment");
+const User = require("../models/User");
+
+// TODO: Add paginations
 
 const createPost = async (req, res) => {
   let newPost;
@@ -81,7 +85,6 @@ const getComPosts = async (req, res) => {
 
     res.status(200).json(formattedPosts);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -126,7 +129,6 @@ const likePost = async (req, res) => {
 
     res.status(200).json(formattedPost);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -155,7 +157,6 @@ const unlikePost = async (req, res) => {
 
     res.status(200).json(formattedPost);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -176,7 +177,6 @@ const addComment = async (req, res) => {
     );
     res.status(200).json({ message: "Comment added successfully" });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       message: "Server error",
     });
@@ -199,35 +199,79 @@ const getComments = async (req, res) => {
 
     res.status(200).json(formattedComments);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// With pagination
+const saveOrUnsavePost = async (req, res, operation) => {
+  const id = req.params.id;
+  const userId = getUserFromToken(req);
 
-// const getComments = async (req, res) => {
-//   const { id } = req.params;
-//   const { page = 1, limit = 10 } = req.query;
+  try {
+    const update = {};
+    update[operation === "$addToSet" ? "$addToSet" : "$pull"] = {
+      savedPosts: id,
+    };
+    const updatedUserPost = await User.findOneAndUpdate(
+      { _id: userId },
+      update,
+      {
+        new: true,
+      }
+    )
+      .select("savedPosts")
+      .populate({
+        path: "savedPosts",
+        populate: { path: "community", select: "name" },
+      });
 
-//   try {
-//     const comments = await Comment.find({ post: id })
-//       .sort({ createdAt: -1 })
-//       .skip((page - 1) * limit)
-//       .limit(limit)
-//       .populate("user", "name avatar")
-//       .lean();
+    if (!updatedUserPost) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-//     const formattedComments = comments.map((comment) => ({
-//       ...comment,
-//       createdAt: dayjs(comment.createdAt).fromNow(),
-//     }));
+    const formattedPosts = updatedUserPost.savedPosts.map((post) => ({
+      ...post.toObject(),
+      createdAt: dayjs(post.createdAt).fromNow(),
+    }));
 
-//     res.status(200).json(formattedComments);
-//   } catch (error) {
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
+    res.status(200).json(formattedPosts);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const savePost = async (req, res) => {
+  saveOrUnsavePost(req, res, "$addToSet");
+};
+
+const unsavePost = async (req, res) => {
+  saveOrUnsavePost(req, res, "$pull");
+};
+
+const getSavedPosts = async (req, res) => {
+  const userId = getUserFromToken(req);
+  try {
+    const user = await User.findById(userId)
+      .select("savedPosts")
+      .populate({
+        path: "savedPosts",
+        populate: { path: "community", select: "name" },
+      });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const formattedPosts = user.savedPosts.map((post) => ({
+      ...post.toObject(),
+      createdAt: dayjs(post.createdAt).fromNow(),
+    }));
+
+    res.status(200).json(formattedPosts);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
   getPosts,
@@ -238,4 +282,7 @@ module.exports = {
   unlikePost,
   addComment,
   getComments,
+  savePost,
+  unsavePost,
+  getSavedPosts,
 };
