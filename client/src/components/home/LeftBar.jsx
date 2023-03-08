@@ -41,7 +41,7 @@ const Leftbar = () => {
   const links = [
     { href: "/home", label: "Home" },
     { href: "/profile", label: "Profile" },
-    { href: "/#", label: "Saved" },
+    { href: "/saved", label: "Saved" },
     {
       href: "#",
       label: "Joined Communities",

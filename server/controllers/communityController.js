@@ -123,7 +123,6 @@ async function leaveCommunity(req, res) {
   }
 }
 
-// add moderators to community
 const addModToCommunity = async (req, res) => {
   const userId = req.body.userId;
   const communityName = req.params.name;
@@ -139,18 +138,23 @@ const addModToCommunity = async (req, res) => {
     // Update the community document with the new moderator
     await Community.findOneAndUpdate(
       { name: communityName },
-      { $addToSet: { moderators: { $each: [userId] } } },
+      {
+        $addToSet: {
+          moderators: userId,
+          members: userId,
+        },
+      },
       { new: true }
     );
+
     res
       .status(200)
-      .json(`User was added to the moderators of ${communityName}`);
+      .json(`User was added as a moderator and member of ${communityName}`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
   }
 };
-
 async function reportPost(req, res) {
   const communityName = req.params.name;
   const userId = getUserFromToken(req);
