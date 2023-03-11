@@ -22,19 +22,25 @@ const PostForm = () => {
     setBody(event.target.value);
   };
 
+  const allowedFileTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "video/mpeg",
+    "video/mp4",
+    "video/avi",
+    "video/webm",
+    "video/x-matroska",
+  ];
+
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     if (
       selectedFile &&
-      (selectedFile.type === "image/jpeg" ||
-        selectedFile.type === "image/jpg" ||
-        selectedFile.type === "image/png" ||
-        selectedFile.type === "image/gif" ||
-        selectedFile.type === "image/webp" ||
-        selectedFile.type === "video/mpeg" ||
-        selectedFile.type === "video/mp4" ||
-        selectedFile.type === "video/avi") &&
-      selectedFile.size <= 50 * 1024 * 1024 // 50MB
+      allowedFileTypes.includes(selectedFile.type) &&
+      selectedFile.size <= 50 * 1024 * 1024
     ) {
       setFile(selectedFile);
       setError("");
