@@ -16,6 +16,7 @@ const CommentForm = ({ communityId }) => {
 
   const userData = useSelector((state) => state.auth.userData);
   const [body, setBody] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,6 +26,7 @@ const CommentForm = ({ communityId }) => {
       post: postId,
     };
     if (userData) {
+      setIsLoading(true); // set isLoading to true before adding comment
       dispatch(
         addCommentAction(postId, newComment, () =>
           dispatch(
@@ -37,9 +39,11 @@ const CommentForm = ({ communityId }) => {
             )
           )
         )
-      );
+      ).then(() => {
+        setIsLoading(false); // set isLoading back to false once the process is complete
+        setBody(""); // reset form
+      });
     }
-    setBody("");
   };
 
   return (
@@ -58,8 +62,10 @@ const CommentForm = ({ communityId }) => {
         <button
           className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
           type="submit"
+          disabled={isLoading} // disable button while isLoading is true
         >
-          Comment
+          {isLoading ? "Loading..." : "Comment"}{" "}
+          {/* Change button text while isLoading is true */}
         </button>
       </form>
     </div>

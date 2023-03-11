@@ -13,6 +13,7 @@ const PostForm = () => {
   const [body, setBody] = useState("");
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   if (!community || !user) return null;
@@ -47,12 +48,20 @@ const PostForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (error) return;
+    if (error || loading) return;
+
+    if (!body && !file) {
+      setError("Please enter a message or select a file.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("body", body);
     formData.append("community", community._id);
     formData.append("user", user.id);
     formData.append("file", file);
+    setLoading(true);
+
     dispatch(
       createPostAction(formData, () => {
         dispatch(
@@ -63,10 +72,10 @@ const PostForm = () => {
         setBody("");
         setFile(null);
         event.target.reset();
+        setLoading(false);
       })
     );
   };
-
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 shadow-md">
       <div className="mb-4">
@@ -97,8 +106,13 @@ const PostForm = () => {
         {error && <p className="text-red-500">{error}</p>}
       </div>
 
-      <button className="bg-blue-500 hover:bg-blue-600 btn-sm text-white font-bold rounded-sm">
-        Post
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        type="submit"
+        disabled={loading || (!body && !file)} // disable button when both fields are empty
+        style={{ display: body || file ? "block" : "none" }} // hide button when both fields are empty
+      >
+        {loading ? "Loading..." : "Post"}
       </button>
     </form>
   );

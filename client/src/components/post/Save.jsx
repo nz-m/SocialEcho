@@ -11,6 +11,7 @@ const Save = ({ postId }) => {
   const dispatch = useDispatch();
 
   const [saved, setSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
@@ -33,14 +34,16 @@ const Save = ({ postId }) => {
     }
   }, [savedPostsIds, postId]);
 
-  const handleSave = () => {
-    dispatch(savePostAction(postId));
+  const handleSave = async () => {
+    setIsSaving(true);
     setSaved(true);
+    dispatch(savePostAction(postId)).then(() => setIsSaving(false));
   };
 
-  const handleUnsave = () => {
-    dispatch(unsavePostAction(postId));
+  const handleUnsave = async () => {
+    setIsSaving(true);
     setSaved(false);
+    dispatch(unsavePostAction(postId)).then(() => setIsSaving(false));
   };
 
   return (
@@ -52,9 +55,10 @@ const Save = ({ postId }) => {
           key={postId}
           onClick={saved ? handleUnsave : handleSave}
           className="flex items-center text-xl gap-1"
+          disabled={isSaving}
         >
           <HiShoppingCart />
-          {saved ? "Remove from Saved" : "Save"}
+          {isSaving ? "Saving..." : saved ? "Remove from Saved" : "Save"}
         </button>
       )}
     </>

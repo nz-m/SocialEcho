@@ -7,11 +7,11 @@ const ProfilePage = () => {
   return (
     <div className="mx-6">
       <div className="flex justify-between">
-      <Leftbar/>
+        <Leftbar />
 
-        <UserProfile/>
-  
-      <RightBar/>
+        <UserProfile />
+
+        <RightBar />
       </div>
     </div>
   );
