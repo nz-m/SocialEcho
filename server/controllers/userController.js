@@ -5,9 +5,8 @@ const RefreshToken = require("../models/RefreshToken");
 // TODO - Invalidate old tokens/JTI
 // sign in
 async function signin(req, res) {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
     const existingUser = await User.findOne({
       email,
     });
@@ -123,10 +122,10 @@ async function addUser(req, res, next) {
 }
 
 async function logout(req, res) {
-  const { refreshToken } = req.body;
-  const accessToken = req.headers.authorization?.split(" ")[1];
-
   try {
+    const { refreshToken } = req.body;
+    const accessToken = req.headers.authorization?.split(" ")[1];
+
     const tokenPair = await RefreshToken.findOne({
       accessToken,
     });
@@ -151,9 +150,8 @@ async function logout(req, res) {
 }
 
 async function refreshToken(req, res) {
-  const { refreshToken } = req.body;
-
   try {
+    const { refreshToken } = req.body;
     const existingToken = await RefreshToken.findOne({
       refreshToken,
     });
@@ -202,13 +200,12 @@ async function refreshToken(req, res) {
 }
 
 async function getModProfile(req, res) {
-  const token = req.headers.authorization.split(" ")[1];
-  const decodedToken = jwt.decode(token, {
-    complete: true,
-  });
-  const userId = decodedToken.payload.id;
-
   try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.decode(token, {
+      complete: true,
+    });
+    const userId = decodedToken.payload.id;
     const moderator = await User.findById(userId);
     if (!moderator) {
       return res.status(404).json({

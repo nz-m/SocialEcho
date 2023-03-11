@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Post from "../post/Post";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
 import { getPostsAction } from "../../redux/actions/postActions";
+
+const MemoizedPost = React.memo(Post);
+
 const MainSection = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);
   const posts = useSelector((state) => state.posts?.posts);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (userData) {
       dispatch(getPostsAction(userData.id));
     }
   }, [userData, dispatch]);
+
+  const memoizedPosts = useMemo(() => {
+    return posts.map((post) => <MemoizedPost key={post._id} post={post} />);
+  }, [posts]);
 
   if (!posts) return null; // add loading spinner here
   return (
@@ -20,11 +26,7 @@ const MainSection = () => {
       <div className="flex justify-center items-center h-32 bg-gray-200 rounded-lg shadow-xl mb-4">
         <h1 className="text-2xl font-bold text-gray-700">Welcome</h1>
       </div>
-      <div>
-        {posts.map((post) => (
-          <Post key={post._id} post={post} />
-        ))}
-      </div>
+      <div>{memoizedPosts}</div>
     </div>
   );
 };

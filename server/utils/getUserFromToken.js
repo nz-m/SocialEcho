@@ -1,10 +1,17 @@
 const jwt = require("jsonwebtoken");
 
 const getUserFromToken = (req) => {
-  const token = req.headers.authorization.split(" ")[1];
-  const decodedToken = jwt.decode(token, { complete: true });
-  const userId = decodedToken.payload.id;
-  return userId;
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return null;
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    return decoded.id;
+  } catch (err) {
+    return null;
+  }
 };
 
 module.exports = getUserFromToken;

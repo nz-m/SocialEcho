@@ -37,8 +37,8 @@ async function getCommunity(req, res) {
 }
 
 async function createCommunity(req, res) {
-  const communities = req.body;
   try {
+    const communities = req.body;
     const savedCommunities = await Community.insertMany(communities);
     res.status(201).json(savedCommunities);
   } catch (error) {
@@ -61,10 +61,10 @@ async function addRules(req, res) {
 }
 
 async function addRulesToCommunity(req, res) {
-  const { name } = req.params;
-  const rules = await ModerationRules.find();
-
   try {
+    const { name } = req.params;
+    const rules = await ModerationRules.find();
+
     const appliedRules = await Community.findOneAndUpdate(
       {
         name,
@@ -87,8 +87,13 @@ async function addRulesToCommunity(req, res) {
 }
 
 async function getMemberCommunities(req, res) {
-  const userId = getUserFromToken(req);
   try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
     const communities = await Community.find({
       members: {
         $in: [userId],
@@ -105,8 +110,13 @@ async function getMemberCommunities(req, res) {
 }
 
 async function getNotMemberCommunities(req, res) {
-  const userId = getUserFromToken(req);
   try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
     const communities = await Community.find({
       members: {
         $nin: [userId],
@@ -123,10 +133,15 @@ async function getNotMemberCommunities(req, res) {
 }
 
 async function joinCommunity(req, res) {
-  const { name } = req.params;
-  const userId = getUserFromToken(req);
-
   try {
+    const { name } = req.params;
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
     const community = await Community.findOneAndUpdate(
       {
         name,
@@ -150,9 +165,14 @@ async function joinCommunity(req, res) {
 }
 
 async function leaveCommunity(req, res) {
-  const { name } = req.params;
-  const userId = getUserFromToken(req);
   try {
+    const { name } = req.params;
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
     const community = await Community.findOneAndUpdate(
       {
         name,
@@ -176,9 +196,9 @@ async function leaveCommunity(req, res) {
 }
 
 const addModToCommunity = async (req, res) => {
-  const userId = req.body.userId;
-  const communityName = req.params.name;
   try {
+    const userId = req.body.userId;
+    const communityName = req.params.name;
     // Retrieve the user information from the database
     const currentUser = await User.findById(userId);
 
@@ -216,10 +236,14 @@ const addModToCommunity = async (req, res) => {
   }
 };
 async function reportPost(req, res) {
-  const communityName = req.params.name;
-  const userId = getUserFromToken(req);
-
   try {
+    const communityName = req.params.name;
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
     const community = await Community.findOneAndUpdate(
       {
         name: communityName,
@@ -263,8 +287,8 @@ async function reportPost(req, res) {
 }
 
 async function getReportedPosts(req, res) {
-  const communityName = req.params.name;
   try {
+    const communityName = req.params.name;
     const community = await Community.findOne({
       name: communityName,
     })
@@ -311,10 +335,9 @@ async function getReportedPosts(req, res) {
 }
 
 async function removeReportedPost(req, res) {
-  const communityName = req.params.name;
-  const postId = req.params.postId;
-
   try {
+    const communityName = req.params.name;
+    const postId = req.params.postId;
     // Find the community by name
     const community = await Community.findOne({
       name: communityName,

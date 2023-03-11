@@ -1,9 +1,9 @@
-import React from "react";
-import PostForm from "../form/PostForm";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { getComPostsAction } from "../../redux/actions/postActions";
+import React, { useEffect, useMemo, useState } from "react";
 import Post from "../post/Post";
+import { useSelector, useDispatch } from "react-redux";
+import { getComPostsAction } from "../../redux/actions/postActions";
+import PostForm from "../form/PostForm";
+const MemoizedPost = React.memo(Post);
 
 const MainSection = () => {
   const dispatch = useDispatch();
@@ -20,6 +20,14 @@ const MainSection = () => {
       );
     }
   }, [dispatch, community]);
+
+  const memoizedCommunityPosts = useMemo(() => {
+    return communityPosts.map((post) => (
+      <MemoizedPost key={post._id} post={post} />
+    ));
+  }, [communityPosts]);
+
+  if (!communityPosts) return null; // add loading spinner here
 
   return (
     <div className="flex-grow h-full bg-gray-100">
@@ -44,9 +52,7 @@ const MainSection = () => {
               <p>Loading posts...</p>
             ) : (
               <div className="mt-4 flex flex-col gap-4">
-                {communityPosts?.map((post) => (
-                  <Post key={post._id} post={post} />
-                ))}
+                {memoizedCommunityPosts}
               </div>
             )}
           </div>

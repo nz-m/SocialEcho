@@ -47,9 +47,8 @@ const createPost = async (req, res) => {
 
 // get all posts
 const getPosts = async (req, res) => {
-  const userId = req.query.userId;
-
   try {
+    const userId = req.query.userId;
     // First, retrieve the list of communities where the user is a member
     const communities = await Community.find({
       members: userId,
@@ -84,8 +83,8 @@ const getPosts = async (req, res) => {
 
 // get all posts from a community
 const getComPosts = async (req, res) => {
-  const { id } = req.params;
   try {
+    const id = req.params.id;
     const posts = await Post.find({
       community: id,
     })
@@ -112,8 +111,8 @@ const getComPosts = async (req, res) => {
 // delete a post
 // auth is done in the client side, need to add here as well
 const deletePost = async (req, res) => {
-  const { id } = req.params;
   try {
+    const id = req.params.id;
     const post = await Post.findById(id);
     if (!post) throw new Error("Post not found");
     // this will also trigger the pre-remove hook to delete comments
@@ -128,10 +127,9 @@ const deletePost = async (req, res) => {
   }
 };
 const likePost = async (req, res) => {
-  const { id } = req.params;
-  const { userId } = req.body;
-
   try {
+    const id = req.params.id;
+    const { userId } = req.body;
     const updatedPost = await Post.findOneAndUpdate(
       {
         _id: id,
@@ -171,10 +169,10 @@ const likePost = async (req, res) => {
 };
 
 const unlikePost = async (req, res) => {
-  const { id } = req.params;
-  const { userId } = req.body;
-
   try {
+    const id = req.params.id;
+    const { userId } = req.body;
+
     const updatedPost = await Post.findOneAndUpdate(
       {
         _id: id,
@@ -212,14 +210,13 @@ const unlikePost = async (req, res) => {
 };
 
 const addComment = async (req, res) => {
-  const { body, user, post } = req.body.newComment;
-  const newComment = new Comment({
-    body,
-    user,
-    post,
-  });
-
   try {
+    const { body, user, post } = req.body.newComment;
+    const newComment = new Comment({
+      body,
+      user,
+      post,
+    });
     await newComment.save();
     await Post.findOneAndUpdate(
       {
@@ -242,9 +239,8 @@ const addComment = async (req, res) => {
 };
 
 const getComments = async (req, res) => {
-  const { id } = req.params;
-
   try {
+    const id = req.params.id;
     const comments = await Comment.find({
       post: id,
     })
@@ -268,10 +264,14 @@ const getComments = async (req, res) => {
 };
 
 const saveOrUnsavePost = async (req, res, operation) => {
-  const id = req.params.id;
-  const userId = getUserFromToken(req);
-
   try {
+    const id = req.params.id;
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
     const update = {};
     update[operation === "$addToSet" ? "$addToSet" : "$pull"] = {
       savedPosts: id,
@@ -322,8 +322,14 @@ const unsavePost = async (req, res) => {
 };
 
 const getSavedPosts = async (req, res) => {
-  const userId = getUserFromToken(req);
   try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
     const user = await User.findById(userId)
       .select("savedPosts")
       .populate({
