@@ -8,9 +8,13 @@ async function signin(req, res) {
   const { email, password } = req.body;
 
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({
+      email,
+    });
     if (!existingUser) {
-      return res.status(404).json({ message: "User doesn't exist" });
+      return res.status(404).json({
+        message: "User doesn't exist",
+      });
     }
 
     const isPasswordCorrect = await bcrypt.compare(
@@ -19,7 +23,9 @@ async function signin(req, res) {
     );
 
     if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({
+        message: "Invalid credentials",
+      });
     }
 
     const payload = {
@@ -36,7 +42,9 @@ async function signin(req, res) {
     });
 
     // delete existing refresh token for user
-    await RefreshToken.deleteOne({ user: existingUser._id });
+    await RefreshToken.deleteOne({
+      user: existingUser._id,
+    });
 
     // create new instance of RefreshToken model and save to database
     const newRefreshToken = new RefreshToken({
@@ -59,7 +67,9 @@ async function signin(req, res) {
       },
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: err.message,
+    });
   }
 }
 
@@ -77,7 +87,11 @@ async function addUser(req, res, next) {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
   const { filename } =
-    req.files && req.files.length > 0 ? req.files[0] : { filename: null };
+    req.files && req.files.length > 0
+      ? req.files[0]
+      : {
+          filename: null,
+        };
   const fileUrl = filename
     ? `${req.protocol}://${req.get("host")}/assets/userAvatars/${filename}`
     : null;
@@ -113,9 +127,13 @@ async function logout(req, res) {
   const accessToken = req.headers.authorization?.split(" ")[1];
 
   try {
-    const tokenPair = await RefreshToken.findOne({ accessToken });
+    const tokenPair = await RefreshToken.findOne({
+      accessToken,
+    });
     if (!tokenPair || tokenPair.refreshToken !== refreshToken) {
-      return res.status(401).json({ message: "Invalid refresh token" });
+      return res.status(401).json({
+        message: "Invalid refresh token",
+      });
     }
 
     await tokenPair.deleteOne();
@@ -126,9 +144,9 @@ async function logout(req, res) {
     });
   } catch (err) {
     console.error(err);
-    return res
-      .status(500)
-      .json({ message: "Internal server error. Please try again later." });
+    return res.status(500).json({
+      message: "Internal server error. Please try again later.",
+    });
   }
 }
 
@@ -136,20 +154,28 @@ async function refreshToken(req, res) {
   const { refreshToken } = req.body;
 
   try {
-    const existingToken = await RefreshToken.findOne({ refreshToken });
+    const existingToken = await RefreshToken.findOne({
+      refreshToken,
+    });
     if (!existingToken) {
-      return res.status(401).json({ message: "Invalid refresh token" });
+      return res.status(401).json({
+        message: "Invalid refresh token",
+      });
     }
     const existingUser = await User.findById(existingToken.user);
     if (!existingUser) {
-      return res.status(401).json({ message: "Invalid refresh token" });
+      return res.status(401).json({
+        message: "Invalid refresh token",
+      });
     }
 
     const refreshTokenExpiresAt =
       jwt.decode(existingToken.refreshToken).exp * 1000;
     if (Date.now() >= refreshTokenExpiresAt) {
       await existingToken.deleteOne();
-      return res.status(401).json({ message: "Expired refresh token" });
+      return res.status(401).json({
+        message: "Expired refresh token",
+      });
     }
 
     const payload = {
@@ -169,29 +195,41 @@ async function refreshToken(req, res) {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 }
 
 async function getModProfile(req, res) {
   const token = req.headers.authorization.split(" ")[1];
-  const decodedToken = jwt.decode(token, { complete: true });
+  const decodedToken = jwt.decode(token, {
+    complete: true,
+  });
   const userId = decodedToken.payload.id;
 
   try {
     const moderator = await User.findById(userId);
     if (!moderator) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
 
     // exclude password from response
-    const moderatorInfo = { ...moderator._doc };
+    const moderatorInfo = {
+      ...moderator._doc,
+    };
     delete moderatorInfo.password;
     moderatorInfo.createdAt = moderatorInfo.createdAt.toLocaleString();
 
-    return res.status(200).json({ moderatorInfo });
+    return res.status(200).json({
+      moderatorInfo,
+    });
   } catch (err) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 }
 

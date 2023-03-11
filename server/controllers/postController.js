@@ -35,9 +35,13 @@ const createPost = async (req, res) => {
 
   try {
     await newPost.save();
-    return res.status(201).json({ message: "Post created successfully" });
+    return res.status(201).json({
+      message: "Post created successfully",
+    });
   } catch (error) {
-    return res.status(409).json({ message: error.message });
+    return res.status(409).json({
+      message: error.message,
+    });
   }
 };
 
@@ -47,12 +51,20 @@ const getPosts = async (req, res) => {
 
   try {
     // First, retrieve the list of communities where the user is a member
-    const communities = await Community.find({ members: userId });
+    const communities = await Community.find({
+      members: userId,
+    });
     const communityIds = communities.map((community) => community._id);
 
     // Next, retrieve the posts that belong to those communities
-    const posts = await Post.find({ community: { $in: communityIds } })
-      .sort({ createdAt: -1 })
+    const posts = await Post.find({
+      community: {
+        $in: communityIds,
+      },
+    })
+      .sort({
+        createdAt: -1,
+      })
       .populate("user", "name avatar")
       .populate("community", "name")
       .lean();
@@ -64,7 +76,9 @@ const getPosts = async (req, res) => {
 
     res.status(200).json(formattedPosts);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({
+      message: error.message,
+    });
   }
 };
 
@@ -72,8 +86,12 @@ const getPosts = async (req, res) => {
 const getComPosts = async (req, res) => {
   const { id } = req.params;
   try {
-    const posts = await Post.find({ community: id })
-      .sort({ createdAt: -1 })
+    const posts = await Post.find({
+      community: id,
+    })
+      .sort({
+        createdAt: -1,
+      })
       .populate("user", "name avatar")
       .populate("community", "name")
       .lean();
@@ -85,7 +103,9 @@ const getComPosts = async (req, res) => {
 
     res.status(200).json(formattedPosts);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 
@@ -98,9 +118,13 @@ const deletePost = async (req, res) => {
     if (!post) throw new Error("Post not found");
     // this will also trigger the pre-remove hook to delete comments
     await post.remove();
-    res.status(200).json({ message: "Post deleted successfully" });
+    res.status(200).json({
+      message: "Post deleted successfully",
+    });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({
+      message: error.message,
+    });
   }
 };
 const likePost = async (req, res) => {
@@ -109,17 +133,28 @@ const likePost = async (req, res) => {
 
   try {
     const updatedPost = await Post.findOneAndUpdate(
-      { _id: id, likes: { $ne: userId } },
-      { $addToSet: { likes: userId } },
-      { new: true }
+      {
+        _id: id,
+        likes: {
+          $ne: userId,
+        },
+      },
+      {
+        $addToSet: {
+          likes: userId,
+        },
+      },
+      {
+        new: true,
+      }
     )
       .populate("user", "name avatar")
       .populate("community", "name");
 
     if (!updatedPost) {
-      return res
-        .status(404)
-        .json({ message: "Post not found or already liked" });
+      return res.status(404).json({
+        message: "Post not found or already liked",
+      });
     }
 
     const formattedPost = {
@@ -129,7 +164,9 @@ const likePost = async (req, res) => {
 
     res.status(200).json(formattedPost);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "Server error",
+    });
   }
 };
 
@@ -139,15 +176,26 @@ const unlikePost = async (req, res) => {
 
   try {
     const updatedPost = await Post.findOneAndUpdate(
-      { _id: id, likes: userId },
-      { $pull: { likes: userId } },
-      { new: true }
+      {
+        _id: id,
+        likes: userId,
+      },
+      {
+        $pull: {
+          likes: userId,
+        },
+      },
+      {
+        new: true,
+      }
     )
       .populate("user", "name avatar")
       .populate("community", "name");
 
     if (!updatedPost) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({
+        message: "Post not found",
+      });
     }
 
     const formattedPost = {
@@ -157,7 +205,9 @@ const unlikePost = async (req, res) => {
 
     res.status(200).json(formattedPost);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "Server error",
+    });
   }
 };
 
@@ -172,10 +222,18 @@ const addComment = async (req, res) => {
   try {
     await newComment.save();
     await Post.findOneAndUpdate(
-      { _id: post },
-      { $addToSet: { comments: newComment._id } }
+      {
+        _id: post,
+      },
+      {
+        $addToSet: {
+          comments: newComment._id,
+        },
+      }
     );
-    res.status(200).json({ message: "Comment added successfully" });
+    res.status(200).json({
+      message: "Comment added successfully",
+    });
   } catch (error) {
     res.status(500).json({
       message: "Server error",
@@ -187,8 +245,12 @@ const getComments = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const comments = await Comment.find({ post: id })
-      .sort({ createdAt: -1 })
+    const comments = await Comment.find({
+      post: id,
+    })
+      .sort({
+        createdAt: -1,
+      })
       .populate("user", "name avatar")
       .lean();
 
@@ -199,7 +261,9 @@ const getComments = async (req, res) => {
 
     res.status(200).json(formattedComments);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "Server error",
+    });
   }
 };
 
@@ -213,7 +277,9 @@ const saveOrUnsavePost = async (req, res, operation) => {
       savedPosts: id,
     };
     const updatedUserPost = await User.findOneAndUpdate(
-      { _id: userId },
+      {
+        _id: userId,
+      },
       update,
       {
         new: true,
@@ -222,11 +288,16 @@ const saveOrUnsavePost = async (req, res, operation) => {
       .select("savedPosts")
       .populate({
         path: "savedPosts",
-        populate: { path: "community", select: "name" },
+        populate: {
+          path: "community",
+          select: "name",
+        },
       });
 
     if (!updatedUserPost) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
 
     const formattedPosts = updatedUserPost.savedPosts.map((post) => ({
@@ -236,7 +307,9 @@ const saveOrUnsavePost = async (req, res, operation) => {
 
     res.status(200).json(formattedPosts);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "Server error",
+    });
   }
 };
 
@@ -255,11 +328,16 @@ const getSavedPosts = async (req, res) => {
       .select("savedPosts")
       .populate({
         path: "savedPosts",
-        populate: { path: "community", select: "name" },
+        populate: {
+          path: "community",
+          select: "name",
+        },
       });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
 
     const formattedPosts = user.savedPosts.map((post) => ({
@@ -269,7 +347,9 @@ const getSavedPosts = async (req, res) => {
 
     res.status(200).json(formattedPosts);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "Server error",
+    });
   }
 };
 

@@ -16,9 +16,17 @@ API.interceptors.request.use((req) => {
 
 export const refreshTokenAction = (refreshToken) => async (dispatch) => {
   try {
-    const response = await API.post("/users/refresh-token", { refreshToken });
-    dispatch({ type: "REFRESH_TOKEN_SUCCESS", payload: response.data });
+    const response = await API.post("/users/refresh-token", {
+      refreshToken,
+    });
+    dispatch({
+      type: "REFRESH_TOKEN_SUCCESS",
+      payload: response.data,
+    });
   } catch (error) {
-    dispatch({ type: "REFRESH_TOKEN_FAIL", payload: error.response.data });
+    dispatch({
+      type: "REFRESH_TOKEN_FAIL",
+      payload: error.response.data,
+    });
   }
 };

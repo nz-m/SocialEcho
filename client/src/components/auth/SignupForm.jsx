@@ -59,37 +59,33 @@ const SignupForm = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign up for an account
+            Sign up for an account{" "}
           </h2>
-
           {signupErr &&
             Array.isArray(signupErr) &&
             signupErr.map((err, i) => (
               <div
                 className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4
-                text-center
-                "
+                    text - center "
                 role="alert"
                 key={i}
               >
-                <strong className="font-bold">Error!</strong>
-
+                <strong className="font-bold"> Error! </strong>
                 <span
                   className="block sm:inline
-              ml-2 mr-2
-              "
+                    ml - 2 mr - 2 "
                 >
-                  {err}
-                </span>
+                  {err}{" "}
+                </span>{" "}
               </div>
-            ))}
-        </div>
+            ))}{" "}
+        </div>{" "}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="name" className="sr-only">
-                Name
-              </label>
+                Name{" "}
+              </label>{" "}
               <input
                 id="name"
                 name="name"
@@ -100,12 +96,12 @@ const SignupForm = () => {
                 placeholder="Name"
                 value={name}
                 onChange={handleNameChange}
-              />
-            </div>
+              />{" "}
+            </div>{" "}
             <div>
               <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
+                Email address{" "}
+              </label>{" "}
               <input
                 id="email"
                 name="email"
@@ -116,12 +112,12 @@ const SignupForm = () => {
                 placeholder="Email address"
                 value={email}
                 onChange={handleEmailChange}
-              />
-            </div>
+              />{" "}
+            </div>{" "}
             <div>
               <label htmlFor="password" className="sr-only">
-                Password
-              </label>
+                Password{" "}
+              </label>{" "}
               <input
                 id="password"
                 name="password"
@@ -132,12 +128,12 @@ const SignupForm = () => {
                 placeholder="Password"
                 value={password}
                 onChange={handlePasswordChange}
-              />
-            </div>
+              />{" "}
+            </div>{" "}
             <div>
               <label htmlFor="avatar" className="sr-only">
-                Avatar
-              </label>
+                Avatar{" "}
+              </label>{" "}
               <input
                 id="avatar"
                 name="avatar"
@@ -146,31 +142,30 @@ const SignupForm = () => {
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo -500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Avatar"
                 onChange={handleAvatarChange}
-              />
-            </div>
-          </div>
+              />{" "}
+            </div>{" "}
+          </div>{" "}
           <div>
             <button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Sign up
+              Sign up{" "}
             </button>
-
             <div className="mt-4 text-center">
               <p className="text-sm text-gray-600">
-                Already have an account?{" "}
+                Already have an account ?{" "}
                 <Link
                   to="/signin"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Sign in
-                </Link>
-              </p>
-            </div>
-          </div>
-        </form>
-      </div>
+                </Link>{" "}
+              </p>{" "}
+            </div>{" "}
+          </div>{" "}
+        </form>{" "}
+      </div>{" "}
     </div>
   );
 };

@@ -59,16 +59,34 @@ postSchema.pre("remove", async function (next) {
       await deleteFilePromise;
     }
     const commentIds = this.comments.map((comment) => comment.toString());
-    await this.model("Comment").deleteMany({ _id: { $in: commentIds } });
+    await this.model("Comment").deleteMany({
+      _id: {
+        $in: commentIds,
+      },
+    });
     // Delete the reported post entry from all communities
     await this.model("Community").updateMany(
-      { "reportedPosts.post": this._id },
-      { $pull: { reportedPosts: { post: this._id } } }
+      {
+        "reportedPosts.post": this._id,
+      },
+      {
+        $pull: {
+          reportedPosts: {
+            post: this._id,
+          },
+        },
+      }
     );
     // Delete the Saved post entry from all users
     await this.model("User").updateMany(
-      { savedPosts: this._id },
-      { $pull: { savedPosts: this._id } }
+      {
+        savedPosts: this._id,
+      },
+      {
+        $pull: {
+          savedPosts: this._id,
+        },
+      }
     );
 
     next();
