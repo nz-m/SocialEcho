@@ -6,8 +6,8 @@ const Post = require("../models/Post");
 const Community = require("../models/Community");
 const { logger } = require("../utils/logger");
 const getUserFromToken = require("../utils/getUserFromToken");
-const dayjs = require('dayjs');
-const duration = require('dayjs/plugin/duration');
+const dayjs = require("dayjs");
+const duration = require("dayjs/plugin/duration");
 dayjs.extend(duration);
 // TODO - Invalidate old tokens/JTI
 // sign in
@@ -95,9 +95,7 @@ const getUsers = async (req, res, next) => {
 // get user by id
 const getUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id)
-      .select("-password")
-      .lean();
+    const user = await User.findById(req.params.id).select("-password").lean();
 
     // Get total number of posts created by the user
     const totalPosts = await Post.countDocuments({ user: user._id });
@@ -107,7 +105,9 @@ const getUser = async (req, res, next) => {
     const totalCommunities = communities.length;
 
     // Get the number of communities the user posted in
-    const postCommunities = await Post.find({ user: user._id }).distinct('community');
+    const postCommunities = await Post.find({ user: user._id }).distinct(
+      "community"
+    );
     const totalPostCommunities = postCommunities.length;
 
     // Calculate user's duration on the platform
@@ -135,7 +135,9 @@ const getUser = async (req, res, next) => {
       user.duration = `${durationYears} years`;
     }
 
-    const posts = await Post.find({ user: user._id }).populate("community", "name").lean();
+    const posts = await Post.find({ user: user._id })
+      .populate("community", "name")
+      .lean();
     user.posts = posts;
 
     res.json(user);
@@ -143,8 +145,6 @@ const getUser = async (req, res, next) => {
     next(err);
   }
 };
-
-
 
 // add user
 const addUser = async (req, res) => {
@@ -155,8 +155,8 @@ const addUser = async (req, res) => {
     req.files && req.files.length > 0
       ? req.files[0]
       : {
-        filename: null,
-      };
+          filename: null,
+        };
   const fileUrl = filename
     ? `${req.protocol}://${req.get("host")}/assets/userAvatars/${filename}`
     : null;

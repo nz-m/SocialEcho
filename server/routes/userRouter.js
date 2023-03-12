@@ -21,16 +21,9 @@ const avatarUpload = require("../middlewares/users/avatarUpload");
 const requireAuth = passport.authenticate("jwt", { session: false });
 
 router.get("/moderator", requireAuth, getModProfile);
-//get all users
 router.get("/", requireAuth, getUsers);
-
-//get user by id
 router.get("/:id", requireAuth, getUser);
-
-// refresh token
 router.post("/refresh-token", refreshToken);
-
-//add user
 router.post(
   "/signup",
   avatarUpload,
@@ -39,9 +32,6 @@ router.post(
   addUser
 );
 router.post("/signin", signin);
-
-
-// logout
 router.post("/logout", logout);
 
 module.exports = router;
