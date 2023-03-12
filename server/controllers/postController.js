@@ -334,11 +334,18 @@ const getSavedPosts = async (req, res) => {
       .select("savedPosts")
       .populate({
         path: "savedPosts",
-        populate: {
-          path: "community",
-          select: "name",
-        },
+        populate: [
+          {
+            path: "community",
+            select: "name",
+          },
+          {
+            path: "user",
+            select: "name avatar",
+          },
+        ],
       });
+
 
     if (!user) {
       return res.status(404).json({

@@ -5,6 +5,7 @@ const RefreshToken = require("../models/RefreshToken");
 const Post = require("../models/Post");
 const Community = require("../models/Community");
 const { logger } = require("../utils/logger");
+const getUserFromToken = require("../utils/getUserFromToken");
 const dayjs = require('dayjs');
 const duration = require('dayjs/plugin/duration');
 dayjs.extend(duration);
@@ -269,11 +270,12 @@ const refreshToken = async (req, res) => {
 
 const getModProfile = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.decode(token, {
-      complete: true,
-    });
-    const userId = decodedToken.payload.id;
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
     const moderator = await User.findById(userId);
     if (!moderator) {
       return res.status(404).json({

@@ -20,6 +20,7 @@ const avatarUpload = require("../middlewares/users/avatarUpload");
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 
+router.get("/moderator", requireAuth, getModProfile);
 //get all users
 router.get("/", requireAuth, getUsers);
 
@@ -39,9 +40,6 @@ router.post(
 );
 router.post("/signin", signin);
 
-// get moderator profile
-
-router.get("/moderator", requireAuth, getModProfile);
 
 // logout
 router.post("/logout", logout);
