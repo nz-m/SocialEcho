@@ -21,12 +21,6 @@ const userSchema = new Schema(
     avatar: {
       type: String,
     },
-    // communities: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Community",
-    //   },
-    // ],
 
     location: {
       type: String,
@@ -51,12 +45,6 @@ const userSchema = new Schema(
       default: "general",
     },
 
-    posts: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Post",
-      },
-    ],
 
     savedPosts: [
       {

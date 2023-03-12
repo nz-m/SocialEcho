@@ -24,7 +24,6 @@ const Post = ({ post }) => {
   const deleteHandler = () => {
     dispatch(deletePostAction(post._id));
   };
-
   return (
     <div className="px-6 py-6 rounded-xl shadow-xl bg-white border border-gray-100">
       <div className="flex justify-between">

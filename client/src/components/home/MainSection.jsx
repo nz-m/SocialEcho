@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo,useEffect } from "react";
 import Post from "../post/Post";
 import { useSelector, useDispatch } from "react-redux";
 import { getPostsAction } from "../../redux/actions/postActions";
@@ -10,7 +10,7 @@ const MainSection = () => {
   const userData = useSelector((state) => state.auth?.userData);
   const posts = useSelector((state) => state.posts?.posts);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (userData) {
       dispatch(getPostsAction(userData.id));
     }

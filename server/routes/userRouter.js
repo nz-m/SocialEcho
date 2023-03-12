@@ -10,6 +10,7 @@ const {
   logout,
   refreshToken,
   getModProfile,
+  getUser,
 } = require("../controllers/userController");
 const {
   addUserValidator,
@@ -17,8 +18,13 @@ const {
 } = require("../middlewares/users/usersValidator");
 const avatarUpload = require("../middlewares/users/avatarUpload");
 
+const requireAuth = passport.authenticate("jwt", { session: false });
+
 //get all users
-router.get("/", passport.authenticate("jwt", { session: false }), getUsers);
+router.get("/", requireAuth, getUsers);
+
+//get user by id
+router.get("/:id", requireAuth, getUser);
 
 // refresh token
 router.post("/refresh-token", refreshToken);
@@ -35,11 +41,7 @@ router.post("/signin", signin);
 
 // get moderator profile
 
-router.get(
-  "/moderator",
-  passport.authenticate("jwt", { session: false }),
-  getModProfile
-);
+router.get("/moderator", requireAuth, getModProfile);
 
 // logout
 router.post("/logout", logout);

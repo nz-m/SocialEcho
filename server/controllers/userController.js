@@ -2,7 +2,12 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const RefreshToken = require("../models/RefreshToken");
+const Post = require("../models/Post");
+const Community = require("../models/Community");
 const { logger } = require("../utils/logger");
+const dayjs = require('dayjs');
+const duration = require('dayjs/plugin/duration');
+dayjs.extend(duration);
 // TODO - Invalidate old tokens/JTI
 // sign in
 
@@ -86,6 +91,60 @@ const getUsers = async (req, res, next) => {
     .catch((err) => next(err));
 };
 
+// get user by id
+const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id)
+      .select("-password")
+      .lean();
+
+    // Get total number of posts created by the user
+    const totalPosts = await Post.countDocuments({ user: user._id });
+
+    // Get the number of communities the user is in
+    const communities = await Community.find({ members: user._id });
+    const totalCommunities = communities.length;
+
+    // Get the number of communities the user posted in
+    const postCommunities = await Post.find({ user: user._id }).distinct('community');
+    const totalPostCommunities = postCommunities.length;
+
+    // Calculate user's duration on the platform
+    const createdAt = dayjs(user.createdAt);
+    const now = dayjs();
+    const durationObj = dayjs.duration(now.diff(createdAt));
+    const durationMinutes = durationObj.asMinutes();
+    const durationHours = durationObj.asHours();
+    const durationDays = durationObj.asDays();
+
+    // Add duration and other info to user object
+    user.totalPosts = totalPosts;
+    user.totalCommunities = totalCommunities;
+    user.totalPostCommunities = totalPostCommunities;
+    user.duration = "";
+
+    if (durationMinutes < 60) {
+      user.duration = `${Math.floor(durationMinutes)} minutes`;
+    } else if (durationHours < 24) {
+      user.duration = `${Math.floor(durationHours)} hours`;
+    } else if (durationDays < 365) {
+      user.duration = `${Math.floor(durationDays)} days`;
+    } else {
+      const durationYears = Math.floor(durationDays / 365);
+      user.duration = `${durationYears} years`;
+    }
+
+    const posts = await Post.find({ user: user._id }).populate("community", "name").lean();
+    user.posts = posts;
+
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+
 // add user
 const addUser = async (req, res) => {
   let newUser;
@@ -95,8 +154,8 @@ const addUser = async (req, res) => {
     req.files && req.files.length > 0
       ? req.files[0]
       : {
-          filename: null,
-        };
+        filename: null,
+      };
   const fileUrl = filename
     ? `${req.protocol}://${req.get("host")}/assets/userAvatars/${filename}`
     : null;
@@ -248,4 +307,5 @@ module.exports = {
   logout,
   refreshToken,
   getModProfile,
+  getUser,
 };

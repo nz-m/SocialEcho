@@ -6,6 +6,7 @@ import {
   joinCommunityAction,
   getJoinedCommunitiesAction,
 } from "../../redux/actions/communityActions";
+import { getUserAction } from "../../redux/actions/userActions";
 import { getPostsAction } from "../../redux/actions/postActions";
 
 const RightBar = () => {
@@ -27,20 +28,19 @@ const RightBar = () => {
   }
 
   const joinCommumityHandler = (communityName) => {
-    dispatch(
-      joinCommunityAction(communityName, () => {
-        dispatch(
-          getJoinedCommunitiesAction(() => {
-            dispatch(
-              getNotJoinedCommunitiesAction(() => {
-                if (userData) dispatch(getPostsAction(userData.id));
-              })
-            );
-          })
-        );
-      })
-    );
+    const handleJoinedCommunities = async () => {
+      await dispatch(joinCommunityAction(communityName));
+      await dispatch(getJoinedCommunitiesAction());
+      await dispatch(getNotJoinedCommunitiesAction());
+      if (userData) {
+        await dispatch(getPostsAction(userData.id));
+        await dispatch(getUserAction(userData.id));
+      }
+    };
+
+    handleJoinedCommunities();
   };
+
   return (
     <div className="w-3/12 h-screen bg-white sticky top-0">
       <div className="card">
