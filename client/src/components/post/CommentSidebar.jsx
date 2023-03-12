@@ -37,7 +37,6 @@ function CommentSidebar() {
                   </span>
                 </div>
                 <p>{comment.body}</p>
-                <p>Likes : {comment.likes.length}</p>
               </div>
             </div>
           ))}

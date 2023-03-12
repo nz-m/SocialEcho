@@ -6,7 +6,10 @@ const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
 
-async function getCommunities(req, res) {
+// Now i will convert all the functions to arrow functions
+
+// Get all communities
+const getCommunities = async (req, res) => {
   try {
     const communities = await Community.find();
     res.status(200).json(communities);
@@ -15,9 +18,11 @@ async function getCommunities(req, res) {
       message: error.message,
     });
   }
-}
+};
 
-async function getCommunity(req, res) {
+// async function getCommunity(req, res) {
+
+const getCommunity = async (req, res) => {
   try {
     const community = await Community.findOne({
       name: req.params.name,
@@ -34,9 +39,9 @@ async function getCommunity(req, res) {
       message: error.message,
     });
   }
-}
+};
 
-async function createCommunity(req, res) {
+const createCommunity = async (req, res) => {
   try {
     const communities = req.body;
     const savedCommunities = await Community.insertMany(communities);
@@ -46,9 +51,9 @@ async function createCommunity(req, res) {
       message: error.message,
     });
   }
-}
+};
 
-async function addRules(req, res) {
+const addRules = async (req, res) => {
   const rules = req.body;
   try {
     const savedRules = await ModerationRules.insertMany(rules);
@@ -58,9 +63,9 @@ async function addRules(req, res) {
       message: error.message,
     });
   }
-}
+};
 
-async function addRulesToCommunity(req, res) {
+const addRulesToCommunity = async (req, res) => {
   try {
     const { name } = req.params;
     const rules = await ModerationRules.find();
@@ -84,9 +89,9 @@ async function addRulesToCommunity(req, res) {
       message: error.message,
     });
   }
-}
+};
 
-async function getMemberCommunities(req, res) {
+const getMemberCommunities = async (req, res) => {
   try {
     const userId = getUserFromToken(req);
     if (!userId) {
@@ -107,9 +112,9 @@ async function getMemberCommunities(req, res) {
       error,
     });
   }
-}
+};
 
-async function getNotMemberCommunities(req, res) {
+const getNotMemberCommunities = async (req, res) => {
   try {
     const userId = getUserFromToken(req);
     if (!userId) {
@@ -130,9 +135,9 @@ async function getNotMemberCommunities(req, res) {
       error,
     });
   }
-}
+};
 
-async function joinCommunity(req, res) {
+const joinCommunity = async (req, res) => {
   try {
     const { name } = req.params;
     const userId = getUserFromToken(req);
@@ -162,9 +167,9 @@ async function joinCommunity(req, res) {
       error,
     });
   }
-}
+};
 
-async function leaveCommunity(req, res) {
+const leaveCommunity = async (req, res) => {
   try {
     const { name } = req.params;
     const userId = getUserFromToken(req);
@@ -193,7 +198,7 @@ async function leaveCommunity(req, res) {
       error,
     });
   }
-}
+};
 
 const addModToCommunity = async (req, res) => {
   try {
@@ -235,7 +240,7 @@ const addModToCommunity = async (req, res) => {
     });
   }
 };
-async function reportPost(req, res) {
+const reportPost = async (req, res) => {
   try {
     const communityName = req.params.name;
     const userId = getUserFromToken(req);
@@ -284,9 +289,9 @@ async function reportPost(req, res) {
     console.log(error);
     res.status(500).json(error);
   }
-}
+};
 
-async function getReportedPosts(req, res) {
+const getReportedPosts = async (req, res) => {
   try {
     const communityName = req.params.name;
     const community = await Community.findOne({
@@ -332,9 +337,9 @@ async function getReportedPosts(req, res) {
       message: "Server error",
     });
   }
-}
+};
 
-async function removeReportedPost(req, res) {
+const removeReportedPost = async (req, res) => {
   try {
     const communityName = req.params.name;
     const postId = req.params.postId;
@@ -381,7 +386,7 @@ async function removeReportedPost(req, res) {
       message: "Server Error",
     });
   }
-}
+};
 
 module.exports = {
   getCommunities,

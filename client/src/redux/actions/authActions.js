@@ -14,6 +14,7 @@ export const logoutAction = () => async (dispatch) => {
   try {
     const { refreshToken } = JSON.parse(localStorage.getItem("profile"));
     const { data } = await api.logout(refreshToken);
+    localStorage.removeItem("profile");
     dispatch({ type: LOGOUT, payload: data });
   } catch (error) {
     console.log(error.message);
@@ -49,9 +50,16 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
       console.log(error.response.data.errors);
       // handle error
     } else {
+      const { user, accessToken, refreshToken } = data;
+      const profile = {
+        user,
+        accessToken,
+        refreshToken,
+      };
+      localStorage.setItem("profile", JSON.stringify(profile));
       dispatch({
         type: SIGNIN,
-        data,
+        data: profile,
       });
       navigate("/");
     }

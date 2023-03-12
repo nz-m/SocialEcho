@@ -20,41 +20,41 @@ const authReducer = (state = initialState, action) => {
     case SIGNUP:
       return {
         ...state,
-        userData: action.data.data,
-        refreshToken: action.data.refreshToken,
-        accessToken: action.data.accessToken,
-        signupErr: action.data ? action.data : [],
+        userData: action.data?.data,
+        refreshToken: action.data?.refreshToken,
+        accessToken: action.data?.accessToken,
+        signupErr: action.data?.errors || [],
       };
 
     case SIGNIN:
-      const { user, accessToken, refreshToken } = action.data;
-      localStorage.setItem("profile", JSON.stringify(action.data));
-      return { ...state, userData: user, accessToken, refreshToken };
+      return {
+        ...state,
+        userData: action.data.user,
+        accessToken: action.data.accessToken,
+        refreshToken: action.data.refreshToken,
+      };
+
     case LOGOUT:
-      localStorage.clear();
       return {
         ...state,
         userData: null,
         accessToken: null,
         refreshToken: null,
       };
+
     case REFRESH_TOKEN_SUCCESS:
-      const profile = JSON.parse(localStorage.getItem("profile"));
-      const payload = action.payload;
-      localStorage.setItem(
-        "profile",
-        JSON.stringify({ ...profile, ...payload })
-      );
       return {
         ...state,
-        accessToken: payload.accessToken,
-        refreshToken: payload.refreshToken,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
       };
 
     case REFRESH_TOKEN_FAIL:
-      localStorage.clear();
       return {
         ...state,
+        userData: null,
+        accessToken: null,
+        refreshToken: null,
       };
 
     case GET_COMMUNITY:

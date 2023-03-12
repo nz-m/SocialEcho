@@ -2,15 +2,19 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const RefreshToken = require("../models/RefreshToken");
+const { logger } = require("../utils/logger");
 // TODO - Invalidate old tokens/JTI
 // sign in
-async function signin(req, res) {
+
+const signin = async (req, res) => {
+  logger.info("User attempting to sign in");
   try {
     const { email, password } = req.body;
     const existingUser = await User.findOne({
       email,
     });
     if (!existingUser) {
+      logger.error("User not found");
       return res.status(404).json({
         message: "User doesn't exist",
       });
@@ -22,6 +26,7 @@ async function signin(req, res) {
     );
 
     if (!isPasswordCorrect) {
+      logger.error("Invalid credentials");
       return res.status(400).json({
         message: "Invalid credentials",
       });
@@ -66,22 +71,23 @@ async function signin(req, res) {
       },
     });
   } catch (err) {
+    logger.error(`Error occurred while signing in user: ${err.message}`);
     res.status(500).json({
       message: err.message,
     });
   }
-}
+};
 
-function getUsers(req, res, next) {
+const getUsers = async (req, res, next) => {
   User.find()
     .then((users) => {
       res.json(users);
     })
     .catch((err) => next(err));
-}
+};
 
 // add user
-async function addUser(req, res, next) {
+const addUser = async (req, res) => {
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -119,37 +125,40 @@ async function addUser(req, res, next) {
       error: err.message,
     });
   }
-}
-
-async function logout(req, res) {
+};
+const logout = async (req, res) => {
   try {
     const { refreshToken } = req.body;
-    const accessToken = req.headers.authorization?.split(" ")[1];
+    const accessToken = req.headers.authorization?.split(" ")[1] ?? null;
 
-    const tokenPair = await RefreshToken.findOne({
-      accessToken,
-    });
+    const tokenPair = await RefreshToken.findOne({ accessToken });
     if (!tokenPair || tokenPair.refreshToken !== refreshToken) {
       return res.status(401).json({
+        success: false,
         message: "Invalid refresh token",
       });
     }
 
     await tokenPair.deleteOne();
 
+    logger.info(`User with access token ${accessToken} has logged out`);
+
     return res.status(200).json({
       success: true,
       message: "Logout successful",
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
+
     return res.status(500).json({
+      success: false,
       message: "Internal server error. Please try again later.",
+      error: err.message,
     });
   }
-}
+};
 
-async function refreshToken(req, res) {
+const refreshToken = async (req, res) => {
   try {
     const { refreshToken } = req.body;
     const existingToken = await RefreshToken.findOne({
@@ -197,9 +206,9 @@ async function refreshToken(req, res) {
       message: "Internal server error",
     });
   }
-}
+};
 
-async function getModProfile(req, res) {
+const getModProfile = async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.decode(token, {
@@ -228,7 +237,9 @@ async function getModProfile(req, res) {
       message: "Internal server error",
     });
   }
-}
+};
+
+// get user by id
 
 module.exports = {
   getUsers,
