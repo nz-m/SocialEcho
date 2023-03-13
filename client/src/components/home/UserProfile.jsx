@@ -124,8 +124,10 @@ const UserProfile = () => {
       <div>
         <h3 className="text-lg font-bold mb-4">Your posts</h3>
 
-        {posttoShow && (
-          <p className="text-gray-600">No posts have been created yet.</p>
+        {posttoShow && posttoShow.length === 0 && (
+          <p className="text-gray-600">
+            No posts available.
+          </p>
         )}
         {posttoShow}
       </div>
