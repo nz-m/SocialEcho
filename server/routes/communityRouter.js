@@ -11,7 +11,10 @@ router.use(requireAuth);
 router.get("/notmember", communityController.getNotMemberCommunities);
 router.get("/member", communityController.getMemberCommunities);
 router.get("/:name/reported-posts", communityController.getReportedPosts);
-router.delete("/:name/reported-posts/:postId", communityController.removeReportedPost);
+router.delete(
+  "/:name/reported-posts/:postId",
+  communityController.removeReportedPost
+);
 router.post("/:name/join", communityController.joinCommunity);
 router.post("/:name/leave", communityController.leaveCommunity);
 router.put("/:name/report", communityController.reportPost);

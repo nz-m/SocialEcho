@@ -22,27 +22,23 @@ const CommentForm = ({ communityId }) => {
     e.preventDefault();
     const newComment = {
       body,
-      user: userData.id,
+      user: userData._id,
       post: postId,
     };
     if (userData) {
-      setIsLoading(true); // set isLoading to true before adding comment
-      dispatch(
-        addCommentAction(postId, newComment, () =>
-          dispatch(
-            getCommentsAction(postId, () =>
-              dispatch(
-                getPostsAction(userData.id, () =>
-                  dispatch(getComPostsAction(communityId))
-                )
-              )
-            )
-          )
-        )
-      ).then(() => {
-        setIsLoading(false); // set isLoading back to false once the process is complete
-        setBody(""); // reset form
-      });
+      setIsLoading(true);
+      dispatch(addCommentAction(postId, newComment))
+        .then(() => dispatch(getCommentsAction(postId)))
+        .then(() => dispatch(getPostsAction(userData._id)))
+        .then(() => dispatch(getComPostsAction(communityId)))
+        .then(() => {
+          setIsLoading(false);
+          setBody("");
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsLoading(false);
+        });
     }
   };
 

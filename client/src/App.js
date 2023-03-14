@@ -11,6 +11,7 @@ import PostPage from "./pages/PostPage";
 import ReportPost from "./components/community/ReportPost";
 import ReportedPostPage from "./pages/ReportedPostPage";
 import Saved from "./pages/Saved";
+import EditProfileForm from "./components/form/EditProfileForm";
 const App = () => {
   return (
     <div className="bg-[#f6f7f9]">
@@ -36,6 +37,7 @@ const App = () => {
             element={<Moderator />}
           />
           <Route path="/saved" element={<Saved />} />
+          <Route path="/edit-profile" element={<EditProfileForm />} />
         </Route>
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>

@@ -13,20 +13,17 @@ const ViewReportedPost = ({ post }) => {
   const createdAtString = new Date(createdAt).toDateString();
 
   const onRemove = () => {
-    dispatch(
-      deletePostAction(_id, () => {
-        //navigate to previous page
-        navigate(-1);
-      })
-    );
+    dispatch(deletePostAction(_id)).then(() => {
+      //navigate to previous page
+      navigate(-1);
+    });
   };
 
   const onNoAction = () => {
-    dispatch(
-      removeReportedPostAction(communityName, _id, () => {
-        navigate(-1);
-      })
-    );
+    dispatch(removeReportedPostAction(communityName, _id)).then(() => {
+      //navigate to previous page
+      navigate(-1);
+    });
   };
 
   const isImageFile = useMemo(() => {

@@ -22,21 +22,17 @@ const ReportPost = () => {
 
   const reportHandler = () => {
     setIsLoading(true);
-    const userId = userData.id;
+    const userId = userData._id;
     dispatch(
-      reportPostAction(
-        communityName,
-        {
-          postId: post._id,
-          reportReason: reason,
-          reportedBy: userId,
-        },
-        () => {
-          setIsLoading(false);
-          navigate(-1);
-        }
-      )
-    );
+      reportPostAction(communityName, {
+        postId: post._id,
+        reportReason: reason,
+        reportedBy: userId,
+      })
+    ).then(() => {
+      setIsLoading(false);
+      navigate(-1);
+    });
   };
 
   const handleReasonChange = (e) => {

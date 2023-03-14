@@ -36,7 +36,7 @@ passport.use(
         if (timeDifference > 0 && timeDifference < 5 * 60 * 1000) {
           // Token is about to expire, issue a new one
           const payloadNew = {
-            id: user._id,
+            _id: user._id,
             email: user.email,
           };
           const newToken = jwt.sign(payloadNew, process.env.SECRET, {

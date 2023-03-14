@@ -17,7 +17,7 @@ const PostPage = () => {
 
   useEffect(() => {
     if (userData) {
-      dispatch(getPostsAction(userData.id));
+      dispatch(getPostsAction(userData._id));
     }
   }, [userData, dispatch]);
 

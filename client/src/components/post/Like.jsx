@@ -12,16 +12,16 @@ const Like = ({ post }) => {
   const userData = useSelector((state) => state.auth.userData);
 
   const [likeState, setLikeState] = useState({
-    liked: post.likes.includes(userData.id),
+    liked: post.likes.includes(userData._id),
     localLikes: likes.length,
   });
 
   useEffect(() => {
     setLikeState({
-      liked: post.likes.includes(userData.id),
+      liked: post.likes.includes(userData._id),
       localLikes: post.likes.length,
     });
-  }, [post.likes, userData.id]);
+  }, [post.likes, userData._id]);
 
   const toggleLike = async (e) => {
     e.preventDefault();
@@ -37,9 +37,9 @@ const Like = ({ post }) => {
 
     try {
       if (likeState.liked) {
-        await dispatch(unlikePostAction(_id, userData.id));
+        await dispatch(unlikePostAction(_id, userData._id));
       } else {
-        await dispatch(likePostAction(_id, userData.id));
+        await dispatch(likePostAction(_id, userData._id));
       }
     } catch (error) {
       setLikeState((prevState) => ({

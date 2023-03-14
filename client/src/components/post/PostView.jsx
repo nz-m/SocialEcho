@@ -25,7 +25,7 @@ const PostView = ({ post }) => {
   }, [fileUrl]);
 
   const communityData = useSelector((state) => state.community.communityData);
-  const userId = userData.id;
+  const userId = userData._id;
   useEffect(() => {
     dispatch(getCommunityAction(community.name));
   }, [dispatch, community.name]);
@@ -41,10 +41,8 @@ const PostView = ({ post }) => {
   }, [communityData, post._id, userId]);
 
   const deleteHandler = () => {
-    dispatch(
-      deletePostAction(post._id, () =>
-        navigate(location.state ? location.state.from : "/")
-      )
+    dispatch(deletePostAction(post._id)).then(() =>
+      navigate(location.state ? location.state.from : "/")
     );
   };
 
@@ -123,7 +121,7 @@ const PostView = ({ post }) => {
               </button>
             )}
 
-            {userData?.id === post.user._id && (
+            {userData?._id === post.user._id && (
               <button
                 onClick={deleteHandler}
                 className="flex items-center text-xl gap-1"

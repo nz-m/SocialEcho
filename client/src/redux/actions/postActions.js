@@ -15,7 +15,7 @@ export const GET_SAVED_POSTS = "GET_SAVED_POSTS";
 
 //  TODO: Remove console.log(error) from all actions and replace with error handling
 
-export const createPostAction = (formData, callback) => async (dispatch) => {
+export const createPostAction = (formData) => async (dispatch) => {
   try {
     const { data } = await api.createPost(formData);
     dispatch({
@@ -25,13 +25,12 @@ export const createPostAction = (formData, callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getPostsAction = (userId, callback) => async (dispatch) => {
+export const getPostsAction = (userId) => async (dispatch) => {
   try {
     const { data } = await api.getPosts(userId);
     dispatch({
@@ -41,13 +40,12 @@ export const getPostsAction = (userId, callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getComPostsAction = (id, callback) => async (dispatch) => {
+export const getComPostsAction = (id) => async (dispatch) => {
   try {
     const { data } = await api.getComPosts(id);
     dispatch({
@@ -57,13 +55,12 @@ export const getComPostsAction = (id, callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
 };
 
-export const deletePostAction = (id, callback) => async (dispatch) => {
+export const deletePostAction = (id) => async (dispatch) => {
   try {
     await api.deletePost(id);
     dispatch({
@@ -73,14 +70,13 @@ export const deletePostAction = (id, callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
 };
 
 // like post
-export const likePostAction = (id, userId, callback) => async (dispatch) => {
+export const likePostAction = (id, userId) => async (dispatch) => {
   try {
     const { data } = await api.likePost(id, userId);
     dispatch({
@@ -90,14 +86,13 @@ export const likePostAction = (id, userId, callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
 };
 
 // unlike post
-export const unlikePostAction = (id, userId, callback) => async (dispatch) => {
+export const unlikePostAction = (id, userId) => async (dispatch) => {
   try {
     const { data } = await api.unlikePost(id, userId);
     dispatch({
@@ -107,24 +102,22 @@ export const unlikePostAction = (id, userId, callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
 };
 
 // add comment
-export const addCommentAction = (postId, newComment, callback) => async () => {
+export const addCommentAction = (postId, newComment) => async () => {
   try {
     await api.addComment(postId, newComment);
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
 };
 
 //get comments
-export const getCommentsAction = (id, callback) => async (dispatch) => {
+export const getCommentsAction = (id) => async (dispatch) => {
   try {
     const { data } = await api.getComments(id);
     dispatch({
@@ -134,14 +127,13 @@ export const getCommentsAction = (id, callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
 };
 
 // save post
-export const savePostAction = (id, callback) => async (dispatch) => {
+export const savePostAction = (id) => async (dispatch) => {
   try {
     const { data } = await api.savePost(id);
     dispatch({
@@ -151,14 +143,13 @@ export const savePostAction = (id, callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
 };
 
 // unsave post
-export const unsavePostAction = (id, callback) => async (dispatch) => {
+export const unsavePostAction = (id) => async (dispatch) => {
   try {
     const { data } = await api.unsavePost(id);
     dispatch({
@@ -168,13 +159,12 @@ export const unsavePostAction = (id, callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getSavedPostsAction = (callback) => async (dispatch) => {
+export const getSavedPostsAction = () => async (dispatch) => {
   try {
     const { data } = await api.getSavedPosts();
     dispatch({
@@ -184,7 +174,6 @@ export const getSavedPostsAction = (callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
     console.log(error);
   }

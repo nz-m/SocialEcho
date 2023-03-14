@@ -70,7 +70,7 @@ const signin = async (req, res) => {
       refreshToken,
       accessTokenUpdatedAt: new Date().toLocaleString(),
       user: {
-        id: existingUser._id,
+        _id: existingUser._id,
         name: existingUser.name,
         email: existingUser.email,
         role: existingUser.role,
@@ -300,7 +300,40 @@ const getModProfile = async (req, res) => {
   }
 };
 
-// get user by id
+// update user info (location, interest, profession)
+const updateInfo = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const { location, interests, profession } = req.body;
+
+    user.location = location;
+    user.interests = interests;
+    user.profession = profession;
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "User info updated successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error updating user info",
+    });
+  }
+};
 
 module.exports = {
   getUsers,
@@ -310,4 +343,5 @@ module.exports = {
   refreshToken,
   getModProfile,
   getUser,
+  updateInfo,
 };

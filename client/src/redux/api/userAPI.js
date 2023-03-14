@@ -21,4 +21,17 @@ const getUser = async (id) => {
   }
 };
 
-export { getUser };
+const updateUser = async (id, formData) => {
+  try {
+    const { data } = await API.put(`/users/${id}`, formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
+
+export { getUser, updateUser };

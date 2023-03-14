@@ -24,7 +24,7 @@ export const getCommunityAction = (communityName) => async (dispatch) => {
   }
 };
 
-export const getJoinedCommunitiesAction = (callback) => async (dispatch) => {
+export const getJoinedCommunitiesAction = () => async (dispatch) => {
   try {
     const { data } = await api.getJoinedCommunities();
     dispatch({
@@ -34,16 +34,12 @@ export const getJoinedCommunitiesAction = (callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-
-    if (callback) {
-      callback();
-    }
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getNotJoinedCommunitiesAction = (callback) => async (dispatch) => {
+export const getNotJoinedCommunitiesAction = () => async (dispatch) => {
   try {
     const { data } = await api.getNotJoinedCommunities();
     dispatch({
@@ -53,71 +49,56 @@ export const getNotJoinedCommunitiesAction = (callback) => async (dispatch) => {
         requiresAuth: true,
       },
     });
-
-    if (callback) {
-      callback();
-    }
   } catch (error) {
     console.log(error);
   }
 };
 
-export const joinCommunityAction =
-  (communityName, callback) => async (dispatch) => {
-    try {
-      const { data } = await api.joinCommunity(communityName);
-      dispatch({
-        type: JOIN_COMMUNITY,
-        payload: data,
-        meta: {
-          requiresAuth: true,
-        },
-      });
-      if (callback) {
-        callback();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const joinCommunityAction = (communityName) => async (dispatch) => {
+  try {
+    const { data } = await api.joinCommunity(communityName);
+    dispatch({
+      type: JOIN_COMMUNITY,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-export const leaveCommunityAction =
-  (communityName, callback) => async (dispatch) => {
-    try {
-      const { data } = await api.leaveCommunity(communityName);
-      dispatch({
-        type: LEAVE_COMMUNITY,
-        payload: data,
-        meta: {
-          requiresAuth: true,
-        },
-      });
-      if (callback) {
-        callback();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const leaveCommunityAction = (communityName) => async (dispatch) => {
+  try {
+    const { data } = await api.leaveCommunity(communityName);
+    dispatch({
+      type: LEAVE_COMMUNITY,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-export const reportPostAction =
-  (communityName, info, callback) => async (dispatch) => {
-    try {
-      const { data } = await api.reportPost(communityName, info);
-      dispatch({
-        type: REPORT_POST,
-        payload: data,
-        meta: {
-          requiresAuth: true,
-        },
-      });
-      if (callback) {
-        callback();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+// Keep the cb
+export const reportPostAction = (communityName, info) => async (dispatch) => {
+  try {
+    const { data } = await api.reportPost(communityName, info);
+    dispatch({
+      type: REPORT_POST,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const getReportedPostsAction = (communityName) => async (dispatch) => {
   try {
@@ -135,7 +116,7 @@ export const getReportedPostsAction = (communityName) => async (dispatch) => {
 };
 
 export const removeReportedPostAction =
-  (communityName, postId, callback) => async (dispatch) => {
+  (communityName, postId) => async (dispatch) => {
     try {
       await api.removeReportedPost(communityName, postId);
       dispatch({
@@ -145,9 +126,6 @@ export const removeReportedPostAction =
           requiresAuth: true,
         },
       });
-      if (callback) {
-        callback();
-      }
     } catch (error) {
       console.log(error);
     }

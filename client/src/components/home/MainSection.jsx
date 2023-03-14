@@ -1,4 +1,4 @@
-import React, { useMemo,useEffect } from "react";
+import React, { useMemo, useEffect } from "react";
 import Post from "../post/Post";
 import { useSelector, useDispatch } from "react-redux";
 import { getPostsAction } from "../../redux/actions/postActions";
@@ -12,7 +12,7 @@ const MainSection = () => {
 
   useEffect(() => {
     if (userData) {
-      dispatch(getPostsAction(userData.id));
+      dispatch(getPostsAction(userData._id));
     }
   }, [userData, dispatch]);
 

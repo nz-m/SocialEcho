@@ -51,7 +51,6 @@ const PostForm = () => {
       );
     }
   };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     if (error || loading) return;
@@ -64,24 +63,25 @@ const PostForm = () => {
     const formData = new FormData();
     formData.append("body", body);
     formData.append("community", community._id);
-    formData.append("user", user.id);
+    formData.append("user", user._id);
     formData.append("file", file);
     setLoading(true);
 
-    dispatch(
-      createPostAction(formData, () => {
-        dispatch(
-          getPostsAction(user.id, () => {
-            dispatch(getComPostsAction(community._id));
-          })
-        );
+    dispatch(createPostAction(formData))
+      .then(() => dispatch(getPostsAction(user._id)))
+      .then(() => dispatch(getComPostsAction(community._id)))
+      .then(() => {
         setBody("");
         setFile(null);
         event.target.reset();
         setLoading(false);
       })
-    );
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
   };
+
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 shadow-md">
       <div className="mb-4">

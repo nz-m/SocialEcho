@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserAction } from "../../redux/actions/userActions";
 import PostOnProfile from "../post/PostOnProfile";
+import { Link } from "react-router-dom";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -10,8 +11,8 @@ const UserProfile = () => {
   const posts = user.posts;
 
   useEffect(() => {
-    dispatch(getUserAction(userData.id));
-  }, [dispatch, userData.id]);
+    dispatch(getUserAction(userData._id));
+  }, [dispatch, userData._id]);
 
   let posttoShow = null;
 
@@ -33,7 +34,6 @@ const UserProfile = () => {
       .reverse()
       .map((post) => <PostOnProfile key={post._id} post={post} />);
   }
-
   return (
     <div className="w-6/12 mx-auto">
       <div className="flex justify-between items-center mb-6">
@@ -58,9 +58,13 @@ const UserProfile = () => {
             )}
           </div>
         </div>
-        <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
+        <Link
+          to="/edit-profile"
+          state={{ userInfo: user }}
+          className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+        >
           Edit Profile
-        </button>
+        </Link>
       </div>
 
       <div className="mb-8">
@@ -69,7 +73,7 @@ const UserProfile = () => {
           user.interests.filter((interest) => interest !== "").length > 0 && (
             <ul className="list-disc list-inside">
               {user.interests.map((interest, i) => {
-                return <li key={i}>{interest}</li>;
+                return <span key={i}>{interest} </span>;
               })}
             </ul>
           )}
@@ -86,7 +90,7 @@ const UserProfile = () => {
           {user.totalPosts === 0 ? (
             <span>
               You haven't created any posts in any communities yet. You're a
-              member of {user.totalCommunities} awesome communit
+              member of {user.totalCommunities} communit
               {user.totalCommunities === 1 ? "y" : "ies"} since joining on{" "}
               {new Date(user.createdAt).toLocaleString("en-US", {
                 month: "long",
@@ -112,7 +116,7 @@ const UserProfile = () => {
                 </span>
               ) : (
                 <span>
-                  . You're a member of {user.totalCommunities} awesome communit
+                  . You're a member of {user.totalCommunities} communit
                   {user.totalCommunities === 1 ? "y" : "ies"}!
                 </span>
               )}
@@ -125,9 +129,7 @@ const UserProfile = () => {
         <h3 className="text-lg font-bold mb-4">Your posts</h3>
 
         {posttoShow && posttoShow.length === 0 && (
-          <p className="text-gray-600">
-            No posts available.
-          </p>
+          <p className="text-gray-600">No posts available.</p>
         )}
         {posttoShow}
       </div>

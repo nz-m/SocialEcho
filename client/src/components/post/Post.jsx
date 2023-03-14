@@ -84,7 +84,7 @@ const Post = ({ post }) => {
           </Link>
         </div>
         <div className="flex items-center gap-2">
-          {userData?.id === post.user._id && (
+          {userData?._id === post.user._id && (
             <button
               onClick={deleteHandler}
               className="flex items-center text-xl gap-1"

@@ -11,6 +11,7 @@ const {
   refreshToken,
   getModProfile,
   getUser,
+  updateInfo,
 } = require("../controllers/userController");
 const {
   addUserValidator,
@@ -22,6 +23,7 @@ const requireAuth = passport.authenticate("jwt", { session: false });
 
 router.get("/moderator", requireAuth, getModProfile);
 router.get("/", requireAuth, getUsers);
+router.put("/:id", requireAuth, updateInfo);
 router.get("/:id", requireAuth, getUser);
 router.post("/refresh-token", refreshToken);
 router.post(

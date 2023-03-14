@@ -1,12 +1,11 @@
 const Community = require("../models/Community");
 const ModerationRules = require("../models/ModerationRules");
 const User = require("../models/User");
+const Post = require("../models/Post");
 const getUserFromToken = require("../utils/getUserFromToken");
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
-
-// Now i will convert all the functions to arrow functions
 
 // Get all communities
 const getCommunities = async (req, res) => {
@@ -20,8 +19,6 @@ const getCommunities = async (req, res) => {
   }
 };
 
-// async function getCommunity(req, res) {
-
 const getCommunity = async (req, res) => {
   try {
     const community = await Community.findOne({
@@ -31,7 +28,6 @@ const getCommunity = async (req, res) => {
       .lean();
 
     // Need to populate the moderators later
-    // ...
 
     res.status(200).json(community);
   } catch (error) {
@@ -191,6 +187,13 @@ const leaveCommunity = async (req, res) => {
         new: true,
       }
     );
+
+    // Delete user's posts in the community
+    await Post.deleteMany({
+      user: userId,
+      community: community._id,
+    });
+
     res.status(200).json(community);
   } catch (error) {
     res.status(500).json({

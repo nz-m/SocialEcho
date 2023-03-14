@@ -24,19 +24,23 @@ const userSchema = new Schema(
 
     location: {
       type: String,
+      default: "",
     },
 
     bio: {
       type: String,
+      default: "",
     },
 
     profession: {
       type: String,
+      default: "",
     },
 
     interests: {
       type: [String],
       maxlength: 3,
+      default: [],
     },
 
     role: {
@@ -44,7 +48,6 @@ const userSchema = new Schema(
       enum: ["general", "moderator", "admin"],
       default: "general",
     },
-
 
     savedPosts: [
       {
