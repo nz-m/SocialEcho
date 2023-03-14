@@ -22,6 +22,7 @@ const communitySchema = new Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        default: [],
       },
     ],
 
@@ -29,6 +30,7 @@ const communitySchema = new Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        default: [],
       },
     ],
     // admin: {
@@ -43,14 +45,17 @@ const communitySchema = new Schema(
         ref: "Post",
       },
     ],
-    reportedPosts: [
-      {
-        post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
-        reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        reportReason: { type: String },
-        reportDate: { type: Date, default: Date.now },
-      },
-    ],
+    reportedPosts: {
+      type: [
+        {
+          post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
+          reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+          reportReason: { type: String },
+          reportDate: { type: Date, default: Date.now },
+        },
+      ],
+      default: [],
+    },
 
     rules: [
       {

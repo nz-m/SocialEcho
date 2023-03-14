@@ -31,6 +31,7 @@ const PostView = ({ post }) => {
   }, [dispatch, community.name]);
 
   useEffect(() => {
+    // reportedPosts SHOULD EXIST in communities COLLECTION
     if (communityData && userId) {
       const isReportedPost = communityData.reportedPosts.some(
         (reportedPost) =>

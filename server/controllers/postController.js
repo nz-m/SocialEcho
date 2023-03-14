@@ -330,30 +330,25 @@ const getSavedPosts = async (req, res) => {
       });
     }
 
-    const user = await User.findById(userId)
-      .select("savedPosts")
-      .populate({
-        path: "savedPosts",
-        populate: [
-          {
-            path: "community",
-            select: "name",
-          },
-          {
-            path: "user",
-            select: "name avatar",
-          },
-        ],
-      });
-
-
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
         message: "User not found",
       });
     }
 
-    const formattedPosts = user.savedPosts.map((post) => ({
+    // Send saved posts of communities user is a member of only
+    const communityIds = await Community.find({ members: userId }).distinct(
+      "_id"
+    );
+    const savedPosts = await Post.find({
+      community: { $in: communityIds },
+      _id: { $in: user.savedPosts },
+    })
+      .populate("user", "name avatar")
+      .populate("community", "name");
+
+    const formattedPosts = savedPosts.map((post) => ({
       ...post.toObject(),
       createdAt: dayjs(post.createdAt).fromNow(),
     }));

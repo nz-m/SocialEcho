@@ -7,7 +7,10 @@ import {
   getJoinedCommunitiesAction,
 } from "../../redux/actions/communityActions";
 import { getUserAction } from "../../redux/actions/userActions";
-import { getPostsAction } from "../../redux/actions/postActions";
+import {
+  getPostsAction,
+  getSavedPostsAction,
+} from "../../redux/actions/postActions";
 
 const RightBar = () => {
   const dispatch = useDispatch();
@@ -36,6 +39,7 @@ const RightBar = () => {
           if (userData) {
             dispatch(getPostsAction(userData._id));
             dispatch(getUserAction(userData._id));
+            dispatch(getSavedPostsAction());
           }
         })
         .catch((error) => {

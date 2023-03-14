@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Merriweather&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 * {
-  font-family: "Merriweather", serif;
+  font-family: "Roboto", sans-serif;
 }
 
 @tailwind base;

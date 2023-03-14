@@ -5,7 +5,8 @@ const PostOnProfile = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { body, fileUrl, community, createdAt, comments, likes } = post;
+  const { body, fileUrl, community, createdAt, comments, likes, isMember } =
+    post;
 
   // Memoize the file extension check to avoid recomputing it unnecessarily
   const isImageFile = useMemo(() => {
@@ -13,13 +14,18 @@ const PostOnProfile = ({ post }) => {
     const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
     return validExtensions.includes(fileExtension);
   }, [fileUrl]);
+
   return (
     <div
-      className="bg-white rounded-md p-4 shadow-md my-2 cursor-pointer"
+      className={`bg-white rounded-md p-4 shadow-md my-2 cursor-pointer ${
+        isMember ? "" : "opacity-50 pointer-events-none"
+      }`}
       onClick={() => {
-        navigate(`/post/${post._id}`, {
-          state: { from: location.pathname },
-        });
+        if (isMember) {
+          navigate(`/post/${post._id}`, {
+            state: { from: location.pathname },
+          });
+        }
       }}
     >
       <div className="flex items-center">

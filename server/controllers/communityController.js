@@ -188,12 +188,6 @@ const leaveCommunity = async (req, res) => {
       }
     );
 
-    // Delete user's posts in the community
-    await Post.deleteMany({
-      user: userId,
-      community: community._id,
-    });
-
     res.status(200).json(community);
   } catch (error) {
     res.status(500).json({

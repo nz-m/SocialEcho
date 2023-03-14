@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import Leftbar from "../components/home/LeftBar";
 import RightBar from "../components/home/RightBar";
-import Post from "../components/post/Post";
+import SavedPost from "../components/post/SavedPost";
 
 const Saved = () => {
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const Saved = () => {
           {savedPosts && savedPosts.length > 0 ? (
             <div className="flex flex-col items-center">
               {savedPosts.reverse().map((post) => (
-                <Post key={post._id} post={post} />
+                <SavedPost key={post._id} post={post} />
               ))}
             </div>
           ) : (

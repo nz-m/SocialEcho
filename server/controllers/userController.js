@@ -136,11 +136,19 @@ const getUser = async (req, res, next) => {
     }
 
     const posts = await Post.find({ user: user._id })
-      .populate("community", "name")
+      .populate("community", "name members")
       .lean();
-    user.posts = posts;
 
-    res.json(user);
+    const formattedPosts = posts.map((post) => ({
+      ...post,
+      isMember: post.community.members
+        .map((member) => member.toString())
+        .includes(user._id.toString()),
+    }));
+
+    user.posts = formattedPosts;
+
+    res.status(200).json(user);
   } catch (err) {
     next(err);
   }

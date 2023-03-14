@@ -46,7 +46,6 @@ const postSchema = new Schema(
 );
 
 postSchema.pre("remove", async function (next) {
-  // Path may required to move to .env file/ config file
   try {
     if (this.fileUrl) {
       const filename = path.basename(this.fileUrl);
@@ -76,7 +75,8 @@ postSchema.pre("remove", async function (next) {
         },
       }
     );
-    // Delete the Saved post entry from all users
+
+    // Delete the saved post entry from all users
     await this.model("User").updateMany(
       {
         savedPosts: this._id,
@@ -87,7 +87,6 @@ postSchema.pre("remove", async function (next) {
         },
       }
     );
-
     next();
   } catch (err) {
     next(err);
