@@ -45,10 +45,10 @@ const UserProfile = () => {
           ></img>
           <div>
             <h2 className="text-2xl font-bold">{user.name}</h2>
-            {user.profession ? (
-              <p className="text-gray-600">{user.profession}</p>
+            {user.bio ? (
+              <p className="text-gray-600">{user.bio}</p>
             ) : (
-              <p className="text-gray-400">Profession not added</p>
+              <p className="text-gray-400">bio not added</p>
             )}
 
             {user.location ? (

@@ -21,6 +21,18 @@ const userSchema = new Schema(
     avatar: {
       type: String,
     },
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
 
     location: {
       type: String,
@@ -28,11 +40,6 @@ const userSchema = new Schema(
     },
 
     bio: {
-      type: String,
-      default: "",
-    },
-
-    profession: {
       type: String,
       default: "",
     },
@@ -62,6 +69,7 @@ const userSchema = new Schema(
   }
 );
 
+// If user chooses to delete their account (Not implemented)
 userSchema.pre("remove", async function (next) {
   try {
     // Todo: user avatar delete (fs.unlink/ promisify)
@@ -75,6 +83,8 @@ userSchema.pre("remove", async function (next) {
       { members: this._id },
       { $pull: { members: this._id } }
     );
+
+    // Remove all relationships where the user is the follower
 
     next();
   } catch (err) {

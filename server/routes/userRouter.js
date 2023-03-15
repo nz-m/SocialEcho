@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-// internal imports
 const {
   getUsers,
   addUser,
@@ -13,6 +12,12 @@ const {
   getUser,
   updateInfo,
 } = require("../controllers/userController");
+
+const {
+  getPublicUsers,
+  followUser,
+  getPublicUser,
+} = require("../controllers/publicProfileController");
 const {
   addUserValidator,
   addUserValidatorHandler,
@@ -21,6 +26,9 @@ const avatarUpload = require("../middlewares/users/avatarUpload");
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 
+router.patch("/:id/follow", requireAuth, followUser);
+router.get("/public-users/:id", requireAuth, getPublicUser);
+router.get("/public-users", requireAuth, getPublicUsers);
 router.get("/moderator", requireAuth, getModProfile);
 router.get("/", requireAuth, getUsers);
 router.put("/:id", requireAuth, updateInfo);

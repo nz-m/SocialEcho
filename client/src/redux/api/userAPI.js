@@ -34,4 +34,30 @@ const updateUser = async (id, formData) => {
   }
 };
 
-export { getUser, updateUser };
+const getPublicUsers = async () => {
+  try {
+    const { data } = await API.get("/users/public-users");
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
+const getPublicUser = async (id) => {
+  try {
+    const { data } = await API.get(`/users/public-users/${id}`);
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
+
+const followUser = async (id) => {
+  try {
+    const { data } = await API.patch(`/users/${id}/follow`);
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
+
+export { getUser, updateUser, getPublicUsers, followUser, getPublicUser };

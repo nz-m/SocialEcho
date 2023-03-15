@@ -308,7 +308,7 @@ const getModProfile = async (req, res) => {
   }
 };
 
-// update user info (location, interest, profession)
+// update user info (location, interest, bio)
 const updateInfo = async (req, res) => {
   try {
     const userId = getUserFromToken(req);
@@ -325,11 +325,11 @@ const updateInfo = async (req, res) => {
       });
     }
 
-    const { location, interests, profession } = req.body;
+    const { location, interests, bio } = req.body;
 
     user.location = location;
     user.interests = interests;
-    user.profession = profession;
+    user.bio = bio;
 
     await user.save();
 
