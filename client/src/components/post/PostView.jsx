@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { MdOutlineReport } from "react-icons/md";
 import { deletePostAction } from "../../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import Save from "./Save";
 import Like from "./Like";
@@ -65,8 +65,21 @@ const PostView = ({ post }) => {
             loading="lazy"
           />
           <div className="">
-            <p className="text-lg font-semibold">{user.name}</p>
-            <p className="text-sm text-gray-500">{community.name}</p>
+            {userData._id === user._id ? (
+              <Link to="/profile" className="text-lg font-semibold">
+                {user.name}
+              </Link>
+            ) : (
+              <Link to={`/user/${user._id}`} className="text-lg font-semibold">
+                {user.name}
+              </Link>
+            )}
+            <Link
+              to={`/community/${community.name}`}
+              className="text-sm text-gray-500"
+            >
+              {community.name}
+            </Link>
           </div>
         </div>
         <p>{createdAt}</p>

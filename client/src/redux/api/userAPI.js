@@ -60,4 +60,20 @@ const followUser = async (id) => {
   }
 };
 
-export { getUser, updateUser, getPublicUsers, followUser, getPublicUser };
+const unfollowUser = async (id) => {
+  try {
+    const { data } = await API.patch(`/users/${id}/unfollow`);
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
+
+export {
+  getUser,
+  updateUser,
+  getPublicUsers,
+  followUser,
+  getPublicUser,
+  unfollowUser,
+};

@@ -87,7 +87,7 @@ const getPublicUser = async (req, res) => {
       totalPosts,
       communities,
       totalCommunities: communities.length,
-      JoinedOn: dayjs(user.createdAt).format("MMM D, YYYY"),
+      joinedOn: dayjs(user.createdAt).format("MMM D, YYYY"),
       totalFollowers: user.followers?.length,
       totalFollowing: user.following?.length,
       isFollowing: isFollowing ? true : false,
@@ -113,35 +113,90 @@ const followUser = async (req, res) => {
     const followingId = req.params.id;
 
     // Check if the relationship already exists
-    const existingRelationship = await Relationship.findOne({
+    const relationshipExists = await Relationship.exists({
       follower: followerId,
       following: followingId,
     });
-    // Update the User model by adding the followerId to the followers array of the following user
-    await User.findByIdAndUpdate(
-      followingId,
-      { $addToSet: { followers: followerId } },
-      { new: true }
-    );
 
-    if (existingRelationship) {
+    if (relationshipExists) {
       return res.status(400).json({
         message: "Relationship already exists",
       });
     }
 
+    // Update the User model by adding the followerId to the followers array of the following user
+    await Promise.all([
+      User.findByIdAndUpdate(
+        followingId,
+        { $addToSet: { followers: followerId } },
+        { new: true }
+      ),
+      User.findByIdAndUpdate(
+        followerId,
+        { $addToSet: { following: followingId } },
+        { new: true }
+      ),
+    ]);
+
     // Create a new relationship between the follower and following users
     await Relationship.create({ follower: followerId, following: followingId });
 
-    // Update the User model by adding the followingId to the following array of the follower user
-    await User.findByIdAndUpdate(
-      followerId,
-      { $addToSet: { following: followingId } },
-      { new: true }
-    );
-
     res.status(200).json({
       message: "User followed successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+const unfollowUser = async (req, res) => {
+  try {
+    const followerId = getUserFromToken(req);
+    if (!followerId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    const followingId = req.params.id;
+
+    // Check if the relationship exists
+    const relationshipExists = await Relationship.exists({
+      follower: followerId,
+      following: followingId,
+    });
+
+    if (!relationshipExists) {
+      return res.status(400).json({
+        message: "Relationship does not exist",
+      });
+    }
+
+    // Update the User model by removing the followerId from the followers array of the following user
+    // and removing the followingId from the following array of the follower user
+    await Promise.all([
+      User.findByIdAndUpdate(
+        followingId,
+        { $pull: { followers: followerId } },
+        { new: true }
+      ),
+      User.findByIdAndUpdate(
+        followerId,
+        { $pull: { following: followingId } },
+        { new: true }
+      ),
+    ]);
+
+    // Delete the relationship between the follower and following users
+    await Relationship.deleteOne({
+      follower: followerId,
+      following: followingId,
+    });
+
+    res.status(200).json({
+      message: "User unfollowed successfully",
     });
   } catch (error) {
     res.status(500).json({
@@ -155,4 +210,5 @@ module.exports = {
   getPublicUsers,
   followUser,
   getPublicUser,
+  unfollowUser,
 };

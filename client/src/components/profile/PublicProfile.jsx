@@ -1,34 +1,55 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router";
-import { getPublicUserAction } from "../../redux/actions/userActions";
+import {
+  getPublicUserAction,
+  getPublicUsersAction,
+  unfollowUserAction,
+} from "../../redux/actions/userActions";
 
 const PublicProfile = () => {
+  // Get user ID from the URL
   const location = useLocation();
-  const userId = location.pathname.split("/")[2];
+  const userId = useMemo(
+    () => location.pathname.split("/")[2],
+    [location.pathname]
+  );
+
   const dispatch = useDispatch();
 
+  // Get public user profile and follow status from the Redux store
   const userProfile = useSelector((state) => state.user.publicUserProfile);
+  const isUserFollowing = useSelector((state) => state.user.isFollowing);
 
+  // Fetch public user profile and follow status on mount or when follow status changes
   useEffect(() => {
     dispatch(getPublicUserAction(userId));
-  }, [dispatch, userId]);
+  }, [dispatch, userId, isUserFollowing]);
 
+  // Handle unfollowing a user
+  const handleUnfollow = (userId) => {
+    dispatch(unfollowUserAction(userId)).then(() => {
+      dispatch(getPublicUsersAction());
+    });
+  };
+
+  // Return null if user profile is not available
   if (!userProfile) {
     return null;
   }
 
+  // Destructure user profile data
   const {
     name,
     avatar,
     location: userLocation,
     bio,
-    // role,
+    role,
     interests,
     totalPosts,
-    communities,
+    // communities, use later to show communities
     totalCommunities,
-    JoinedOn,
+    joinedOn,
     totalFollowers,
     totalFollowing,
     isFollowing,
@@ -47,6 +68,11 @@ const PublicProfile = () => {
         <div>
           <h1 className="text-3xl font-bold">{name}</h1>
           <p className="text-gray-500">{userLocation}</p>
+          {role === "moderator" ? (
+            <p className="text-sky-700 text-center text-sm font-semibold bg-sky-200 rounded-md py-1 px-2">
+              Moderator
+            </p>
+          ) : null}
         </div>
       </div>
       <div className="my-4">
@@ -64,27 +90,49 @@ const PublicProfile = () => {
           ))}
       </div>
       <div className="my-4">
-        <p>Joined on {JoinedOn}</p>
+        <p>Joined on {joinedOn}</p>
 
         <p>{totalPosts} posts</p>
-        <p>{totalCommunities} communities</p>
+        <p>
+          {totalCommunities === 0
+            ? "Not a member of any communities"
+            : totalCommunities === 1
+            ? "1 community"
+            : `${totalCommunities} communities`}
+        </p>
         <p>{totalFollowing} following</p>
       </div>
       <div className="my-4">
         <p>{postsLast30Days} posts in last 30 days</p>
-        <p> in {communities?.length} communities</p>
 
-        {isFollowing ? (
+        {isFollowing && role !== "moderator" ? (
           <>
-            <p>
-              {`Followed by you and `}
-              <span className="font-semibold">{totalFollowers - 1} others</span>
-            </p>
+            {totalFollowers === 1 ? (
+              <p>Followed by you</p>
+            ) : (
+              <p>
+                {`Followed by you and `}
+                <span className="font-semibold">
+                  {totalFollowers - 1} others
+                </span>
+              </p>
+            )}
             <p>You are following since {followingSince}</p>
+            <button
+              onClick={() => handleUnfollow(userId)}
+              type="button"
+              className="bg-white text-red-500 border border-red-500 rounded-full py-1 px-4 text-sm font-semibold"
+            >
+              Unfollow
+            </button>
           </>
         ) : (
           <p>
-            <span className="font-semibold">{totalFollowers} followers</span>
+            {role === "moderator" ? null : totalFollowers === 1 ? (
+              <span className="font-semibold">{totalFollowers} follower</span>
+            ) : (
+              <span className="font-semibold">{totalFollowers} followers</span>
+            )}
           </p>
         )}
       </div>

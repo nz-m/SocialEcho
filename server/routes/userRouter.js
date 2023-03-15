@@ -17,6 +17,7 @@ const {
   getPublicUsers,
   followUser,
   getPublicUser,
+  unfollowUser,
 } = require("../controllers/publicProfileController");
 const {
   addUserValidator,
@@ -27,6 +28,7 @@ const avatarUpload = require("../middlewares/users/avatarUpload");
 const requireAuth = passport.authenticate("jwt", { session: false });
 
 router.patch("/:id/follow", requireAuth, followUser);
+router.patch("/:id/unfollow", requireAuth, unfollowUser);
 router.get("/public-users/:id", requireAuth, getPublicUser);
 router.get("/public-users", requireAuth, getPublicUsers);
 router.get("/moderator", requireAuth, getModProfile);

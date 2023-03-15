@@ -2,6 +2,7 @@ import * as api from "../api/userAPI";
 export const GET_USER = "GET_USER";
 export const GET_PUBLIC_USERS = "GET_PUBLIC_USERS";
 export const GET_PUBLIC_USER_PROFILE = "GET_PUBLIC_USER_PROFILE";
+export const CHANGE_FOLLOW_STATUS = "CHANGE_FOLLOW_STATUS";
 
 export const getUserAction = (id) => async (dispatch) => {
   try {
@@ -54,6 +55,23 @@ export const getPublicUserAction = (id) => async (dispatch) => {
 export const followUserAction = (id) => async (dispatch) => {
   try {
     await api.followUser(id);
+    dispatch({
+      type: CHANGE_FOLLOW_STATUS,
+      data: { isFollowing: true },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const unfollowUserAction = (id) => async (dispatch) => {
+  try {
+    await api.unfollowUser(id);
+
+    dispatch({
+      type: CHANGE_FOLLOW_STATUS,
+      data: { isFollowing: false },
+    });
   } catch (error) {
     console.log(error);
   }

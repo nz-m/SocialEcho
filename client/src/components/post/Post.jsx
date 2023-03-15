@@ -45,7 +45,12 @@ const Post = ({ post }) => {
                 {user.name}
               </Link>
             )}
-            <p className="text-sm text-gray-500">{community.name}</p>
+            <Link
+              to={`/community/${community.name}`}
+              className="text-sm text-gray-500"
+            >
+              {community.name}
+            </Link>
           </div>
         </div>
         <p>{createdAt}</p>
