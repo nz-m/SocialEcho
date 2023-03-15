@@ -1,21 +1,29 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { MdOutlineReport } from "react-icons/md";
-import { deletePostAction } from "../../actions/postActions";
+import { deletePostAction } from "../../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import Like from "./Like";
-import {
-  HiOutlineChatBubbleOvalLeft,
-  HiOutlineBookmarkSquare,
-} from "react-icons/hi2";
+
 const Post = ({ post }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const userData = useSelector((state) => state.auth?.userData);
+
   const { body, fileUrl, user, community, createdAt, comments } = post;
-  const deleteHandler = (e) => {
+
+  // Memoize the file extension check to avoid recomputing it unnecessarily
+  const isImageFile = useMemo(() => {
+    const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
+    const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
+    return validExtensions.includes(fileExtension);
+  }, [fileUrl]);
+
+  const deleteHandler = () => {
     dispatch(deletePostAction(post._id));
   };
-
   return (
     <div className="px-6 py-6 rounded-xl shadow-xl bg-white border border-gray-100">
       <div className="flex justify-between">
@@ -34,20 +42,33 @@ const Post = ({ post }) => {
         </div>
         <p>{createdAt}</p>
       </div>
-      <div>
-        <Link to={`/post/${post._id}`}>
-          <p className="text-lg">{body}</p>
-          <div className="flex justify-center">
-            {fileUrl && (
-              <img
+      <div
+        className="cursor-pointer"
+        onClick={() => {
+          navigate(`/post/${post._id}`, {
+            state: { from: location.pathname },
+          });
+        }}
+      >
+        <p className="text-lg">{body}</p>
+        <div className="flex justify-center">
+          {fileUrl && isImageFile ? (
+            <img
+              className="w-[800px] h-auto rounded-xl mt-3"
+              src={fileUrl}
+              alt={body}
+              loading="lazy"
+            />
+          ) : (
+            fileUrl && (
+              <video
                 className="w-[800px] h-auto rounded-xl mt-3"
                 src={fileUrl}
-                alt={body}
-                loading="lazy"
+                controls
               />
-            )}
-          </div>
-        </Link>
+            )
+          )}
+        </div>
       </div>
 
       <div className="flex items-center justify-between mt-4">
@@ -63,22 +84,12 @@ const Post = ({ post }) => {
           </Link>
         </div>
         <div className="flex items-center gap-2">
-          <button className="flex items-center text-xl gap-1">
-            {" "}
-            <HiOutlineBookmarkSquare />
-            Save
-          </button>
-          <button className="flex items-center text-xl gap-1">
-            {" "}
-            <MdOutlineReport />
-            Report
-          </button>
-
-          {userData?.id === post.user._id && (
+          {userData?._id === post.user._id && (
             <button
               onClick={deleteHandler}
               className="flex items-center text-xl gap-1"
             >
+              {" "}
               <MdOutlineReport />
               Delete
             </button>

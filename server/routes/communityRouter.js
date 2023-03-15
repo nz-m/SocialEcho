@@ -2,36 +2,28 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-// MAINTAIN THE ORDER OF THE ROUTES BY SPECIFICITY
 const communityController = require("../controllers/communityController");
-
 const requireAuth = passport.authenticate("jwt", { session: false });
 
-router.get(
-  "/notmember",
-  requireAuth,
-  communityController.getNotMemberCommunities
+// Apply authentication middleware to all routes
+router.use(requireAuth);
+
+router.get("/notmember", communityController.getNotMemberCommunities);
+router.get("/member", communityController.getMemberCommunities);
+router.get("/:name/reported-posts", communityController.getReportedPosts);
+router.delete(
+  "/:name/reported-posts/:postId",
+  communityController.removeReportedPost
 );
-
-router.get("/member", requireAuth, communityController.getMemberCommunities);
-
-// Join a community
-router.post("/:name/join", requireAuth, communityController.joinCommunity);
-
-// Leave a community
-router.post("/:name/leave", requireAuth, communityController.leaveCommunity);
-
-router.get("/:name", requireAuth, communityController.getCommunity);
-router.get("/", requireAuth, communityController.getCommunities);
-router.post("/", requireAuth, communityController.createCommunity);
-
-// add all rules to a community
+router.post("/:name/join", communityController.joinCommunity);
+router.post("/:name/leave", communityController.leaveCommunity);
+router.put("/:name/report", communityController.reportPost);
+router.get("/:name", communityController.getCommunity);
+router.get("/", communityController.getCommunities);
+router.post("/", communityController.createCommunity);
 router.post("/:name/add-all-rules", communityController.addRulesToCommunity);
-
-// add rules to the database
 router.post("/rules", communityController.addRules);
-
-// add a rule single rule to database
+router.patch("/:name/add-moderators", communityController.addModToCommunity);
 // router.post("/rule", communityController.addRule);
 
 module.exports = router;

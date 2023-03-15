@@ -16,12 +16,12 @@ const commentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Post",
     },
-    likes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    // likes: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "User",
+    //   },
+    // ],
   },
   {
     timestamps: true,
@@ -31,4 +31,3 @@ const commentSchema = new Schema(
 const Comment = mongoose.model("Comment", commentSchema);
 
 module.exports = Comment;
-

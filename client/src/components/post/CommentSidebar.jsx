@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getCommentsAction } from "../../actions/postActions";
+import { getCommentsAction } from "../../redux/actions/postActions";
 import { useParams } from "react-router-dom";
 
 function CommentSidebar() {
@@ -37,7 +37,6 @@ function CommentSidebar() {
                   </span>
                 </div>
                 <p>{comment.body}</p>
-                <p>Likes : {comment.likes.length}</p>
               </div>
             </div>
           ))}

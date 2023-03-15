@@ -1,16 +1,13 @@
+require("dotenv").config();
+
 const express = require("express");
 const app = express();
-const dotenv = require("dotenv");
-const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const passport = require("passport");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
-dotenv.config();
-
-// internal imports
 const {
   notFoundHandler,
   errorHandler,
@@ -21,13 +18,19 @@ const PORT = process.env.PORT || 5000;
 mongoose.set("strictQuery", false);
 
 // Connect to DB
-mongoose
-  .connect(process.env.DB_CONNECT, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("Connected to DB!"))
-  .catch((err) => console.log(err));
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.DB_CONNECT, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Connected to DB!");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+connectDB();
 
 // use middlewares
 app.use(cors());
@@ -40,7 +43,6 @@ app.use(
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(passport.initialize());
 require("./config/passport.js");
 

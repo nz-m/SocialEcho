@@ -4,7 +4,7 @@ import {
   createPostAction,
   getPostsAction,
   getComPostsAction,
-} from "../../actions/postActions";
+} from "../../redux/actions/postActions";
 import { useSelector } from "react-redux";
 
 const PostForm = () => {
@@ -12,6 +12,8 @@ const PostForm = () => {
   const user = useSelector((state) => state.auth.userData);
   const [body, setBody] = useState("");
   const [file, setFile] = useState(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   if (!community || !user) return null;
@@ -20,29 +22,64 @@ const PostForm = () => {
     setBody(event.target.value);
   };
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
+  const allowedFileTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "video/mpeg",
+    "video/mp4",
+    "video/avi",
+    "video/webm",
+    "video/x-matroska",
+  ];
 
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (
+      selectedFile &&
+      allowedFileTypes.includes(selectedFile.type) &&
+      selectedFile.size <= 50 * 1024 * 1024
+    ) {
+      setFile(selectedFile);
+      setError("");
+    } else {
+      setFile(null);
+      setError(
+        "Invalid file type or size. Please select an image or video file under 50MB."
+      );
+    }
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (error || loading) return;
+
+    if (!body && !file) {
+      setError("Please enter a message or select a file.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("body", body);
     formData.append("community", community._id);
-    formData.append("user", user.id);
+    formData.append("user", user._id);
     formData.append("file", file);
-    dispatch(
-      createPostAction(formData, () => {
-        dispatch(
-          getPostsAction(user.id, () => {
-            dispatch(getComPostsAction(community._id));
-          })
-        );
+    setLoading(true);
+
+    dispatch(createPostAction(formData))
+      .then(() => dispatch(getPostsAction(user._id)))
+      .then(() => dispatch(getComPostsAction(community._id)))
+      .then(() => {
         setBody("");
         setFile(null);
         event.target.reset();
+        setLoading(false);
       })
-    );
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
   };
 
   return (
@@ -72,10 +109,16 @@ const PostForm = () => {
           onChange={handleFileChange}
           className="border rounded-md p-2 w-full"
         />
+        {error && <p className="text-red-500">{error}</p>}
       </div>
 
-      <button className="bg-blue-500 hover:bg-blue-600 btn-sm text-white font-bold rounded-sm">
-        Post
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        type="submit"
+        disabled={loading || (!body && !file)} // disable button when both fields are empty
+        style={{ display: body || file ? "block" : "none" }} // hide button when both fields are empty
+      >
+        {loading ? "Loading..." : "Post"}
       </button>
     </form>
   );

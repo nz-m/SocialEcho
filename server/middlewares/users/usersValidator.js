@@ -1,6 +1,5 @@
 const { check, validationResult } = require("express-validator");
 const User = require("../../models/User");
-const createError = require("http-errors");
 const path = require("path");
 const fs = require("fs");
 // add user

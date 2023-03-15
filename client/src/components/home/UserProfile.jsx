@@ -1,38 +1,140 @@
-import React from 'react'
-import { HiCamera, HiOutlinePencilSquare } from 'react-icons/hi2'
-import rownok1 from '../../assets/rownok.png'
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserAction } from "../../redux/actions/userActions";
+import PostOnProfile from "../post/PostOnProfile";
+import { Link } from "react-router-dom";
+
 const UserProfile = () => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.auth.userData);
+  const user = useSelector((state) => state.user.user);
+  const posts = user.posts;
+
+  useEffect(() => {
+    dispatch(getUserAction(userData._id));
+  }, [dispatch, userData._id]);
+
+  let posttoShow = null;
+
+  if (posts) {
+    const postsWithUser = posts.map((post) => {
+      return {
+        ...post,
+        createdAt: new Date(post.createdAt).toLocaleString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        }),
+      };
+    });
+    posttoShow = postsWithUser
+      .reverse()
+      .map((post) => <PostOnProfile key={post._id} post={post} />);
+  }
   return (
-    <div className='mx-auto'>
-        <div className="relative rounded-xl w-full shadow-lg">
-        <img className="w-[1200px] object-cover rounded-xl h-48"
-          src={
-            "https://a-static.besthdwallpaper.com/alone-in-unknown-world-wallpaper-1600x900-33874_47.jpg"
-          }
-          alt={`Nz's avatar`}
-         
+    <div className="w-6/12 mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center">
+          <img
+            className="w-16 h-16 rounded-full mr-4"
+            src={user.avatar}
+            alt="Profile"
+          ></img>
+          <div>
+            <h2 className="text-2xl font-bold">{user.name}</h2>
+            {user.profession ? (
+              <p className="text-gray-600">{user.profession}</p>
+            ) : (
+              <p className="text-gray-400">Profession not added</p>
+            )}
 
-          // add slow loading image
-        />
-        <button className='btn btn-sm rounded-full shadow-2xl capitalize btn-primary absolute top-3 right-3 flex items-center gap-1'>
-            <HiCamera className='text-xl'/>
-             Edit Cover Photo</button>
-        </div>
-        <div className="flex justify-between mx-5 items-center">
-            <div className="flex gap-4">
-            <img className='w-32 shadow-lg rounded-full border-2 border-white -mt-10 z-20' src={rownok1} alt="rownok" />
-          <div className="flex flex-col mt-2">
-            <p className='text-3xl font-semibold'>Mehbubur Rahman (Rownok)</p>
-            <p className='text-lg'>3.k Follower</p>
+            {user.location ? (
+              <p className="text-gray-600">{user.location}</p>
+            ) : (
+              <p className="text-gray-400">Location not added</p>
+            )}
           </div>
-            </div>
-            <button className='btn rounded-full  btn-primary flex gap-2 items-center capitalize'>
-                <HiOutlinePencilSquare className='text-xl'/>
-                Edit Profile</button>
-         
         </div>
-    </div>
-  )
-}
+        <Link
+          to="/edit-profile"
+          state={{ userInfo: user }}
+          className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+        >
+          Edit Profile
+        </Link>
+      </div>
 
-export default UserProfile
+      <div className="mb-8">
+        <h3 className="text-lg font-bold mb-4">Interests</h3>
+        {user.interests &&
+          user.interests.filter((interest) => interest !== "").length > 0 && (
+            <ul className="list-disc list-inside">
+              {user.interests.map((interest, i) => {
+                return <span key={i}>{interest} </span>;
+              })}
+            </ul>
+          )}
+        {user.interests &&
+          user.interests.filter((interest) => interest !== "").length === 0 && (
+            <p className="text-gray-600">
+              No interests have been set yet. Add some interests to let people
+              know more about you.
+            </p>
+          )}
+      </div>
+      {user.totalPosts !== undefined && (
+        <div className="mb-4">
+          {user.totalPosts === 0 ? (
+            <span>
+              You haven't created any posts in any communities yet. You're a
+              member of {user.totalCommunities} communit
+              {user.totalCommunities === 1 ? "y" : "ies"} since joining on{" "}
+              {new Date(user.createdAt).toLocaleString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </span>
+          ) : (
+            <span>
+              In {user.duration}, You've created {user.totalPosts}{" "}
+              {user.totalPosts === 1 ? "post" : "posts"} across{" "}
+              {user.totalPostCommunities}{" "}
+              {user.totalPostCommunities === 1 ? "community" : "communities"}{" "}
+              since joining on{" "}
+              {new Date(user.createdAt).toLocaleString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+              {user.totalCommunities === 0 ? (
+                <span>
+                  . Currently you are not a member of any communities.
+                </span>
+              ) : (
+                <span>
+                  . You're a member of {user.totalCommunities} communit
+                  {user.totalCommunities === 1 ? "y" : "ies"}!
+                </span>
+              )}
+            </span>
+          )}
+        </div>
+      )}
+
+      <div>
+        <h3 className="text-lg font-bold mb-4">Your posts</h3>
+
+        {posttoShow && posttoShow.length === 0 && (
+          <p className="text-gray-600">No posts available.</p>
+        )}
+        {posttoShow}
+      </div>
+    </div>
+  );
+};
+
+export default UserProfile;

@@ -8,6 +8,10 @@ import ProfilePage from "./pages/ProfilePage";
 import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PostPage from "./pages/PostPage";
+import ReportPost from "./components/community/ReportPost";
+import ReportedPostPage from "./pages/ReportedPostPage";
+import Saved from "./pages/Saved";
+import EditProfileForm from "./components/form/EditProfileForm";
 const App = () => {
   return (
     <div className="bg-[#f6f7f9]">
@@ -17,14 +21,23 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/community" element={<CommunityPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/community/:communityName" element={<CommunityPage />} />
+          <Route
+            path="/community/:communityName/report"
+            element={<ReportPost />}
+          />
+          <Route
+            path="/community/:communityName/reported-post"
+            element={<ReportedPostPage />}
+          />
           <Route path="/post/:postId" element={<PostPage />} />
           <Route
             path="/community/:communityName/moderator"
             element={<Moderator />}
           />
+          <Route path="/saved" element={<Saved />} />
+          <Route path="/edit-profile" element={<EditProfileForm />} />
         </Route>
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>

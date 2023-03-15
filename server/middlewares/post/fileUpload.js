@@ -36,7 +36,9 @@ function fileUpload(req, res, next) {
         file.mimetype === "image/webp" ||
         file.mimetype === "video/mpeg" ||
         file.mimetype === "video/mp4" ||
-        file.mimetype === "video/avi"
+        file.mimetype === "video/avi" ||
+        file.mimetype === "video/webm" ||
+        file.mimetype === "video/x-matroska"
       ) {
         cb(null, true);
       } else {

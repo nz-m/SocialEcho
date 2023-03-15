@@ -4,7 +4,7 @@ import PostView from "../components/post/PostView";
 import CommentSidebar from "../components/post/CommentSidebar";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getPostsAction } from "../actions/postActions";
+import { getPostsAction } from "../redux/actions/postActions";
 import { useParams } from "react-router-dom";
 
 const PostPage = () => {
@@ -17,7 +17,7 @@ const PostPage = () => {
 
   useEffect(() => {
     if (userData) {
-      dispatch(getPostsAction(userData.id));
+      dispatch(getPostsAction(userData._id));
     }
   }, [userData, dispatch]);
 

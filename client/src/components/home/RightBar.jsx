@@ -5,8 +5,12 @@ import {
   getNotJoinedCommunitiesAction,
   joinCommunityAction,
   getJoinedCommunitiesAction,
-} from "../../actions/communityActions";
-import { getPostsAction } from "../../actions/postActions";
+} from "../../redux/actions/communityActions";
+import { getUserAction } from "../../redux/actions/userActions";
+import {
+  getPostsAction,
+  getSavedPostsAction,
+} from "../../redux/actions/postActions";
 
 const RightBar = () => {
   const dispatch = useDispatch();
@@ -27,20 +31,25 @@ const RightBar = () => {
   }
 
   const joinCommumityHandler = (communityName) => {
-    dispatch(
-      joinCommunityAction(communityName, () => {
-        dispatch(
-          getJoinedCommunitiesAction(() => {
-            dispatch(
-              getNotJoinedCommunitiesAction(() => {
-                if (userData) dispatch(getPostsAction(userData.id));
-              })
-            );
-          })
-        );
-      })
-    );
+    const handleJoinedCommunities = () => {
+      dispatch(joinCommunityAction(communityName))
+        .then(() => dispatch(getJoinedCommunitiesAction()))
+        .then(() => dispatch(getNotJoinedCommunitiesAction()))
+        .then(() => {
+          if (userData) {
+            dispatch(getPostsAction(userData._id));
+            dispatch(getUserAction(userData._id));
+            dispatch(getSavedPostsAction());
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    handleJoinedCommunities();
   };
+
   return (
     <div className="w-3/12 h-screen bg-white sticky top-0">
       <div className="card">

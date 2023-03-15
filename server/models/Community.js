@@ -22,15 +22,15 @@ const communitySchema = new Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        default: [],
       },
     ],
-    guidelines: {
-      type: String,
-    },
+
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        default: [],
       },
     ],
     // admin: {
@@ -45,6 +45,18 @@ const communitySchema = new Schema(
         ref: "Post",
       },
     ],
+    reportedPosts: {
+      type: [
+        {
+          post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
+          reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+          reportReason: { type: String },
+          reportDate: { type: Date, default: Date.now },
+        },
+      ],
+      default: [],
+    },
+
     rules: [
       {
         type: Schema.Types.ObjectId,
@@ -57,6 +69,18 @@ const communitySchema = new Schema(
   }
 );
 
+communitySchema.pre("remove", async function (next) {
+  try {
+    const postIds = this.posts.map((post) => post.toString());
+    await this.model("Post").updateMany(
+      { _id: { $in: postIds } },
+      { $unset: { community: "" } }
+    );
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 const Community = mongoose.model("Community", communitySchema);
 
 module.exports = Community;

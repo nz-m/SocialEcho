@@ -1,20 +1,56 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { MdOutlineReport } from "react-icons/md";
-import { deletePostAction } from "../../actions/postActions";
+import { deletePostAction } from "../../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getCommunityAction } from "../../redux/actions/communityActions";
+import Save from "./Save";
 import Like from "./Like";
 import CommentForm from "../form/CommentForm";
-import {
-  HiOutlineChatBubbleOvalLeft,
-  HiOutlineBookmarkSquare,
-} from "react-icons/hi2";
+import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 
 const PostView = ({ post }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);
   const { body, fileUrl, user, community, createdAt, comments } = post;
+  const [isReported, setIsReported] = useState(null);
+
+  // Memoize the file extension check to avoid recomputing it unnecessarily
+  const isImageFile = useMemo(() => {
+    const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
+    const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
+    return validExtensions.includes(fileExtension);
+  }, [fileUrl]);
+
+  const communityData = useSelector((state) => state.community.communityData);
+  const userId = userData._id;
+  useEffect(() => {
+    dispatch(getCommunityAction(community.name));
+  }, [dispatch, community.name]);
+
+  useEffect(() => {
+    // reportedPosts SHOULD EXIST in communities COLLECTION
+    if (communityData && userId) {
+      const isReportedPost = communityData.reportedPosts.some(
+        (reportedPost) =>
+          reportedPost.reportedBy === userId && reportedPost.post === post._id
+      );
+      setIsReported(isReportedPost || false);
+    }
+  }, [communityData, post._id, userId]);
+
   const deleteHandler = () => {
-    dispatch(deletePostAction(post._id));
+    dispatch(deletePostAction(post._id)).then(() =>
+      navigate(location.state ? location.state.from : "/")
+    );
+  };
+
+  const reportHandler = () => {
+    navigate(`/community/${community.name}/report`, {
+      state: { post, communityName: community.name },
+    });
   };
 
   return (
@@ -39,13 +75,21 @@ const PostView = ({ post }) => {
       <div>
         <p className="text-lg">{body}</p>
         <div className="flex justify-center">
-          {fileUrl && (
+          {fileUrl && isImageFile ? (
             <img
               className="w-[800px] h-auto rounded-xl mt-3"
               src={fileUrl}
               alt={body}
               loading="lazy"
             />
+          ) : (
+            fileUrl && (
+              <video
+                className="w-[800px] h-auto rounded-xl mt-3"
+                src={fileUrl}
+                controls
+              />
+            )
           )}
         </div>
 
@@ -60,18 +104,25 @@ const PostView = ({ post }) => {
             </button>
           </div>
           <div className="flex items-center gap-2">
-            <button className="flex items-center text-xl gap-1">
-              {" "}
-              <HiOutlineBookmarkSquare />
-              Save
-            </button>
-            <button className="flex items-center text-xl gap-1">
-              {" "}
-              <MdOutlineReport />
-              Report
-            </button>
+            <Save postId={post._id} />
+            {isReported === null ? null : isReported ? (
+              <button disabled className="flex items-center text-xl gap-1">
+                {" "}
+                <MdOutlineReport />
+                Reported
+              </button>
+            ) : (
+              <button
+                onClick={reportHandler}
+                className="flex items-center text-xl gap-1"
+              >
+                {" "}
+                <MdOutlineReport />
+                Report
+              </button>
+            )}
 
-            {userData?.id === post.user._id && (
+            {userData?._id === post.user._id && (
               <button
                 onClick={deleteHandler}
                 className="flex items-center text-xl gap-1"
