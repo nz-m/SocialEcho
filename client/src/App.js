@@ -15,7 +15,7 @@ import EditProfileForm from "./components/form/EditProfileForm";
 import PublicProfilePage from "./pages/PublicProfilePage";
 const App = () => {
   return (
-    <div className="bg-gray-200">
+    <div>
       <Routes>
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/signin" element={<SignIn />} />

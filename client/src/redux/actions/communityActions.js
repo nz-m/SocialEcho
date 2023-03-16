@@ -8,6 +8,8 @@ export const LEAVE_COMMUNITY = "LEAVE_COMMUNITY";
 export const REPORT_POST = "REPORT_POST";
 export const GET_REPORTED_POSTS = "GET_REPORTED_POSTS";
 export const DELETE_REPORTED_POST = "DELETE_REPORTED_POST";
+export const GET_COMMUNITY_MEMBERS = "GET_COMMUNITY_MEMBERS";
+export const GET_COMMUNITY_MODS = "GET_COMMUNITY_MODS";
 
 export const getCommunityAction = (communityName) => async (dispatch) => {
   try {
@@ -130,3 +132,51 @@ export const removeReportedPostAction =
       console.log(error);
     }
   };
+
+export const getComMembersAction = (communityName) => async (dispatch) => {
+  try {
+    const { data } = await api.getCommunityMembers(communityName);
+    dispatch({
+      type: GET_COMMUNITY_MEMBERS,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getComModsAction = (communityName) => async (dispatch) => {
+  try {
+    const { data } = await api.getCommunityMods(communityName);
+    dispatch({
+      type: GET_COMMUNITY_MODS,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const banUserAction = (communityName, userId) => async (dispatch) => {
+  try {
+    await api.banUser(communityName, userId);
+    dispatch(getComMembersAction(communityName));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const unbanUserAction = (communityName, userId) => async (dispatch) => {
+  try {
+    await api.unbanUser(communityName, userId);
+    dispatch(getComMembersAction(communityName));
+  } catch (error) {
+    console.log(error);
+  }
+};

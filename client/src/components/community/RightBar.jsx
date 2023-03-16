@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import { leaveFetchData } from "../../middlewares/joinLeaveFetch";
 
+
 const RightBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const RightBar = () => {
     // later add a loading spinner
   }
 
+
   return (
     <div className="w-1/4 p-4 h-screen bg-white sticky top-0">
       <div className="bg-white rounded-md  p-4">
@@ -63,15 +65,6 @@ const RightBar = () => {
             </button>
           )}
         </div>
-        {/* 
-        {moderators && moderators.length > 0 && (
-          <div className="text-gray-500 mb-4">
-            <span className="font-bold">Moderators:</span>{" "}
-            {moderators.map((moderator) => moderator.name).join(", ")}
-          </div>
-
-          Moderators: an array of ids
-        )} */}
 
         {rules && rules.length > 0 && (
           <div className="text-gray-500 mb-4">

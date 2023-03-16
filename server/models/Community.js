@@ -14,7 +14,7 @@ const communitySchema = new Schema(
       required: true,
       trim: true,
     },
-    image: {
+    banner: {
       type: String,
     },
 
@@ -33,6 +33,15 @@ const communitySchema = new Schema(
         default: [],
       },
     ],
+
+    bannedUsers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
+
     // admin: {
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: "User",
