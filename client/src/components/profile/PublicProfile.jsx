@@ -27,10 +27,13 @@ const PublicProfile = () => {
   }, [dispatch, userId, isUserFollowing]);
 
   // Handle unfollowing a user
-  const handleUnfollow = (userId) => {
-    dispatch(unfollowUserAction(userId)).then(() => {
+  const handleUnfollow = async (userId) => {
+    try {
+      await dispatch(unfollowUserAction(userId));
       dispatch(getPublicUsersAction());
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Return null if user profile is not available

@@ -12,7 +12,6 @@ router.get("/notmember", communityController.getNotMemberCommunities);
 router.get("/member", communityController.getMemberCommunities);
 router.get("/:name/members", communityController.getCommunityMembers);
 router.get("/:name/moderators", communityController.getCommunityMods);
-
 router.get("/:name/reported-posts", communityController.getReportedPosts);
 router.delete(
   "/:name/reported-posts/:postId",

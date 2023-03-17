@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import { leaveFetchData } from "../../middlewares/joinLeaveFetch";
 
-
 const RightBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,8 +19,8 @@ const RightBar = () => {
 
   const { name, description, members, rules } = communityData || {};
 
-  const leaveCommunityHandler = () => {
-    dispatch(leaveFetchData(communityName));
+  const leaveCommunityHandler = async () => {
+    await dispatch(leaveFetchData(communityName));
     navigate("/");
   };
   useEffect(() => {
@@ -34,7 +33,6 @@ const RightBar = () => {
     return null;
     // later add a loading spinner
   }
-
 
   return (
     <div className="w-1/4 p-4 h-screen bg-white sticky top-0">

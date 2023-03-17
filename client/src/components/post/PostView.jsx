@@ -31,20 +31,27 @@ const PostView = ({ post }) => {
   }, [dispatch, community.name]);
 
   useEffect(() => {
-    // reportedPosts SHOULD EXIST in communities COLLECTION
     if (communityData && userId) {
-      const isReportedPost = communityData.reportedPosts.some(
-        (reportedPost) =>
-          reportedPost.reportedBy === userId && reportedPost.post === post._id
-      );
-      setIsReported(isReportedPost || false);
+      const reportedPosts = communityData.reportedPosts;
+      if (reportedPosts && reportedPosts.length > 0) {
+        const isReportedPost = reportedPosts.some(
+          (reportedPost) =>
+            reportedPost.reportedBy === userId && reportedPost.post === post._id
+        );
+        setIsReported(isReportedPost || false);
+      } else {
+        setIsReported(false);
+      }
     }
   }, [communityData, post._id, userId]);
 
-  const deleteHandler = () => {
-    dispatch(deletePostAction(post._id)).then(() =>
-      navigate(location.state ? location.state.from : "/")
-    );
+  const deleteHandler = async () => {
+    try {
+      await dispatch(deletePostAction(post._id));
+      navigate(location.state ? location.state.from : "/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const reportHandler = () => {

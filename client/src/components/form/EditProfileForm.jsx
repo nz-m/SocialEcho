@@ -9,9 +9,7 @@ const EditProfileForm = () => {
   const userInfo = locationHook.state.userInfo;
 
   const dispatch = useDispatch();
-  const [bio, setbio] = useState(
-    userInfo.bio ? userInfo.bio : ""
-  );
+  const [bio, setbio] = useState(userInfo.bio ? userInfo.bio : "");
   const [location, setLocation] = useState(
     userInfo.location ? userInfo.location : ""
   );
@@ -40,18 +38,18 @@ const EditProfileForm = () => {
     location,
     interests,
   };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(updateUserAction(userInfo._id, formData))
-      .then(() => {
-        setbio("");
-        setLocation("");
-        setInterests(["", "", ""]);
-      })
-      .then(() => {
-        navigate(-1);
-      });
+    try {
+      await dispatch(updateUserAction(userInfo._id, formData));
+      setbio("");
+      setLocation("");
+      setInterests(["", "", ""]);
+      navigate(-1);
+    } catch (error) {
+      console.log(error);
+      // handle error
+    }
   };
 
   return (
@@ -71,10 +69,7 @@ const EditProfileForm = () => {
         className="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         <div className="mb-4">
-          <label
-            className="block text-gray-700 font-bold mb-2"
-            htmlFor="bio"
-          >
+          <label className="block text-gray-700 font-bold mb-2" htmlFor="bio">
             bio:
           </label>
           <input

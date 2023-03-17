@@ -39,20 +39,19 @@ const RightBar = () => {
   }
 
   const joinCommumityHandler = (communityName) => {
-    const handleJoinedCommunities = () => {
-      dispatch(joinCommunityAction(communityName))
-        .then(() => dispatch(getJoinedCommunitiesAction()))
-        .then(() => dispatch(getNotJoinedCommunitiesAction()))
-        .then(() => {
-          if (userData) {
-            dispatch(getPostsAction(userData._id));
-            dispatch(getUserAction(userData._id));
-            dispatch(getSavedPostsAction());
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    const handleJoinedCommunities = async () => {
+      try {
+        await dispatch(joinCommunityAction(communityName));
+        await dispatch(getJoinedCommunitiesAction());
+        await dispatch(getNotJoinedCommunitiesAction());
+        if (userData) {
+          await dispatch(getPostsAction(userData._id));
+          await dispatch(getUserAction(userData._id));
+          await dispatch(getSavedPostsAction());
+        }
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     handleJoinedCommunities();

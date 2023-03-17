@@ -20,19 +20,24 @@ const ReportPost = () => {
     navigate("/login");
   }
 
-  const reportHandler = () => {
+  const reportHandler = async () => {
     setIsLoading(true);
     const userId = userData._id;
-    dispatch(
-      reportPostAction(communityName, {
-        postId: post._id,
-        reportReason: reason,
-        reportedBy: userId,
-      })
-    ).then(() => {
+    try {
+      await dispatch(
+        reportPostAction(communityName, {
+          postId: post._id,
+          reportReason: reason,
+          reportedBy: userId,
+        })
+      );
       setIsLoading(false);
       navigate(-1);
-    });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      // handle error
+    }
   };
 
   const handleReasonChange = (e) => {

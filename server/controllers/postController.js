@@ -87,7 +87,7 @@ const getPosts = async (req, res) => {
 };
 
 // get all posts from a community
-const getComPosts = async (req, res) => {
+const getCommunityPosts = async (req, res) => {
   try {
     const id = req.params.id;
     const limit = parseInt(req.query.limit) || 10;
@@ -373,7 +373,7 @@ const getSavedPosts = async (req, res) => {
 module.exports = {
   getPosts,
   createPost,
-  getComPosts,
+  getCommunityPosts,
   deletePost,
   likePost,
   unlikePost,

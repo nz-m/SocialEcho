@@ -19,14 +19,10 @@ const MembersList = () => {
 
   const { communityMembers } = useSelector((state) => state.moderation);
 
-  const banHandler = (userId) => {
-    dispatch(banUserAction(communityName, userId)).then(
-      dispatch(
-        getComMembersAction(communityName).then(
-          dispatch(getCommunityAction(communityName))
-        )
-      )
-    );
+  const banHandler = async (userId) => {
+    await dispatch(banUserAction(communityName, userId));
+    await dispatch(getComMembersAction(communityName));
+    dispatch(getCommunityAction(communityName));
   };
 
   return (

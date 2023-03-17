@@ -51,7 +51,7 @@ const PostForm = () => {
       );
     }
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (error || loading) return;
 
@@ -67,19 +67,19 @@ const PostForm = () => {
     formData.append("file", file);
     setLoading(true);
 
-    dispatch(createPostAction(formData))
-      .then(() => dispatch(getPostsAction(user._id)))
-      .then(() => dispatch(getComPostsAction(community._id)))
-      .then(() => {
-        setBody("");
-        setFile(null);
-        event.target.reset();
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
+    try {
+      await dispatch(createPostAction(formData));
+      await dispatch(getPostsAction(user._id));
+      await dispatch(getComPostsAction(community._id));
+      setBody("");
+      setFile(null);
+      event.target.reset();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      // handle error
+    }
   };
 
   return (

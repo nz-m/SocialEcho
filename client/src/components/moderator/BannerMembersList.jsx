@@ -18,10 +18,9 @@ const BannerMembersList = () => {
 
   const { bannedUsers } = useSelector((state) => state.moderation);
 
-  const unbanHandler = (userId) => {
-    dispatch(unbanUserAction(communityName, userId)).then(
-      dispatch(getComMembersAction(communityName))
-    );
+  const unbanHandler = async (userId) => {
+    await dispatch(unbanUserAction(communityName, userId));
+    dispatch(getComMembersAction(communityName));
   };
 
   return (
