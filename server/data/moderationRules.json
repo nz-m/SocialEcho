@@ -1,0 +1,42 @@
+[
+  {
+    "rule": "No hate speech or discrimination",
+    "description": "Any language that promotes violence or discrimination against individuals or groups based on their race, ethnicity, religion, gender identity, sexual orientation, or other protected characteristics is strictly prohibited."
+  },
+  {
+    "rule": "No sexually explicit content",
+    "description": "Posting nudity or pornography is not allowed."
+  },
+  {
+    "rule": "No posting personal information about others without their consent",
+    "description": "Sharing others' addresses, phone numbers, social security numbers, or other personal information without their consent is prohibited."
+  },
+  {
+    "rule": "No spam or fraudulent content",
+    "description": "Scams, phishing attempts, and deceptive advertising are not allowed."
+  },
+  {
+    "rule": "No threatening or harassing language",
+    "description": "Cyberbullying or targeted harassment is strictly prohibited."
+  },
+  {
+    "rule": "No promotion of illegal activities",
+    "description": "Promoting or glorifying illegal activities such as drug use or terrorism is not allowed."
+  },
+  {
+    "rule": "No posting of copyrighted material without permission",
+    "description": "Posting copyrighted material without permission is not allowed."
+  },
+  {
+    "rule": "No graphic violence or gore",
+    "description": "Posting content that contains graphic violence or gore is prohibited."
+  },
+  {
+    "rule": "No spreading false or misleading information",
+    "description": "Posting misinformation about public health or safety is not allowed."
+  },
+  {
+    "rule": "No encouraging self-harm or suicide",
+    "description": "Encouraging self-harm or suicide is strictly prohibited."
+  }
+]

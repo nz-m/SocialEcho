@@ -141,7 +141,7 @@ const getUser = async (req, res, next) => {
 
     const formattedPosts = posts.map((post) => ({
       ...post,
-      isMember: post.community.members
+      isMember: post.community?.members
         .map((member) => member.toString())
         .includes(user._id.toString()),
     }));
