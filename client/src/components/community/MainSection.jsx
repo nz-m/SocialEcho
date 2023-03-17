@@ -24,7 +24,8 @@ const MainSection = () => {
       !isLoading &&
       communityData &&
       communityData._id &&
-      communityPosts.length % LIMIT === 0
+      communityPosts.length % LIMIT === 0 &&
+      communityPosts.length >= LIMIT
     ) {
       dispatch(
         getComPostsAction(
@@ -62,21 +63,23 @@ const MainSection = () => {
               <p className="text-xl font-semibold my-5">
                 Recent post from this community
               </p>
-
               {isLoading && <div>Loading posts...</div>}
               {!isLoading && memoizedCommunityPosts.length > 0 ? (
                 <>
                   <div className="mt-4 flex flex-col gap-4">
                     {memoizedCommunityPosts}
                   </div>
-                  <div className="flex justify-center">
-                    <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                      onClick={handleLoadMore}
-                    >
-                      {isLoading ? "Loading..." : "Load More"}
-                    </button>
-                  </div>
+                  {communityPosts.length >= LIMIT &&
+                    communityPosts.length % LIMIT === 0 && (
+                      <div className="flex justify-center">
+                        <button
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          onClick={handleLoadMore}
+                        >
+                          {isLoading ? "Loading..." : "Load More"}
+                        </button>
+                      </div>
+                    )}
                 </>
               ) : (
                 <p>No posts found.</p>

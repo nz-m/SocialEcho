@@ -2,6 +2,8 @@ const readline = require("readline");
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const Community = require("../models/Community");
+const kleur = require("kleur");
+const LOG = console.log;
 
 // Set up the readline interface for user input
 const rl = readline.createInterface({
@@ -16,11 +18,11 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Connected to database");
+    LOG(kleur.green().bold("✅ Connected to MongoDB"));
     start();
   })
   .catch((err) => {
-    console.error("Error connecting to database", err);
+    LOG(kleur.red().bold("❌ Error connecting to database" + err.message));
     process.exit(1);
   });
 
@@ -31,13 +33,16 @@ async function start() {
 
     // Prompt the user to choose a moderator to add
     const modChoice = await promptUserChoice(
-      "Which moderator would you like to add? (enter the number)",
-      moderators.map((mod, index) => `${index + 1}. ${mod.email}`)
+      kleur
+        .blue()
+        .bold("Which moderator would you like to add? (Enter the number)"),
+
+      moderators.map((mod, index) => `${index + 1}. ${mod.name} - ${mod.email}`)
     );
 
     const moderatorToAdd = moderators[modChoice - 1];
     if (!moderatorToAdd) {
-      console.error("Error: Moderator not found.");
+      LOG(kleur.red().bold("❌ Error! Moderator not found."));
       return;
     }
 
@@ -47,7 +52,12 @@ async function start() {
 
     // Prompt the user to choose a community to add the moderator to
     const communityName = await promptUserInput(
-      "Which community would you like to add the moderator to?",
+      kleur
+        .blue()
+        .bold(
+          "Which community would you like to add the moderator to? (Enter the number)"
+        ),
+
       communityNames
     );
 
@@ -55,9 +65,14 @@ async function start() {
 
     // Check if the community exists
     if (!chosenCommunity) {
-      console.error(
-        `Error: Community does not exist. Choose a valid community.`
+      LOG(
+        kleur
+          .yellow()
+          .bold(
+            `⚠️ Warning: Community does not exist. Please select a valid community.`
+          )
       );
+
       process.exit(1);
     }
 
@@ -66,9 +81,18 @@ async function start() {
       chosenCommunity.moderators.length > 0 &&
       chosenCommunity.moderators.includes(moderatorToAdd._id)
     ) {
-      console.error(
-        `${moderatorToAdd.email} is already a moderator of ${communityName}`
+      LOG(
+        kleur
+          .yellow()
+          .bold(
+            `⚠️ Warning: ${kleur.white(
+              moderatorToAdd.name
+            )} is already a moderator of ${kleur.white(
+              communityName
+            )} community!`
+          )
       );
+
       process.exit(1);
     }
     // Add the moderator to the community
@@ -82,9 +106,16 @@ async function start() {
       },
       { new: true }
     );
-
-    console.log(
-      `${moderatorToAdd.email} added as a moderator and member of ${communityName}`
+    LOG(
+      kleur
+        .green()
+        .bold(
+          `✅ Done! ${kleur.white(
+            moderatorToAdd.name
+          )} has been added as a moderator and member of ${kleur.white(
+            communityName
+          )} community.`
+        )
     );
 
     rl.close();
@@ -99,7 +130,8 @@ async function start() {
 function promptUserInput(promptText, options) {
   return new Promise((resolve) => {
     if (options && options.length > 0) {
-      console.log("Select an option:");
+      // console.log("Select an option:");
+      LOG(kleur.blue().bold("Select an option:"));
       options.forEach((option, index) =>
         console.log(`${index + 1}. ${option}`)
       );
@@ -120,7 +152,7 @@ async function promptUserChoice(prompt, choices) {
         choiceIndex < 0 ||
         choiceIndex >= choices.length
       ) {
-        reject(new Error("Invalid choice"));
+        reject(new Error(kleur.red().bold("❌ Invalid choice")));
       } else {
         resolve(choices[choiceIndex].split(". ")[0]);
       }

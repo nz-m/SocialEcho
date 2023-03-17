@@ -10,14 +10,13 @@ const MainSection = () => {
   const { userData } = useSelector((state) => state.auth);
   const { posts, isLoading } = useSelector((state) => state.posts);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
-
   const LIMIT = 10;
 
   useEffect(() => {
-    if (userData && posts.length < LIMIT) {
+    if (userData) {
       dispatch(getPostsAction(userData._id, LIMIT, 0));
     }
-  }, [userData, dispatch, posts, LIMIT]);
+  }, [userData, dispatch, LIMIT]);
 
   const handleLoadMore = useCallback(() => {
     if (!isLoading && posts.length % LIMIT === 0 && posts.length >= LIMIT) {
@@ -52,9 +51,7 @@ const MainSection = () => {
       </div>
       <div>{memoizedPosts}</div>
       {isLoading && <div>Loading...</div>}
-      {!isLoading && (posts.length < LIMIT || posts.length % LIMIT !== 0) && (
-        <div>No more posts</div>
-      )}
+
       {!isLoading && posts.length >= LIMIT && posts.length % LIMIT === 0 && (
         <div className="flex justify-center">
           <button
@@ -64,6 +61,11 @@ const MainSection = () => {
             {isLoadMoreLoading ? "Loading..." : "Load More"}
           </button>
         </div>
+      )}
+      {!isLoading && posts.length === 0 && (
+        <h1 className="text-center font-bold text-gray-700">
+          Nothing to show. Be the first to make a post.
+        </h1>
       )}
     </div>
   );

@@ -2,6 +2,8 @@ const readline = require("readline");
 const mongoose = require("mongoose");
 const Community = require("../models/Community");
 const ModerationRules = require("../models/ModerationRules");
+const kleur = require("kleur");
+const LOG = console.log;
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -37,16 +39,21 @@ const promptCommunityName = async () => {
   const communityNames = await getCommunityNames();
   return new Promise((resolve) => {
     rl.question(
-      `Enter a community name (${communityNames.join("/")}/all): `,
+      kleur
+        .blue()
+        .bold(`Enter a community name (${communityNames.join("/")}/all): `),
       (answer) => {
         if (answer === "all" || communityNames.includes(answer)) {
           resolve(answer);
         } else {
-          console.log(
-            `Invalid community name. Please enter one of the following: ${communityNames.join(
-              "/"
-            )}/all`
+          LOG(
+            kleur
+              .red()
+              .bold(
+                "⚠️ Invalid community name. Please enter one of the following: "
+              ) + kleur.yellow().bold(`${communityNames.join("/")}/all`)
           );
+
           promptCommunityName();
         }
       }
@@ -58,16 +65,26 @@ const promptConfirmation = async (communityName, rules) => {
   const ruleIds = rules.map((r) => r._id);
   return new Promise((resolve) => {
     rl.question(
-      `Do you want to add the following rules to ${communityName}? (y/n)\n${JSON.stringify(
-        ruleIds,
-        null,
-        2
-      )}\n`,
+      kleur
+        .blue()
+        .bold(
+          `Do you want to add the following rules to ${communityName}? (y/n)\n${JSON.stringify(
+            ruleIds,
+            null,
+            2
+          )}\n`
+        ),
       (answer) => {
         if (answer.toLowerCase() === "y" || answer.toLowerCase() === "n") {
           resolve(answer);
         } else {
-          console.log(`Invalid input. Please enter either y or n.`);
+          LOG(
+            kleur.red().bold("⚠️ Invalid input. Please enter either ") +
+              kleur.yellow().bold("y") +
+              kleur.red().bold(" or ") +
+              kleur.yellow().bold("n")
+          );
+
           promptConfirmation(communityName, rules);
         }
       }
@@ -105,7 +122,14 @@ const addRulesToCommunity = async (communityName, rules) => {
           new: true,
         }
       );
-      console.log(`Added rules to ${communityName}`);
+
+      LOG(
+        kleur
+          .green()
+          .bold(
+            `✅ Done! rules have been added to ${communityName} (${community._id})`
+          )
+      );
     }
   } catch (error) {
     console.error(error);
@@ -119,9 +143,9 @@ const main = async () => {
   const confirmation = await promptConfirmation(communityName, rules);
   if (confirmation.toLowerCase() === "y") {
     await addRulesToCommunity(communityName, rules);
-    console.log("Rules added successfully!");
+    LOG(kleur.green().bold("✅ Done! Rules added successfully!"));
   } else {
-    console.log("Rules not added.");
+    LOG(kleur.yellow().bold("⚠️ Aborted!"));
   }
   process.exit(0);
 };
