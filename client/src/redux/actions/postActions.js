@@ -29,36 +29,45 @@ export const createPostAction = (formData) => async (dispatch) => {
     console.log(error);
   }
 };
+export const getPostsAction =
+  (userId, limit = 10, skip = 0) =>
+  async (dispatch) => {
+    try {
+      const { data } = await api.getPosts(userId, limit, skip);
+      dispatch({
+        type: GET_POSTS,
+        payload: {
+          page: skip / limit + 1,
+          posts: data,
+        },
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-export const getPostsAction = (userId) => async (dispatch) => {
-  try {
-    const { data } = await api.getPosts(userId);
-    dispatch({
-      type: GET_POSTS,
-      payload: data,
-      meta: {
-        requiresAuth: true,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getComPostsAction = (id) => async (dispatch) => {
-  try {
-    const { data } = await api.getComPosts(id);
-    dispatch({
-      type: GET_COMMUNITY_POSTS,
-      payload: data,
-      meta: {
-        requiresAuth: true,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const getComPostsAction =
+  (id, limit = 10, skip = 0) =>
+  async (dispatch) => {
+    try {
+      const { data } = await api.getComPosts(id, limit, skip);
+      dispatch({
+        type: GET_COMMUNITY_POSTS,
+        payload: {
+          page: skip / limit + 1,
+          posts: data,
+        },
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const deletePostAction = (id) => async (dispatch) => {
   try {

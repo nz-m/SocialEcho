@@ -30,15 +30,32 @@ const postReducer = (state = initialState, action) => {
         posts: [...state.posts, payload],
       };
     case GET_POSTS:
-      return {
-        ...state,
-        posts: payload || [],
-      };
+      if (payload.page === 1) {
+        // If it's the first page, replace existing posts
+        return {
+          ...state,
+          posts: payload.posts || [],
+        };
+      } else {
+        // If it's not the first page, append new posts to existing posts
+        return {
+          ...state,
+          posts: [...state.posts, ...(payload.posts || [])],
+        };
+      }
     case GET_COMMUNITY_POSTS:
-      return {
-        ...state,
-        communityPosts: payload || [],
-      };
+      if (payload.page === 1) {
+        return {
+          ...state,
+          communityPosts: payload.posts || [],
+        };
+      } else {
+        return {
+          ...state,
+          communityPosts: [...state.communityPosts, ...(payload.posts || [])],
+        };
+      }
+
     case DELETE_POST:
       return {
         ...state,
