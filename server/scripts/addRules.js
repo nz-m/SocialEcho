@@ -1,3 +1,4 @@
+
 const readline = require("readline");
 const mongoose = require("mongoose");
 const Community = require("../models/Community");
@@ -20,7 +21,7 @@ const getCommunityNames = async () => {
     const communities = await Community.find({}, { name: 1 });
     return communities.map((c) => c.name);
   } catch (error) {
-    console.error(error);
+    LOG(kleur.red().bold("⚠️ Error while getting community names"));
     process.exit(1);
   }
 };
@@ -30,7 +31,7 @@ const getModerationRules = async () => {
     const rules = await ModerationRules.find();
     return rules;
   } catch (error) {
-    console.error(error);
+    LOG(kleur.red().bold("⚠️ Error while getting rules"));
     process.exit(1);
   }
 };
@@ -132,7 +133,7 @@ const addRulesToCommunity = async (communityName, rules) => {
       );
     }
   } catch (error) {
-    console.error(error);
+    LOG(kleur.red().bold("⚠️ Error while adding rules to community"));
     process.exit(1);
   }
 };

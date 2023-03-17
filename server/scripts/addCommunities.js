@@ -19,8 +19,16 @@ db.once("open", async () => {
   LOG(kleur.green().bold("✅ Connected to MongoDB"));
 
   try {
-    // Insert communities
-    const savedCommunities = await Community.insertMany(communities);
+    // Get existing community names
+    const existingCommunities = await Community.distinct("name");
+
+    // Filter new communities to exclude existing ones
+    const newCommunities = communities.filter(
+      (c) => !existingCommunities.includes(c.name)
+    );
+
+    // Insert new communities
+    const savedCommunities = await Community.insertMany(newCommunities);
     LOG(
       kleur
         .green()
@@ -29,16 +37,26 @@ db.once("open", async () => {
         )
     );
 
-    // Insert moderation rules
-    const savedRules = await ModerationRules.insertMany(rules);
-    console.log(
-      `✅ Done! ${savedRules.length} moderation rules have been saved to database`
+    // Get existing rule strings
+    const existingRules = await ModerationRules.distinct("rule");
+
+    // Filter new rules to exclude existing ones
+    const newRules = rules.filter((r) => !existingRules.includes(r.rule));
+
+    // Insert new rules
+    const savedRules = await ModerationRules.insertMany(newRules);
+    LOG(
+      kleur
+        .green()
+        .bold(
+          `✅ Done! ${savedRules.length} moderation rules have been saved to database`
+        )
     );
 
     db.close();
   } catch (error) {
     if (error.code === 11000) {
-      LOG(kleur.yellow().bold("⚠️ Warning: Community already exists"));
+      LOG(kleur.yellow().bold("⚠️ Warning: Community or rule already exists"));
     } else {
       LOG(kleur.red().bold("❌ Error! " + error.message));
     }

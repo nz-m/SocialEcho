@@ -13,10 +13,13 @@ const rl = readline.createInterface({
 mongoose.set("strictQuery", false);
 // Connect to the database
 mongoose
-  .connect("mongodb://127.0.0.1:27017/db_socialecho", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb://127.0.0.1:27017/db_socialecho",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
     LOG(kleur.green().bold("✅ Connected to MongoDB"));
     start();
@@ -121,7 +124,7 @@ async function start() {
     rl.close();
     process.exit(0);
   } catch (err) {
-    console.error("Error:", err);
+    LOG(kleur.red().bold("❌ Error: " + err.message));
     process.exit(1);
   }
 }
@@ -130,10 +133,9 @@ async function start() {
 function promptUserInput(promptText, options) {
   return new Promise((resolve) => {
     if (options && options.length > 0) {
-      // console.log("Select an option:");
       LOG(kleur.blue().bold("Select an option:"));
       options.forEach((option, index) =>
-        console.log(`${index + 1}. ${option}`)
+        LOG(kleur.blue().bold(`${index + 1}. ${option}`))
       );
     }
     rl.question(`${promptText} `, (answer) => {

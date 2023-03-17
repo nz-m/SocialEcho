@@ -1,7 +1,9 @@
 const readline = require("readline");
 const mongoose = require("mongoose");
-const User = require("./models/User");
-const Community = require("./models/Community");
+const User = require("../models/User");
+const Community = require("../models/Community");
+const kleur = require("kleur");
+const LOG = console.log;
 
 // Set up the readline interface for user input
 const rl = readline.createInterface({
@@ -18,11 +20,11 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Connected to database");
+    LOG(kleur.green().bold("✅ Connected to MongoDB"));
     start();
   })
   .catch((err) => {
-    console.error("Error connecting to database", err);
+    LOG(kleur.red().bold("❌ Error connecting to database" + err.message));
     process.exit(1);
   });
 
@@ -34,7 +36,10 @@ async function start() {
 
     // Prompt the user to choose a community to remove the moderator from
     const communityName = await promptUserInput(
-      "Which community would you like to remove the moderator from?",
+      kleur
+        .yellow()
+        .bold("Which community would you like to remove the moderator from?"),
+
       communityNames
     );
 
@@ -42,15 +47,13 @@ async function start() {
 
     // Check if the community exists
     if (!chosenCommunity) {
-      console.error(
-        `Error: Community does not exist. Choose a valid community.`
-      );
+      LOG(kleur.red().bold("❌ Error! Community does not exist."));
       process.exit(1);
     }
 
     // Check if the community has any moderators
     if (chosenCommunity.moderators.length === 0) {
-      console.error(`Error: There are no moderators in ${communityName}`);
+      LOG(kleur.red().bold("❌ Error! Community has no moderators."));
       process.exit(1);
     }
 
@@ -62,13 +65,15 @@ async function start() {
 
     // Prompt the user to choose a moderator to remove
     const modChoice = await promptUserChoice(
-      "Which moderator would you like to remove? (enter the number)",
+      kleur
+        .white()
+        .bold("Which moderator would you like to remove? (Enter the number)"),
       moderators.map((mod, index) => `${index + 1}. ${mod.email}`)
     );
 
     const moderatorToRemove = moderators[modChoice - 1];
     if (!moderatorToRemove) {
-      console.error("Error: Moderator not found.");
+      LOG(kleur.red().bold("❌ Error! Moderator not found."));
       return;
     }
 
@@ -84,14 +89,12 @@ async function start() {
       { new: true }
     );
 
-    console.log(
-      `${moderatorToRemove.email} removed as a moderator and member of ${communityName}`
-    );
+    LOG(kleur.green().bold("✅ Done! Moderator removed successfully!"));
 
     rl.close();
     process.exit(0);
   } catch (err) {
-    console.error("Error:", err);
+    LOG(kleur.red().bold("❌ Error! " + err.message));
     process.exit(1);
   }
 }
@@ -100,16 +103,16 @@ async function start() {
 function promptUserInput(promptText, options) {
   return new Promise((resolve) => {
     if (options && options.length > 0) {
-      console.log("Select an option:");
+      LOG(kleur.yellow().bold(promptText));
       options.forEach((option, index) =>
-        console.log(`${index + 1}. ${option}`)
+        LOG(kleur.yellow().bold(`${index + 1}. ${option}`))
       );
     }
     rl.question(`${promptText}>`, (input) => {
       if (options && options.length > 0) {
         const index = parseInt(input) - 1;
         if (isNaN(index) || index < 0 || index >= options.length) {
-          console.error("Invalid choice. Please try again.");
+          LOG(kleur.red().bold("❌ Error! Invalid choice. Please try again."));
           promptUserInput(promptText, options).then(resolve);
         } else {
           resolve(options[index]);
@@ -130,7 +133,7 @@ async function promptUserChoice(prompt, choices) {
         choiceIndex < 0 ||
         choiceIndex >= choices.length
       ) {
-        reject(new Error("Invalid choice"));
+        reject(new Error(kleur.red().bold("❌ Error! Invalid choice")));
       } else {
         resolve(choices[choiceIndex].split(". ")[0]);
       }
