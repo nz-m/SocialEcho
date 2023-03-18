@@ -12,9 +12,10 @@ import ReportPost from "./components/community/ReportPost";
 import ReportedPostPage from "./pages/ReportedPostPage";
 import Saved from "./pages/Saved";
 import EditProfileForm from "./components/form/EditProfileForm";
+import PublicProfilePage from "./pages/PublicProfilePage";
 const App = () => {
   return (
-    <div className="bg-[#f6f7f9]">
+    <div>
       <Routes>
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/signin" element={<SignIn />} />
@@ -38,6 +39,7 @@ const App = () => {
           />
           <Route path="/saved" element={<Saved />} />
           <Route path="/edit-profile" element={<EditProfileForm />} />
+          <Route path="/user/:userId" element={<PublicProfilePage />} />
         </Route>
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>

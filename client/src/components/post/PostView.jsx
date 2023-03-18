@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { MdOutlineReport } from "react-icons/md";
 import { deletePostAction } from "../../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import Save from "./Save";
 import Like from "./Like";
@@ -31,20 +31,27 @@ const PostView = ({ post }) => {
   }, [dispatch, community.name]);
 
   useEffect(() => {
-    // reportedPosts SHOULD EXIST in communities COLLECTION
     if (communityData && userId) {
-      const isReportedPost = communityData.reportedPosts.some(
-        (reportedPost) =>
-          reportedPost.reportedBy === userId && reportedPost.post === post._id
-      );
-      setIsReported(isReportedPost || false);
+      const reportedPosts = communityData.reportedPosts;
+      if (reportedPosts && reportedPosts.length > 0) {
+        const isReportedPost = reportedPosts.some(
+          (reportedPost) =>
+            reportedPost.reportedBy === userId && reportedPost.post === post._id
+        );
+        setIsReported(isReportedPost || false);
+      } else {
+        setIsReported(false);
+      }
     }
   }, [communityData, post._id, userId]);
 
-  const deleteHandler = () => {
-    dispatch(deletePostAction(post._id)).then(() =>
-      navigate(location.state ? location.state.from : "/")
-    );
+  const deleteHandler = async () => {
+    try {
+      await dispatch(deletePostAction(post._id));
+      navigate(location.state ? location.state.from : "/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const reportHandler = () => {
@@ -65,8 +72,21 @@ const PostView = ({ post }) => {
             loading="lazy"
           />
           <div className="">
-            <p className="text-lg font-semibold">{user.name}</p>
-            <p className="text-sm text-gray-500">{community.name}</p>
+            {userData._id === user._id ? (
+              <Link to="/profile" className="text-lg font-semibold">
+                {user.name}
+              </Link>
+            ) : (
+              <Link to={`/user/${user._id}`} className="text-lg font-semibold">
+                {user.name}
+              </Link>
+            )}
+            <Link
+              to={`/community/${community.name}`}
+              className="text-sm text-gray-500"
+            >
+              {community.name}
+            </Link>
           </div>
         </div>
         <p>{createdAt}</p>

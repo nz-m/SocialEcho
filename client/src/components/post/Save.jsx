@@ -19,7 +19,6 @@ const Save = ({ postId }) => {
       await dispatch(getSavedPostsAction());
       setIsFetching(false);
     };
-
     fetchSavedPosts();
   }, [dispatch]);
 
@@ -35,15 +34,27 @@ const Save = ({ postId }) => {
   }, [savedPostsIds, postId]);
 
   const handleSave = async () => {
-    setIsSaving(true);
-    setSaved(true);
-    dispatch(savePostAction(postId)).then(() => setIsSaving(false));
+    try {
+      setIsSaving(true);
+      setSaved(true);
+      await dispatch(savePostAction(postId));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleUnsave = async () => {
-    setIsSaving(true);
-    setSaved(false);
-    dispatch(unsavePostAction(postId)).then(() => setIsSaving(false));
+    try {
+      setIsSaving(true);
+      setSaved(false);
+      await dispatch(unsavePostAction(postId));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (

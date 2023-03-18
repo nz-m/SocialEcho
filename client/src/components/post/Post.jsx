@@ -36,8 +36,21 @@ const Post = ({ post }) => {
             loading="lazy"
           />
           <div className="">
-            <p className="text-lg font-semibold">{user.name}</p>
-            <p className="text-sm text-gray-500">{community.name}</p>
+            {userData._id === user._id ? (
+              <Link to="/profile" className="text-lg font-semibold">
+                {user.name}
+              </Link>
+            ) : (
+              <Link to={`/user/${user._id}`} className="text-lg font-semibold">
+                {user.name}
+              </Link>
+            )}
+            <Link
+              to={`/community/${community.name}`}
+              className="text-sm text-gray-500"
+            >
+              {community.name}
+            </Link>
           </div>
         </div>
         <p>{createdAt}</p>

@@ -18,6 +18,6 @@ router.get("/:id/comment", postController.getComments);
 router.get("/", postController.getPosts);
 router.post("/", fileUpload, postController.createPost);
 router.delete("/:id", postController.deletePost);
-router.get("/:id", postController.getComPosts);
+router.get("/:id", postController.getCommunityPosts);
 
 module.exports = router;

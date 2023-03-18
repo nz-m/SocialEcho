@@ -9,9 +9,7 @@ const EditProfileForm = () => {
   const userInfo = locationHook.state.userInfo;
 
   const dispatch = useDispatch();
-  const [profession, setProfession] = useState(
-    userInfo.profession ? userInfo.profession : ""
-  );
+  const [bio, setbio] = useState(userInfo.bio ? userInfo.bio : "");
   const [location, setLocation] = useState(
     userInfo.location ? userInfo.location : ""
   );
@@ -21,8 +19,8 @@ const EditProfileForm = () => {
     userInfo.interests && userInfo.interests[2] ? userInfo.interests[2] : "",
   ]);
 
-  const handleProfessionChange = (event) => {
-    setProfession(event.target.value);
+  const handlebioChange = (event) => {
+    setbio(event.target.value);
   };
 
   const handleLocationChange = (event) => {
@@ -36,22 +34,22 @@ const EditProfileForm = () => {
   };
 
   const formData = {
-    profession,
+    bio,
     location,
     interests,
   };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(updateUserAction(userInfo._id, formData))
-      .then(() => {
-        setProfession("");
-        setLocation("");
-        setInterests(["", "", ""]);
-      })
-      .then(() => {
-        navigate(-1);
-      });
+    try {
+      await dispatch(updateUserAction(userInfo._id, formData));
+      setbio("");
+      setLocation("");
+      setInterests(["", "", ""]);
+      navigate(-1);
+    } catch (error) {
+      console.log(error);
+      // handle error
+    }
   };
 
   return (
@@ -62,7 +60,7 @@ const EditProfileForm = () => {
           Go back to profile
         </button>
         <p className="text-grey-500">
-          Please provide your profession, location and interests.
+          Please provide your bio, location and interests.
         </p>
       </div>
 
@@ -71,18 +69,15 @@ const EditProfileForm = () => {
         className="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         <div className="mb-4">
-          <label
-            className="block text-gray-700 font-bold mb-2"
-            htmlFor="profession"
-          >
-            Profession:
+          <label className="block text-gray-700 font-bold mb-2" htmlFor="bio">
+            bio:
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="profession"
+            id="bio"
             type="text"
-            value={profession}
-            onChange={handleProfessionChange}
+            value={bio}
+            onChange={handlebioChange}
           />
         </div>
         <div className="mb-4">

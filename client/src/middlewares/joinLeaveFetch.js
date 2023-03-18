@@ -4,9 +4,13 @@ import {
   leaveCommunityAction,
 } from "../redux/actions/communityActions";
 
-// API CALL IN EACH ACTION CREATOR
-export const leaveFetchData = (communityName) => (dispatch) => {
-  dispatch(leaveCommunityAction(communityName))
-    .then(() => dispatch(getNotJoinedCommunitiesAction()))
-    .then(() => dispatch(getJoinedCommunitiesAction()));
+export const leaveFetchData = (communityName) => async (dispatch) => {
+  try {
+    await dispatch(leaveCommunityAction(communityName));
+    await dispatch(getNotJoinedCommunitiesAction());
+    await dispatch(getJoinedCommunitiesAction());
+  } catch (error) {
+    console.log(error);
+    // handle error
+  }
 };

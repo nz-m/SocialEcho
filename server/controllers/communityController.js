@@ -1,7 +1,6 @@
 const Community = require("../models/Community");
 const ModerationRules = require("../models/ModerationRules");
 const User = require("../models/User");
-const Post = require("../models/Post");
 const getUserFromToken = require("../utils/getUserFromToken");
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
@@ -122,6 +121,9 @@ const getNotMemberCommunities = async (req, res) => {
       members: {
         $nin: [userId],
       },
+      bannedUsers: {
+        $nin: [userId],
+      },
     });
 
     res.status(200).json(communities);
@@ -192,6 +194,73 @@ const leaveCommunity = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error leaving community",
+      error,
+    });
+  }
+};
+
+const banUser = async (req, res) => {
+  try {
+    const { id, name } = req.params;
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+    const community = await Community.findOneAndUpdate(
+      {
+        name,
+      },
+      {
+        $pull: {
+          members: id,
+        },
+        $push: {
+          bannedUsers: id,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json(community);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error banning user from community",
+      error,
+    });
+  }
+};
+
+const unbanUser = async (req, res) => {
+  try {
+    const { id, name } = req.params;
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+    const community = await Community.findOneAndUpdate(
+      {
+        name,
+      },
+      {
+        $pull: {
+          bannedUsers: id,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json(community);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error unbanning user from community",
       error,
     });
   }
@@ -385,6 +454,75 @@ const removeReportedPost = async (req, res) => {
   }
 };
 
+const getCommunityMembers = async (req, res) => {
+  try {
+    const communityName = req.params.name;
+    const community = await Community.findOne({
+      name: communityName,
+    })
+      .populate({
+        path: "members",
+        model: "User",
+        select: ["name", "avatar", "createdAt", "_id", "location"],
+        match: { role: { $ne: "moderator" } },
+      })
+      .populate({
+        path: "bannedUsers",
+        model: "User",
+        select: ["name", "avatar", "createdAt", "_id", "location"],
+      })
+      .lean();
+
+    if (!community) {
+      return res.status(404).json({
+        message: "Community not found",
+      });
+    }
+
+    const members = community.members;
+    const bannedUsers = community.bannedUsers;
+
+    return res.status(200).json({ members, bannedUsers });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
+
+const getCommunityMods = async (req, res) => {
+  try {
+    const communityName = req.params.name;
+    const community = await Community.findOne({
+      name: communityName,
+    })
+
+      .populate({
+        path: "moderators",
+        model: "User",
+        select: ["name", "avatar", "createdAt", "_id", "location"],
+        match: { role: "moderator" },
+      })
+      .lean();
+
+    if (!community) {
+      return res.status(404).json({
+        message: "Community not found",
+      });
+    }
+
+    const moderators = community.moderators;
+
+    return res.status(200).json(moderators);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
+
 module.exports = {
   getCommunities,
   getCommunity,
@@ -399,4 +537,8 @@ module.exports = {
   reportPost,
   getReportedPosts,
   removeReportedPost,
+  getCommunityMembers,
+  getCommunityMods,
+  banUser,
+  unbanUser,
 };

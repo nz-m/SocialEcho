@@ -102,6 +102,46 @@ const removeReportedPost = async (communityName, postId) => {
   }
 };
 
+const getCommunityMembers = async (communityName) => {
+  try {
+    const { data } = await API.get(`/communities/${communityName}/members`);
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
+
+const getCommunityMods = async (communityName) => {
+  try {
+    const { data } = await API.get(`/communities/${communityName}/moderators`);
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
+
+const banUser = async (communityName, userId) => {
+  try {
+    const { data } = await API.post(
+      `/communities/${communityName}/ban/${userId}`
+    );
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
+
+const unbanUser = async (communityName, userId) => {
+  try {
+    const { data } = await API.post(
+      `/communities/${communityName}/unban/${userId}`
+    );
+    return { error: null, data };
+  } catch (error) {
+    return { error: error.message, data: null };
+  }
+};
+
 export {
   getCommunity,
   getJoinedCommunities,
@@ -112,4 +152,8 @@ export {
   getCommunityPosts,
   getReportedPosts,
   removeReportedPost,
+  getCommunityMembers,
+  getCommunityMods,
+  banUser,
+  unbanUser,
 };

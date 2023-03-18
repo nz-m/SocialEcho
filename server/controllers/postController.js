@@ -45,17 +45,20 @@ const createPost = async (req, res) => {
   }
 };
 
-// get all posts
+//get all posts
 const getPosts = async (req, res) => {
   try {
     const userId = req.query.userId;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = parseInt(req.query.skip) || 0;
+
     // First, retrieve the list of communities where the user is a member
     const communities = await Community.find({
       members: userId,
     });
     const communityIds = communities.map((community) => community._id);
 
-    // Next, retrieve the posts that belong to those communities
+    // Next, retrieve the posts that belong to those communities with pagination
     const posts = await Post.find({
       community: {
         $in: communityIds,
@@ -66,6 +69,8 @@ const getPosts = async (req, res) => {
       })
       .populate("user", "name avatar")
       .populate("community", "name")
+      .skip(skip)
+      .limit(limit)
       .lean();
 
     const formattedPosts = posts.map((post) => ({
@@ -82,9 +87,12 @@ const getPosts = async (req, res) => {
 };
 
 // get all posts from a community
-const getComPosts = async (req, res) => {
+const getCommunityPosts = async (req, res) => {
   try {
     const id = req.params.id;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = parseInt(req.query.skip) || 0;
+
     const posts = await Post.find({
       community: id,
     })
@@ -93,8 +101,9 @@ const getComPosts = async (req, res) => {
       })
       .populate("user", "name avatar")
       .populate("community", "name")
+      .skip(skip)
+      .limit(limit)
       .lean();
-
     const formattedPosts = posts.map((post) => ({
       ...post,
       createdAt: dayjs(post.createdAt).fromNow(),
@@ -364,7 +373,7 @@ const getSavedPosts = async (req, res) => {
 module.exports = {
   getPosts,
   createPost,
-  getComPosts,
+  getCommunityPosts,
   deletePost,
   likePost,
   unlikePost,

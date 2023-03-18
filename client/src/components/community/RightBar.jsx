@@ -19,8 +19,8 @@ const RightBar = () => {
 
   const { name, description, members, rules } = communityData || {};
 
-  const leaveCommunityHandler = () => {
-    dispatch(leaveFetchData(communityName));
+  const leaveCommunityHandler = async () => {
+    await dispatch(leaveFetchData(communityName));
     navigate("/");
   };
   useEffect(() => {
@@ -63,15 +63,6 @@ const RightBar = () => {
             </button>
           )}
         </div>
-        {/* 
-        {moderators && moderators.length > 0 && (
-          <div className="text-gray-500 mb-4">
-            <span className="font-bold">Moderators:</span>{" "}
-            {moderators.map((moderator) => moderator.name).join(", ")}
-          </div>
-
-          Moderators: an array of ids
-        )} */}
 
         {rules && rules.length > 0 && (
           <div className="text-gray-500 mb-4">

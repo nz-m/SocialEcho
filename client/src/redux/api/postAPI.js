@@ -25,18 +25,22 @@ const createPost = async (formData) => {
   }
 };
 
-const getPosts = async (userId) => {
+const getPosts = async (userId, limit = 10, skip = 0) => {
   try {
-    const { data } = await API.get(`/posts?userId=${userId}`);
+    const { data } = await API.get(
+      `/posts?userId=${userId}&limit=${limit}&skip=${skip}`
+    );
     return { error: null, data };
   } catch (error) {
     return { error: error.message, data: null };
   }
 };
 
-const getComPosts = async (id) => {
+
+
+const getComPosts = async (id, limit = 10, skip = 0) => {
   try {
-    const { data } = await API.get(`posts/${id}`);
+    const { data } = await API.get(`/posts/${id}?limit=${limit}&skip=${skip}`);
     return { error: null, data };
   } catch (error) {
     return { error: error.message, data: null };

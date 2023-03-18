@@ -14,7 +14,7 @@ const communitySchema = new Schema(
       required: true,
       trim: true,
     },
-    image: {
+    banner: {
       type: String,
     },
 
@@ -33,18 +33,21 @@ const communitySchema = new Schema(
         default: [],
       },
     ],
-    // admin: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "User",
-    //   required: true,
-    // },
 
+    bannedUsers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
     posts: [
       {
         type: Schema.Types.ObjectId,
         ref: "Post",
       },
     ],
+
     reportedPosts: {
       type: [
         {
@@ -61,6 +64,7 @@ const communitySchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: "ModerationRule",
+        unique: true,
       },
     ],
   },

@@ -11,19 +11,22 @@ const ViewReportedPost = ({ post }) => {
   const { _id, body, fileUrl, user, createdAt } = post;
   const { name, avatar } = user;
   const createdAtString = new Date(createdAt).toDateString();
-
-  const onRemove = () => {
-    dispatch(deletePostAction(_id)).then(() => {
-      //navigate to previous page
+  const onRemove = async () => {
+    try {
+      await dispatch(deletePostAction(_id));
       navigate(-1);
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const onNoAction = () => {
-    dispatch(removeReportedPostAction(communityName, _id)).then(() => {
-      //navigate to previous page
+  const onNoAction = async () => {
+    try {
+      await dispatch(removeReportedPostAction(communityName, _id));
       navigate(-1);
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const isImageFile = useMemo(() => {

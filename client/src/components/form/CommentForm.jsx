@@ -18,7 +18,7 @@ const CommentForm = ({ communityId }) => {
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newComment = {
       body,
@@ -27,18 +27,18 @@ const CommentForm = ({ communityId }) => {
     };
     if (userData) {
       setIsLoading(true);
-      dispatch(addCommentAction(postId, newComment))
-        .then(() => dispatch(getCommentsAction(postId)))
-        .then(() => dispatch(getPostsAction(userData._id)))
-        .then(() => dispatch(getComPostsAction(communityId)))
-        .then(() => {
-          setIsLoading(false);
-          setBody("");
-        })
-        .catch((error) => {
-          console.log(error);
-          setIsLoading(false);
-        });
+      try {
+        await dispatch(addCommentAction(postId, newComment));
+        await dispatch(getCommentsAction(postId));
+        await dispatch(getPostsAction(userData._id));
+        await dispatch(getComPostsAction(communityId));
+        setIsLoading(false);
+        setBody("");
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+        // handle error
+      }
     }
   };
 
