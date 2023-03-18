@@ -1,4 +1,3 @@
-
 const readline = require("readline");
 const mongoose = require("mongoose");
 const Community = require("../models/Community");
@@ -41,7 +40,7 @@ const promptCommunityName = async () => {
   return new Promise((resolve) => {
     rl.question(
       kleur
-        .blue()
+        .white()
         .bold(`Enter a community name (${communityNames.join("/")}/all): `),
       (answer) => {
         if (answer === "all" || communityNames.includes(answer)) {
@@ -67,9 +66,11 @@ const promptConfirmation = async (communityName, rules) => {
   return new Promise((resolve) => {
     rl.question(
       kleur
-        .blue()
+        .yellow()
         .bold(
-          `Do you want to add the following rules to ${communityName}? (y/n)\n${JSON.stringify(
+          `Do you want to add the following ${
+            ruleIds.length
+          } rules to ${communityName}? (y/n)\n${JSON.stringify(
             ruleIds,
             null,
             2

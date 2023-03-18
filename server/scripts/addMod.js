@@ -37,7 +37,7 @@ async function start() {
     // Prompt the user to choose a moderator to add
     const modChoice = await promptUserChoice(
       kleur
-        .blue()
+        .cyan()
         .bold("Which moderator would you like to add? (Enter the number)"),
 
       moderators.map((mod, index) => `${index + 1}. ${mod.name} - ${mod.email}`)
@@ -56,7 +56,7 @@ async function start() {
     // Prompt the user to choose a community to add the moderator to
     const communityName = await promptUserInput(
       kleur
-        .blue()
+        .cyan()
         .bold(
           "Which community would you like to add the moderator to? (Enter the number)"
         ),
@@ -133,9 +133,9 @@ async function start() {
 function promptUserInput(promptText, options) {
   return new Promise((resolve) => {
     if (options && options.length > 0) {
-      LOG(kleur.blue().bold("Select an option:"));
+      LOG(kleur.cyan().bold("Select an option:"));
       options.forEach((option, index) =>
-        LOG(kleur.blue().bold(`${index + 1}. ${option}`))
+        LOG(kleur.cyan().bold(`${index + 1}. ${option}`))
       );
     }
     rl.question(`${promptText} `, (answer) => {

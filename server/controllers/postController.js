@@ -11,29 +11,42 @@ const User = require("../models/User");
 // TODO: Add paginations
 
 const createPost = async (req, res) => {
-  let newPost;
-
-  if (req.files && req.files.length > 0) {
-    const { filename } = req.files[0];
-    const fileUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/assets/userFiles/${filename}`;
-    newPost = new Post({
-      user: req.body.user,
-      community: req.body.community,
-      body: req.body.body,
-      fileUrl: fileUrl,
-    });
-  } else {
-    newPost = new Post({
-      user: req.body.user,
-      community: req.body.community,
-      body: req.body.body,
-      fileUrl: null,
-    });
-  }
-
   try {
+    const userId = req.body.user;
+    //check if user is a member of the community
+    const isMember = await Community.findOne({
+      _id: req.body.community,
+      members: userId,
+    });
+
+    if (!isMember) {
+      return res.status(401).json({
+        message: "Unauthorized to post in this community",
+      });
+    }
+
+    let newPost;
+
+    if (req.files && req.files.length > 0) {
+      const { filename } = req.files[0];
+      const fileUrl = `${req.protocol}://${req.get(
+        "host"
+      )}/assets/userFiles/${filename}`;
+      newPost = new Post({
+        user: req.body.user,
+        community: req.body.community,
+        body: req.body.body,
+        fileUrl: fileUrl,
+      });
+    } else {
+      newPost = new Post({
+        user: req.body.user,
+        community: req.body.community,
+        body: req.body.body,
+        fileUrl: null,
+      });
+    }
+
     await newPost.save();
     return res.status(201).json({
       message: "Post created successfully",
