@@ -14,7 +14,6 @@ const RelationshipSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
 const Relationship = mongoose.model("Relationship", RelationshipSchema);
 
 module.exports = Relationship;

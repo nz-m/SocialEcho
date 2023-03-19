@@ -19,83 +19,69 @@ db.on("error", console.error.bind(console, "Connection error:"));
 db.once("open", async () => {
   LOG(kleur.green().bold("✅ Connected to MongoDB"));
 
-  const readline = require("readline");
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  rl.question(
-    kleur.bold().yellow(`
-⚠️ Warning: 
-Adding the ${communities.length} communities and ${rules.length} moderation rules found in the JSON files 
-will prevent you from modifying or deleting any existing communities or rules later. You can only add new 
-communities and rules. If these communities or rules already exist in the database, they will be ignored.
-
-Are you sure you want to proceed? (Y/N)
-`),
-    async (answer) => {
-      if (answer.toUpperCase() === "Y") {
-        try {
-          // Get existing community names
-          const existingCommunities = await Community.distinct("name");
-
-          // Filter new communities to exclude existing ones
-          const newCommunities = communities.filter(
-            (c) => !existingCommunities.includes(c.name)
-          );
-
-          // Insert new communities
-          const savedCommunities = await Community.insertMany(newCommunities);
-          LOG(
-            kleur
-              .green()
-              .bold(
-                `✅ Done! ${savedCommunities.length} communities have been saved to database`
-              )
-          );
-
-          // Get existing rule strings
-          const existingRules = await ModerationRules.distinct("rule");
-
-          // Filter new rules to exclude existing ones
-          const newRules = rules.filter((r) => !existingRules.includes(r.rule));
-
-          // Insert new rules
-          const savedRules = await ModerationRules.insertMany(newRules);
-          LOG(
-            kleur
-              .green()
-              .bold(
-                `✅ Done! ${savedRules.length} moderation rules have been saved to database`
-              )
-          );
-
-          db.close();
-        } catch (error) {
-          if (error.code === 11000) {
-            LOG(
-              kleur
-                .yellow()
-                .bold("⚠️ Warning: Community or rule already exists")
-            );
-          } else {
-            LOG(kleur.red().bold("❌ Error! " + error.message));
-          }
-
-          db.close();
-        }
-      } else {
+  try {
+    for (let community of communities) {
+      // Check if community already exists with the same name
+      const existingCommunity = await Community.findOne({
+        name: community.name,
+      });
+      if (existingCommunity) {
         LOG(
           kleur
             .yellow()
             .bold(
-              "⚠️ Operation cancelled! No new communities or rules have been added to the database"
+              `⚠️ Warning: The community ${kleur
+                .white()
+                .bold(community.name)} already exists`
             )
         );
-        db.close();
+      } else {
+        // Insert new community
+        const savedCommunity = await Community.create(community);
+        LOG(
+          kleur
+            .green()
+            .bold(
+              `✅ Done! The community ${kleur
+                .yellow()
+                .bold(savedCommunity.name)} has been saved to database`
+            )
+        );
       }
-      rl.close();
     }
-  );
+
+    for (let eachRule of rules) {
+      // Check if rule already exists with the same name
+      const existingRule = await ModerationRules.findOne({
+        rule: eachRule.rule,
+      });
+      if (existingRule) {
+        LOG(
+          kleur
+            .yellow()
+            .bold(
+              `⚠️ Warning: Rule ${kleur
+                .white()
+                .bold(eachRule.rule)} already exists`
+            )
+        );
+      } else {
+        // Insert new rule
+        const savedRule = await ModerationRules.create(eachRule);
+        LOG(
+          kleur
+            .green()
+            .bold(
+              `✅ Done! The rule ${kleur
+                .yellow()
+                .bold(savedRule.rule)} has been saved to database`
+            )
+        );
+      }
+    }
+    db.close();
+  } catch (error) {
+    LOG(kleur.red().bold(`❌ Error! ${error.message}`));
+    db.close();
+  }
 });

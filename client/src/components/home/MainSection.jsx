@@ -6,15 +6,18 @@ import { getPostsAction } from "../../redux/actions/postActions";
 const MemoizedPost = React.memo(Post);
 
 const MainSection = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.auth);
-  const { posts, isLoading } = useSelector((state) => state.posts);
+  const { posts } = useSelector((state) => state.posts);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const LIMIT = 10;
 
   useEffect(() => {
     if (userData) {
-      dispatch(getPostsAction(userData._id, LIMIT, 0));
+      dispatch(getPostsAction(userData._id, LIMIT, 0)).finally(() => {
+        setIsLoading(false);
+      });
     }
   }, [userData, dispatch, LIMIT]);
 

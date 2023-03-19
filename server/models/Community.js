@@ -76,10 +76,7 @@ const communitySchema = new Schema(
 communitySchema.pre("remove", async function (next) {
   try {
     const postIds = this.posts.map((post) => post.toString());
-    await this.model("Post").updateMany(
-      { _id: { $in: postIds } },
-      { $unset: { community: "" } }
-    );
+    await this.model("Post").deleteMany({ _id: { $in: postIds } });
     next();
   } catch (err) {
     next(err);

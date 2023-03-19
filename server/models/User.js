@@ -68,7 +68,6 @@ const userSchema = new Schema(
     timestamps: true,
   }
 );
-
 // If user chooses to delete their account (Not implemented)
 userSchema.pre("remove", async function (next) {
   try {
@@ -85,6 +84,16 @@ userSchema.pre("remove", async function (next) {
     );
 
     // Remove all relationships where the user is the follower
+    await this.model("Relationship").deleteMany({ follower: this._id });
+
+    // Remove all relationships where the user is the following
+    await this.model("Relationship").deleteMany({ following: this._id });
+
+    // Remove all reported posts by the user
+    await this.model("Community").updateMany(
+      { "reportedPosts.user": this._id },
+      { $pull: { reportedPosts: { user: this._id } } }
+    );
 
     next();
   } catch (err) {
