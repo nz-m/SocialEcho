@@ -60,7 +60,7 @@ async function start() {
     // Get the moderators of the community
     const moderators = await User.find(
       { _id: { $in: chosenCommunity.moderators } },
-      { email: 1, _id: 0 }
+      { email: 1, name: 1 }
     );
 
     // Prompt the user to choose a moderator to remove
@@ -68,10 +68,11 @@ async function start() {
       kleur
         .white()
         .bold("Which moderator would you like to remove? (Enter the number)"),
-      moderators.map((mod, index) => `${index + 1}. ${mod.email}`)
+      moderators.map((mod, index) => `${index + 1}-${mod.name} ${mod.email}`)
     );
 
     const moderatorToRemove = moderators[modChoice - 1];
+
     if (!moderatorToRemove) {
       LOG(kleur.red().bold("❌ Error! Moderator not found."));
       return;
@@ -88,13 +89,11 @@ async function start() {
       },
       { new: true }
     );
-
     LOG(kleur.green().bold("✅ Done! Moderator removed successfully!"));
-
     rl.close();
     process.exit(0);
   } catch (err) {
-    LOG(kleur.red().bold("❌ Error! " + err.message));
+    LOG(kleur.red().bold(err.message));
     process.exit(1);
   }
 }
@@ -133,9 +132,9 @@ async function promptUserChoice(prompt, choices) {
         choiceIndex < 0 ||
         choiceIndex >= choices.length
       ) {
-        reject(new Error(kleur.red().bold("❌ Error! Invalid choice")));
+        reject(new Error("❌ Error! Invalid choice"));
       } else {
-        resolve(choices[choiceIndex].split(". ")[0]);
+        resolve(choices[choiceIndex].split("-")[0]);
       }
     });
   });
