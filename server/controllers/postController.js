@@ -53,7 +53,7 @@ const createPost = async (req, res) => {
     });
   } catch (error) {
     return res.status(409).json({
-      message: error.message,
+      message: "Error creating post",
     });
   }
 };
@@ -94,7 +94,7 @@ const getPosts = async (req, res) => {
     res.status(200).json(formattedPosts);
   } catch (error) {
     res.status(404).json({
-      message: error.message,
+      message: "Posts not found",
     });
   }
 };
@@ -125,7 +125,7 @@ const getCommunityPosts = async (req, res) => {
     res.status(200).json(formattedPosts);
   } catch (error) {
     res.status(500).json({
-      message: error.message,
+      message: "Server error",
     });
   }
 };
@@ -144,7 +144,7 @@ const deletePost = async (req, res) => {
     });
   } catch (error) {
     res.status(404).json({
-      message: error.message,
+      message: "Post not found",
     });
   }
 };

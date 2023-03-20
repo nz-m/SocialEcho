@@ -6,14 +6,17 @@ const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
 
+// Now Im going to send custom error messages to the client instead of the actual error message
+
 // Get all communities
 const getCommunities = async (req, res) => {
   try {
     const communities = await Community.find();
     res.status(200).json(communities);
   } catch (error) {
+    // Send not found error
     res.status(404).json({
-      message: error.message,
+      message: "No communities found",
     });
   }
 };
@@ -25,13 +28,10 @@ const getCommunity = async (req, res) => {
     })
       .populate("rules")
       .lean();
-
-    // Need to populate the moderators later
-
     res.status(200).json(community);
   } catch (error) {
     res.status(404).json({
-      message: error.message,
+      message: "Community not found",
     });
   }
 };
@@ -43,7 +43,7 @@ const createCommunity = async (req, res) => {
     res.status(201).json(savedCommunities);
   } catch (error) {
     res.status(409).json({
-      message: error.message,
+      message: "Error creating community",
     });
   }
 };
@@ -55,7 +55,7 @@ const addRules = async (req, res) => {
     res.status(201).json(savedRules);
   } catch (error) {
     res.status(409).json({
-      message: error.message,
+      message: "Error creating rules",
     });
   }
 };
@@ -81,7 +81,7 @@ const addRulesToCommunity = async (req, res) => {
     res.status(201).json(appliedRules);
   } catch (error) {
     res.status(409).json({
-      message: error.message,
+      message: "Error adding rules to community",
     });
   }
 };
@@ -104,7 +104,6 @@ const getMemberCommunities = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error getting communities",
-      error,
     });
   }
 };
@@ -130,7 +129,6 @@ const getNotMemberCommunities = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error getting communities",
-      error,
     });
   }
 };
@@ -162,7 +160,6 @@ const joinCommunity = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error joining community",
-      error,
     });
   }
 };
@@ -194,7 +191,6 @@ const leaveCommunity = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error leaving community",
-      error,
     });
   }
 };
@@ -229,7 +225,6 @@ const banUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error banning user from community",
-      error,
     });
   }
 };
@@ -261,7 +256,6 @@ const unbanUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error unbanning user from community",
-      error,
     });
   }
 };
@@ -295,7 +289,6 @@ const addModToCommunity = async (req, res) => {
         new: true,
       }
     );
-
     res
       .status(200)
       .json(`User was added as a moderator and member of ${communityName}`);
@@ -353,7 +346,9 @@ const reportPost = async (req, res) => {
     res.status(200).json(latestReportedPost);
   } catch (error) {
     console.log(error);
-    res.status(500).json(error);
+    res.status(500).json({
+      message: "Error reporting post",
+    });
   }
 };
 
@@ -400,7 +395,7 @@ const getReportedPosts = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      message: "Server error",
+      message: "Server Error",
     });
   }
 };

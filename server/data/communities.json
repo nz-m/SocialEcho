@@ -2,6 +2,7 @@
   {
     "name": "Programming",
     "description": "Discussions about programming languages, tools and techniques",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Programming.jpg",
     "moderators": [],
     "members": [],
     "bannedUsers": [],
@@ -12,6 +13,7 @@
   {
     "name": "Music",
     "description": "Talk about your favorite songs, artists and genres",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Music.jpg",
     "moderators": [],
     "members": [],
     "bannedUsers": [],
@@ -22,6 +24,7 @@
   {
     "name": "Gaming",
     "description": "All things gaming - from retro to the latest releases",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Gaming.jpg",
     "moderators": [],
     "members": [],
     "bannedUsers": [],
@@ -32,6 +35,7 @@
   {
     "name": "Education",
     "description": "Discussions about learning, teaching and educational resources",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Education.jpg",
     "moderators": [],
     "members": [],
     "bannedUsers": [],
@@ -52,7 +56,6 @@
   {
     "name": "Technology",
     "description": "Discussions about gadgets, software, hardware and emerging technologies",
-    "banner": "https://example.com/tech-banner.jpg",
     "moderators": [],
     "members": [],
     "bannedUsers": [],
@@ -144,6 +147,16 @@
   {
     "name": "Politics",
     "description": "A community for sharing political stories, tips and recommendations.",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Fashion",
+    "description": "A community for sharing fashion stories, tips and recommendations.",
     "moderators": [],
     "members": [],
     "bannedUsers": [],

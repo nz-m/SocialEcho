@@ -97,7 +97,9 @@ const getPublicUser = async (req, res) => {
 
     res.status(200).json(responseData);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Some error occurred while retrieving the user",
+    });
   }
 };
 
@@ -120,7 +122,7 @@ const followUser = async (req, res) => {
 
     if (relationshipExists) {
       return res.status(400).json({
-        message: "Relationship already exists",
+        message: "Already following this user",
       });
     }
 
@@ -147,7 +149,6 @@ const followUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Internal server error",
-      error: error.message,
     });
   }
 };
@@ -201,7 +202,6 @@ const unfollowUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Internal server error",
-      error: error.message,
     });
   }
 };
