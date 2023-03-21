@@ -1,5 +1,4 @@
 import * as api from "../api/communityAPI";
-
 export const GET_COMMUNITY = "GET_COMMUNITY";
 export const GET_JOINED_COMMUNITIES = "GET_JOINED_COMMUNITIES";
 export const GET_NOT_JOINED_COMMUNITIES = "GET_NOT_JOINED_COMMUNITIES";

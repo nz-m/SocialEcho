@@ -80,10 +80,11 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
       navigate("/");
     }
   } catch (error) {
-    dispatch({
+    await dispatch({
       type: SIGNIN_FAILED,
       payload: ERROR_MESSAGE,
     });
+    navigate("/signin");
   }
 };
 

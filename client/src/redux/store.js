@@ -31,13 +31,7 @@ const checkTokens = async () => {
   }
 };
 
-checkTokens()
-  .then(() => {
-    console.log("Store is ready!");
-  })
-  .catch(() => {
-    console.error("Failed to check tokens: ");
-  });
+checkTokens();
 
 const store = configureStore({
   reducer: rootReducer,
