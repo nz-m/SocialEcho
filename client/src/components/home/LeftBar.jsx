@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { logoutAction } from "../../redux/actions/authActions";
 import { useEffect } from "react";
 import { getJoinedCommunitiesAction } from "../../redux/actions/communityActions";
@@ -13,7 +12,6 @@ const Leftbar = () => {
     dispatch(logoutAction());
   };
   const user = useSelector((state) => state.auth.userData);
-
   useEffect(() => {
     dispatch(getJoinedCommunitiesAction());
   }, [dispatch]);

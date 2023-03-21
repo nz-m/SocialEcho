@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const API = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
@@ -21,7 +20,10 @@ const signIn = async (formData) => {
     });
     return { error: null, data: res.data };
   } catch (err) {
-    return { error: err, data: null };
+    return {
+      error: err.response.data.message,
+      data: null,
+    };
   }
 };
 
@@ -34,24 +36,26 @@ const signUp = async (formData) => {
     });
     return { error: null, data: res.data };
   } catch (err) {
-    return { error: err, data: null };
+    return {
+      error: err.response.data.errors,
+      data: null,
+    };
   }
 };
 
-const logout = async (refreshToken) => {
+const logout = async () => {
   try {
-    const res = await API.post(
-      "/users/logout",
-      { refreshToken },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const res = await API.post("/users/logout", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return { error: null, data: res.data };
   } catch (err) {
-    return { error: err, data: null };
+    return {
+      error: err.response.data.message,
+      data: null,
+    };
   }
 };
 
@@ -60,7 +64,10 @@ const getModProfile = async () => {
     const res = await API.get("/users/moderator");
     return { error: null, data: res.data };
   } catch (err) {
-    return { error: err, data: null };
+    return {
+      error: err.response.data.message,
+      data: null,
+    };
   }
 };
 

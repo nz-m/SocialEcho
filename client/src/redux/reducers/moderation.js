@@ -1,5 +1,7 @@
-// export default moderationReducer;
-import { GET_MOD_PROFILE } from "../actions/authActions";
+import {
+  GET_MOD_PROFILE_SUCCESS,
+  GET_MOD_PROFILE_FAIL,
+} from "../actions/authActions";
 import {
   GET_COMMUNITY_MEMBERS,
   GET_COMMUNITY_MODS,
@@ -22,10 +24,16 @@ const moderationReducer = (state = initialState, action) => {
         ...state,
         isModerator: payload,
       };
-    case GET_MOD_PROFILE:
+    case GET_MOD_PROFILE_SUCCESS:
       return {
         ...state,
         modProfile: payload.moderatorInfo,
+      };
+
+    case GET_MOD_PROFILE_FAIL:
+      return {
+        ...state,
+        modProfile: null,
       };
 
     case GET_COMMUNITY_MEMBERS:

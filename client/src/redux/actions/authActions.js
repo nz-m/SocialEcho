@@ -1,44 +1,57 @@
 import * as api from "../api/authAPI";
 
-export const SIGNUP = "SIGNUP";
-export const SIGNIN = "SIGNIN";
+export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
+export const SIGNUP_FAILED = "SIGNUP_FAILED";
+
+export const SIGNIN_SUCCESS = "SIGNIN_SUCCESS";
+export const SIGNIN_FAILED = "SIGNIN_FAILED";
 export const LOGOUT = "LOGOUT";
 
 export const REFRESH_TOKEN_SUCCESS = "REFRESH_TOKEN_SUCCESS";
 export const REFRESH_TOKEN_FAIL = "REFRESH_TOKEN_FAIL";
-export const GET_MOD_PROFILE = "GET_MOD_PROFILE";
+export const GET_MOD_PROFILE_SUCCESS = "GET_MOD_PROFILE_SUCCESS";
+export const GET_MOD_PROFILE_FAIL = "GET_MOD_PROFILE_FAIL";
 
-// action creators
+const ERROR_MESSAGE = "Something went wrong.";
+const SIGNUP_SUCCESS_MESSAGE =
+  "You have successfully created an account. Please sign in.";
+
+export const setInitialAuthState = (navigate) => async (dispatch) => {
+  await dispatch({ type: LOGOUT });
+  navigate("/signin");
+};
 
 export const logoutAction = () => async (dispatch) => {
   try {
-    const { refreshToken } = JSON.parse(localStorage.getItem("profile"));
-    const { data } = await api.logout(refreshToken);
+    const { data } = await api.logout();
     localStorage.removeItem("profile");
     dispatch({ type: LOGOUT, payload: data });
   } catch (error) {
-    console.log(error.message);
+    dispatch({ type: LOGOUT, payload: ERROR_MESSAGE });
   }
 };
 
 export const signUpAction = (formData, navigate) => async (dispatch) => {
   try {
     const response = await api.signUp(formData);
-    const { error, data } = response;
+    const { error } = response;
     if (error) {
       dispatch({
-        type: SIGNUP,
-        data: error.response.data.errors,
+        type: SIGNUP_FAILED,
+        payload: error,
       });
     } else {
       dispatch({
-        type: SIGNUP,
-        data,
+        type: SIGNUP_SUCCESS,
+        payload: SIGNUP_SUCCESS_MESSAGE,
       });
       navigate("/signin");
     }
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: SIGNUP_FAILED,
+      payload: ERROR_MESSAGE,
+    });
   }
 };
 
@@ -47,8 +60,10 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
     const response = await api.signIn(formData);
     const { error, data } = response;
     if (error) {
-      console.log(error.response.data.errors);
-      // handle error
+      dispatch({
+        type: SIGNIN_FAILED,
+        payload: error,
+      });
     } else {
       const { user, accessToken, refreshToken, accessTokenUpdatedAt } = data;
       const profile = {
@@ -59,13 +74,16 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
       };
       localStorage.setItem("profile", JSON.stringify(profile));
       dispatch({
-        type: SIGNIN,
-        data: profile,
+        type: SIGNIN_SUCCESS,
+        payload: profile,
       });
       navigate("/");
     }
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: SIGNIN_FAILED,
+      payload: ERROR_MESSAGE,
+    });
   }
 };
 
@@ -73,93 +91,13 @@ export const getModProfileAction = () => async (dispatch) => {
   try {
     const { data } = await api.getModProfile();
     dispatch({
-      type: GET_MOD_PROFILE,
+      type: GET_MOD_PROFILE_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: GET_MOD_PROFILE_FAIL,
+      payload: ERROR_MESSAGE,
+    });
   }
 };
-
-// import * as api from "../api/authAPI";
-
-// export const SIGNUP_REQUEST = "SIGNUP_REQUEST";
-// export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
-// export const SIGNUP_FAILURE = "SIGNUP_FAILURE";
-
-// export const SIGNIN_REQUEST = "SIGNIN_REQUEST";
-// export const SIGNIN_SUCCESS = "SIGNIN_SUCCESS";
-// export const SIGNIN_FAILURE = "SIGNIN_FAILURE";
-
-// export const LOGOUT_REQUEST = "LOGOUT_REQUEST";
-// export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
-// export const LOGOUT_FAILURE = "LOGOUT_FAILURE";
-
-// export const REFRESH_TOKEN_SUCCESS = "REFRESH_TOKEN_SUCCESS";
-// export const REFRESH_TOKEN_FAILURE = "REFRESH_TOKEN_FAILURE";
-
-// export const GET_MOD_PROFILE_REQUEST = "GET_MOD_PROFILE_REQUEST";
-// export const GET_MOD_PROFILE_SUCCESS = "GET_MOD_PROFILE_SUCCESS";
-// export const GET_MOD_PROFILE_FAILURE = "GET_MOD_PROFILE_FAILURE";
-
-// export const logoutAction = () => async (dispatch) => {
-//   dispatch({ type: LOGOUT_REQUEST });
-//   try {
-//     const { refreshToken } = JSON.parse(localStorage.getItem("profile"));
-//     const { data } = await api.logout(refreshToken);
-//     localStorage.removeItem("profile");
-//     dispatch({ type: LOGOUT_SUCCESS, payload: data });
-//   } catch (error) {
-//     dispatch({ type: LOGOUT_FAILURE, payload: error.message });
-//   }
-// };
-
-// const request = (actionType) => {
-//   return { type: actionType };
-// };
-
-// const handleResponse = (
-//   response,
-//   successActionType,
-//   failureActionType,
-//   dispatch
-// ) => {
-//   const { error, data } = response;
-//   if (error) {
-//     dispatch({ type: failureActionType, payload: error.response.data.errors });
-//   } else {
-//     dispatch({ type: successActionType, payload: data });
-//   }
-// };
-
-// export const signUpAction = (formData, navigate) => async (dispatch) => {
-//   dispatch(request(SIGNUP_REQUEST));
-//   try {
-//     const response = await api.signUp(formData);
-//     handleResponse(response, SIGNUP_SUCCESS, SIGNUP_FAILURE, dispatch);
-//     navigate("/signin");
-//   } catch (error) {
-//     dispatch({ type: SIGNUP_FAILURE, payload: error.message });
-//   }
-// };
-
-// export const signInAction = (formData, navigate) => async (dispatch) => {
-//   dispatch(request(SIGNIN_REQUEST));
-//   try {
-//     const response = await api.signIn(formData);
-//     handleResponse(response, SIGNIN_SUCCESS, SIGNIN_FAILURE, dispatch);
-//     navigate("/");
-//   } catch (error) {
-//     dispatch({ type: SIGNIN_FAILURE, payload: error.message });
-//   }
-// };
-
-// export const getModProfileAction = () => async (dispatch) => {
-//   dispatch(request(GET_MOD_PROFILE_REQUEST));
-//   try {
-//     const { data } = await api.getModProfile();
-//     dispatch({ type: GET_MOD_PROFILE_SUCCESS, payload: data });
-//   } catch (error) {
-//     dispatch({ type: GET_MOD_PROFILE_FAILURE, payload: error.message });
-//   }
-// };

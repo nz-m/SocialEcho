@@ -13,7 +13,6 @@ const persistedState = {
   },
 };
 
-// Check if access token is valid, if not, call refresh token action
 const checkTokens = async () => {
   const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
   const refreshToken = JSON.parse(
@@ -27,12 +26,18 @@ const checkTokens = async () => {
         localStorage.getItem("profile")
       )?.user;
     } else {
-      await refreshTokenAction(refreshToken);
+      await store.dispatch(refreshTokenAction(refreshToken));
     }
   }
 };
 
-checkTokens();
+checkTokens()
+  .then(() => {
+    console.log("Store is ready!");
+  })
+  .catch(() => {
+    console.error("Failed to check tokens: ");
+  });
 
 const store = configureStore({
   reducer: rootReducer,

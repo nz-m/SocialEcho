@@ -13,8 +13,6 @@ export const SAVE_POST = "SAVE_POST";
 export const UNSAVE_POST = "UNSAVE_POST";
 export const GET_SAVED_POSTS = "GET_SAVED_POSTS";
 
-//  TODO: Remove console.log(error) from all actions and replace with error handling
-
 export const createPostAction = (formData) => async (dispatch) => {
   try {
     const { data } = await api.createPost(formData);

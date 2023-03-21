@@ -22,7 +22,7 @@ const signin = async (req, res) => {
     if (!existingUser) {
       logger.error("User not found");
       return res.status(404).json({
-        message: "User doesn't exist",
+        message: "Invalid credentials",
       });
     }
 
@@ -79,7 +79,7 @@ const signin = async (req, res) => {
   } catch (err) {
     logger.error(`Error occurred while signing in user: ${err.message}`);
     res.status(500).json({
-      message: err.message,
+      message: "Something went wrong",
     });
   }
 };
@@ -183,45 +183,28 @@ const addUser = async (req, res) => {
   try {
     await newUser.save();
     res.status(200).json({
-      success: true,
       message: "User added successfully",
     });
   } catch (err) {
     res.status(400).json({
-      success: false,
-      message: "User not added",
-      error: err.message,
+      message: err.message,
     });
   }
 };
 const logout = async (req, res) => {
   try {
-    const { refreshToken } = req.body;
     const accessToken = req.headers.authorization?.split(" ")[1] ?? null;
-
-    const tokenPair = await RefreshToken.findOne({ accessToken });
-    if (!tokenPair || tokenPair.refreshToken !== refreshToken) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid refresh token",
-      });
+    if (accessToken) {
+      await RefreshToken.deleteOne({ accessToken });
+      logger.info(`User with access token ${accessToken} has logged out`);
     }
-
-    await tokenPair.deleteOne();
-
-    logger.info(`User with access token ${accessToken} has logged out`);
-
     return res.status(200).json({
-      success: true,
       message: "Logout successful",
     });
   } catch (err) {
     logger.error(err);
-
     return res.status(500).json({
-      success: false,
       message: "Internal server error. Please try again later.",
-      error: err.message,
     });
   }
 };
@@ -269,7 +252,6 @@ const refreshToken = async (req, res) => {
       accessTokenUpdatedAt: new Date().toLocaleString(),
     });
   } catch (err) {
-    console.error(err);
     return res.status(500).json({
       message: "Internal server error",
     });
