@@ -5,7 +5,7 @@ const initialState = {
   communityPosts: [],
   comments: [],
   savedPosts: [],
-  error: null,
+  postError: null,
 };
 
 const postReducer = (state = initialState, action) => {
@@ -16,12 +16,12 @@ const postReducer = (state = initialState, action) => {
       return {
         ...state,
         posts: [...state.posts, payload],
-        error: null,
+        postError: null,
       };
     case types.CREATE_POST_FAIL:
       return {
         ...state,
-        error: payload,
+        postError: payload,
       };
     case types.GET_POSTS_SUCCESS:
       if (payload.page === 1) {
@@ -29,20 +29,20 @@ const postReducer = (state = initialState, action) => {
         return {
           ...state,
           posts: payload.posts || [],
-          error: null,
+          postError: null,
         };
       } else {
         // If it's not the first page, append new posts to existing posts
         return {
           ...state,
           posts: [...state.posts, ...(payload.posts || [])],
-          error: null,
+          postError: null,
         };
       }
     case types.GET_POSTS_FAIL:
       return {
         ...state,
-        error: payload,
+        postError: payload,
       };
 
     case types.GET_COMMUNITY_POSTS_SUCCESS:
@@ -50,20 +50,20 @@ const postReducer = (state = initialState, action) => {
         return {
           ...state,
           communityPosts: payload.posts || [],
-          error: null,
+          postError: null,
         };
       } else {
         return {
           ...state,
           communityPosts: [...state.communityPosts, ...(payload.posts || [])],
-          error: null,
+          postError: null,
         };
       }
 
     case types.GET_COMMUNITY_POSTS_FAIL:
       return {
         ...state,
-        error: payload,
+        postError: payload,
       };
 
     case types.DELETE_POST_SUCCESS:
@@ -73,12 +73,12 @@ const postReducer = (state = initialState, action) => {
         communityPosts: state.communityPosts.filter(
           (post) => post._id !== payload
         ),
-        error: null,
+        postError: null,
       };
     case types.DELETE_POST_FAIL:
       return {
         ...state,
-        error: payload,
+        postError: payload,
       };
 
     case types.UPDATE_POST_SUCCESS:
@@ -90,12 +90,12 @@ const postReducer = (state = initialState, action) => {
         communityPosts: state.communityPosts.map((post) =>
           post._id === payload._id ? payload : post
         ),
-        error: null,
+        postError: null,
       };
     case types.UPDATE_POST_FAIL:
       return {
         ...state,
-        error: payload,
+        postError: payload,
       };
 
     case types.LIKE_POST_SUCCESS:
@@ -105,25 +105,25 @@ const postReducer = (state = initialState, action) => {
         ...state,
         posts,
         communityPosts,
-        error: null,
+        postError: null,
       };
     case types.LIKE_POST_FAIL:
     case types.UNLIKE_POST_FAIL:
       return {
         ...state,
-        error: payload,
+        postError: payload,
       };
 
     case types.GET_COMMENTS_SUCCESS:
       return {
         ...state,
         comments: payload,
-        error: null,
+        postError: null,
       };
     case types.GET_COMMENTS_FAIL:
       return {
         ...state,
-        error: payload,
+        postError: payload,
       };
 
     case types.DELETE_COMMENT_SUCCESS:
@@ -136,12 +136,12 @@ const postReducer = (state = initialState, action) => {
         comments: state.comments.filter((comment) => comment._id !== payload),
         posts: postsUpdateD,
         communityPosts: communityPostsUpdateD,
-        error: null,
+        postError: null,
       };
     case types.DELETE_COMMENT_FAIL:
       return {
         ...state,
-        error: payload,
+        postError: payload,
       };
 
     case types.SAVE_POST_SUCCESS:
@@ -150,14 +150,14 @@ const postReducer = (state = initialState, action) => {
       return {
         ...state,
         savedPosts: payload || [],
-        error: null,
+        postError: null,
       };
     case types.SAVE_POST_FAIL:
     case types.UNSAVE_POST_FAIL:
     case types.GET_SAVED_POSTS_FAIL:
       return {
         ...state,
-        error: payload,
+        postError: payload,
       };
 
     default:

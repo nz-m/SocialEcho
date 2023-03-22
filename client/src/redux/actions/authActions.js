@@ -1,23 +1,12 @@
 import * as api from "../api/authAPI";
-
-export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
-export const SIGNUP_FAIL = "SIGNUP_FAIL";
-
-export const SIGNIN_SUCCESS = "SIGNIN_SUCCESS";
-export const SIGNIN_FAIL = "SIGNIN_FAIL";
-export const LOGOUT = "LOGOUT";
-
-export const REFRESH_TOKEN_SUCCESS = "REFRESH_TOKEN_SUCCESS";
-export const REFRESH_TOKEN_FAIL = "REFRESH_TOKEN_FAIL";
-export const GET_MOD_PROFILE_SUCCESS = "GET_MOD_PROFILE_SUCCESS";
-export const GET_MOD_PROFILE_FAIL = "GET_MOD_PROFILE_FAIL";
+import * as types from "../constants/authConstants";
 
 const ERROR_MESSAGE = "Something went wrong.";
 const SIGNUP_SUCCESS_MESSAGE =
   "You have successfully created an account. Please sign in.";
 
 export const setInitialAuthState = (navigate) => async (dispatch) => {
-  await dispatch({ type: LOGOUT });
+  await dispatch({ type: types.LOGOUT });
   navigate("/signin");
 };
 
@@ -25,9 +14,9 @@ export const logoutAction = () => async (dispatch) => {
   try {
     const { data } = await api.logout();
     localStorage.removeItem("profile");
-    dispatch({ type: LOGOUT, payload: data });
+    dispatch({ type: types.LOGOUT, payload: data });
   } catch (error) {
-    dispatch({ type: LOGOUT, payload: ERROR_MESSAGE });
+    dispatch({ type: types.LOGOUT, payload: ERROR_MESSAGE });
   }
 };
 
@@ -37,19 +26,19 @@ export const signUpAction = (formData, navigate) => async (dispatch) => {
     const { error } = response;
     if (error) {
       dispatch({
-        type: SIGNUP_FAIL,
+        type: types.SIGNUP_FAIL,
         payload: error,
       });
     } else {
       dispatch({
-        type: SIGNUP_SUCCESS,
+        type: types.SIGNUP_SUCCESS,
         payload: SIGNUP_SUCCESS_MESSAGE,
       });
       navigate("/signin");
     }
   } catch (error) {
     dispatch({
-      type: SIGNUP_FAIL,
+      type: types.SIGNUP_FAIL,
       payload: ERROR_MESSAGE,
     });
   }
@@ -61,7 +50,7 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
     const { error, data } = response;
     if (error) {
       dispatch({
-        type: SIGNIN_FAIL,
+        type: types.SIGNIN_FAIL,
         payload: error,
       });
     } else {
@@ -74,14 +63,14 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
       };
       localStorage.setItem("profile", JSON.stringify(profile));
       dispatch({
-        type: SIGNIN_SUCCESS,
+        type: types.SIGNIN_SUCCESS,
         payload: profile,
       });
       navigate("/");
     }
   } catch (error) {
     await dispatch({
-      type: SIGNIN_FAIL,
+      type: types.SIGNIN_FAIL,
       payload: ERROR_MESSAGE,
     });
     navigate("/signin");
@@ -92,12 +81,12 @@ export const getModProfileAction = () => async (dispatch) => {
   try {
     const { data } = await api.getModProfile();
     dispatch({
-      type: GET_MOD_PROFILE_SUCCESS,
+      type: types.GET_MOD_PROFILE_SUCCESS,
       payload: data,
     });
   } catch (error) {
     dispatch({
-      type: GET_MOD_PROFILE_FAIL,
+      type: types.GET_MOD_PROFILE_FAIL,
       payload: ERROR_MESSAGE,
     });
   }

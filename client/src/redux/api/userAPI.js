@@ -16,8 +16,8 @@ const getUser = async (id) => {
   try {
     const { data } = await API.get(`/users/${id}`);
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -29,8 +29,8 @@ const updateUser = async (id, formData) => {
       },
     });
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -38,16 +38,16 @@ const getPublicUsers = async () => {
   try {
     const { data } = await API.get("/users/public-users");
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 const getPublicUser = async (id) => {
   try {
     const { data } = await API.get(`/users/public-users/${id}`);
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -55,8 +55,8 @@ const followUser = async (id) => {
   try {
     const { data } = await API.patch(`/users/${id}/follow`);
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -64,8 +64,8 @@ const unfollowUser = async (id) => {
   try {
     const { data } = await API.patch(`/users/${id}/unfollow`);
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 

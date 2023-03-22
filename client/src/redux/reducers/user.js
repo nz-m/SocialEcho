@@ -1,28 +1,44 @@
-import {
-  GET_USER,
-  GET_PUBLIC_USERS,
-  GET_PUBLIC_USER_PROFILE,
-  CHANGE_FOLLOW_STATUS,
-} from "../actions/userActions";
+import * as types from "../constants/userConstants";
 
 const initialState = {
   user: {},
   publicUsers: [],
   publicUserProfile: {},
   isFollowing: null,
+  userError: null,
 };
 
 const user = (state = initialState, action) => {
-  switch (action.type) {
-    case GET_USER:
-      return { ...state, user: action.payload };
-    case GET_PUBLIC_USERS:
-      return { ...state, publicUsers: action.payload };
+  const { type, payload } = action;
 
-    case GET_PUBLIC_USER_PROFILE:
-      return { ...state, publicUserProfile: action.payload };
-    case CHANGE_FOLLOW_STATUS:
-      return { ...state, isFollowing: action.data.isFollowing };
+  switch (type) {
+    case types.GET_USER_SUCCESS:
+      return { ...state, user: payload, userError: null };
+
+    case types.GET_USER_FAIL:
+      return { ...state, userError: payload };
+
+    case types.GET_PUBLIC_USERS_SUCCESS:
+      return { ...state, publicUsers: payload, userError: null };
+
+    case types.GET_PUBLIC_USERS_FAIL:
+      return { ...state, userError: payload };
+
+    case types.GET_PUBLIC_USER_PROFILE_SUCCESS:
+      return { ...state, publicUserProfile: payload, userError: null };
+
+    case types.GET_PUBLIC_USER_PROFILE_FAIL:
+      return { ...state, userError: payload };
+
+    case types.CHANGE_FOLLOW_STATUS_SUCCESS:
+      return {
+        ...state,
+        isFollowing: payload.isFollowing,
+        userError: null,
+      };
+
+    case types.CHANGE_FOLLOW_STATUS_FAIL:
+      return { ...state, userError: payload };
 
     default:
       return state;

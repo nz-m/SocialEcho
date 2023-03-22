@@ -1,78 +1,117 @@
 import * as api from "../api/userAPI";
-export const GET_USER = "GET_USER";
-export const GET_PUBLIC_USERS = "GET_PUBLIC_USERS";
-export const GET_PUBLIC_USER_PROFILE = "GET_PUBLIC_USER_PROFILE";
-export const CHANGE_FOLLOW_STATUS = "CHANGE_FOLLOW_STATUS";
+import * as types from "../constants/userConstants";
 
 export const getUserAction = (id) => async (dispatch) => {
   try {
-    const { data } = await api.getUser(id);
+    const { error, data } = await api.getUser(id);
+
+    if (error) {
+      throw new Error(error);
+    }
+
     dispatch({
-      type: GET_USER,
+      type: types.GET_USER_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.GET_USER_FAIL,
+      payload: error.message,
+    });
   }
 };
 
 export const updateUserAction = (id, formData) => async (dispatch) => {
   try {
-    const { data } = await api.updateUser(id, formData);
+    const { error, data } = await api.updateUser(id, formData);
+
+    if (error) {
+      throw new Error(error);
+    }
+
     dispatch({
-      type: GET_USER,
+      type: types.GET_USER_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.GET_USER_FAIL,
+      payload: error.message,
+    });
   }
 };
 
 export const getPublicUsersAction = () => async (dispatch) => {
   try {
-    const { data } = await api.getPublicUsers();
+    const { error, data } = await api.getPublicUsers();
+
+    if (error) {
+      throw new Error(error);
+    }
+
     dispatch({
-      type: GET_PUBLIC_USERS,
+      type: types.GET_PUBLIC_USERS_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.GET_PUBLIC_USERS_FAIL,
+      payload: error.message,
+    });
   }
 };
 
 export const getPublicUserAction = (id) => async (dispatch) => {
   try {
-    const { data } = await api.getPublicUser(id);
+    const { error, data } = await api.getPublicUser(id);
+    if (error) {
+      throw new Error(error);
+    }
     dispatch({
-      type: GET_PUBLIC_USER_PROFILE,
+      type: types.GET_PUBLIC_USER_PROFILE_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.GET_PUBLIC_USER_PROFILE_FAIL,
+      payload: error.message,
+    });
   }
 };
 
 export const followUserAction = (id) => async (dispatch) => {
   try {
-    await api.followUser(id);
+    const { error } = await api.followUser(id);
+    if (error) {
+      throw new Error(error);
+    }
     dispatch({
-      type: CHANGE_FOLLOW_STATUS,
-      data: { isFollowing: true },
+      type: types.CHANGE_FOLLOW_STATUS_SUCCESS,
+      payload: { isFollowing: true },
     });
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.CHANGE_FOLLOW_STATUS_FAIL,
+      payload: error.message,
+    });
   }
 };
 
 export const unfollowUserAction = (id) => async (dispatch) => {
   try {
-    await api.unfollowUser(id);
+    const { error } = await api.unfollowUser(id);
+    if (error) {
+      throw new Error(error);
+    }
 
     dispatch({
-      type: CHANGE_FOLLOW_STATUS,
-      data: { isFollowing: false },
+      type: types.CHANGE_FOLLOW_STATUS_SUCCESS,
+      payload: { isFollowing: false },
     });
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.CHANGE_FOLLOW_STATUS_FAIL,
+      payload: error.message,
+    });
   }
 };

@@ -1,13 +1,8 @@
+import * as types from "../constants/authConstants";
 import {
-  SIGNUP_SUCCESS,
-  SIGNUP_FAIL,
-  SIGNIN_SUCCESS,
-  SIGNIN_FAIL,
-  LOGOUT,
-  REFRESH_TOKEN_SUCCESS,
-  REFRESH_TOKEN_FAIL,
-} from "../actions/authActions";
-import { GET_COMMUNITY } from "../actions/communityActions";
+  GET_COMMUNITY_SUCCESS,
+  GET_COMMUNITY_FAIL,
+} from "../constants/communityConstants";
 
 const initialState = {
   userData: null,
@@ -20,35 +15,37 @@ const initialState = {
 };
 
 const authReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case SIGNUP_SUCCESS:
+  const { type, payload } = action;
+
+  switch (type) {
+    case types.SIGNUP_SUCCESS:
       return {
         ...state,
-        successMessage: action.payload || null,
+        successMessage: payload || null,
       };
 
-    case SIGNUP_FAIL:
+    case types.SIGNUP_FAIL:
       return {
         ...state,
-        signUperror: action.payload || [],
+        signUperror: payload || [],
       };
 
-    case SIGNIN_SUCCESS:
+    case types.SIGNIN_SUCCESS:
       return {
         ...state,
-        userData: action.payload?.user,
-        accessToken: action.payload?.accessToken,
-        refreshToken: action.payload?.refreshToken,
-        successMessage: action.payload || null,
+        userData: payload?.user,
+        accessToken: payload?.accessToken,
+        refreshToken: payload?.refreshToken,
+        successMessage: payload || null,
       };
 
-    case SIGNIN_FAIL:
+    case types.SIGNIN_FAIL:
       return {
         ...state,
-        signInerror: action.payload,
+        signInerror: payload,
       };
 
-    case LOGOUT:
+    case types.LOGOUT:
       return {
         ...state,
         userData: null,
@@ -60,14 +57,14 @@ const authReducer = (state = initialState, action) => {
         isModerator: false,
       };
 
-    case REFRESH_TOKEN_SUCCESS:
+    case types.REFRESH_TOKEN_SUCCESS:
       return {
         ...state,
-        accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken,
+        accessToken: payload?.accessToken,
+        refreshToken: payload?.refreshToken,
       };
 
-    case REFRESH_TOKEN_FAIL:
+    case types.REFRESH_TOKEN_FAIL:
       return {
         ...state,
         userData: null,
@@ -79,14 +76,20 @@ const authReducer = (state = initialState, action) => {
         isModerator: false,
       };
 
-    case GET_COMMUNITY:
-      const moderators = action.payload?.moderators || [];
+    case GET_COMMUNITY_SUCCESS:
+      const moderators = payload?.moderators || [];
       const isModerator = moderators.some(
         (moderator) => moderator === state.userData?._id
       );
       return {
         ...state,
         isModerator,
+      };
+
+    case GET_COMMUNITY_FAIL:
+      return {
+        ...state,
+        isModerator: false,
       };
 
     default:

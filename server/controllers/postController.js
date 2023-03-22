@@ -171,7 +171,7 @@ const likePost = async (req, res) => {
 
     if (!updatedPost) {
       return res.status(404).json({
-        message: "Post not found or already liked",
+        message: "Post not found. It may have been deleted already",
       });
     }
 
@@ -212,7 +212,7 @@ const unlikePost = async (req, res) => {
 
     if (!updatedPost) {
       return res.status(404).json({
-        message: "Post not found or already unliked",
+        message: "Post not found. It may have been deleted already",
       });
     }
 

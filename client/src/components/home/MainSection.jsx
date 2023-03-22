@@ -6,7 +6,7 @@ import { getPostsAction } from "../../redux/actions/postActions";
 const MemoizedPost = React.memo(Post);
 
 const MainSection = () => {
-  const error = useSelector((state) => state.posts.error);
+  const postError = useSelector((state) => state.posts.postError);
 
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ const MainSection = () => {
       <div className="flex justify-center items-center h-32 bg-gray-200 rounded-lg shadow-xl mb-4">
         <h1 className="text-2xl font-bold text-gray-700">Welcome</h1>
       </div>
-      {error && <div className="text-red-500">{error}</div>}
+      {postError && <div className="text-red-500">{postError}</div>}
 
       <div>{memoizedPosts}</div>
       {isLoading && <div>Loading...</div>}
