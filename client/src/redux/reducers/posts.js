@@ -1,70 +1,87 @@
-import {
-  CREATE_POST,
-  GET_POSTS,
-  GET_COMMUNITY_POSTS,
-  DELETE_POST,
-  UPDATE_POST,
-  LIKE_POST,
-  UNLIKE_POST,
-  GET_COMMENTS,
-  DELETE_COMMENT,
-  SAVE_POST,
-  UNSAVE_POST,
-  GET_SAVED_POSTS,
-} from "../actions/postActions";
+import * as types from "../constants/postConstants";
 
 const initialState = {
   posts: [],
   communityPosts: [],
   comments: [],
   savedPosts: [],
+  error: null,
 };
 
 const postReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case CREATE_POST:
+    case types.CREATE_POST_SUCCESS:
       return {
         ...state,
         posts: [...state.posts, payload],
+        error: null,
       };
-    case GET_POSTS:
+    case types.CREATE_POST_FAIL:
+      return {
+        ...state,
+        error: payload,
+      };
+    case types.GET_POSTS_SUCCESS:
       if (payload.page === 1) {
         // If it's the first page, replace existing posts
         return {
           ...state,
           posts: payload.posts || [],
+          error: null,
         };
       } else {
         // If it's not the first page, append new posts to existing posts
         return {
           ...state,
           posts: [...state.posts, ...(payload.posts || [])],
+          error: null,
         };
       }
-    case GET_COMMUNITY_POSTS:
+    case types.GET_POSTS_FAIL:
+      return {
+        ...state,
+        error: payload,
+      };
+
+    case types.GET_COMMUNITY_POSTS_SUCCESS:
       if (payload.page === 1) {
         return {
           ...state,
           communityPosts: payload.posts || [],
+          error: null,
         };
       } else {
         return {
           ...state,
           communityPosts: [...state.communityPosts, ...(payload.posts || [])],
+          error: null,
         };
       }
 
-    case DELETE_POST:
+    case types.GET_COMMUNITY_POSTS_FAIL:
+      return {
+        ...state,
+        error: payload,
+      };
+
+    case types.DELETE_POST_SUCCESS:
       return {
         ...state,
         posts: state.posts.filter((post) => post._id !== payload),
         communityPosts: state.communityPosts.filter(
           (post) => post._id !== payload
         ),
+        error: null,
       };
-    case UPDATE_POST:
+    case types.DELETE_POST_FAIL:
+      return {
+        ...state,
+        error: payload,
+      };
+
+    case types.UPDATE_POST_SUCCESS:
       return {
         ...state,
         posts: state.posts.map((post) =>
@@ -73,22 +90,43 @@ const postReducer = (state = initialState, action) => {
         communityPosts: state.communityPosts.map((post) =>
           post._id === payload._id ? payload : post
         ),
+        error: null,
       };
-    case LIKE_POST:
-    case UNLIKE_POST:
+    case types.UPDATE_POST_FAIL:
+      return {
+        ...state,
+        error: payload,
+      };
+
+    case types.LIKE_POST_SUCCESS:
+    case types.UNLIKE_POST_SUCCESS:
       const { posts, communityPosts } = updatePostLike(state, payload);
       return {
         ...state,
         posts,
         communityPosts,
+        error: null,
+      };
+    case types.LIKE_POST_FAIL:
+    case types.UNLIKE_POST_FAIL:
+      return {
+        ...state,
+        error: payload,
       };
 
-    case GET_COMMENTS:
+    case types.GET_COMMENTS_SUCCESS:
       return {
         ...state,
         comments: payload,
+        error: null,
       };
-    case DELETE_COMMENT:
+    case types.GET_COMMENTS_FAIL:
+      return {
+        ...state,
+        error: payload,
+      };
+
+    case types.DELETE_COMMENT_SUCCESS:
       const { postsUpdateD, communityPostsUpdateD } = updateComment(
         state,
         payload
@@ -98,13 +136,28 @@ const postReducer = (state = initialState, action) => {
         comments: state.comments.filter((comment) => comment._id !== payload),
         posts: postsUpdateD,
         communityPosts: communityPostsUpdateD,
+        error: null,
       };
-    case SAVE_POST:
-    case UNSAVE_POST:
-    case GET_SAVED_POSTS:
+    case types.DELETE_COMMENT_FAIL:
+      return {
+        ...state,
+        error: payload,
+      };
+
+    case types.SAVE_POST_SUCCESS:
+    case types.UNSAVE_POST_SUCCESS:
+    case types.GET_SAVED_POSTS_SUCCESS:
       return {
         ...state,
         savedPosts: payload || [],
+        error: null,
+      };
+    case types.SAVE_POST_FAIL:
+    case types.UNSAVE_POST_FAIL:
+    case types.GET_SAVED_POSTS_FAIL:
+      return {
+        ...state,
+        error: payload,
       };
 
     default:

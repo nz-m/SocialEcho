@@ -1,8 +1,8 @@
 import {
   SIGNUP_SUCCESS,
-  SIGNUP_FAILED,
+  SIGNUP_FAIL,
   SIGNIN_SUCCESS,
-  SIGNIN_FAILED,
+  SIGNIN_FAIL,
   LOGOUT,
   REFRESH_TOKEN_SUCCESS,
   REFRESH_TOKEN_FAIL,
@@ -27,7 +27,7 @@ const authReducer = (state = initialState, action) => {
         successMessage: action.payload || null,
       };
 
-    case SIGNUP_FAILED:
+    case SIGNUP_FAIL:
       return {
         ...state,
         signUperror: action.payload || [],
@@ -42,7 +42,7 @@ const authReducer = (state = initialState, action) => {
         successMessage: action.payload || null,
       };
 
-    case SIGNIN_FAILED:
+    case SIGNIN_FAIL:
       return {
         ...state,
         signInerror: action.payload,

@@ -130,8 +130,6 @@ const getCommunityPosts = async (req, res) => {
   }
 };
 
-// delete a post
-// auth is done in the client side, need to add here as well
 const deletePost = async (req, res) => {
   try {
     const id = req.params.id;
@@ -144,7 +142,7 @@ const deletePost = async (req, res) => {
     });
   } catch (error) {
     res.status(404).json({
-      message: "Post not found",
+      message: "Post not found. It may have been deleted already",
     });
   }
 };
@@ -214,7 +212,7 @@ const unlikePost = async (req, res) => {
 
     if (!updatedPost) {
       return res.status(404).json({
-        message: "Post not found",
+        message: "Post not found or already unliked",
       });
     }
 

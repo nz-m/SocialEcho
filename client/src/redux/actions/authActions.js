@@ -1,10 +1,10 @@
 import * as api from "../api/authAPI";
 
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
-export const SIGNUP_FAILED = "SIGNUP_FAILED";
+export const SIGNUP_FAIL = "SIGNUP_FAIL";
 
 export const SIGNIN_SUCCESS = "SIGNIN_SUCCESS";
-export const SIGNIN_FAILED = "SIGNIN_FAILED";
+export const SIGNIN_FAIL = "SIGNIN_FAIL";
 export const LOGOUT = "LOGOUT";
 
 export const REFRESH_TOKEN_SUCCESS = "REFRESH_TOKEN_SUCCESS";
@@ -37,7 +37,7 @@ export const signUpAction = (formData, navigate) => async (dispatch) => {
     const { error } = response;
     if (error) {
       dispatch({
-        type: SIGNUP_FAILED,
+        type: SIGNUP_FAIL,
         payload: error,
       });
     } else {
@@ -49,7 +49,7 @@ export const signUpAction = (formData, navigate) => async (dispatch) => {
     }
   } catch (error) {
     dispatch({
-      type: SIGNUP_FAILED,
+      type: SIGNUP_FAIL,
       payload: ERROR_MESSAGE,
     });
   }
@@ -61,7 +61,7 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
     const { error, data } = response;
     if (error) {
       dispatch({
-        type: SIGNIN_FAILED,
+        type: SIGNIN_FAIL,
         payload: error,
       });
     } else {
@@ -81,7 +81,7 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
     }
   } catch (error) {
     await dispatch({
-      type: SIGNIN_FAILED,
+      type: SIGNIN_FAIL,
       payload: ERROR_MESSAGE,
     });
     navigate("/signin");
