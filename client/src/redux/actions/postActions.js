@@ -186,7 +186,6 @@ export const addCommentAction = (postId, newComment) => async (dispatch) => {
   }
 };
 
-//get comments
 export const getCommentsAction = (id) => async (dispatch) => {
   try {
     const { error, data } = await api.getComments(id);
@@ -213,7 +212,6 @@ export const getCommentsAction = (id) => async (dispatch) => {
   }
 };
 
-// save post
 export const savePostAction = (id) => async (dispatch) => {
   try {
     const { error, data } = await api.savePost(id);
@@ -240,7 +238,6 @@ export const savePostAction = (id) => async (dispatch) => {
   }
 };
 
-// unsave post
 export const unsavePostAction = (id) => async (dispatch) => {
   try {
     const { error, data } = await api.unsavePost(id);
