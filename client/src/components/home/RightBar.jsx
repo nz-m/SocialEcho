@@ -1,29 +1,30 @@
-import React from "react";
+import React, { useState, useEffect, useMemo, useCallback, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { getNotJoinedCommunitiesAction } from "../../redux/actions/communityActions";
 import {
-  getNotJoinedCommunitiesAction,
-  joinCommunityAction,
-  getJoinedCommunitiesAction,
-} from "../../redux/actions/communityActions";
-import {
-  getUserAction,
   getPublicUsersAction,
-  followUserAction,
+  followUserAndFetchData,
 } from "../../redux/actions/userActions";
-import {
-  getPostsAction,
-  getSavedPostsAction,
-} from "../../redux/actions/postActions";
+import placeholder from "../../assets/placeholder.png";
 import { Link } from "react-router-dom";
 import ModeratorProfile from "../moderator/ModeratorProfile";
+import JoinModal from "../modals/JoinModal";
 
 const RightBar = () => {
   const dispatch = useDispatch();
 
-  const userData = useSelector((state) => state.auth?.userData);
-  const publicUsers = useSelector((state) => state.user.publicUsers);
-  const isModerator = userData?.role === "moderator";
+  const [joinModalVisibility, setJoinModalVisibility] = useState({});
+
+  const toggleJoinModal = (communityId, visible) => {
+    setJoinModalVisibility((prev) => ({
+      ...prev,
+      [communityId]: visible,
+    }));
+  };
+
+  const currentUser = useSelector((state) => state.auth?.userData);
+  const recommendedUsers = useSelector((state) => state.user?.publicUsers);
+  const currentUserIsModerator = currentUser?.role === "moderator";
   useEffect(() => {
     dispatch(getNotJoinedCommunitiesAction());
     dispatch(getPublicUsersAction());
@@ -33,49 +34,27 @@ const RightBar = () => {
     (state) => state.community.notJoinedCommunities
   );
 
+  const [visibleCommunities, remainingCount] = useMemo(() => {
+    const visibleCommunities = notJoinedCommunities?.slice(0, 5);
+    const remainingCount = Math.max((notJoinedCommunities?.length || 0) - 5, 0);
+    return [visibleCommunities, remainingCount];
+  }, [notJoinedCommunities]);
+
+  const followUserHandler = useCallback(
+    (toFollowId) => {
+      dispatch(followUserAndFetchData(toFollowId, currentUser));
+    },
+    [dispatch, currentUser]
+  );
+  const MemoizedLink = memo(Link);
+
   if (!notJoinedCommunities) {
     return null;
     // later add a loading spinner
   }
-
-  const joinCommumityHandler = (communityName) => {
-    const handleJoinedCommunities = async () => {
-      try {
-        await dispatch(joinCommunityAction(communityName));
-        await dispatch(getJoinedCommunitiesAction());
-        await dispatch(getNotJoinedCommunitiesAction());
-        if (userData) {
-          await dispatch(getPostsAction(userData._id));
-          await dispatch(getUserAction(userData._id));
-          await dispatch(getSavedPostsAction());
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    handleJoinedCommunities();
-  };
-
-  const followUserHandler = (toFollowId) => {
-    dispatch(followUserAction(toFollowId))
-      .then(() => dispatch(getPublicUsersAction()))
-      .then(() => {
-        if (userData) {
-          dispatch(getPostsAction(userData._id));
-          dispatch(getUserAction(userData._id));
-          dispatch(getSavedPostsAction());
-        }
-      })
-
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   return (
     <>
-      {isModerator ? (
+      {currentUserIsModerator ? (
         <ModeratorProfile />
       ) : (
         <div className="w-3/12 h-screen bg-white sticky top-0">
@@ -88,41 +67,52 @@ const RightBar = () => {
                 </div>
               )}
               <ul className="list-group">
-                {notJoinedCommunities?.map((community) => (
+                {visibleCommunities?.map((community) => (
                   <li
                     key={community._id}
                     className="list-group-item d-flex align-items-center"
                   >
                     <img
-                      src="https://via.placeholder.com/50"
-                      className="rounded-circle me-2"
-                      alt="User Avatar"
+                      src={community.banner || placeholder}
+                      className="h-10 w-10 rounded-full mr-4"
+                      alt="community"
                     />
                     <span>{community.name}</span>
                     <button
-                      onClick={() => {
-                        joinCommumityHandler(community.name);
-                      }}
+                      onClick={() => toggleJoinModal(community._id, true)}
                       className="btn btn-primary btn-sm ms-2"
                     >
                       Join
                     </button>
+                    <JoinModal
+                      show={joinModalVisibility[community._id] || false}
+                      onClose={() => toggleJoinModal(community._id, false)}
+                      community={community}
+                    />
                   </li>
                 ))}
               </ul>
+              {remainingCount > 0 && (
+                <MemoizedLink
+                  to="/communities"
+                  className="text-center block text-blue-500 font-medium mt-2"
+                >
+                  See More ({remainingCount})
+                </MemoizedLink>
+              )}
             </div>
           </div>
           <div className="card mt-4">
             <div className="card-body">
               <h5 className="card-title mb-3">Follow People</h5>
-              {publicUsers?.length === 0 && (
+              {recommendedUsers?.length === 0 && (
                 <div className="text-center italic text-gray-400">
                   No users to follow. Check back later
                 </div>
               )}
               <ul className="list-group">
-                {publicUsers &&
-                  publicUsers.map((user) => (
+                {recommendedUsers &&
+                  recommendedUsers.map((user) => (
                     <li
                       key={user._id}
                       className="list-group-item d-flex justify-content-between"
@@ -134,12 +124,12 @@ const RightBar = () => {
                           alt={user.name}
                         />
                         <div>
-                          <Link
+                          <MemoizedLink
                             to={`/user/${user._id}`}
                             className="font-medium"
                           >
                             {user.name}
-                          </Link>
+                          </MemoizedLink>
                           <div className="text-gray-500 text-sm">
                             {user.location}
                           </div>

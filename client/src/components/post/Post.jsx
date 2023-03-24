@@ -1,14 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { MdOutlineReport } from "react-icons/md";
-import { deletePostAction } from "../../redux/actions/postActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
+import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
 
 const Post = ({ post }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const location = useLocation();
   const userData = useSelector((state) => state.auth?.userData);
 
@@ -21,9 +20,11 @@ const Post = ({ post }) => {
     return validExtensions.includes(fileExtension);
   }, [fileUrl]);
 
-  const deleteHandler = () => {
-    dispatch(deletePostAction(post._id));
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = (value) => {
+    setShowModal(value);
   };
+
   return (
     <div className="px-6 py-6 rounded-xl shadow-xl bg-white border border-gray-100">
       <div className="flex justify-between">
@@ -99,7 +100,7 @@ const Post = ({ post }) => {
         <div className="flex items-center gap-2">
           {userData?._id === post.user._id && (
             <button
-              onClick={deleteHandler}
+              onClick={() => toggleModal(true)}
               className="flex items-center text-xl gap-1"
             >
               {" "}
@@ -108,6 +109,14 @@ const Post = ({ post }) => {
             </button>
           )}
         </div>
+
+        {showModal && (
+          <DeleteModal
+            showModal={showModal}
+            postId={post._id}
+            onClose={() => toggleModal(false)}
+          />
+        )}
       </div>
     </div>
   );

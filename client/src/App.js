@@ -15,6 +15,7 @@ import EditProfileForm from "./components/form/EditProfileForm";
 import PublicProfilePage from "./pages/PublicProfilePage";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import AllCommunities from "./pages/AllCommunities";
 const App = () => {
   const user = useSelector((state) => state.auth.userData);
   return (
@@ -46,6 +47,7 @@ const App = () => {
           <Route path="/saved" element={<Saved />} />
           <Route path="/edit-profile" element={<EditProfileForm />} />
           <Route path="/user/:userId" element={<PublicProfilePage />} />
+          <Route path="/communities" element={<AllCommunities />} />
         </Route>
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>

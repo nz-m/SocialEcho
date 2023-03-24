@@ -1,5 +1,7 @@
 import * as api from "../api/communityAPI";
 import * as types from "../constants/communityConstants";
+import { getSavedPostsAction } from "./postActions";
+import { getUserAction } from "./userActions";
 
 export const getCommunityAction = (communityName) => async (dispatch) => {
   try {
@@ -278,5 +280,31 @@ export const unbanUserAction = (communityName, userId) => async (dispatch) => {
         requiresAuth: true,
       },
     });
+  }
+};
+
+export const joinCommunityAndFetchData =
+  (communityName, userData) => async (dispatch) => {
+    try {
+      await dispatch(joinCommunityAction(communityName));
+      await dispatch(getJoinedCommunitiesAction());
+      await dispatch(getNotJoinedCommunitiesAction());
+      if (userData) {
+        await dispatch(getUserAction(userData._id));
+        await dispatch(getSavedPostsAction());
+      }
+    } catch (error) {
+      // handle error
+    }
+  };
+
+export const leaveFetchData = (communityName) => async (dispatch) => {
+  try {
+    await dispatch(leaveCommunityAction(communityName));
+    await dispatch(getNotJoinedCommunitiesAction());
+    await dispatch(getJoinedCommunitiesAction());
+  } catch (error) {
+    console.log(error);
+    // handle error
   }
 };

@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getCommunityAction } from "../../redux/actions/communityActions";
-import { leaveFetchData } from "../../middlewares/joinLeaveFetch";
+import {
+  getCommunityAction,
+  leaveFetchData,
+} from "../../redux/actions/communityActions";
 import placeholder from "../../assets/placeholder.png";
 
 const RightBar = () => {
