@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import Post from "../post/Post";
 import { useSelector, useDispatch } from "react-redux";
 import { getComPostsAction } from "../../redux/actions/postActions";
 import PostForm from "../form/PostForm";
+import Post from "../post/Post";
 
 const MemoizedPost = React.memo(Post);
 

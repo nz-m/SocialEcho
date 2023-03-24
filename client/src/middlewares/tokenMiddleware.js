@@ -12,12 +12,24 @@ export const tokenMiddleware = (store) => (next) => async (action) => {
         const refreshToken = state.auth.refreshToken;
         try {
           await store.dispatch(refreshTokenAction(refreshToken));
+          // Refresh token succeeded, get the new access token from the state
+          const newToken = store.getState().auth.accessToken;
+          // If new token is still null, logout the user
+          if (!newToken) {
+            throw new Error("Access token not found after refresh");
+          }
         } catch (error) {
+          console.error("Error refreshing token:");
           store.dispatch({ type: "LOGOUT" });
+          // Redirect to login page
+          window.location.href = "/signin";
         }
       }
     } else {
+      console.error("Access token not found");
       store.dispatch({ type: "LOGOUT" });
+      // Redirect to login page
+      window.location.href = "/signin";
     }
   }
   return next(action);

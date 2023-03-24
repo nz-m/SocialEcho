@@ -6,15 +6,12 @@ const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
 
-// Now Im going to send custom error messages to the client instead of the actual error message
-
 // Get all communities
 const getCommunities = async (req, res) => {
   try {
     const communities = await Community.find();
     res.status(200).json(communities);
   } catch (error) {
-    // Send not found error
     res.status(404).json({
       message: "No communities found",
     });

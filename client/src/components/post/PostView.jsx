@@ -60,8 +60,15 @@ const PostView = ({ post }) => {
     });
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
   return (
     <div className="px-6 py-6 rounded-xl shadow-xl bg-white border border-gray-100">
+      <span className="text-blue-500 font-bold">
+        <button onClick={handleBack}>Go back</button>
+      </span>
+
       <div className="flex justify-between">
         <div className="flex gap-2">
           <img

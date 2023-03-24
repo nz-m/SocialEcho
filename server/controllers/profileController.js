@@ -174,9 +174,6 @@ const unfollowUser = async (req, res) => {
         message: "Relationship does not exist",
       });
     }
-
-    // Update the User model by removing the followerId from the followers array of the following user
-    // and removing the followingId from the following array of the follower user
     await Promise.all([
       User.findByIdAndUpdate(
         followingId,

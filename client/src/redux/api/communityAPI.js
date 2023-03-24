@@ -19,8 +19,8 @@ const getCommunity = async (communityName) => {
   try {
     const { data } = await API.get(`/communities/${communityName}`);
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -28,8 +28,8 @@ const getJoinedCommunities = async () => {
   try {
     const { data } = await API.get("/communities/member");
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -37,8 +37,8 @@ const getNotJoinedCommunities = async () => {
   try {
     const { data } = await API.get("/communities/notmember");
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -46,8 +46,8 @@ const joinCommunity = async (communityName) => {
   try {
     const { data } = await API.post(`/communities/${communityName}/join`);
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -55,8 +55,8 @@ const leaveCommunity = async (communityName) => {
   try {
     const { data } = await API.post(`/communities/${communityName}/leave`);
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -66,8 +66,8 @@ const reportPost = async (communityName, info) => {
       info,
     });
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -75,8 +75,8 @@ const getCommunityPosts = async (communityName) => {
   try {
     const { data } = await API.get(`/communities/${communityName}/posts`);
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -86,8 +86,8 @@ const getReportedPosts = async (communityName) => {
       `/communities/${communityName}/reported-posts`
     );
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -97,8 +97,8 @@ const removeReportedPost = async (communityName, postId) => {
       `/communities/${communityName}/reported-posts/${postId}`
     );
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -106,8 +106,8 @@ const getCommunityMembers = async (communityName) => {
   try {
     const { data } = await API.get(`/communities/${communityName}/members`);
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -115,8 +115,8 @@ const getCommunityMods = async (communityName) => {
   try {
     const { data } = await API.get(`/communities/${communityName}/moderators`);
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -126,8 +126,8 @@ const banUser = async (communityName, userId) => {
       `/communities/${communityName}/ban/${userId}`
     );
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 
@@ -137,8 +137,8 @@ const unbanUser = async (communityName, userId) => {
       `/communities/${communityName}/unban/${userId}`
     );
     return { error: null, data };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (err) {
+    return { error: err.response.data.message, data: null };
   }
 };
 

@@ -13,12 +13,18 @@ import ReportedPostPage from "./pages/ReportedPostPage";
 import Saved from "./pages/Saved";
 import EditProfileForm from "./components/form/EditProfileForm";
 import PublicProfilePage from "./pages/PublicProfilePage";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 const App = () => {
+  const user = useSelector((state) => state.auth.userData);
   return (
     <div>
       <Routes>
         <Route path="/signup" element={<SignupForm />} />
-        <Route path="/signin" element={<SignIn />} />
+        <Route
+          path="/signin"
+          element={user ? <Navigate to="/" /> : <SignIn />}
+        />
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />

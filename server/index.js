@@ -1,5 +1,9 @@
 require("dotenv").config();
 
+const userRouter = require("./routes/userRouter");
+const postRouter = require("./routes/postRouter");
+const communityRouter = require("./routes/communityRouter");
+
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -46,21 +50,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 require("./config/passport.js");
 
-// user routes
-const userRouter = require("./routes/userRouter");
+//routes
+app.use("/check-connectivity", (req, res) => {
+  res.status(200).json({ message: "Server is up and running!" });
+});
+
 app.use("/users", userRouter);
-
-// post routes
-const postRouter = require("./routes/postRouter");
 app.use("/posts", postRouter);
-
-const communityRouter = require("./routes/communityRouter");
 app.use("/communities", communityRouter);
 
-// 404 error handling
+// 404 error handler
 app.use(notFoundHandler);
 
-//error handling
+// common error handler
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server up and running on port ${PORT}!`));

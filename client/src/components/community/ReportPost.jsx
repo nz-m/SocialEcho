@@ -46,9 +46,16 @@ const ReportPost = () => {
     setIsDisabled(value.length === 0);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       <div className="flex flex-col gap-2">
+        <span className="text-blue-500 font-bold">
+          <button onClick={handleBack}>Go back</button>
+        </span>
         <h1 className="text-2xl font-semibold">Report Post</h1>
         <p className="text-gray-500">
           Please provide a reason for reporting this post.

@@ -12,7 +12,7 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const signupErr = useSelector((state) => state.auth.signupErr);
+  const signUperror = useSelector((state) => state.auth.signUperror);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -29,6 +29,7 @@ const SignupForm = () => {
   const handleAvatarChange = (e) => {
     // file type & size validation
     if (
+      e.target.files[0] &&
       e.target.files[0].type !== "image/jpeg" &&
       e.target.files[0].type !== "image/png" &&
       e.target.files[0].type !== "image/jpg" &&
@@ -61,9 +62,9 @@ const SignupForm = () => {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign up for an account{" "}
           </h2>
-          {signupErr &&
-            Array.isArray(signupErr) &&
-            signupErr.map((err, i) => (
+          {signUperror &&
+            Array.isArray(signUperror) &&
+            signUperror.map((err, i) => (
               <div
                 className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4
                     text - center "

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signInAction } from "../../redux/actions/authActions";
 
 const SignIn = () => {
@@ -18,6 +18,9 @@ const SignIn = () => {
     dispatch(signInAction(formData, navigate));
   };
 
+  const signInerror = useSelector((state) => state.auth.signInerror);
+  const successMessage = useSelector((state) => state.auth.successMessage);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -26,6 +29,26 @@ const SignIn = () => {
             Sign in to your account
           </h2>
         </div>
+        {signInerror && (
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <strong className="font-bold">Error! </strong>
+            <span className="block sm:inline">{signInerror}</span>
+          </div>
+        )}
+
+        {successMessage && (
+          <div
+            className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <strong className="font-bold">Success! </strong>
+            <span className="block sm:inline">{successMessage}</span>
+          </div>
+        )}
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" value="true" />
           <div className="rounded-md shadow-sm -space-y-px">
