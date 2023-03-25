@@ -23,6 +23,8 @@ const CommunityCard = ({ community }) => {
         <h4 className="text-xl font-semibold tracking-tight text-blue-600">
           {community.name}
         </h4>
+        <p className="text-gray-700 mb-2">{community.members.length} members</p>
+
         <p className="mb-2 leading-normal">
           {community.description.substring(0, 100)}...
         </p>

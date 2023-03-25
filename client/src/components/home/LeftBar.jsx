@@ -18,7 +18,6 @@ const Leftbar = () => {
     dispatch(getJoinedCommunitiesAction());
   }, [dispatch]);
 
-  console.log(joinedCommunities);
   const visibleCommunities = joinedCommunities?.slice(0, 5);
   const remainingCount = Math.max((joinedCommunities?.length || 0) - 5, 0);
 
