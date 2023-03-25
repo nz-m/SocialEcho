@@ -95,7 +95,9 @@ const getMemberCommunities = async (req, res) => {
       members: {
         $in: [userId],
       },
-    });
+    })
+      .select("_id name banner members description")
+      .lean();
 
     res.status(200).json(communities);
   } catch (error) {
@@ -120,7 +122,9 @@ const getNotMemberCommunities = async (req, res) => {
       bannedUsers: {
         $nin: [userId],
       },
-    });
+    })
+      .select("_id name banner description members")
+      .lean();
 
     res.status(200).json(communities);
   } catch (error) {
@@ -153,6 +157,7 @@ const joinCommunity = async (req, res) => {
         new: true,
       }
     );
+
     res.status(200).json(community);
   } catch (error) {
     res.status(500).json({

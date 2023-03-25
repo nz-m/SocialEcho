@@ -1,5 +1,7 @@
 import * as api from "../api/communityAPI";
 import * as types from "../constants/communityConstants";
+import { getSavedPostsAction } from "./postActions";
+import { getUserAction } from "./userActions";
 
 export const getCommunityAction = (communityName) => async (dispatch) => {
   try {
@@ -274,6 +276,43 @@ export const unbanUserAction = (communityName, userId) => async (dispatch) => {
     dispatch({
       type: types.UNBAN_USER_FAIL,
       payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  }
+};
+
+export const joinCommunityAndFetchData =
+  (communityName, userData) => async (dispatch) => {
+    try {
+      await dispatch(joinCommunityAction(communityName));
+      await dispatch(getJoinedCommunitiesAction());
+      await dispatch(getNotJoinedCommunitiesAction());
+      if (userData) {
+        await dispatch(getUserAction(userData._id));
+        await dispatch(getSavedPostsAction());
+      }
+    } catch (error) {
+      dispatch({
+        type: types.JOIN_COMMUNITY_FAIL,
+        payload: "Error joining community",
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    }
+  };
+
+export const leaveFetchData = (communityName) => async (dispatch) => {
+  try {
+    await dispatch(leaveCommunityAction(communityName));
+    await dispatch(getNotJoinedCommunitiesAction());
+    await dispatch(getJoinedCommunitiesAction());
+  } catch (error) {
+    dispatch({
+      type: types.LEAVE_COMMUNITY_FAIL,
+      payload: "Error leaving community",
       meta: {
         requiresAuth: true,
       },
