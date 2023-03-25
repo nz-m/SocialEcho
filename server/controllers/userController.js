@@ -9,8 +9,6 @@ const getUserFromToken = require("../utils/getUserFromToken");
 const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
 dayjs.extend(duration);
-// TODO - Invalidate old tokens/JTI
-// sign in
 
 const signin = async (req, res) => {
   logger.info("User attempting to sign in");
@@ -92,7 +90,6 @@ const getUsers = async (req, res, next) => {
     .catch((err) => next(err));
 };
 
-// get user by id
 const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).select("-password").lean();
@@ -134,19 +131,15 @@ const getUser = async (req, res, next) => {
       const durationYears = Math.floor(durationDays / 365);
       user.duration = `${durationYears} years`;
     }
-
     const posts = await Post.find({ user: user._id })
       .populate("community", "name members")
       .lean();
-
-    const formattedPosts = posts.map((post) => ({
+    user.posts = posts.map((post) => ({
       ...post,
       isMember: post.community?.members
         .map((member) => member.toString())
         .includes(user._id.toString()),
     }));
-
-    user.posts = formattedPosts;
 
     res.status(200).json(user);
   } catch (err) {
@@ -154,19 +147,14 @@ const getUser = async (req, res, next) => {
   }
 };
 
-// add user
 const addUser = async (req, res) => {
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-  const { filename } =
-    req.files && req.files.length > 0
-      ? req.files[0]
-      : {
-          filename: null,
-        };
-  const fileUrl = filename
-    ? `${req.protocol}://${req.get("host")}/assets/userAvatars/${filename}`
+  const fileUrl = req.files?.[0]?.filename
+    ? `${req.protocol}://${req.get("host")}/assets/userAvatars/${
+        req.files[0].filename
+      }`
     : null;
 
   const emailDomain = req.body.email.split("@")[1];

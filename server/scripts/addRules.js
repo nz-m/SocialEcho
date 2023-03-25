@@ -27,8 +27,7 @@ const getCommunityNames = async () => {
 
 const getModerationRules = async () => {
   try {
-    const rules = await ModerationRules.find();
-    return rules;
+    return await ModerationRules.find();
   } catch (error) {
     LOG(kleur.red().bold("⚠️ Error while getting rules"));
     process.exit(1);

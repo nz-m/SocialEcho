@@ -62,7 +62,7 @@ postSchema.pre("remove", async function (next) {
         $in: commentIds,
       },
     });
-    // Delete the reported post entry from all communities
+    // Delete the reported post-entry from all communities
     await this.model("Community").updateMany(
       {
         "reportedPosts.post": this._id,
@@ -76,7 +76,7 @@ postSchema.pre("remove", async function (next) {
       }
     );
 
-    // Delete the saved post entry from all users
+    // Delete the saved post-entry from all users
     await this.model("User").updateMany(
       {
         savedPosts: this._id,

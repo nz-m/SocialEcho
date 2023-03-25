@@ -18,6 +18,7 @@ const {
   followUser,
   getPublicUser,
   unfollowUser,
+  getFollowingUsers,
 } = require("../controllers/profileController");
 
 const {
@@ -34,6 +35,7 @@ router.patch("/:id/unfollow", requireAuth, unfollowUser);
 router.get("/public-users/:id", requireAuth, getPublicUser);
 router.get("/public-users", requireAuth, getPublicUsers);
 router.get("/moderator", requireAuth, getModProfile);
+router.get("/following", requireAuth, getFollowingUsers);
 router.put("/:id", requireAuth, updateInfo);
 router.get("/:id", requireAuth, getUser);
 router.get("/", requireAuth, getUsers);

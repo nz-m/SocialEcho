@@ -59,7 +59,7 @@ export const getPostsAction =
   };
 
 export const getComPostsAction =
-  (id, limit = 10, skip = 0) =>
+  (id, limit = 10, skip = 0, currentPage = 1) =>
   async (dispatch) => {
     try {
       const { error, data } = await api.getComPosts(id, limit, skip);
@@ -71,7 +71,7 @@ export const getComPostsAction =
       dispatch({
         type: types.GET_COMMUNITY_POSTS_SUCCESS,
         payload: {
-          page: skip / limit + 1,
+          page: currentPage,
           posts: data,
         },
         meta: {
@@ -282,6 +282,32 @@ export const getSavedPostsAction = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: types.GET_SAVED_POSTS_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  }
+};
+
+export const getPublicPostsAction = (publicUserId) => async (dispatch) => {
+  try {
+    const { error, data } = await api.getPublicPosts(publicUserId);
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    dispatch({
+      type: types.GET_PUBLIC_POSTS_SUCCESS,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: types.GET_PUBLIC_POSTS_FAIL,
       payload: error.message,
       meta: {
         requiresAuth: true,

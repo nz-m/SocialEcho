@@ -11,6 +11,16 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+const handleApiError = (error) => {
+  if (error.response && error.response.data && error.response.data.message) {
+    // The API returned an error message
+    return { error: error.response.data.message, data: null };
+  } else {
+    // An unexpected error occurred
+    return { error: "An unexpected error occurred.", data: null };
+  }
+};
+
 const signIn = async (formData) => {
   try {
     const res = await API.post("/users/signin", formData, {
@@ -20,10 +30,7 @@ const signIn = async (formData) => {
     });
     return { error: null, data: res.data };
   } catch (err) {
-    return {
-      error: err.response.data.message,
-      data: null,
-    };
+    return handleApiError(err);
   }
 };
 
@@ -52,10 +59,7 @@ const logout = async () => {
     });
     return { error: null, data: res.data };
   } catch (err) {
-    return {
-      error: err.response.data.message,
-      data: null,
-    };
+    return handleApiError(err);
   }
 };
 
@@ -64,10 +68,7 @@ const getModProfile = async () => {
     const res = await API.get("/users/moderator");
     return { error: null, data: res.data };
   } catch (err) {
-    return {
-      error: err.response.data.message,
-      data: null,
-    };
+    return handleApiError(err);
   }
 };
 

@@ -12,12 +12,21 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+const handleApiError = (error) => {
+  if (error.response && error.response.data && error.response.data.message) {
+    // The API returned an error message
+    return { error: error.response.data.message, data: null };
+  } else {
+    // An unexpected error occurred
+    return { error: "An unexpected error occurred.", data: null };
+  }
+};
 const getUser = async (id) => {
   try {
     const { data } = await API.get(`/users/${id}`);
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -30,7 +39,7 @@ const updateUser = async (id, formData) => {
     });
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -39,7 +48,7 @@ const getPublicUsers = async () => {
     const { data } = await API.get("/users/public-users");
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 const getPublicUser = async (id) => {
@@ -47,7 +56,7 @@ const getPublicUser = async (id) => {
     const { data } = await API.get(`/users/public-users/${id}`);
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -56,7 +65,7 @@ const followUser = async (id) => {
     const { data } = await API.patch(`/users/${id}/follow`);
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -65,7 +74,16 @@ const unfollowUser = async (id) => {
     const { data } = await API.patch(`/users/${id}/unfollow`);
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
+  }
+};
+
+const getFollowingUsers = async () => {
+  try {
+    const { data } = await API.get("/users/following");
+    return { error: null, data };
+  } catch (err) {
+    return handleApiError(err);
   }
 };
 
@@ -76,4 +94,5 @@ export {
   followUser,
   getPublicUser,
   unfollowUser,
+  getFollowingUsers,
 };

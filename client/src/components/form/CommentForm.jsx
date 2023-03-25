@@ -61,7 +61,6 @@ const CommentForm = ({ communityId }) => {
           disabled={isLoading} // disable button while isLoading is true
         >
           {isLoading ? "Loading..." : "Comment"}{" "}
-          {/* Change button text while isLoading is true */}
         </button>
       </form>
     </div>

@@ -9,6 +9,7 @@ const requireAuth = passport.authenticate("jwt", { session: false });
 router.use(requireAuth);
 
 router.get("/saved", postController.getSavedPosts);
+router.get("/:publicUserId", postController.getPublicPosts);
 router.patch("/:id/save", postController.savePost);
 router.patch("/:id/unsave", postController.unsavePost);
 router.patch("/:id/like", postController.likePost);

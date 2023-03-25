@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import AllCommunities from "./pages/AllCommunities";
 import MyCommunities from "./pages/MyCommunities";
+import Following from "./pages/Following";
 const App = () => {
   const user = useSelector((state) => state.auth.userData);
   return (
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="/user/:userId" element={<PublicProfilePage />} />
           <Route path="/communities" element={<AllCommunities />} />
           <Route path="/my-communities" element={<MyCommunities />} />
+          <Route path="/following" element={<Following />} />
         </Route>
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>

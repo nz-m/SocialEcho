@@ -15,12 +15,21 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+const handleApiError = (error) => {
+  if (error.response && error.response.data && error.response.data.message) {
+    // The API returned an error message
+    return { error: error.response.data.message, data: null };
+  } else {
+    // An unexpected error occurred
+    return { error: 'An unexpected error occurred.', data: null };
+  }
+};
 const getCommunity = async (communityName) => {
   try {
     const { data } = await API.get(`/communities/${communityName}`);
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -29,7 +38,7 @@ const getJoinedCommunities = async () => {
     const { data } = await API.get("/communities/member");
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -38,7 +47,7 @@ const getNotJoinedCommunities = async () => {
     const { data } = await API.get("/communities/notmember");
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -47,7 +56,7 @@ const joinCommunity = async (communityName) => {
     const { data } = await API.post(`/communities/${communityName}/join`);
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -56,7 +65,7 @@ const leaveCommunity = async (communityName) => {
     const { data } = await API.post(`/communities/${communityName}/leave`);
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -67,16 +76,7 @@ const reportPost = async (communityName, info) => {
     });
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
-  }
-};
-
-const getCommunityPosts = async (communityName) => {
-  try {
-    const { data } = await API.get(`/communities/${communityName}/posts`);
-    return { error: null, data };
-  } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -87,7 +87,7 @@ const getReportedPosts = async (communityName) => {
     );
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -98,7 +98,7 @@ const removeReportedPost = async (communityName, postId) => {
     );
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -107,7 +107,7 @@ const getCommunityMembers = async (communityName) => {
     const { data } = await API.get(`/communities/${communityName}/members`);
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -116,7 +116,7 @@ const getCommunityMods = async (communityName) => {
     const { data } = await API.get(`/communities/${communityName}/moderators`);
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -127,7 +127,7 @@ const banUser = async (communityName, userId) => {
     );
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -138,7 +138,7 @@ const unbanUser = async (communityName, userId) => {
     );
     return { error: null, data };
   } catch (err) {
-    return { error: err.response.data.message, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -149,7 +149,6 @@ export {
   joinCommunity,
   leaveCommunity,
   reportPost,
-  getCommunityPosts,
   getReportedPosts,
   removeReportedPost,
   getCommunityMembers,

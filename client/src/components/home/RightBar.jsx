@@ -6,11 +6,13 @@ import {
   followUserAndFetchData,
 } from "../../redux/actions/userActions";
 import placeholder from "../../assets/placeholder.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ModeratorProfile from "../moderator/ModeratorProfile";
 import JoinModal from "../modals/JoinModal";
+import LoadingSpinner from "../spinner/LoadingSpinner";
 
 const RightBar = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [joinModalVisibility, setJoinModalVisibility] = useState({});
@@ -24,6 +26,21 @@ const RightBar = () => {
 
   const currentUser = useSelector((state) => state.auth?.userData);
   const recommendedUsers = useSelector((state) => state.user?.publicUsers);
+  /*
+   Current user is excluded from the server side but,
+   there is an issue with the aggregation pipeline.
+   Needs to be fixed.
+  */
+
+  // exclude the current user from the list of recommended users
+  const filteredRecommendedUsers = useMemo(() => {
+    return recommendedUsers?.filter(
+      (user) =>
+        user._id !== currentUser?._id &&
+        !currentUser?.following?.includes(user._id)
+    );
+  }, [recommendedUsers, currentUser]);
+
   const currentUserIsModerator = currentUser?.role === "moderator";
   useEffect(() => {
     dispatch(getNotJoinedCommunitiesAction());
@@ -40,79 +57,102 @@ const RightBar = () => {
     return [visibleCommunities, remainingCount];
   }, [notJoinedCommunities]);
 
+  const [followLoading, setFollowLoadingState] = useState({});
+
   const followUserHandler = useCallback(
-    (toFollowId) => {
-      dispatch(followUserAndFetchData(toFollowId, currentUser));
+    async (toFollowId) => {
+      // Set the loading state for this user to true
+      setFollowLoadingState((prevState) => ({
+        ...prevState,
+        [toFollowId]: true,
+      }));
+
+      // Call the followUserAndFetchData action creator
+      await dispatch(followUserAndFetchData(toFollowId, currentUser));
+
+      // Set the loading state for this user back to false
+      setFollowLoadingState((prevState) => ({
+        ...prevState,
+        [toFollowId]: false,
+      }));
+
+      navigate(`/user/${toFollowId}`);
     },
-    [dispatch, currentUser]
+    [dispatch, currentUser, navigate]
   );
+
   const MemoizedLink = memo(Link);
 
   if (!notJoinedCommunities) {
     return null;
     // later add a loading spinner
   }
+
+  const currentLocation = window.location.pathname;
+
   return (
     <>
       {currentUserIsModerator ? (
         <ModeratorProfile />
       ) : (
         <div className="w-3/12 h-screen bg-white sticky top-0">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title mb-3">Suggested Communities</h5>
-              {notJoinedCommunities?.length === 0 && (
-                <div className="text-center italic text-gray-400">
-                  No communities to join. Check back later
-                </div>
-              )}
-              <ul className="list-group">
-                {visibleCommunities?.map((community) => (
-                  <li
-                    key={community._id}
-                    className="list-group-item d-flex align-items-center"
-                  >
-                    <img
-                      src={community.banner || placeholder}
-                      className="h-10 w-10 rounded-full mr-4"
-                      alt="community"
-                    />
-                    <span>{community.name}</span>
-                    <button
-                      onClick={() => toggleJoinModal(community._id, true)}
-                      className="btn btn-primary btn-sm ms-2"
+          {currentLocation !== "/communities" && (
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title mb-3">Suggested Communities</h5>
+                {notJoinedCommunities?.length === 0 && (
+                  <div className="text-center italic text-gray-400">
+                    No communities to join. Check back later
+                  </div>
+                )}
+                <ul className="list-group">
+                  {visibleCommunities?.map((community) => (
+                    <li
+                      key={community._id}
+                      className="list-group-item d-flex align-items-center"
                     >
-                      Join
-                    </button>
-                    <JoinModal
-                      show={joinModalVisibility[community._id] || false}
-                      onClose={() => toggleJoinModal(community._id, false)}
-                      community={community}
-                    />
-                  </li>
-                ))}
-              </ul>
-              {remainingCount > 0 && (
-                <MemoizedLink
-                  to="/communities"
-                  className="text-center block text-blue-500 font-medium mt-2"
-                >
-                  See More ({remainingCount})
-                </MemoizedLink>
-              )}
+                      <img
+                        src={community.banner || placeholder}
+                        className="h-10 w-10 rounded-full mr-4"
+                        alt="community"
+                      />
+                      <span>{community.name}</span>
+                      <button
+                        onClick={() => toggleJoinModal(community._id, true)}
+                        className="btn btn-primary btn-sm ms-2"
+                      >
+                        Join
+                      </button>
+                      <JoinModal
+                        show={joinModalVisibility[community._id] || false}
+                        onClose={() => toggleJoinModal(community._id, false)}
+                        community={community}
+                      />
+                    </li>
+                  ))}
+                </ul>
+                {remainingCount > 0 && (
+                  <MemoizedLink
+                    to="/communities"
+                    className="text-center block text-blue-500 font-medium mt-2"
+                  >
+                    See More ({remainingCount})
+                  </MemoizedLink>
+                )}
+              </div>
             </div>
-          </div>
+          )}
           <div className="card mt-4">
             <div className="card-body">
-              <h5 className="card-title mb-3">Follow People</h5>
-              {recommendedUsers?.length === 0 && (
+              <h5 className="card-title mb-3">Popular Users to Follow</h5>
+              {filteredRecommendedUsers?.length === 0 && (
                 <div className="text-center italic text-gray-400">
                   No users to follow. Check back later
                 </div>
               )}
               <ul className="list-group">
-                {recommendedUsers &&
-                  recommendedUsers.map((user) => (
+                {filteredRecommendedUsers &&
+                  filteredRecommendedUsers.map((user) => (
                     <li
                       key={user._id}
                       className="list-group-item d-flex justify-content-between"
@@ -133,13 +173,18 @@ const RightBar = () => {
                           <div className="text-gray-500 text-sm">
                             {user.location}
                           </div>
+                          <div>Followers: {user.numFollowers}</div>
                         </div>
                       </div>
                       <button
                         onClick={() => followUserHandler(user._id)}
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                       >
-                        Follow
+                        {followLoading[user._id] ? (
+                          <LoadingSpinner />
+                        ) : (
+                          <span>Follow</span>
+                        )}
                       </button>
                     </li>
                   ))}

@@ -7,8 +7,7 @@ const Post = require("../models/Post");
 const Community = require("../models/Community");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
-
-// TODO: Add paginations
+const Relationship = require("../models/Relationship");
 
 const createPost = async (req, res) => {
   try {
@@ -58,7 +57,6 @@ const createPost = async (req, res) => {
   }
 };
 
-//get all posts
 const getPosts = async (req, res) => {
   try {
     const userId = req.query.userId;
@@ -334,11 +332,11 @@ const saveOrUnsavePost = async (req, res, operation) => {
 };
 
 const savePost = async (req, res) => {
-  saveOrUnsavePost(req, res, "$addToSet");
+  await saveOrUnsavePost(req, res, "$addToSet");
 };
 
 const unsavePost = async (req, res) => {
-  saveOrUnsavePost(req, res, "$pull");
+  await saveOrUnsavePost(req, res, "$pull");
 };
 
 const getSavedPosts = async (req, res) => {
@@ -381,6 +379,46 @@ const getSavedPosts = async (req, res) => {
   }
 };
 
+// Get upto 10 posts of the public user that are posted in the communities that both users are members of
+const getPublicPosts = async (req, res) => {
+  try {
+    const publicUserId = req.params.publicUserId;
+    const currentUserId = getUserFromToken(req);
+    if (!currentUserId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // check if the current user is following the public user
+    const isFollowing = await Relationship.exists({
+      follower: currentUserId,
+      following: publicUserId,
+    });
+    if (!isFollowing) {
+      return null;
+    }
+
+    // get the ids of the communities that both users are members of
+    const commonCommunityIds = await Community.find({
+      members: { $all: [currentUserId, publicUserId] },
+    }).distinct("_id");
+
+    // get the posts that belong to the common communities and are posted by the public user
+    const publicPosts = await Post.find({
+      community: { $in: commonCommunityIds },
+      user: publicUserId,
+    })
+      .populate("user", "_id name avatar")
+      .populate("community", "_id name")
+      .sort("-createdAt")
+      .limit(10)
+      .exec();
+
+    res.status(200).json(publicPosts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPosts,
   createPost,
@@ -393,4 +431,5 @@ module.exports = {
   savePost,
   unsavePost,
   getSavedPosts,
+  getPublicPosts,
 };

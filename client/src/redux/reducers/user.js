@@ -4,6 +4,7 @@ const initialState = {
   user: {},
   publicUsers: [],
   publicUserProfile: {},
+  followingUsers: [],
   isFollowing: null,
   userError: null,
 };
@@ -38,6 +39,12 @@ const user = (state = initialState, action) => {
       };
 
     case types.CHANGE_FOLLOW_STATUS_FAIL:
+      return { ...state, userError: payload };
+
+    case types.GET_FOLLOWING_USERS_SUCCESS:
+      return { ...state, followingUsers: payload, userError: null };
+
+    case types.GET_FOLLOWING_USERS_FAIL:
       return { ...state, userError: payload };
 
     default:
