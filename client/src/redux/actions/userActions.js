@@ -130,7 +130,7 @@ export const followUserAndFetchData =
     } catch (error) {
       dispatch({
         type: types.CHANGE_FOLLOW_STATUS_FAIL,
-        payload: error.message,
+        payload: "Failed to follow user",
       });
     }
   };

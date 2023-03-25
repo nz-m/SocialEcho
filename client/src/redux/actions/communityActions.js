@@ -294,7 +294,13 @@ export const joinCommunityAndFetchData =
         await dispatch(getSavedPostsAction());
       }
     } catch (error) {
-      // handle error
+      dispatch({
+        type: types.JOIN_COMMUNITY_FAIL,
+        payload: "Error joining community",
+        meta: {
+          requiresAuth: true,
+        },
+      });
     }
   };
 
@@ -304,7 +310,12 @@ export const leaveFetchData = (communityName) => async (dispatch) => {
     await dispatch(getNotJoinedCommunitiesAction());
     await dispatch(getJoinedCommunitiesAction());
   } catch (error) {
-    console.log(error);
-    // handle error
+    dispatch({
+      type: types.LEAVE_COMMUNITY_FAIL,
+      payload: "Error leaving community",
+      meta: {
+        requiresAuth: true,
+      },
+    });
   }
 };

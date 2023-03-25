@@ -31,7 +31,7 @@ const RightBar = () => {
   }, [dispatch]);
 
   const notJoinedCommunities = useSelector(
-    (state) => state.community.notJoinedCommunities
+    (state) => state.community?.notJoinedCommunities
   );
 
   const [visibleCommunities, remainingCount] = useMemo(() => {
