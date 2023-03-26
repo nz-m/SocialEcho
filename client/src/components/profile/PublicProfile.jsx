@@ -102,7 +102,7 @@ const PublicProfile = () => {
       <div className="my-4">
         <p>{postsLast30Days} posts in last 30 days</p>
         {commonCommunities?.length === 0 ? (
-          <p>You both have no communities in common. </p>
+          <p>You have no communities in common.</p>
         ) : (
           <p>
             You both are members of{" "}
@@ -115,13 +115,14 @@ const PublicProfile = () => {
                   {c.name}
                 </Link>
                 {index === 0 && commonCommunities.length > 2 ? ", " : ""}
+                {index === 0 && commonCommunities.length > 1 ? " and " : ""}
               </React.Fragment>
             ))}
             {commonCommunities?.length > 2 && (
               <span>
                 {" and "}
                 <span className="tooltip">
-                  {` ${commonCommunities?.length - 2} other ${
+                  {`${commonCommunities?.length - 2} other ${
                     commonCommunities?.length - 2 === 1
                       ? "community"
                       : "communities"
