@@ -15,6 +15,8 @@ const MainSection = () => {
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const LIMIT = 10;
 
+  const [activeTab, setActiveTab] = useState("all-posts");
+
   useEffect(() => {
     if (userData) {
       dispatch(getPostsAction(userData._id, LIMIT, 0)).finally(() => {
@@ -38,41 +40,64 @@ const MainSection = () => {
     return posts.map((post) => <MemoizedPost key={post._id} post={post} />);
   }, [posts]);
 
-  if (!posts || isLoading) {
-    return (
-      <div className="w-6/12">
-        <div className="flex justify-center items-center h-32 bg-gray-200 rounded-lg shadow-xl mb-4">
-          <h1 className="text-2xl font-bold text-gray-700">Welcome</h1>
-        </div>
-        <div>Loading...</div>
-      </div>
-    );
-  }
+  const handleTabClick = useCallback((tab) => {
+    setActiveTab(tab);
+  }, []);
 
   return (
     <div className="w-6/12">
       <div className="flex justify-center items-center h-32 bg-gray-200 rounded-lg shadow-xl mb-4">
         <h1 className="text-2xl font-bold text-gray-700">Welcome</h1>
       </div>
+      <div className="flex justify-center mb-4">
+        <button
+          className={`mr-4 px-4 py-2 rounded ${
+            activeTab === "all-posts"
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+          onClick={() => handleTabClick("all-posts")}
+        >
+          All Posts
+        </button>
+        <button
+          className={`px-4 py-2 rounded ${
+            activeTab === "your-following"
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+          onClick={() => handleTabClick("your-following")}
+        >
+          Your Following
+        </button>
+      </div>
       {postError && <div className="text-red-500">{postError}</div>}
-
-      <div>{memoizedPosts}</div>
-      {isLoading && <div>Loading...</div>}
-
-      {!isLoading && posts.length >= LIMIT && posts.length % LIMIT === 0 && (
-        <div className="flex justify-center">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleLoadMore}
-          >
-            {isLoadMoreLoading ? "Loading..." : "Load More"}
-          </button>
+      {activeTab === "all-posts" ? (
+        <>
+          <div>{memoizedPosts}</div>
+          {isLoading && <div>Loading...</div>}
+          {!isLoading &&
+            posts.length >= LIMIT &&
+            posts.length % LIMIT === 0 && (
+              <div className="flex justify-center">
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={handleLoadMore}
+                >
+                  {isLoadMoreLoading ? "Loading..." : "Load More"}
+                </button>
+              </div>
+            )}
+          {!isLoading && posts.length === 0 && (
+            <div className="text-gray-500 text-center py-10">
+              No posts found.
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="text-gray-500 text-center py-10">
+          Your Following tab content goes here.
         </div>
-      )}
-      {!isLoading && posts.length === 0 && (
-        <h1 className="text-center font-bold text-gray-700">
-          Nothing to show. Be the first to make a post.
-        </h1>
       )}
     </div>
   );
