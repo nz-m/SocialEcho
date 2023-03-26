@@ -8,8 +8,8 @@ const requireAuth = passport.authenticate("jwt", { session: false });
 // Apply authentication middleware to all routes
 router.use(requireAuth);
 
+router.get("/:publicUserId/userPosts", postController.getPublicPosts);
 router.get("/saved", postController.getSavedPosts);
-router.get("/:publicUserId", postController.getPublicPosts);
 router.patch("/:id/save", postController.savePost);
 router.patch("/:id/unsave", postController.unsavePost);
 router.patch("/:id/like", postController.likePost);

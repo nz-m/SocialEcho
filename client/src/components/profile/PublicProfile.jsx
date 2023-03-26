@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
@@ -7,48 +7,29 @@ import {
   getPublicUsersAction,
   unfollowUserAction,
 } from "../../redux/actions/userActions";
-import { getPublicPostsAction } from "../../redux/actions/postActions";
-
+import PublicPost from "./PublicPost";
 const PublicProfile = () => {
   const navigate = useNavigate();
-  // Get user ID from the URL
   const location = useLocation();
-  const userId = useMemo(
-    () => location.pathname.split("/")[2],
-    [location.pathname]
-  );
-
   const dispatch = useDispatch();
 
-  // Get public user profile and follow status from the Redux store
   const userProfile = useSelector((state) => state.user?.publicUserProfile);
   const isUserFollowing = useSelector((state) => state.user?.isFollowing);
-
-  const publicPosts = useSelector((state) => state.post?.publicPosts);
+  const publicUserId = location.pathname.split("/")[2];
 
   useEffect(() => {
-    dispatch(getPublicUserAction(userId));
-    dispatch(getPublicPostsAction(userId));
-  }, [dispatch, userId, isUserFollowing]);
+    dispatch(getPublicUserAction(publicUserId));
+  }, [dispatch, isUserFollowing, publicUserId]);
 
-  console.log(publicPosts);
-
-  // Handle unfollowing a user
-  const handleUnfollow = async (userId) => {
-    try {
-      await dispatch(unfollowUserAction(userId));
-      dispatch(getPublicUsersAction());
-    } catch (error) {
-      console.log(error);
-    }
+  const handleUnfollow = async (publicUserId) => {
+    await dispatch(unfollowUserAction(publicUserId));
+    dispatch(getPublicUsersAction());
   };
 
-  // Return null if user profile is not available
   if (!userProfile) {
     return null;
   }
 
-  // Destructure user profile data
   const {
     name,
     avatar,
@@ -67,7 +48,6 @@ const PublicProfile = () => {
     postsLast30Days,
     commonCommunities,
   } = userProfile;
-
   return (
     <div className="w-6/12 mx-auto">
       <button
@@ -176,7 +156,7 @@ const PublicProfile = () => {
               since {followingSince}
             </p>
             <button
-              onClick={() => handleUnfollow(userId)}
+              onClick={() => handleUnfollow(publicUserId)}
               type="button"
               className="bg-white text-red-500 border border-red-500 rounded-full py-1 px-4 text-sm font-semibold"
             >
@@ -193,6 +173,7 @@ const PublicProfile = () => {
           </p>
         )}
       </div>
+      {isUserFollowing && <PublicPost publicUserId={publicUserId} />}
     </div>
   );
 };

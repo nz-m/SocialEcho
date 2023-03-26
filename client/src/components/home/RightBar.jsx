@@ -26,20 +26,6 @@ const RightBar = () => {
 
   const currentUser = useSelector((state) => state.auth?.userData);
   const recommendedUsers = useSelector((state) => state.user?.publicUsers);
-  /*
-   Current user is excluded from the server side but,
-   there is an issue with the aggregation pipeline.
-   Needs to be fixed.
-  */
-
-  // exclude the current user from the list of recommended users
-  const filteredRecommendedUsers = useMemo(() => {
-    return recommendedUsers?.filter(
-      (user) =>
-        user._id !== currentUser?._id &&
-        !currentUser?.following?.includes(user._id)
-    );
-  }, [recommendedUsers, currentUser]);
 
   const currentUserIsModerator = currentUser?.role === "moderator";
   useEffect(() => {
@@ -145,14 +131,14 @@ const RightBar = () => {
           <div className="card mt-4">
             <div className="card-body">
               <h5 className="card-title mb-3">Popular Users to Follow</h5>
-              {filteredRecommendedUsers?.length === 0 && (
+              {recommendedUsers?.length === 0 && (
                 <div className="text-center italic text-gray-400">
                   No users to follow. Check back later
                 </div>
               )}
               <ul className="list-group">
-                {filteredRecommendedUsers &&
-                  filteredRecommendedUsers.map((user) => (
+                {recommendedUsers &&
+                  recommendedUsers.map((user) => (
                     <li
                       key={user._id}
                       className="list-group-item d-flex justify-content-between"
@@ -173,7 +159,7 @@ const RightBar = () => {
                           <div className="text-gray-500 text-sm">
                             {user.location}
                           </div>
-                          <div>Followers: {user.numFollowers}</div>
+                          <div>Followers: {user.followerCount}</div>
                         </div>
                       </div>
                       <button
