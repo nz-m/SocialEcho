@@ -116,6 +116,23 @@ export const unfollowUserAction = (id) => async (dispatch) => {
     });
   }
 };
+export const getFollowingUsersAction = () => async (dispatch) => {
+  try {
+    const { error, data } = await api.getFollowingUsers();
+    if (error) {
+      throw new Error(error);
+    }
+    dispatch({
+      type: types.GET_FOLLOWING_USERS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: types.GET_FOLLOWING_USERS_FAIL,
+      payload: error.message,
+    });
+  }
+};
 
 export const followUserAndFetchData =
   (toFollowId, currentUser) => async (dispatch) => {

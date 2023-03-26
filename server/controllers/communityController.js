@@ -295,7 +295,6 @@ const addModToCommunity = async (req, res) => {
       .status(200)
       .json(`User was added as a moderator and member of ${communityName}`);
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       message: "Server Error",
     });

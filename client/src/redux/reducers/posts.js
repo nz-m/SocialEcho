@@ -2,6 +2,7 @@ import * as types from "../constants/postConstants";
 
 const initialState = {
   posts: [],
+  publicPosts: [],
   communityPosts: [],
   comments: [],
   savedPosts: [],
@@ -155,6 +156,18 @@ const postReducer = (state = initialState, action) => {
     case types.SAVE_POST_FAIL:
     case types.UNSAVE_POST_FAIL:
     case types.GET_SAVED_POSTS_FAIL:
+      return {
+        ...state,
+        postError: payload,
+      };
+
+    case types.GET_PUBLIC_POSTS_SUCCESS:
+      return {
+        ...state,
+        publicPosts: payload.publicPosts || [],
+        postError: null,
+      };
+    case types.GET_PUBLIC_POSTS_FAIL:
       return {
         ...state,
         postError: payload,

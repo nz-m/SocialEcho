@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getCommunityAction,
-  leaveFetchData,
-} from "../../redux/actions/communityActions";
+import LeaveModal from "../modals/LeaveModal";
+
+import { getCommunityAction } from "../../redux/actions/communityActions";
 import placeholder from "../../assets/placeholder.png";
 
 const RightBar = () => {
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { communityName } = useParams();
+
+  const toggleLeaveModal = () => {
+    setShowLeaveModal(!showLeaveModal);
+  };
 
   useEffect(() => {
     dispatch(getCommunityAction(communityName));
@@ -26,11 +29,6 @@ const RightBar = () => {
   );
 
   const [bannerLoaded, setBannerLoaded] = useState(false);
-
-  const leaveCommunityHandler = async () => {
-    await dispatch(leaveFetchData(communityName));
-    navigate("/");
-  };
 
   useEffect(() => {
     if (banner) {
@@ -91,12 +89,19 @@ const RightBar = () => {
 
           {isModeratorUpdated && !isModerator && (
             <button
-              onClick={leaveCommunityHandler}
+              onClick={toggleLeaveModal}
               className="text-white btn-primary btn-sm"
             >
               Leave Community
             </button>
           )}
+          {
+            <LeaveModal
+              show={showLeaveModal}
+              toggle={toggleLeaveModal}
+              communityName={communityName}
+            />
+          }
         </div>
         {rules && rules.length > 0 && (
           <div className="text-gray-500 mb-4">

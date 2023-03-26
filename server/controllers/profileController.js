@@ -16,21 +16,45 @@ const getPublicUsers = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // get up to 5 public users that the current user is not already following
-    const usersToDisplay = await User.find(
+    // get up to 5 public users that the current user is not already following, sorted by number of followers
+    const currentUser = await User.findById(userId);
+    const usersToDisplay = await User.aggregate([
       {
-        _id: {
-          $nin: [
-            userId,
-            ...(await Relationship.find({ follower: userId }).distinct(
-              "following"
-            )),
-          ],
+        $match: {
+          _id: { $ne: userId },
+          role: { $ne: "moderator" },
+          following: { $nin: currentUser.following },
         },
-        role: { $ne: "moderator" },
       },
-      "_id name avatar location"
-    ).limit(5);
+      {
+        $lookup: {
+          from: "relationships",
+          localField: "_id",
+          foreignField: "following",
+          as: "followers",
+        },
+      },
+      {
+        $addFields: {
+          numFollowers: { $size: "$followers" },
+        },
+      },
+      {
+        $sort: { numFollowers: -1 },
+      },
+      {
+        $limit: 5,
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          avatar: 1,
+          location: 1,
+          numFollowers: 1,
+        },
+      },
+    ]);
 
     res.status(200).json(usersToDisplay);
   } catch (error) {
@@ -60,6 +84,23 @@ const getPublicUser = async (req, res) => {
       .select("name")
       .lean();
 
+    // get the list of communities that the current user is in
+    const currentUserCommunities = await Community.find({
+      members: currentUserId,
+    })
+      .select("_id name")
+      .lean();
+
+    // get the list of communities that the user is in
+    const userCommunities = await Community.find({ members: user._id })
+      .select("_id name")
+      .lean();
+
+    // find the common communities
+    const commonCommunities = currentUserCommunities.filter((comm) => {
+      return userCommunities.some((userComm) => userComm._id.equals(comm._id));
+    });
+
     // check if the current user is following the user
     const isFollowing = await Relationship.findOne({
       follower: currentUserId,
@@ -73,10 +114,14 @@ const getPublicUser = async (req, res) => {
 
     // get the number of posts the user has created in the last 30 days
     const last30Days = dayjs().subtract(30, "day").toDate();
-    const postsLast30Days = await Post.countDocuments({
-      user: user._id,
-      createdAt: { $gte: last30Days },
-    });
+    const postsLast30Days = await Post.aggregate([
+      { $match: { user: user._id, createdAt: { $gte: last30Days } } },
+      { $count: "total" },
+    ]);
+
+    const totalPostsLast30Days =
+      postsLast30Days.length > 0 ? postsLast30Days[0].total : 0;
+
     const responseData = {
       name: user.name,
       avatar: user.avatar,
@@ -90,9 +135,10 @@ const getPublicUser = async (req, res) => {
       joinedOn: dayjs(user.createdAt).format("MMM D, YYYY"),
       totalFollowers: user.followers?.length,
       totalFollowing: user.following?.length,
-      isFollowing: isFollowing ? true : false,
+      isFollowing: !!isFollowing,
       followingSince,
-      postsLast30Days,
+      postsLast30Days: totalPostsLast30Days,
+      commonCommunities,
     };
 
     res.status(200).json(responseData);
@@ -203,9 +249,38 @@ const unfollowUser = async (req, res) => {
   }
 };
 
+const getFollowingUsers = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Query the Relationship model for all relationships where the current user is the follower
+    const relationships = await Relationship.find({
+      follower: userId,
+    })
+      .populate("following", "_id name avatar location")
+      .lean();
+
+    // Extract the users from the `following` property of each relationship object
+    const followingUsers = relationships
+      .map((relationship) => ({
+        ...relationship.following,
+        followingSince: relationship.createdAt,
+      }))
+      .sort((a, b) => b.followingSince - a.followingSince);
+
+    res.status(200).json(followingUsers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPublicUsers,
   followUser,
   getPublicUser,
   unfollowUser,
+  getFollowingUsers,
 };

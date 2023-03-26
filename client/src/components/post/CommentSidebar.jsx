@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getCommentsAction } from "../../redux/actions/postActions";
 import { useParams } from "react-router-dom";
 
-function CommentSidebar() {
+const CommentSidebar = () => {
   const { postId } = useParams();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);
@@ -16,7 +16,7 @@ function CommentSidebar() {
       dispatch(getCommentsAction(postId));
     }
   }, [userData, dispatch, postId]);
-
+  
   return (
     <div className="w-3/12 h-screen bg-white sticky top-0">
       {comments.length > 0 && (
@@ -44,6 +44,6 @@ function CommentSidebar() {
       )}
     </div>
   );
-}
+};
 
 export default CommentSidebar;

@@ -3,7 +3,9 @@ import React from "react";
 const LoadingSpinner = ({ loadingText }) => {
   return (
     <div className="flex justify-center items-center">
-      <span className="mr-2">{loadingText ? loadingText : "Loading..."}</span>
+      <span className="mr-2">
+        {loadingText ? loadingText : "Just a moment..."}
+      </span>
       <div className="flex justify-center items-center">
         <svg
           className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"

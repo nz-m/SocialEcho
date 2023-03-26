@@ -19,7 +19,6 @@ const Leftbar = () => {
   }, [dispatch]);
 
   const visibleCommunities = joinedCommunities?.slice(0, 5);
-  const remainingCount = Math.max((joinedCommunities?.length || 0) - 5, 0);
 
   const communityLinks = useMemo(() => {
     return visibleCommunities?.map((community) => ({
@@ -43,6 +42,7 @@ const Leftbar = () => {
           <Link to="/home">Home</Link>
           <Link to="/profile">Profile</Link>
           <Link to="/saved">Saved</Link>
+          <Link to="/following">Following</Link>
           {joinedCommunities ? (
             <div>
               <h3 className="mb-2">Communities you're in</h3>
@@ -53,11 +53,12 @@ const Leftbar = () => {
                   </li>
                 ))}
               </ul>
-              {remainingCount > 0 && (
-                <div>
-                  <Link to="/my-communities">See more ({remainingCount})</Link>
-                </div>
-              )}
+
+              <div>
+                <Link to="/my-communities">
+                  See all ({joinedCommunities.length})
+                </Link>
+              </div>
             </div>
           ) : (
             <div>Loading communities...</div>

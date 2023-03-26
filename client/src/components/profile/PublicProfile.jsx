@@ -1,13 +1,16 @@
 import React, { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 import {
   getPublicUserAction,
   getPublicUsersAction,
   unfollowUserAction,
 } from "../../redux/actions/userActions";
+import { getPublicPostsAction } from "../../redux/actions/postActions";
 
 const PublicProfile = () => {
+  const navigate = useNavigate();
   // Get user ID from the URL
   const location = useLocation();
   const userId = useMemo(
@@ -18,13 +21,17 @@ const PublicProfile = () => {
   const dispatch = useDispatch();
 
   // Get public user profile and follow status from the Redux store
-  const userProfile = useSelector((state) => state.user.publicUserProfile);
-  const isUserFollowing = useSelector((state) => state.user.isFollowing);
+  const userProfile = useSelector((state) => state.user?.publicUserProfile);
+  const isUserFollowing = useSelector((state) => state.user?.isFollowing);
 
-  // Fetch public user profile and follow status on mount or when follow status changes
+  const publicPosts = useSelector((state) => state.post?.publicPosts);
+
   useEffect(() => {
     dispatch(getPublicUserAction(userId));
+    dispatch(getPublicPostsAction(userId));
   }, [dispatch, userId, isUserFollowing]);
+
+  console.log(publicPosts);
 
   // Handle unfollowing a user
   const handleUnfollow = async (userId) => {
@@ -58,10 +65,17 @@ const PublicProfile = () => {
     isFollowing,
     followingSince,
     postsLast30Days,
+    commonCommunities,
   } = userProfile;
 
   return (
     <div className="w-6/12 mx-auto">
+      <button
+        className="bg-gray-200 text-gray-800 text-sm font-semibold rounded-full py-1 px-2 mr-2 mb-2"
+        onClick={() => navigate(-1)}
+      >
+        Go back
+      </button>
       <div className="flex items-center justify-center">
         <img
           className="h-32 w-32 rounded-full object-cover mr-4"
@@ -107,6 +121,42 @@ const PublicProfile = () => {
       </div>
       <div className="my-4">
         <p>{postsLast30Days} posts in last 30 days</p>
+        {commonCommunities?.length === 0 ? (
+          <p>You both have no communities in common. </p>
+        ) : (
+          <p>
+            You both are members of{" "}
+            {commonCommunities?.slice(0, 2).map((c, index) => (
+              <React.Fragment key={c._id}>
+                <Link
+                  className="text-sky-700 font-bold hover:underline"
+                  to={`/community/${c.name}`}
+                >
+                  {c.name}
+                </Link>
+                {index === 0 && commonCommunities.length > 2 ? ", " : ""}
+              </React.Fragment>
+            ))}
+            {commonCommunities?.length > 2 && (
+              <span>
+                {" and "}
+                <span className="tooltip">
+                  {` ${commonCommunities?.length - 2} other ${
+                    commonCommunities?.length - 2 === 1
+                      ? "community"
+                      : "communities"
+                  }`}
+                  <span className="tooltiptext">
+                    {commonCommunities
+                      ?.slice(2)
+                      .map((c) => `${c.name}`)
+                      .join(", ")}
+                  </span>
+                </span>
+              </span>
+            )}
+          </p>
+        )}
 
         {isFollowing && role !== "moderator" ? (
           <>
@@ -120,7 +170,11 @@ const PublicProfile = () => {
                 </span>
               </p>
             )}
-            <p>You are following since {followingSince}</p>
+            <p>
+              You are following
+              <span className="font-semibold text-sky-700"> {name} </span>
+              since {followingSince}
+            </p>
             <button
               onClick={() => handleUnfollow(userId)}
               type="button"
