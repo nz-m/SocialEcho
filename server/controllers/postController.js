@@ -58,17 +58,17 @@ const createPost = async (req, res) => {
 };
 
 /**
-Retrieves the posts for a given user, including pagination, sorted by creation date.
-@name getPosts
-@async
-@param {Object} req - The request object from Express.
-@param {string} req.query.userId - The ID of the user whose posts to retrieve.
-@param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not provided.
-@param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them. Defaults to 0 if not provided.
-@param {Object} res - The response object from Express.
-@returns {Promise<void>} - A Promise that resolves to the response JSON object containing the retrieved posts.
-@throws {Error} - If an error occurs while retrieving the posts.
-*/
+ * @async
+ * @function getPosts
+ * @description Retrieves the posts for a given user, including pagination, sorted by creation date.
+ * @param {Object} req - The request object from Express.
+ * @param {Object} res - The response object from Express.
+ * @param {string} req.query.userId - The ID of the user whose posts to retrieve.
+ * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not provided.
+ * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them. Defaults to 0 if not provided.
+ * @throws {Error} - If an error occurs while retrieving the posts.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object containing the retrieved posts.
+ */
 const getPosts = async (req, res) => {
   try {
     const userId = req.query.userId;

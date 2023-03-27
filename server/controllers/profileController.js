@@ -9,14 +9,14 @@ const duration = require("dayjs/plugin/duration");
 dayjs.extend(duration);
 
 /**
- * Retrieves up to 5 public users that the current user is not already following,
- * including their name, avatar, location, and follower count, sorted by the number of followers.
- * @name getPublicUsers
  * @async
+ * @function getPublicUsers
+ * @description Retrieves up to 5 public users that the current user is not already following,
+   including their name, avatar, location, and follower count, sorted by the number of followers.
  * @param {Object} req - The request object from Express.
  * @param {Object} res - The response object from Express.
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  * @throws {Error} - If an error occurs while retrieving the users.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getPublicUsers = async (req, res) => {
   try {
