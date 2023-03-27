@@ -164,7 +164,7 @@ const postReducer = (state = initialState, action) => {
     case types.GET_PUBLIC_POSTS_SUCCESS:
       return {
         ...state,
-        publicPosts: payload.publicPosts || [],
+        publicPosts: payload || [],
         postError: null,
       };
     case types.GET_PUBLIC_POSTS_FAIL:

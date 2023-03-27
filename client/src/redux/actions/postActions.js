@@ -88,7 +88,6 @@ export const getComPostsAction =
       });
     }
   };
-
 export const deletePostAction = (id) => async (dispatch) => {
   try {
     const { error } = await api.deletePost(id);

@@ -16,45 +16,50 @@ const getPublicUsers = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // get up to 5 public users that the current user is not already following, sorted by number of followers
-    const currentUser = await User.findById(userId);
-    const usersToDisplay = await User.aggregate([
+    // get up to 5 public users that the current user is not already following,
+    // include the number of followers, and sort them by the number of followers
+    const usersToDisplay = await User.find(
       {
-        $match: {
-          _id: { $ne: userId },
-          role: { $ne: "moderator" },
-          following: { $nin: currentUser.following },
+        _id: {
+          $nin: [
+            userId,
+            ...(await Relationship.find({ follower: userId }).distinct(
+              "following"
+            )),
+          ],
         },
+        role: { $ne: "moderator" },
       },
-      {
-        $lookup: {
-          from: "relationships",
-          localField: "_id",
-          foreignField: "following",
-          as: "followers",
-        },
-      },
-      {
-        $addFields: {
-          numFollowers: { $size: "$followers" },
-        },
-      },
-      {
-        $sort: { numFollowers: -1 },
-      },
-      {
-        $limit: 5,
-      },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
-          avatar: 1,
-          location: 1,
-          numFollowers: 1,
-        },
-      },
-    ]);
+      "_id name avatar location"
+    )
+      .populate({
+        path: "followers",
+        select: "_id",
+      })
+      .lean()
+      .exec();
+
+    // calculate the number of followers for each user
+    const userFollowerCounts = {};
+    await Promise.all(
+      usersToDisplay.map(async (user) => {
+        userFollowerCounts[user._id] = user.followers.length;
+      })
+    );
+
+    // sort the users by the number of followers
+    usersToDisplay.sort(
+      (a, b) => userFollowerCounts[b._id] - userFollowerCounts[a._id]
+    );
+
+    // add the number of followers to each user object
+    usersToDisplay.forEach((user) => {
+      user.followerCount = userFollowerCounts[user._id];
+      delete user.followers;
+    });
+
+    // limit the results to 5
+    usersToDisplay.splice(5);
 
     res.status(200).json(usersToDisplay);
   } catch (error) {

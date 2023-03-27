@@ -125,7 +125,6 @@ export const leaveCommunityAction = (communityName) => async (dispatch) => {
   }
 };
 
-// Keep the cb
 export const reportPostAction = (communityName, info) => async (dispatch) => {
   try {
     const { error, data } = await api.reportPost(communityName, info);

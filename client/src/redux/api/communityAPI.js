@@ -21,7 +21,7 @@ const handleApiError = (error) => {
     return { error: error.response.data.message, data: null };
   } else {
     // An unexpected error occurred
-    return { error: 'An unexpected error occurred.', data: null };
+    return { error: "An unexpected error occurred.", data: null };
   }
 };
 const getCommunity = async (communityName) => {

@@ -128,7 +128,7 @@ const getSavedPosts = async () => {
 
 const getPublicPosts = async (publicUserId) => {
   try {
-    const { data } = await API.get(`/posts/${publicUserId}`);
+    const { data } = await API.get(`/posts/${publicUserId}/userPosts`);
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);

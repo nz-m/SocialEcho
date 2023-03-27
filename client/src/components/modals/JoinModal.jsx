@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { useNavigate } from "react-router-dom";
 import { Fragment, useRef, useState, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { joinCommunityAndFetchData } from "../../redux/actions/communityActions";
@@ -7,6 +8,7 @@ import { joinCommunityAndFetchData } from "../../redux/actions/communityActions"
 import LoadingSpinner from "../spinner/LoadingSpinner";
 
 const JoinModal = memo(({ show, onClose, community }) => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
@@ -14,15 +16,20 @@ const JoinModal = memo(({ show, onClose, community }) => {
 
   const cancelButtonRef = useRef(null);
 
-  const joinCommumityHandler = useCallback(
-    (communityName) => {
+  const joinCommunityHandler = useCallback(
+    async (communityName) => {
       setLoading(true);
-      dispatch(joinCommunityAndFetchData(communityName, userData)).then(() => {
+      try {
+        await dispatch(joinCommunityAndFetchData(communityName, userData));
+        navigate(`/community/${communityName}`);
+      } catch (error) {
+        loading(false);
+      } finally {
         setLoading(false);
         onClose();
-      });
+      }
     },
-    [dispatch, userData, onClose]
+    [dispatch, userData, navigate, onClose, loading]
   );
 
   return (
@@ -93,7 +100,7 @@ const JoinModal = memo(({ show, onClose, community }) => {
                       disabled={loading}
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={() => joinCommumityHandler(community.name)}
+                      onClick={() => joinCommunityHandler(community.name)}
                     >
                       {loading ? (
                         <LoadingSpinner loadingText={"Joining..."} />

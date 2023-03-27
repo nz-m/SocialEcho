@@ -20,13 +20,22 @@ const user = (state = initialState, action) => {
       return { ...state, userError: payload };
 
     case types.GET_PUBLIC_USERS_SUCCESS:
-      return { ...state, publicUsers: payload, userError: null };
+      return {
+        ...state,
+        publicUsers: payload,
+        userError: null,
+      };
 
     case types.GET_PUBLIC_USERS_FAIL:
       return { ...state, userError: payload };
 
     case types.GET_PUBLIC_USER_PROFILE_SUCCESS:
-      return { ...state, publicUserProfile: payload, userError: null };
+      return {
+        ...state,
+        publicUserProfile: payload,
+        userError: null,
+        isFollowing: payload.isFollowing,
+      };
 
     case types.GET_PUBLIC_USER_PROFILE_FAIL:
       return { ...state, userError: payload };

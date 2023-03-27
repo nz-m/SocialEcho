@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { MdOutlineReport } from "react-icons/md";
-import { deletePostAction } from "../../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { getCommunityAction } from "../../redux/actions/communityActions";
@@ -8,10 +7,11 @@ import Save from "./Save";
 import Like from "./Like";
 import CommentForm from "../form/CommentForm";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
+import DeleteModal from "../modals/DeleteModal";
 
 const PostView = ({ post }) => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);
   const { body, fileUrl, user, community, createdAt, comments } = post;
@@ -45,21 +45,15 @@ const PostView = ({ post }) => {
     }
   }, [communityData, post._id, userId]);
 
-  const deleteHandler = async () => {
-    try {
-      await dispatch(deletePostAction(post._id));
-      navigate(location.state ? location.state.from : "/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const reportHandler = () => {
     navigate(`/community/${community.name}/report`, {
       state: { post, communityName: community.name },
     });
   };
-
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = (value) => {
+    setShowModal(value);
+  };
   const handleBack = () => {
     navigate(-1);
   };
@@ -151,12 +145,21 @@ const PostView = ({ post }) => {
 
             {userData?._id === post.user._id && (
               <button
-                onClick={deleteHandler}
+                onClick={() => toggleModal(true)}
                 className="flex items-center text-xl gap-1"
               >
+                {" "}
                 <MdOutlineReport />
                 Delete
               </button>
+            )}
+            {showModal && (
+              <DeleteModal
+                showModal={showModal}
+                postId={post._id}
+                onClose={() => toggleModal(false)}
+                prevPath={location.state.from || "/"}
+              />
             )}
           </div>
         </div>

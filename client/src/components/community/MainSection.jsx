@@ -11,6 +11,7 @@ const MainSection = () => {
   const { communityData } = useSelector((state) => state.community);
   const { communityPosts, isLoading } = useSelector((state) => state.posts);
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeTab, setActiveTab] = useState("All posts");
   const LIMIT = 10;
 
   useEffect(() => {
@@ -55,34 +56,52 @@ const MainSection = () => {
             This is {communityData?.name} community (in main section)
           </h1>
           <div className="flex flex-col mt-4">
-            <div className="mb-4">
-              <PostForm />
-            </div>
-
+            <ul className="flex border-b">
+              <li
+                className={`${
+                  activeTab === "All posts"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                } flex-1 cursor-pointer text-center py-4 px-1 border-b-2 font-medium`}
+                onClick={() => setActiveTab("All posts")}
+              >
+                All posts
+              </li>
+              <li
+                className={`${
+                  activeTab === "You're following"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                } flex-1 cursor-pointer text-center py-4 px-1 border-b-2 font-medium`}
+                onClick={() => setActiveTab("You're following")}
+              >
+                You're following
+              </li>
+            </ul>
             <div className="mt-4 flex flex-col gap-4">
-              <p className="text-xl font-semibold my-5">
-                Recent post from this community
-              </p>
-              {isLoading && <div>Loading posts...</div>}
-              {!isLoading && memoizedCommunityPosts.length > 0 ? (
+              {activeTab === "All posts" && (
                 <>
-                  <div className="mt-4 flex flex-col gap-4">
-                    {memoizedCommunityPosts}
+                  <div className="mb-4">
+                    <PostForm />
                   </div>
-                  {communityPosts.length >= LIMIT &&
-                    communityPosts.length % LIMIT === 0 && (
-                      <div className="flex justify-center">
-                        <button
-                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                          onClick={handleLoadMore}
-                        >
-                          {isLoading ? "Loading..." : "Load More"}
-                        </button>
-                      </div>
-                    )}
+                  <p
+                    className="text-xl
+"
+                  >
+                    {isLoading ? "Loading..." : memoizedCommunityPosts}
+                  </p>
+                  {communityPosts.length > 0 && (
+                    <button
+                      onClick={handleLoadMore}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                      Load more
+                    </button>
+                  )}
                 </>
-              ) : (
-                <p>No posts found.</p>
+              )}
+              {activeTab === "You're following" && (
+                <p>You're not following any posts yet.</p>
               )}
             </div>
           </div>
