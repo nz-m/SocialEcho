@@ -110,7 +110,8 @@ const getPosts = async (req, res) => {
 /**
  * @async
  * @function getCommunityPosts
- * @description Retrieves the posts for a given community, including the post information, the user who created it, and the community it belongs to.
+ * @description Retrieves the posts for a given community, including the post information,
+   the user who created it, and the community it belongs to.
  * @param {string} req.params.id - The ID of the community to retrieve the posts for.
  * @param {Object} req - The request object from Express.
  * @param {Object} req.query - The query parameters for the request.
@@ -151,15 +152,15 @@ const getCommunityPosts = async (req, res) => {
 };
 
 /**
-Deletes a post with the specified ID and its associated comments.
-@name deletePost
-@async
-@param {Object} req - The request object from Express.
-@param {string} req.params.id - The ID of the post to be deleted.
-@param {Object} res - The response object from Express.
-@returns {Promise<void>} - A Promise that resolves to the response JSON object.
-@throws {Error} - If the specified post cannot be found or if there is an error while deleting it.
-*/
+ * @async
+ * @function deletePost
+ * @description Deletes a post with the specified ID and its associated comments.
+ * @param {Object} req - The request object from Express.
+ * @param {string} req.params.id - The ID of the post to be deleted.
+ * @param {Object} res - The response object from Express.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ * @throws {Error} - If the specified post cannot be found or if there is an error while deleting it.
+ */
 const deletePost = async (req, res) => {
   try {
     const id = req.params.id;
@@ -411,15 +412,16 @@ const getSavedPosts = async (req, res) => {
 };
 
 /**
-* @async
-* @function getPublicPosts
-* @description Retrieves up to 10 posts of the public user that are posted in the communities that both the public user and the current user are members of.
-* @param {Object} req - The request object from Express.
-* @param {string} req.params.publicUserId - The id of the public user whose posts to retrieve.
-* @param {Object} res - The response object from Express.
-* @throws {Error} - If an error occurs while retrieving the posts.
-* @returns {Promise<void>} - A Promise that resolves to the response JSON object.
-*/
+ * @async
+ * @function getPublicPosts
+ * @description Retrieves up to 10 posts of the public user that are posted in the communities
+   that both the public user and the current user are members of.
+ * @param {Object} req - The request object from Express.
+ * @param {string} req.params.publicUserId - The id of the public user whose posts to retrieve.
+ * @param {Object} res - The response object from Express.
+ * @throws {Error} - If an error occurs while retrieving the posts.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ */
 const getPublicPosts = async (req, res) => {
   try {
     const publicUserId = req.params.publicUserId;
@@ -428,7 +430,6 @@ const getPublicPosts = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // check if the current user is following the public user
     const isFollowing = await Relationship.exists({
       follower: currentUserId,
       following: publicUserId,
@@ -437,12 +438,10 @@ const getPublicPosts = async (req, res) => {
       return null;
     }
 
-    // get the ids of the communities that both users are members of
     const commonCommunityIds = await Community.find({
       members: { $all: [currentUserId, publicUserId] },
     }).distinct("_id");
 
-    // get the posts that belong to the common communities and are posted by the public user
     const publicPosts = await Post.find({
       community: { $in: commonCommunityIds },
       user: publicUserId,
