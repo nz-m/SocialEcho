@@ -89,7 +89,7 @@ const getUsers = async (req, res, next) => {
 /**
  * @async
  * @function getUser
-   @description Retrieves a user's profile information, including their total number of posts,
+ * @description Retrieves a user's profile information, including their total number of posts,
    the number of communities they are in, the number of communities they have posted in,
    and their duration on the platform.
  * @param {Object} req - Express request object

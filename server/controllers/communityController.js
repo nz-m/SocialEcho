@@ -117,15 +117,15 @@ const getMemberCommunities = async (req, res) => {
 };
 
 /**
-Retrieves up to 10 public communities that the current user is not a member of and has not been banned from,
-including their name, banner image, description, and member count, sorted by the number of members.
-@name getNotMemberCommunities
-@async
-@param {Object} req - The request object from Express.
-@param {Object} res - The response object from Express.
-@returns {Promise<void>} - A Promise that resolves to the response JSON object.
-@throws {Error} - If an error occurs while retrieving the communities.
-*/
+ * @async
+ * @function getNotMemberCommunities
+ * @description Retrieves up to 10 public communities that the current user is not a member of and has not been banned from,
+   including their name, banner image, description, and member count, sorted by the number of members.
+ * @param {Object} req - The request object from Express.
+ * @param {Object} res - The response object from Express.
+ * @throws {Error} - If an error occurs while retrieving the communities.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ */
 
 const getNotMemberCommunities = async (req, res) => {
   try {
@@ -283,16 +283,16 @@ const unbanUser = async (req, res) => {
 };
 
 /**
- * Adds a user to a community as a moderator and member.
- * @name addModToCommunity
  * @async
+ * @description Adds a user to a community as a moderator and member.
+ * @function addModToCommunity
  * @param {Object} req - The request object from Express.
  * @param {string} req.body.userId - The ID of the user to add as a moderator.
  * @param {string} req.params.name - The name of the community to add the user to.
  * @param {Object} res - The response object from Express.
  * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
- * @throws {Error} - If an error occurs while adding the user to the community.
  * @throws {Error} - If the current user is not a moderator.
+ * @throws {Error} - If an error occurs while adding the user to the community.
  */
 
 const addModToCommunity = async (req, res) => {
@@ -382,15 +382,15 @@ const reportPost = async (req, res) => {
 };
 
 /**
-Retrieves the reported posts for a given community, including the post information and the user who reported it.
-@name getReportedPosts
-@async
-@param {Object} req - The request object from Express.
-@param {Object} req.params.name - The name of the community to retrieve the reported posts for.
-@param {Object} res - The response object from Express.
-@returns {Promise<void>} - A Promise that resolves to the response JSON object.
-@throws {Error} - If an error occurs while retrieving the reported posts.
-*/
+ * @async
+ * @function getReportedPosts
+ * @description Retrieves the reported posts for a given community, including the post information and the user who reported it.
+ * @param {Object} req - The request object from Express.
+ * @param {Object} req.params.name - The name of the community to retrieve the reported posts for.
+ * @param {Object} res - The response object from Express.
+ * @throws {Error} - If an error occurs while retrieving the reported posts.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ */
 const getReportedPosts = async (req, res) => {
   try {
     const communityName = req.params.name;
