@@ -14,6 +14,4 @@ export function isValidToken(token) {
   const expiryTime = decodedPayload.exp * 1000;
   const currentTime = Date.now();
   return expiryTime > currentTime;
-
-
 }

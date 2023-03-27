@@ -22,18 +22,8 @@ const PostForm = () => {
     setBody(event.target.value);
   };
 
-  const allowedFileTypes = [
-    "image/jpeg",
-    "image/jpg",
-    "image/png",
-    "image/gif",
-    "image/webp",
-    "video/mpeg",
-    "video/mp4",
-    "video/avi",
-    "video/webm",
-    "video/x-matroska",
-  ];
+  const allowedFileTypes =
+    /^image\/(jpeg|png|gif|webp|bmp|svg\+xml)|video\/(mpeg|mp4|avi|webm|x-matroska|quicktime|ogg)$/;
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
