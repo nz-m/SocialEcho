@@ -283,16 +283,16 @@ const unbanUser = async (req, res) => {
 };
 
 /**
- * Adds a user to a community as a moderator and member.
- * @name addModToCommunity
  * @async
+ * @description Adds a user to a community as a moderator and member.
+ * @function addModToCommunity
  * @param {Object} req - The request object from Express.
  * @param {string} req.body.userId - The ID of the user to add as a moderator.
  * @param {string} req.params.name - The name of the community to add the user to.
  * @param {Object} res - The response object from Express.
  * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
- * @throws {Error} - If an error occurs while adding the user to the community.
  * @throws {Error} - If the current user is not a moderator.
+ * @throws {Error} - If an error occurs while adding the user to the community.
  */
 
 const addModToCommunity = async (req, res) => {
