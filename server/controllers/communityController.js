@@ -527,7 +527,6 @@ const getCommunityMods = async (req, res) => {
     const community = await Community.findOne({
       name: communityName,
     })
-
       .populate({
         path: "moderators",
         model: "User",
