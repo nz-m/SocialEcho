@@ -83,15 +83,15 @@ const addRulesToCommunity = async (req, res) => {
 };
 
 /**
-Retrieves all communities that a user is a member of, including the community's ID, name, banner image,
-member count, and description.
-@name getMemberCommunities
-@async
-@param {Object} req - The request object from Express.
-@param {Object} res - The response object from Express.
-@returns {Promise<void>} - A Promise that resolves to the response JSON object.
-@throws {Error} - If an error occurs while retrieving the communities.
-*/
+ * @async
+ * @function getMemberCommunities
+ * @description Retrieves all communities that a user is a member of, including the community's ID, name, banner image,
+   member count, and description.
+ * @param {Object} req - The request object from Express.
+ * @param {Object} res - The response object from Express.
+ * @throws {Error} - If an error occurs while retrieving the communities.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ */
 const getMemberCommunities = async (req, res) => {
   try {
     const userId = getUserFromToken(req);

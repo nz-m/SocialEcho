@@ -88,16 +88,16 @@ const getUsers = async (req, res, next) => {
 };
 /**
  * @async
-  @function getUser
-  @description Retrieves a user's profile information, including their total number of posts,
-  the number of communities they are in, the number of communities they have posted in,
-  and their duration on the platform.
-  @param {Object} req - Express request object
-  @param {Object} res - Express response object
-  @param {Function} next - Express next function
-  @throws {Error} If an error occurs while retrieving the user's information
-  @returns {Object} Returns the user's profile information.
-*/
+ * @function getUser
+   @description Retrieves a user's profile information, including their total number of posts,
+   the number of communities they are in, the number of communities they have posted in,
+   and their duration on the platform.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next function
+ * @throws {Error} If an error occurs while retrieving the user's information
+ * @returns {Object} Returns the user's profile information.
+ */
 const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).select("-password").lean();
