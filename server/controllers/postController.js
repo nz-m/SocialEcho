@@ -153,8 +153,8 @@ const getCommunityPosts = async (req, res) => {
 
 /**
  * @async
- * @descriptionDeletes a post with the specified ID and its associated comments.
  * @function deletePost
+ * @description Deletes a post with the specified ID and its associated comments.
  * @param {Object} req - The request object from Express.
  * @param {string} req.params.id - The ID of the post to be deleted.
  * @param {Object} res - The response object from Express.
