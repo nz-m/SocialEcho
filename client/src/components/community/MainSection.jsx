@@ -84,12 +84,9 @@ const MainSection = () => {
                   <div className="mb-4">
                     <PostForm />
                   </div>
-                  <p
-                    className="text-xl
-"
-                  >
+                  <div className="text-xl">
                     {isLoading ? "Loading..." : memoizedCommunityPosts}
-                  </p>
+                  </div>
                   {communityPosts.length > 0 && (
                     <button
                       onClick={handleLoadMore}
@@ -101,7 +98,7 @@ const MainSection = () => {
                 </>
               )}
               {activeTab === "You're following" && (
-                <p>You're not following any posts yet.</p>
+                <div>You're not following any posts yet.</div>
               )}
             </div>
           </div>
