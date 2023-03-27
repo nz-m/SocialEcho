@@ -85,7 +85,7 @@ const addRulesToCommunity = async (req, res) => {
 /**
  * @async
  * @function getMemberCommunities
- * @description Retrieves all communities that a user is a member of, including the community's ID, name, banner image,
+ * @description Retrieves all communities that a user is a member of including the community's ID, name, banner image,
    member count, and description.
  * @param {Object} req - The request object from Express.
  * @param {Object} res - The response object from Express.
@@ -126,7 +126,6 @@ const getMemberCommunities = async (req, res) => {
  * @throws {Error} - If an error occurs while retrieving the communities.
  * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
-
 const getNotMemberCommunities = async (req, res) => {
   try {
     const userId = getUserFromToken(req);
@@ -294,7 +293,6 @@ const unbanUser = async (req, res) => {
  * @throws {Error} - If an error occurs while adding the user to the community.
  * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
-
 const addModToCommunity = async (req, res) => {
   try {
     const userId = req.body.userId;
@@ -330,6 +328,7 @@ const addModToCommunity = async (req, res) => {
     });
   }
 };
+
 const reportPost = async (req, res) => {
   try {
     const communityName = req.params.name;
@@ -384,7 +383,8 @@ const reportPost = async (req, res) => {
 /**
  * @async
  * @function getReportedPosts
- * @description Retrieves the reported posts for a given community, including the post information and the user who reported it.
+ * @description Retrieves the reported posts for a given community,
+   including the post information and the user who reported it.
  * @param {Object} req - The request object from Express.
  * @param {Object} req.params.name - The name of the community to retrieve the reported posts for.
  * @param {Object} res - The response object from Express.

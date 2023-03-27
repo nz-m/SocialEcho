@@ -29,7 +29,7 @@ const PostForm = () => {
     const selectedFile = event.target.files[0];
     if (
       selectedFile &&
-      allowedFileTypes.includes(selectedFile.type) &&
+      allowedFileTypes.test(selectedFile.type) &&
       selectedFile.size <= 50 * 1024 * 1024
     ) {
       setFile(selectedFile);
@@ -66,9 +66,7 @@ const PostForm = () => {
       event.target.reset();
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
-      // handle error
     }
   };
 
@@ -105,8 +103,8 @@ const PostForm = () => {
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         type="submit"
-        disabled={loading || (!body && !file)} // disable button when both fields are empty
-        style={{ display: body || file ? "block" : "none" }} // hide button when both fields are empty
+        disabled={loading || (!body && !file)}
+        style={{ display: body || file ? "block" : "none" }}
       >
         {loading ? "Loading..." : "Post"}
       </button>

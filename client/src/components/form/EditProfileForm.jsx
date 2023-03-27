@@ -47,7 +47,6 @@ const EditProfileForm = () => {
       setInterests(["", "", ""]);
       navigate(-1);
     } catch (error) {
-      console.log(error);
       // handle error
     }
   };
