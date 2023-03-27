@@ -57,19 +57,29 @@ const createPost = async (req, res) => {
   }
 };
 
+/**
+Retrieves the posts for a given user, including pagination, sorted by creation date.
+@name getPosts
+@async
+@param {Object} req - The request object from Express.
+@param {string} req.query.userId - The ID of the user whose posts to retrieve.
+@param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not provided.
+@param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them. Defaults to 0 if not provided.
+@param {Object} res - The response object from Express.
+@returns {Promise<void>} - A Promise that resolves to the response JSON object containing the retrieved posts.
+@throws {Error} - If an error occurs while retrieving the posts.
+*/
 const getPosts = async (req, res) => {
   try {
     const userId = req.query.userId;
     const limit = parseInt(req.query.limit) || 10;
     const skip = parseInt(req.query.skip) || 0;
 
-    // First, retrieve the list of communities where the user is a member
     const communities = await Community.find({
       members: userId,
     });
     const communityIds = communities.map((community) => community._id);
 
-    // Next, retrieve the posts that belong to those communities with pagination
     const posts = await Post.find({
       community: {
         $in: communityIds,
@@ -97,7 +107,19 @@ const getPosts = async (req, res) => {
   }
 };
 
-// get all posts from a community
+/**
+Retrieves the posts for a given community, including the post information, the user who created it, and the community it belongs to.
+@name getCommunityPosts
+@async
+@param {Object} req - The request object from Express.
+@param {string} req.params.id - The ID of the community to retrieve the posts for.
+@param {Object} req.query - The query parameters for the request.
+@param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not specified.
+@param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them. Defaults to 0 if not specified.
+@param {Object} res - The response object from Express.
+@returns {Promise<void>} - A Promise that resolves to the response JSON object.
+@throws {Error} - If an error occurs while retrieving the posts.
+*/
 const getCommunityPosts = async (req, res) => {
   try {
     const id = req.params.id;
@@ -128,12 +150,21 @@ const getCommunityPosts = async (req, res) => {
   }
 };
 
+/**
+Deletes a post with the specified ID and its associated comments.
+@name deletePost
+@async
+@param {Object} req - The request object from Express.
+@param {string} req.params.id - The ID of the post to be deleted.
+@param {Object} res - The response object from Express.
+@returns {Promise<void>} - A Promise that resolves to the response JSON object.
+@throws {Error} - If the specified post cannot be found or if there is an error while deleting it.
+*/
 const deletePost = async (req, res) => {
   try {
     const id = req.params.id;
     const post = await Post.findById(id);
     if (!post) throw new Error("Post not found");
-    // this will also trigger the pre-remove hook to delete comments
     await post.remove();
     res.status(200).json({
       message: "Post deleted successfully",
@@ -379,7 +410,16 @@ const getSavedPosts = async (req, res) => {
   }
 };
 
-// Get upto 10 posts of the public user that are posted in the communities that both users are members of
+/**
+Retrieves up to 10 posts of the public user that are posted in the communities that both the public user and the current user are members of.
+@name getPublicPosts
+@async
+@param {Object} req - The request object from Express.
+@param {string} req.params.publicUserId - The id of the public user whose posts to retrieve.
+@param {Object} res - The response object from Express.
+@returns {Promise<void>} - A Promise that resolves to the response JSON object.
+@throws {Error} - If an error occurs while retrieving the posts.
+*/
 const getPublicPosts = async (req, res) => {
   try {
     const publicUserId = req.params.publicUserId;

@@ -6,7 +6,6 @@ const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
 
-// Get all communities
 const getCommunities = async (req, res) => {
   try {
     const communities = await Community.find();
@@ -83,6 +82,16 @@ const addRulesToCommunity = async (req, res) => {
   }
 };
 
+/**
+Retrieves all communities that a user is a member of, including the community's ID, name, banner image,
+member count, and description.
+@name getMemberCommunities
+@async
+@param {Object} req - The request object from Express.
+@param {Object} res - The response object from Express.
+@returns {Promise<void>} - A Promise that resolves to the response JSON object.
+@throws {Error} - If an error occurs while retrieving the communities.
+*/
 const getMemberCommunities = async (req, res) => {
   try {
     const userId = getUserFromToken(req);
@@ -106,6 +115,17 @@ const getMemberCommunities = async (req, res) => {
     });
   }
 };
+
+/**
+Retrieves up to 10 public communities that the current user is not a member of and has not been banned from,
+including their name, banner image, description, and member count, sorted by the number of members.
+@name getNotMemberCommunities
+@async
+@param {Object} req - The request object from Express.
+@param {Object} res - The response object from Express.
+@returns {Promise<void>} - A Promise that resolves to the response JSON object.
+@throws {Error} - If an error occurs while retrieving the communities.
+*/
 
 const getNotMemberCommunities = async (req, res) => {
   try {
@@ -262,21 +282,31 @@ const unbanUser = async (req, res) => {
   }
 };
 
+/**
+ * Adds a user to a community as a moderator and member.
+ * @name addModToCommunity
+ * @async
+ * @param {Object} req - The request object from Express.
+ * @param {string} req.body.userId - The ID of the user to add as a moderator.
+ * @param {string} req.params.name - The name of the community to add the user to.
+ * @param {Object} res - The response object from Express.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ * @throws {Error} - If an error occurs while adding the user to the community.
+ * @throws {Error} - If the current user is not a moderator.
+ */
+
 const addModToCommunity = async (req, res) => {
   try {
     const userId = req.body.userId;
     const communityName = req.params.name;
-    // Retrieve the user information from the database
     const currentUser = await User.findById(userId);
 
-    // Check if the current user has the 'moderator' role
     if (currentUser.role !== "moderator") {
       return res.status(401).json({
         message: "Only moderators can be added.",
       });
     }
 
-    // Update the community document with the new moderator
     await Community.findOneAndUpdate(
       {
         name: communityName,
@@ -321,7 +351,6 @@ const reportPost = async (req, res) => {
           },
         },
       },
-      // if the user hasn't reported this post already, add the post to the reportedPosts array
       {
         $addToSet: {
           reportedPosts: {
@@ -337,7 +366,6 @@ const reportPost = async (req, res) => {
       }
     );
     if (!community) {
-      // user has already reported the post, return an error
       return res.status(400).json({
         message: "You have already reported this post.",
       });
@@ -353,6 +381,16 @@ const reportPost = async (req, res) => {
   }
 };
 
+/**
+Retrieves the reported posts for a given community, including the post information and the user who reported it.
+@name getReportedPosts
+@async
+@param {Object} req - The request object from Express.
+@param {Object} req.params.name - The name of the community to retrieve the reported posts for.
+@param {Object} res - The response object from Express.
+@returns {Promise<void>} - A Promise that resolves to the response JSON object.
+@throws {Error} - If an error occurs while retrieving the reported posts.
+*/
 const getReportedPosts = async (req, res) => {
   try {
     const communityName = req.params.name;
@@ -405,7 +443,6 @@ const removeReportedPost = async (req, res) => {
   try {
     const communityName = req.params.name;
     const postId = req.params.postId;
-    // Find the community by name
     const community = await Community.findOne({
       name: communityName,
     });
@@ -416,7 +453,6 @@ const removeReportedPost = async (req, res) => {
       });
     }
 
-    // Remove the reported post from the reportedPosts array
     const updatedCommunity = await Community.findOneAndUpdate(
       {
         name: communityName,
@@ -443,7 +479,6 @@ const removeReportedPost = async (req, res) => {
       message: "Reported post removed successfully",
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       message: "Server Error",
     });
@@ -480,7 +515,6 @@ const getCommunityMembers = async (req, res) => {
 
     return res.status(200).json({ members, bannedUsers });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       message: "Server error",
     });
@@ -512,7 +546,6 @@ const getCommunityMods = async (req, res) => {
 
     return res.status(200).json(moderators);
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       message: "Server error",
     });

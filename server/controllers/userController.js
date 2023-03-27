@@ -49,12 +49,10 @@ const signin = async (req, res) => {
       expiresIn: "7d",
     });
 
-    // delete existing refresh token for user
     await RefreshToken.deleteOne({
       user: existingUser._id,
     });
 
-    // create new instance of RefreshToken model and save to database
     const newRefreshToken = new RefreshToken({
       user: existingUser._id,
       refreshToken,
@@ -62,7 +60,6 @@ const signin = async (req, res) => {
     });
     await newRefreshToken.save();
 
-    // send BOTH tokens to client AND the user data
     res.status(200).json({
       accessToken,
       refreshToken,
@@ -89,7 +86,18 @@ const getUsers = async (req, res, next) => {
     })
     .catch((err) => next(err));
 };
-
+/**
+ * @async
+  @function getUser
+  @description Retrieves a user's profile information, including their total number of posts,
+  the number of communities they are in, the number of communities they have posted in,
+  and their duration on the platform.
+  @param {Object} req - Express request object
+  @param {Object} res - Express response object
+  @param {Function} next - Express next function
+  @throws {Error} If an error occurs while retrieving the user's information
+  @returns {Object} Returns the user's profile information.
+*/
 const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).select("-password").lean();
@@ -133,6 +141,7 @@ const getUser = async (req, res, next) => {
     }
     const posts = await Post.find({ user: user._id })
       .populate("community", "name members")
+      .limit(20)
       .lean();
     user.posts = posts.map((post) => ({
       ...post,
@@ -261,7 +270,6 @@ const getModProfile = async (req, res) => {
       });
     }
 
-    // exclude password from response
     const moderatorInfo = {
       ...moderator._doc,
     };
@@ -278,7 +286,6 @@ const getModProfile = async (req, res) => {
   }
 };
 
-// update user info (location, interest, bio)
 const updateInfo = async (req, res) => {
   try {
     const userId = getUserFromToken(req);
