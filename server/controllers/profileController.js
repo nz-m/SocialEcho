@@ -266,14 +266,14 @@ const unfollowUser = async (req, res) => {
 };
 
 /**
- * Retrieves the users that the current user is following, including their name, avatar, location,
- * and the date when they were followed, sorted by the most recent follow date.
- * @name getFollowingUsers
  * @async
+ * @description Retrieves the users that the current user is following, including their name, avatar, location,
+   and the date when they were followed, sorted by the most recent follow date.
+ * @function getFollowingUsers
  * @param {Object} req - The request object from Express.
  * @param {Object} res - The response object from Express.
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  * @throws {Error} - If an error occurs while retrieving the users.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getFollowingUsers = async (req, res) => {
   try {
