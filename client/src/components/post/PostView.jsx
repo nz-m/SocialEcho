@@ -17,7 +17,6 @@ const PostView = ({ post }) => {
   const { body, fileUrl, user, community, createdAt, comments } = post;
   const [isReported, setIsReported] = useState(null);
 
-  // Memoize the file extension check to avoid recomputing it unnecessarily
   const isImageFile = useMemo(() => {
     const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
     const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
@@ -116,7 +115,6 @@ const PostView = ({ post }) => {
 
         <div className="flex items-center justify-between mt-4">
           <div className="flex items-center gap-2">
-            {/* like button here */}
             <Like post={post} />
             <button className="flex items-center text-xl gap-1">
               {" "}

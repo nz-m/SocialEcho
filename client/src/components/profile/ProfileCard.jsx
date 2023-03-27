@@ -2,8 +2,6 @@ import React, { memo } from "react";
 import { Link } from "react-router-dom";
 
 const ProfileCard = memo(({ user }) => {
- 
-
   const followingSince = new Date(user.followingSince).toLocaleString("en-US", {
     year: "numeric",
     month: "long",

@@ -90,8 +90,8 @@ const getUsers = async (req, res, next) => {
  * @async
  * @function getUser
  * @description Retrieves a user's profile information, including their total number of posts,
-   the number of communities they are in, the number of communities they have posted in,
-   and their duration on the platform.
+ * the number of communities they are in, the number of communities they have posted in,
+ * and their duration on the platform.
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - Express next function
@@ -102,20 +102,16 @@ const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).select("-password").lean();
 
-    // Get total number of posts created by the user
     const totalPosts = await Post.countDocuments({ user: user._id });
 
-    // Get the number of communities the user is in
     const communities = await Community.find({ members: user._id });
     const totalCommunities = communities.length;
 
-    // Get the number of communities the user posted in
     const postCommunities = await Post.find({ user: user._id }).distinct(
       "community"
     );
     const totalPostCommunities = postCommunities.length;
 
-    // Calculate user's duration on the platform
     const createdAt = dayjs(user.createdAt);
     const now = dayjs();
     const durationObj = dayjs.duration(now.diff(createdAt));
@@ -123,7 +119,6 @@ const getUser = async (req, res, next) => {
     const durationHours = durationObj.asHours();
     const durationDays = durationObj.asDays();
 
-    // Add duration and other info to user object
     user.totalPosts = totalPosts;
     user.totalCommunities = totalCommunities;
     user.totalPostCommunities = totalPostCommunities;
@@ -242,7 +237,6 @@ const refreshToken = async (req, res) => {
       expiresIn: "1h",
     });
 
-    // Return new access token
     return res.status(200).json({
       accessToken,
       refreshToken: existingToken.refreshToken,

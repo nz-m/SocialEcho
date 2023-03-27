@@ -9,7 +9,6 @@ const SavedPost = ({ post }) => {
 
   const { body, fileUrl, user, community, createdAt, comments } = post;
 
-  // Memoize the file extension check to avoid recomputing it unnecessarily
   const isImageFile = useMemo(() => {
     const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
     const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
@@ -72,7 +71,6 @@ const SavedPost = ({ post }) => {
 
       <div className="flex items-center justify-between mt-4">
         <div className="flex items-center gap-2">
-          {/* like button here */}
           <Like post={post} />
           <Link to={`/post/${post._id}`}>
             <button className="flex items-center text-xl gap-1">

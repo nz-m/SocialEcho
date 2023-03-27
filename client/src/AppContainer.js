@@ -1,5 +1,6 @@
 /**
- * A container component that sets up the Redux store and checks server status before rendering the main application.
+ * A container component that sets up the Redux store and
+ * checks server status before rendering the main application.
  *
  * @component
  * @returns {JSX.Element} The rendered React component
@@ -10,8 +11,10 @@
  * )
  *
  * @description
- * This component sets up the Redux store using `createAppStore()` and checks server status using an HTTP GET request to `/check-connectivity`.
- * If the server is down, the component will display an error message. If there is an error setting up the store, it will also display an error message.
+ * This component sets up the Redux store using `createAppStore()` and
+ * checks server status using an HTTP GET request to `/check-connectivity`.
+ * If the server is down, the component will display an error message.
+ * If there is an error setting up the store, it will also display an error message.
  */
 
 import React, { useState, useEffect } from "react";

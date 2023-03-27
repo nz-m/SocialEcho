@@ -47,16 +47,13 @@ const RightBar = () => {
 
   const followUserHandler = useCallback(
     async (toFollowId) => {
-      // Set the loading state for this user to true
       setFollowLoadingState((prevState) => ({
         ...prevState,
         [toFollowId]: true,
       }));
 
-      // Call the followUserAndFetchData action creator
       await dispatch(followUserAndFetchData(toFollowId, currentUser));
 
-      // Set the loading state for this user back to false
       setFollowLoadingState((prevState) => ({
         ...prevState,
         [toFollowId]: false,

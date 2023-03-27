@@ -10,7 +10,6 @@ export function isValidToken(token) {
 
   const decodedPayload = JSON.parse(window.atob(payload));
 
-  // Check if token is expired
   const expiryTime = decodedPayload.exp * 1000;
   const currentTime = Date.now();
   return expiryTime > currentTime;

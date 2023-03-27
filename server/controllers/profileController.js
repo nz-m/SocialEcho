@@ -12,7 +12,7 @@ dayjs.extend(duration);
  * @async
  * @function getPublicUsers
  * @description Retrieves up to 5 public users that the current user is not already following,
-   including their name, avatar, location, and follower count, sorted by the number of followers.
+ * including their name, avatar, location, and follower count, sorted by the number of followers.
  * @param {Object} req - The request object from Express.
  * @param {Object} res - The response object from Express.
  * @throws {Error} - If an error occurs while retrieving the users.
@@ -74,9 +74,9 @@ const getPublicUsers = async (req, res) => {
  * @async
  * @function getPublicUser
  * @description Retrieves public user information, including name, avatar, location, bio, role, interests,
-   total number of posts, list of communities the user is in, number of followers and followings,
-   whether the current user is following the user, the date the current user started following the user,
-   the number of posts the user has created in the last 30 days, and common communities between the current user and the user.
+ * total number of posts, list of communities the user is in, number of followers and followings,
+ * whether the current user is following the user, the date the current user started following the user,
+ * the number of posts the user has created in the last 30 days, and common communities between the current user and the user.
  * @param {Object} req - The request object from Express.
  * @param {Object} res - The response object from Express.
  * @throws {Error} - If an error occurs while retrieving the user.
@@ -98,41 +98,34 @@ const getPublicUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    // get the number of posts the user has created and the list of communities the user is in
     const totalPosts = await Post.countDocuments({ user: user._id });
     const communities = await Community.find({ members: user._id })
       .select("name")
       .lean();
 
-    // get the list of communities that the current user is in
     const currentUserCommunities = await Community.find({
       members: currentUserId,
     })
       .select("_id name")
       .lean();
 
-    // get the list of communities that the user is in
     const userCommunities = await Community.find({ members: user._id })
       .select("_id name")
       .lean();
 
-    // find the common communities
     const commonCommunities = currentUserCommunities.filter((comm) => {
       return userCommunities.some((userComm) => userComm._id.equals(comm._id));
     });
 
-    // check if the current user is following the user
     const isFollowing = await Relationship.findOne({
       follower: currentUserId,
       following: user._id,
     });
 
-    // check when current user followed the user
     const followingSince = isFollowing
       ? dayjs(isFollowing.createdAt).format("MMM D, YYYY")
       : null;
 
-    // get the number of posts the user has created in the last 30 days
     const last30Days = dayjs().subtract(30, "day").toDate();
     const postsLast30Days = await Post.aggregate([
       { $match: { user: user._id, createdAt: { $gte: last30Days } } },
@@ -268,7 +261,7 @@ const unfollowUser = async (req, res) => {
 /**
  * @async
  * @description Retrieves the users that the current user is following, including their name, avatar, location,
-   and the date when they were followed, sorted by the most recent follow date.
+ * and the date when they were followed, sorted by the most recent follow date.
  * @function getFollowingUsers
  * @param {Object} req - The request object from Express.
  * @param {Object} res - The response object from Express.

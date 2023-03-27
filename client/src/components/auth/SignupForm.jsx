@@ -27,7 +27,6 @@ const SignupForm = () => {
   };
 
   const handleAvatarChange = (e) => {
-    // file type & size validation
     if (
       e.target.files[0] &&
       e.target.files[0].type !== "image/jpeg" &&
@@ -36,7 +35,6 @@ const SignupForm = () => {
       e.target.files[0].size > 10 * 1024 * 1024
     ) {
       alert("Please upload a valid image file (jpeg, jpg, png) less than 10MB");
-      // Reset the file input value
       e.target.value = null;
     } else {
       setAvatar(e.target.files[0]);

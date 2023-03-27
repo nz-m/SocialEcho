@@ -64,8 +64,10 @@ const createPost = async (req, res) => {
  * @param {Object} req - The request object from Express.
  * @param {Object} res - The response object from Express.
  * @param {string} req.query.userId - The ID of the user whose posts to retrieve.
- * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not provided.
- * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them. Defaults to 0 if not provided.
+ * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve.
+ *  Defaults to 10 if not provided.
+ * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them.
+ *  Defaults to 0 if not provided.
  * @throws {Error} - If an error occurs while retrieving the posts.
  * @returns {Promise<void>} - A Promise that resolves to the response JSON object containing the retrieved posts.
  */
@@ -111,12 +113,13 @@ const getPosts = async (req, res) => {
  * @async
  * @function getCommunityPosts
  * @description Retrieves the posts for a given community, including the post information,
-   the user who created it, and the community it belongs to.
+ * the user who created it, and the community it belongs to.
  * @param {string} req.params.id - The ID of the community to retrieve the posts for.
  * @param {Object} req - The request object from Express.
  * @param {Object} req.query - The query parameters for the request.
  * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not specified.
- * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them. Defaults to 0 if not specified.
+ * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them. 
+ * Defaults to 0 if not specified.
  * @param {Object} res - The response object from Express.
  * @throws {Error} - If an error occurs while retrieving the posts.
  * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
@@ -313,6 +316,18 @@ const getComments = async (req, res) => {
   }
 };
 
+/**
+ * @async
+ * @function saveOrUnsavePost
+ * @description Saves or unsaves a post for a given user by updating the user's
+ * savedPosts array in the database. Uses $addToSet or $pull operation based on the value of the
+ * @param {Object} req - The request object from Express.
+ * @param {Object} res - The response object from Express.
+ * @param {string} operation - The operation to perform, either "$addToSet" to save the post or "$pull" to unsave it.
+ * @throws {Error} - If an error occurs while saving or unsaving the post.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON
+ * object containing the updated list of saved posts for the user.
+ */
 const saveOrUnsavePost = async (req, res, operation) => {
   try {
     const id = req.params.id;
@@ -415,7 +430,7 @@ const getSavedPosts = async (req, res) => {
  * @async
  * @function getPublicPosts
  * @description Retrieves up to 10 posts of the public user that are posted in the communities
-   that both the public user and the current user are members of.
+ * that both the public user and the current user are members of.
  * @param {Object} req - The request object from Express.
  * @param {string} req.params.publicUserId - The id of the public user whose posts to retrieve.
  * @param {Object} res - The response object from Express.
