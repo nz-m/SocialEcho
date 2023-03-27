@@ -151,15 +151,15 @@ const getCommunityPosts = async (req, res) => {
 };
 
 /**
-Deletes a post with the specified ID and its associated comments.
-@name deletePost
-@async
-@param {Object} req - The request object from Express.
-@param {string} req.params.id - The ID of the post to be deleted.
-@param {Object} res - The response object from Express.
-@returns {Promise<void>} - A Promise that resolves to the response JSON object.
-@throws {Error} - If the specified post cannot be found or if there is an error while deleting it.
-*/
+ * @async
+ * @descriptionDeletes a post with the specified ID and its associated comments.
+ * @function deletePost
+ * @param {Object} req - The request object from Express.
+ * @param {string} req.params.id - The ID of the post to be deleted.
+ * @param {Object} res - The response object from Express.
+ * @throws {Error} - If the specified post cannot be found or if there is an error while deleting it.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ */
 const deletePost = async (req, res) => {
   try {
     const id = req.params.id;
