@@ -8,16 +8,23 @@ const duration = require("dayjs/plugin/duration");
 
 dayjs.extend(duration);
 
+/**
+ * Retrieves up to 5 public users that the current user is not already following,
+ * including their name, avatar, location, and follower count, sorted by the number of followers.
+ * @name getPublicUsers
+ * @async
+ * @param {Object} req - The request object from Express.
+ * @param {Object} res - The response object from Express.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ * @throws {Error} - If an error occurs while retrieving the users.
+ */
 const getPublicUsers = async (req, res) => {
   try {
-    // get the user ID from the authorization token
     const userId = getUserFromToken(req);
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // get up to 5 public users that the current user is not already following,
-    // include the number of followers, and sort them by the number of followers
     const usersToDisplay = await User.find(
       {
         _id: {
@@ -39,7 +46,6 @@ const getPublicUsers = async (req, res) => {
       .lean()
       .exec();
 
-    // calculate the number of followers for each user
     const userFollowerCounts = {};
     await Promise.all(
       usersToDisplay.map(async (user) => {
@@ -47,18 +53,15 @@ const getPublicUsers = async (req, res) => {
       })
     );
 
-    // sort the users by the number of followers
     usersToDisplay.sort(
       (a, b) => userFollowerCounts[b._id] - userFollowerCounts[a._id]
     );
 
-    // add the number of followers to each user object
     usersToDisplay.forEach((user) => {
       user.followerCount = userFollowerCounts[user._id];
       delete user.followers;
     });
 
-    // limit the results to 5
     usersToDisplay.splice(5);
 
     res.status(200).json(usersToDisplay);
@@ -67,6 +70,18 @@ const getPublicUsers = async (req, res) => {
   }
 };
 
+/**
+ * @async
+ * @function getPublicUser
+ * @description Retrieves public user information, including name, avatar, location, bio, role, interests,
+   total number of posts, list of communities the user is in, number of followers and followings,
+   whether the current user is following the user, the date the current user started following the user,
+   the number of posts the user has created in the last 30 days, and common communities between the current user and the user.
+ * @param {Object} req - The request object from Express.
+ * @param {Object} res - The response object from Express.
+ * @throws {Error} - If an error occurs while retrieving the user.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ */
 const getPublicUser = async (req, res) => {
   try {
     const currentUserId = getUserFromToken(req);
@@ -165,7 +180,6 @@ const followUser = async (req, res) => {
 
     const followingId = req.params.id;
 
-    // Check if the relationship already exists
     const relationshipExists = await Relationship.exists({
       follower: followerId,
       following: followingId,
@@ -177,7 +191,6 @@ const followUser = async (req, res) => {
       });
     }
 
-    // Update the User model by adding the followerId to the followers array of the following user
     await Promise.all([
       User.findByIdAndUpdate(
         followingId,
@@ -191,7 +204,6 @@ const followUser = async (req, res) => {
       ),
     ]);
 
-    // Create a new relationship between the follower and following users
     await Relationship.create({ follower: followerId, following: followingId });
 
     res.status(200).json({
@@ -203,6 +215,7 @@ const followUser = async (req, res) => {
     });
   }
 };
+
 const unfollowUser = async (req, res) => {
   try {
     const followerId = getUserFromToken(req);
@@ -214,7 +227,6 @@ const unfollowUser = async (req, res) => {
 
     const followingId = req.params.id;
 
-    // Check if the relationship exists
     const relationshipExists = await Relationship.exists({
       follower: followerId,
       following: followingId,
@@ -238,7 +250,6 @@ const unfollowUser = async (req, res) => {
       ),
     ]);
 
-    // Delete the relationship between the follower and following users
     await Relationship.deleteOne({
       follower: followerId,
       following: followingId,
@@ -254,6 +265,16 @@ const unfollowUser = async (req, res) => {
   }
 };
 
+/**
+ * Retrieves the users that the current user is following, including their name, avatar, location,
+ * and the date when they were followed, sorted by the most recent follow date.
+ * @name getFollowingUsers
+ * @async
+ * @param {Object} req - The request object from Express.
+ * @param {Object} res - The response object from Express.
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ * @throws {Error} - If an error occurs while retrieving the users.
+ */
 const getFollowingUsers = async (req, res) => {
   try {
     const userId = getUserFromToken(req);
@@ -261,14 +282,12 @@ const getFollowingUsers = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // Query the Relationship model for all relationships where the current user is the follower
     const relationships = await Relationship.find({
       follower: userId,
     })
       .populate("following", "_id name avatar location")
       .lean();
 
-    // Extract the users from the `following` property of each relationship object
     const followingUsers = relationships
       .map((relationship) => ({
         ...relationship.following,
