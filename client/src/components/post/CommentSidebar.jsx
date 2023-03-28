@@ -6,7 +6,9 @@ import { useParams } from "react-router-dom";
 const CommentSidebar = () => {
   const { postId } = useParams();
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.auth?.userData);
+
+  const { userData } = useSelector((state) => state.auth) ?? {};
+
   const comments = useSelector((state) =>
     state.posts?.comments.filter((comment) => comment.post === postId)
   );
@@ -16,7 +18,7 @@ const CommentSidebar = () => {
       dispatch(getCommentsAction(postId));
     }
   }, [userData, dispatch, postId]);
-  
+
   return (
     <div className="w-3/12 h-screen bg-white sticky top-0">
       {comments.length > 0 && (

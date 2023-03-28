@@ -13,7 +13,7 @@ const PostView = ({ post }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.auth?.userData);
+  const { userData } = useSelector((state) => state.auth) ?? {};
   const { body, fileUrl, user, community, createdAt, comments } = post;
   const [isReported, setIsReported] = useState(null);
 

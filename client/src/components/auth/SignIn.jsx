@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signInAction } from "../../redux/actions/authActions";
 import LoadingSpinner from "../spinner/LoadingSpinner";
 
 const SignIn = () => {
-  const [loading, setLoading] = React.useState(false);
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,8 +21,8 @@ const SignIn = () => {
     setLoading(false);
   };
 
-  const signInerror = useSelector((state) => state.auth.signInerror);
-  const successMessage = useSelector((state) => state.auth.successMessage);
+  const { signInerror, successMessage } =
+    useSelector((state) => state.auth) ?? {};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

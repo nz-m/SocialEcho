@@ -12,9 +12,9 @@ const ReportPost = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
 
-  const post = location.state.post;
-  const communityName = location.state.communityName;
-  const userData = useSelector((state) => state.auth?.userData);
+  const { post } = location.state || {};
+  const { communityName } = location.state ?? {};
+  const { userData } = useSelector((state) => state.auth) ?? {};
 
   if (!userData) {
     navigate("/login");

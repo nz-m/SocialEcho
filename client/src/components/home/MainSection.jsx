@@ -1,17 +1,17 @@
-import React, { useMemo, useEffect, useCallback, useState } from "react";
-import Post from "../post/Post";
-import { useSelector, useDispatch } from "react-redux";
+import React, { memo, useMemo, useEffect, useCallback, useState } from "react";
 import { getPostsAction } from "../../redux/actions/postActions";
+import { useSelector, useDispatch } from "react-redux";
+import Post from "../post/Post";
 
-const MemoizedPost = React.memo(Post);
+const MemoizedPost = memo(Post);
 
 const MainSection = () => {
-  const postError = useSelector((state) => state.posts.postError);
+  const { postError } = useSelector((state) => state.posts) ?? {};
 
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.auth);
-  const { posts } = useSelector((state) => state.posts);
+  const { userData } = useSelector((state) => state.auth) ?? {};
+  const { posts } = useSelector((state) => state.posts) ?? {};
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const LIMIT = 10;
 

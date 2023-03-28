@@ -12,7 +12,7 @@ const ReportedPosts = () => {
     dispatch(getReportedPostsAction(communityName));
   }, [dispatch, communityName]);
 
-  const reportedPosts = useSelector((state) => state.community?.reportedPosts);
+  const { reportedPosts } = useSelector((state) => state.community) || {};
 
   if (!reportedPosts) return null; // add loading spinner here
 

@@ -19,8 +19,9 @@ const RightBar = () => {
     dispatch(getCommunityAction(communityName));
   }, [dispatch, communityName]);
 
-  const communityData = useSelector((state) => state.community.communityData);
-  const isModerator = useSelector((state) => state.auth.isModerator);
+  const { communityData } = useSelector((state) => state.community) ?? {};
+  const { isModerator } = useSelector((state) => state.auth) ?? {};
+
   const [isModeratorUpdated, setIsModeratorUpdated] = useState(false);
 
   const { name, description, members, rules, banner } = useMemo(

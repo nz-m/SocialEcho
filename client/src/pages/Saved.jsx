@@ -13,7 +13,7 @@ const Saved = () => {
     dispatch(getSavedPostsAction());
   }, [dispatch]);
 
-  const savedPosts = useSelector((state) => state.posts.savedPosts);
+  const { savedPosts } = useSelector((state) => state.posts) ?? {};
 
   return (
     <div className="flex mx-6">

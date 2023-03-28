@@ -24,8 +24,9 @@ const RightBar = () => {
     }));
   };
 
-  const currentUser = useSelector((state) => state.auth?.userData);
-  const recommendedUsers = useSelector((state) => state.user?.publicUsers);
+  const { userData: currentUser } = useSelector((state) => state.auth) ?? {};
+  const { publicUsers: recommendedUsers } =
+    useSelector((state) => state.user) ?? {};
 
   const currentUserIsModerator = currentUser?.role === "moderator";
   useEffect(() => {

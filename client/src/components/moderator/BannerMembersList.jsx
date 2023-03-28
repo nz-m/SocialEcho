@@ -10,13 +10,13 @@ import { Link } from "react-router-dom";
 const BannerMembersList = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const communityName = location.pathname.split("/")[2];
+  const communityName = location.pathname.split("/")[2] || "";
 
   useEffect(() => {
     dispatch(getComMembersAction(communityName));
   }, [dispatch, communityName]);
 
-  const { bannedUsers } = useSelector((state) => state.moderation);
+  const { bannedUsers } = useSelector((state) => state.moderation) || {};
 
   const unbanHandler = async (userId) => {
     await dispatch(unbanUserAction(communityName, userId));

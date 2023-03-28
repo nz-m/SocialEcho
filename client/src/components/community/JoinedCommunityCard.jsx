@@ -10,7 +10,6 @@ const JoinedCommunityCard = ({ community }) => {
         alt=""
         loading="lazy"
       />
-
       <h3 className="text-xl font-semibold mb-2">{community.name}</h3>
       <p className="text-gray-700 mb-2">{community.members.length} members</p>
       <p className="text-gray-700 text-center">{community.description}</p>

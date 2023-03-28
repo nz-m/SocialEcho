@@ -8,7 +8,7 @@ import { getFollowingUsersAction } from "../redux/actions/userActions";
 const Following = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const followingUsers = useSelector((state) => state.user?.followingUsers);
+  const { followingUsers } = useSelector((state) => state.user) ?? {};
 
   useEffect(() => {
     const fetchFollowingUsers = async () => {

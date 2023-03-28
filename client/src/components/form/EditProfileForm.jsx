@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const EditProfileForm = () => {
   const navigate = useNavigate();
   const locationHook = useLocation();
-  const userInfo = locationHook.state.userInfo;
+  const { userInfo } = locationHook.state || {};
 
   const dispatch = useDispatch();
   const [bio, setbio] = useState(userInfo.bio ? userInfo.bio : "");

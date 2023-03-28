@@ -13,8 +13,8 @@ const CommentForm = ({ communityId }) => {
   const dispatch = useDispatch();
 
   const { postId } = useParams();
+  const { userData } = useSelector((state) => state.auth) ?? {};
 
-  const userData = useSelector((state) => state.auth.userData);
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,7 +35,6 @@ const CommentForm = ({ communityId }) => {
         setIsLoading(false);
         setBody("");
       } catch (error) {
-        console.log(error);
         setIsLoading(false);
         // handle error
       }

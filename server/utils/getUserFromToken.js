@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 
 /**
+ * Gets the user ID from the JWT token in the Authorization header of the request.
  * @function getUserFromToken
- * @description Gets the user ID from the JWT token in the Authorization header of the request.
- * @param {Object} req - The request object from Express.
+ * @param {object} req - The request object.
  * @returns {string|null} - The user ID decoded from the JWT token, or null if the token is invalid or not present.
  */
 const getUserFromToken = (req) => {

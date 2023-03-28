@@ -6,7 +6,7 @@ import { getPublicPostsAction } from "../../redux/actions/postActions";
 const PublicPost = ({ publicUserId }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const publicPosts = useSelector((state) => state.posts?.publicPosts);
+  const { publicPosts } = useSelector((state) => state.posts) ?? {};
 
   useEffect(() => {
     const getPublicPosts = async () => {

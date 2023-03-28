@@ -11,13 +11,13 @@ import { Link } from "react-router-dom";
 const MembersList = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const communityName = location.pathname.split("/")[2];
+  const communityName = location.pathname.split("/")[2] || "";
 
   useEffect(() => {
     dispatch(getComMembersAction(communityName));
   }, [dispatch, communityName]);
 
-  const { communityMembers } = useSelector((state) => state.moderation);
+  const { communityMembers } = useSelector((state) => state.moderation) || {};
 
   const banHandler = async (userId) => {
     await dispatch(banUserAction(communityName, userId));

@@ -86,16 +86,19 @@ const getUsers = async (req, res, next) => {
     })
     .catch((err) => next(err));
 };
+
 /**
  * @async
  * @function getUser
+ * 
  * @description Retrieves a user's profile information, including their total number of posts,
  * the number of communities they are in, the number of communities they have posted in,
  * and their duration on the platform.
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
+
  * @param {Function} next - Express next function
+
  * @throws {Error} If an error occurs while retrieving the user's information
+ * 
  * @returns {Object} Returns the user's profile information.
  */
 const getUser = async (req, res, next) => {
@@ -151,6 +154,25 @@ const getUser = async (req, res, next) => {
   }
 };
 
+/**
+ * Adds a new user to the database with the given name, email, password, and avatar.
+ *
+ * @async
+ * @function addUser
+ *
+ * @description If the email domain of the user's email is "mod.socialecho.com", the user will be
+ * assigned the role of "moderator" by default, but not necessarily as a moderator of any community.
+ * Otherwise, the user will be assigned the role of "general" user.
+ *
+ * @param {string} req.body.name - The name of the user to be added.
+ * @param {string} req.body.email - The email of the user to be added.
+ * @param {string} req.body.password - The password of the user to be added.
+ * @param {Object} req.files - The files attached to the request object (for avatar).
+ *
+ * @returns {Object} The response object with a success message if the user is added successfully.
+ *
+ * @throws {Error} If an error occurs while hashing the user password, or saving the new user to the database.
+ */
 const addUser = async (req, res) => {
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -183,6 +205,7 @@ const addUser = async (req, res) => {
     });
   }
 };
+
 const logout = async (req, res) => {
   try {
     const accessToken = req.headers.authorization?.split(" ")[1] ?? null;

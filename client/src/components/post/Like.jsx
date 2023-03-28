@@ -9,7 +9,7 @@ import {
 const Like = ({ post }) => {
   const dispatch = useDispatch();
   const { _id, likes } = post;
-  const userData = useSelector((state) => state.auth.userData);
+  const { userData } = useSelector((state) => state.auth) ?? {};
 
   const [likeState, setLikeState] = useState({
     liked: post.likes.includes(userData._id),

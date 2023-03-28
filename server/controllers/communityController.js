@@ -83,14 +83,16 @@ const addRulesToCommunity = async (req, res) => {
 };
 
 /**
+ * Retrieves all communities that a user is a member of, including the community's ID,
+ * name, banner image, member count, and description.
+ *
  * @async
  * @function getMemberCommunities
- * @description Retrieves all communities that a user is a member of including
- * the community's ID, name, banner image, member count, and description.
- * @param {Object} req - The request object from Express.
- * @param {Object} res - The response object from Express.
+ *
  * @throws {Error} - If an error occurs while retrieving the communities.
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ *
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object,
+ *                            containing an array of communities that the user is a member of.
  */
 const getMemberCommunities = async (req, res) => {
   try {
@@ -117,15 +119,20 @@ const getMemberCommunities = async (req, res) => {
 };
 
 /**
+ * Retrieves up to 10 public communities that the current user is not a member of
+ * and has not been banned from, including their name, banner image, description,
+ * and member count, sorted by the number of members.
+ *
  * @async
  * @function getNotMemberCommunities
- * @description Retrieves up to 10 public communities that the current
- * user is not a member of and has not been banned from,
- * including their name, banner image, description, and member count, sorted by the number of members.
- * @param {Object} req - The request object from Express.
- * @param {Object} res - The response object from Express.
+ *
  * @throws {Error} - If an error occurs while retrieving the communities.
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ *
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object,
+ *                            containing an array of up to 10 public communities
+ *                            that the user is not a member of and has not been banned from.
+ *                            Each community object includes the community's ID, name,
+ *                            banner image URL, description, and member count.
  */
 const getNotMemberCommunities = async (req, res) => {
   try {
@@ -283,16 +290,19 @@ const unbanUser = async (req, res) => {
 };
 
 /**
+ * Adds a user to a community as a moderator and member.
+ *
  * @async
- * @description Adds a user to a community as a moderator and member.
  * @function addModToCommunity
- * @param {Object} req - The request object from Express.
+ *
  * @param {string} req.body.userId - The ID of the user to add as a moderator.
  * @param {string} req.params.name - The name of the community to add the user to.
- * @param {Object} res - The response object from Express.
- * @throws {Error} - If the current user is not a moderator.
+ *
+ * @throws {Error} - If the current user is not a moderator of the community.
  * @throws {Error} - If an error occurs while adding the user to the community.
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ *
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object,
+ *                            indicating that the user was successfully added as a moderator and member.
  */
 const addModToCommunity = async (req, res) => {
   try {
@@ -382,14 +392,17 @@ const reportPost = async (req, res) => {
 };
 
 /**
+ * Retrieves the reported posts for a given community,
+ * including the post information and the user who reported it.
+ *
  * @async
  * @function getReportedPosts
- * @description Retrieves the reported posts for a given community,
- * including the post information and the user who reported it.
- * @param {Object} req - The request object from Express.
+ *
  * @param {Object} req.params.name - The name of the community to retrieve the reported posts for.
- * @param {Object} res - The response object from Express.
+ *                                   Each community has a unique name.
+ *
  * @throws {Error} - If an error occurs while retrieving the reported posts.
+ *
  * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getReportedPosts = async (req, res) => {
@@ -433,7 +446,6 @@ const getReportedPosts = async (req, res) => {
       reportedPosts,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       message: "Server Error",
     });

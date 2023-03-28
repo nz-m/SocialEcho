@@ -8,8 +8,11 @@ import {
 import { useSelector } from "react-redux";
 
 const PostForm = () => {
-  const community = useSelector((state) => state.community.communityData);
-  const user = useSelector((state) => state.auth.userData);
+  const { communityData: community } =
+    useSelector((state) => state.community) ?? {};
+
+  const { userData: user } = useSelector((state) => state.auth) ?? {};
+
   const [body, setBody] = useState("");
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");

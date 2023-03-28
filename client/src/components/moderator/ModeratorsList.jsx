@@ -11,7 +11,7 @@ const ModeratorsList = () => {
   useEffect(() => {
     dispatch(getComModsAction(communityName));
   }, [dispatch, communityName]);
-  const { communityMods } = useSelector((state) => state.moderation);
+  const { communityMods } = useSelector((state) => state.moderation) || {};
 
   return (
     <div className="flex flex-col">

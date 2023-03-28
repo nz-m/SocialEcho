@@ -1,15 +1,18 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { memo, useEffect, useMemo, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getComPostsAction } from "../../redux/actions/postActions";
 import PostForm from "../form/PostForm";
 import Post from "../post/Post";
 
-const MemoizedPost = React.memo(Post);
+const MemoizedPost = memo(Post);
 
 const MainSection = () => {
   const dispatch = useDispatch();
-  const { communityData } = useSelector((state) => state.community);
-  const { communityPosts, isLoading } = useSelector((state) => state.posts);
+
+  const { communityData } = useSelector((state) => state.community) || {};
+  const { communityPosts, isLoading } =
+    useSelector((state) => state.posts) ?? {};
+
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState("All posts");
   const LIMIT = 10;

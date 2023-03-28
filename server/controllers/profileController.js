@@ -9,13 +9,14 @@ const duration = require("dayjs/plugin/duration");
 dayjs.extend(duration);
 
 /**
+ * Retrieves up to 5 public users that the current user is not already following,
+ * including their name, avatar, location, and follower count, sorted by the number of followers.
+ *
  * @async
  * @function getPublicUsers
- * @description Retrieves up to 5 public users that the current user is not already following,
- * including their name, avatar, location, and follower count, sorted by the number of followers.
- * @param {Object} req - The request object from Express.
- * @param {Object} res - The response object from Express.
+ *
  * @throws {Error} - If an error occurs while retrieving the users.
+ *
  * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getPublicUsers = async (req, res) => {
@@ -73,13 +74,14 @@ const getPublicUsers = async (req, res) => {
 /**
  * @async
  * @function getPublicUser
+ * 
  * @description Retrieves public user information, including name, avatar, location, bio, role, interests,
  * total number of posts, list of communities the user is in, number of followers and followings,
  * whether the current user is following the user, the date the current user started following the user,
  * the number of posts the user has created in the last 30 days, and common communities between the current user and the user.
- * @param {Object} req - The request object from Express.
- * @param {Object} res - The response object from Express.
+
  * @throws {Error} - If an error occurs while retrieving the user.
+
  * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getPublicUser = async (req, res) => {
@@ -259,13 +261,14 @@ const unfollowUser = async (req, res) => {
 };
 
 /**
- * @async
- * @description Retrieves the users that the current user is following, including their name, avatar, location,
+ * Retrieves the users that the current user is following, including their name, avatar, location,
  * and the date when they were followed, sorted by the most recent follow date.
+ * 
+ * @async
  * @function getFollowingUsers
- * @param {Object} req - The request object from Express.
- * @param {Object} res - The response object from Express.
+ *
  * @throws {Error} - If an error occurs while retrieving the users.
+ *
  * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getFollowingUsers = async (req, res) => {
