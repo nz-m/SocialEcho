@@ -114,6 +114,18 @@ const getPublicPosts = async (publicUserId) => {
   }
 };
 
+const getFollowingUsersPosts = async (id, limit = 10, skip = 0) => {
+  try {
+    const { data } = await API.get(
+      `/posts/${id}/following?limit=${limit}&skip=${skip}`
+    );
+
+    return { error: null, data };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
+
 export {
   createPost,
   getPosts,
@@ -127,4 +139,5 @@ export {
   unsavePost,
   getSavedPosts,
   getPublicPosts,
+  getFollowingUsersPosts,
 };

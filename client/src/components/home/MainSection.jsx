@@ -6,12 +6,12 @@ import Post from "../post/Post";
 const MemoizedPost = memo(Post);
 
 const MainSection = () => {
-  const { postError } = useSelector((state) => state.posts) ?? {};
-
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state.auth) ?? {};
-  const { posts } = useSelector((state) => state.posts) ?? {};
+  const postError = useSelector((state) => state.posts?.postError);
+  const userData = useSelector((state) => state.auth?.userData);
+  const posts = useSelector((state) => state.posts?.posts);
+
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const LIMIT = 10;
 

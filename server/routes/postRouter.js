@@ -10,6 +10,7 @@ router.use(requireAuth);
 
 router.get("/:publicUserId/userPosts", postController.getPublicPosts);
 router.get("/saved", postController.getSavedPosts);
+router.get("/:id/following", postController.getFollowingUsersPosts);
 router.patch("/:id/save", postController.savePost);
 router.patch("/:id/unsave", postController.unsavePost);
 router.patch("/:id/like", postController.likePost);

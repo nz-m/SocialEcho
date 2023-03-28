@@ -3,34 +3,41 @@ import { useSelector, useDispatch } from "react-redux";
 import { getComPostsAction } from "../../redux/actions/postActions";
 import PostForm from "../form/PostForm";
 import Post from "../post/Post";
+import FollowingUsersPosts from "./FollowingUsersPosts";
 
 const MemoizedPost = memo(Post);
 
 const MainSection = () => {
   const dispatch = useDispatch();
 
-  const { communityData } = useSelector((state) => state.community) || {};
-  const { communityPosts, isLoading } =
-    useSelector((state) => state.posts) ?? {};
+  const communityData = useSelector((state) => state.community?.communityData);
+  const communityPosts = useSelector((state) => state.posts?.communityPosts);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState("All posts");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const LIMIT = 10;
 
   useEffect(() => {
-    if (communityData && communityData._id) {
-      dispatch(getComPostsAction(communityData._id, LIMIT, 0));
-    }
-  }, [dispatch, communityData, LIMIT]);
+    const fetchInitialPosts = async () => {
+      setIsLoading(true);
+      if (communityData?._id) {
+        await dispatch(getComPostsAction(communityData._id));
+      }
+      setIsLoading(false);
+    };
+    fetchInitialPosts();
+  }, [dispatch, communityData]);
 
   const handleLoadMore = useCallback(() => {
     if (
-      !isLoading &&
-      communityData &&
-      communityData._id &&
+      !isLoadMoreLoading &&
+      communityData?._id &&
       communityPosts.length % LIMIT === 0 &&
       communityPosts.length >= currentPage * LIMIT
     ) {
+      setIsLoadMoreLoading(true);
       dispatch(
         getComPostsAction(
           communityData._id,
@@ -38,10 +45,19 @@ const MainSection = () => {
           communityPosts.length,
           currentPage + 1
         )
-      );
-      setCurrentPage(currentPage + 1);
+      ).then(() => {
+        setIsLoadMoreLoading(false);
+        setCurrentPage(currentPage + 1);
+      });
     }
-  }, [currentPage, dispatch, communityData, communityPosts, isLoading, LIMIT]);
+  }, [
+    currentPage,
+    dispatch,
+    communityData,
+    communityPosts,
+    isLoadMoreLoading,
+    LIMIT,
+  ]);
 
   const memoizedCommunityPosts = useMemo(() => {
     return communityPosts.map((post) => (
@@ -96,13 +112,13 @@ const MainSection = () => {
                         onClick={handleLoadMore}
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                       >
-                        Load more
+                        {isLoadMoreLoading ? "Loading..." : "Load more"}
                       </button>
                     )}
                 </>
               )}
               {activeTab === "You're following" && (
-                <div>You're not following any posts yet.</div>
+                <FollowingUsersPosts communityData={communityData} />
               )}
             </div>
           </div>

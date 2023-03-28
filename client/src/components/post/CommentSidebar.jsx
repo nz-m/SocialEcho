@@ -7,7 +7,7 @@ const CommentSidebar = () => {
   const { postId } = useParams();
   const dispatch = useDispatch();
 
-  const { userData } = useSelector((state) => state.auth) ?? {};
+  const userData = useSelector((state) => state.auth?.userData);
 
   const comments = useSelector((state) =>
     state.posts?.comments.filter((comment) => comment.post === postId)

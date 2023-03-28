@@ -12,7 +12,7 @@ const JoinModal = memo(({ show, onClose, community }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const { userData } = useSelector((state) => state.auth) ?? {};
+  const userData = useSelector((state) => state.auth?.userData);
 
   const cancelButtonRef = useRef(null);
 

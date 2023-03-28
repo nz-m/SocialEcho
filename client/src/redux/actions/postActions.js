@@ -88,6 +88,42 @@ export const getComPostsAction =
       });
     }
   };
+
+export const getFollowingUsersPostsAction =
+  (communityName, limit = 10, skip = 0) =>
+  async (dispatch) => {
+    try {
+      const { error, data } = await api.getFollowingUsersPosts(
+        communityName,
+        limit,
+        skip
+      );
+
+      if (error) {
+        throw new Error(error);
+      }
+
+      dispatch({
+        type: types.GET_FOLLOWING_USERS_POSTS_SUCCESS,
+        payload: {
+          page: skip / limit + 1,
+          posts: data,
+        },
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: types.GET_FOLLOWING_USERS_POSTS_FAIL,
+        payload: error.message,
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    }
+  };
+
 export const deletePostAction = (id) => async (dispatch) => {
   try {
     const { error } = await api.deletePost(id);

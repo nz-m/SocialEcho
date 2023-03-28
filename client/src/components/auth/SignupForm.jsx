@@ -12,7 +12,7 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { signUperror } = useSelector((state) => state.auth) ?? {};
+  const signUperror = useSelector((state) => state.auth?.signUperror);
 
   const handleNameChange = (e) => {
     setName(e.target.value);

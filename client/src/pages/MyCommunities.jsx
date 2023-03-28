@@ -8,7 +8,9 @@ import Rightbar from "../components/home/RightBar";
 const MyCommunities = () => {
   const dispatch = useDispatch();
 
-  const { joinedCommunities } = useSelector((state) => state.community) ?? {};
+  const joinedCommunities = useSelector(
+    (state) => state.community?.joinedCommunities
+  );
 
   useEffect(() => {
     dispatch(getJoinedCommunitiesAction());

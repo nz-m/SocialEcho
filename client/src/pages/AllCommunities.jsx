@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 const AllCommunities = () => {
   const dispatch = useDispatch();
 
-  const { notJoinedCommunities } =
-    useSelector((state) => state.community) ?? {};
+  const notJoinedCommunities = useSelector(
+    (state) => state.community?.notJoinedCommunities
+  );
+
   useEffect(() => {
     dispatch(getNotJoinedCommunitiesAction());
   }, [dispatch]);

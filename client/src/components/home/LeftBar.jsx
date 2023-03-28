@@ -11,10 +11,9 @@ const Leftbar = () => {
     dispatch(logoutAction());
   };
   const user = useSelector((state) => state.auth?.userData);
-
-  const { joinedCommunities } = useSelector((state) => state.community) ?? {
-    joinedCommunities: [],
-  };
+  const joinedCommunities = useSelector(
+    (state) => state.community?.joinedCommunities
+  );
 
   useEffect(() => {
     dispatch(getJoinedCommunitiesAction());

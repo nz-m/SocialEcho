@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 const UserProfile = () => {
   const dispatch = useDispatch();
 
-  const { userData } = useSelector((state) => state.auth) ?? {};
-  const { user } = useSelector((state) => state.user) ?? {};
+  const userData = useSelector((state) => state.auth?.userData);
+  const user = useSelector((state) => state.user?.user);
 
   const posts = user.posts;
 

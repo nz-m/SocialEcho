@@ -4,6 +4,7 @@ const initialState = {
   posts: [],
   publicPosts: [],
   communityPosts: [],
+  followingUsersPosts: [],
   comments: [],
   savedPosts: [],
   postError: null,
@@ -63,6 +64,30 @@ const postReducer = (state = initialState, action) => {
       }
 
     case types.GET_COMMUNITY_POSTS_FAIL:
+      return {
+        ...state,
+        postError: payload,
+      };
+
+    case types.GET_FOLLOWING_USERS_POSTS_SUCCESS:
+      if (payload.page === 1) {
+        return {
+          ...state,
+          followingUsersPosts: payload ? payload.posts : [],
+          postError: null,
+        };
+      } else {
+        return {
+          ...state,
+          followingUsersPosts: [
+            ...state.followingUsersPosts,
+            ...(payload ? payload.posts : []),
+          ],
+          postError: null,
+        };
+      }
+
+    case types.GET_FOLLOWING_USERS_POSTS_FAIL:
       return {
         ...state,
         postError: payload,

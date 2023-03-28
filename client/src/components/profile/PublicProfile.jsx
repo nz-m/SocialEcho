@@ -13,8 +13,8 @@ const PublicProfile = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const { publicUserProfile: userProfile, isFollowing: isUserFollowing } =
-    useSelector((state) => state.user) ?? {};
+  const userProfile = useSelector((state) => state.user?.publicUserProfile);
+  const isUserFollowing = useSelector((state) => state.user?.isFollowing);
 
   const publicUserId = location.pathname.split("/")[2];
 

@@ -9,7 +9,7 @@ import Like from "./Like";
 const Post = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { userData } = useSelector((state) => state.auth) ?? {};
+  const userData = useSelector((state) => state.auth?.userData);
 
   const { body, fileUrl, user, community, createdAt, comments } = post;
 

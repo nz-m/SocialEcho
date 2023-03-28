@@ -8,9 +8,7 @@ import {
 import { useSelector } from "react-redux";
 
 const PostForm = () => {
-  const { communityData: community } =
-    useSelector((state) => state.community) ?? {};
-
+  const community = useSelector((state) => state.community?.communityData);
   const { userData: user } = useSelector((state) => state.auth) ?? {};
 
   const [body, setBody] = useState("");

@@ -158,6 +158,48 @@ const getCommunityPosts = async (req, res) => {
   }
 };
 
+const getFollowingUsersPosts = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    const communityId = req.params.id;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = parseInt(req.query.skip) || 0;
+
+    const following = await Relationship.find({
+      follower: userId,
+    });
+    const followingIds = following.map(
+      (relationship) => relationship.following
+    );
+
+    const posts = await Post.find({
+      user: {
+        $in: followingIds,
+      },
+      community: communityId,
+    })
+      .sort({
+        createdAt: -1,
+      })
+      .populate("user", "name avatar")
+      .populate("community", "name")
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    const formattedPosts = posts.map((post) => ({
+      ...post,
+      createdAt: dayjs(post.createdAt).fromNow(),
+    }));
+
+    res.status(200).json(formattedPosts);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
+
 /**
  * Deletes a post with the specified ID and its associated comments.
  *
@@ -496,4 +538,5 @@ module.exports = {
   unsavePost,
   getSavedPosts,
   getPublicPosts,
+  getFollowingUsersPosts,
 };

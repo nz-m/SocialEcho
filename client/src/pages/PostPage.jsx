@@ -11,7 +11,7 @@ const PostPage = () => {
   const { postId } = useParams();
   const dispatch = useDispatch();
 
-  const { userData } = useSelector((state) => state.auth) ?? {};
+  const userData = useSelector((state) => state.auth?.userData);
   const post = useSelector((state) =>
     state.posts?.posts.find((post) => post._id === postId)
   );
