@@ -1,10 +1,6 @@
 import * as api from "../api/authAPI";
 import * as types from "../constants/authConstants";
 
-const ERROR_MESSAGE = "Something went wrong.";
-const SIGNUP_SUCCESS_MESSAGE =
-  "You have successfully created an account. Please sign in.";
-
 export const setInitialAuthState = (navigate) => async (dispatch) => {
   await dispatch({ type: types.LOGOUT });
   navigate("/signin");
@@ -16,7 +12,7 @@ export const logoutAction = () => async (dispatch) => {
     localStorage.removeItem("profile");
     dispatch({ type: types.LOGOUT, payload: data });
   } catch (error) {
-    dispatch({ type: types.LOGOUT, payload: ERROR_MESSAGE });
+    dispatch({ type: types.LOGOUT, payload: types.ERROR_MESSAGE });
   }
 };
 
@@ -32,14 +28,14 @@ export const signUpAction = (formData, navigate) => async (dispatch) => {
     } else {
       dispatch({
         type: types.SIGNUP_SUCCESS,
-        payload: SIGNUP_SUCCESS_MESSAGE,
+        payload: types.SIGNUP_SUCCESS_MESSAGE,
       });
       navigate("/signin");
     }
   } catch (error) {
     dispatch({
       type: types.SIGNUP_FAIL,
-      payload: ERROR_MESSAGE,
+      payload: types.ERROR_MESSAGE,
     });
   }
 };
@@ -71,7 +67,7 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
   } catch (error) {
     await dispatch({
       type: types.SIGNIN_FAIL,
-      payload: ERROR_MESSAGE,
+      payload: types.ERROR_MESSAGE,
     });
     navigate("/signin");
   }
@@ -90,7 +86,7 @@ export const getModProfileAction = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: types.GET_MOD_PROFILE_FAIL,
-      payload: ERROR_MESSAGE,
+      payload: types.ERROR_MESSAGE,
     });
   }
 };

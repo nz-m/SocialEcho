@@ -15,7 +15,7 @@ const communityReducer = (state = initialState, action) => {
     case types.GET_COMMUNITY_SUCCESS:
       return {
         ...state,
-        communityData: payload || null,
+        communityData: payload ? payload : null,
         communityError: null,
       };
     case types.GET_COMMUNITY_FAIL:
@@ -27,7 +27,7 @@ const communityReducer = (state = initialState, action) => {
     case types.GET_JOINED_COMMUNITIES_SUCCESS:
       return {
         ...state,
-        joinedCommunities: payload || [],
+        joinedCommunities: payload ? payload : [],
         communityError: null,
       };
     case types.GET_JOINED_COMMUNITIES_FAIL:
@@ -39,7 +39,7 @@ const communityReducer = (state = initialState, action) => {
     case types.GET_NOT_JOINED_COMMUNITIES_SUCCESS:
       return {
         ...state,
-        notJoinedCommunities: payload || [],
+        notJoinedCommunities: payload ? payload : [],
         communityError: null,
       };
     case types.GET_NOT_JOINED_COMMUNITIES_FAIL:
@@ -97,7 +97,7 @@ const communityReducer = (state = initialState, action) => {
     case types.GET_REPORTED_POSTS_SUCCESS:
       return {
         ...state,
-        reportedPosts: payload || [],
+        reportedPosts: payload ? payload : [],
         communityError: null,
       };
 

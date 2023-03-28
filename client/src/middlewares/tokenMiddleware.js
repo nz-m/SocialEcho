@@ -29,28 +29,28 @@ export const tokenMiddleware = (store) => (next) => async (action) => {
             throw new Error("Access token not found after refresh");
           }
         } catch (error) {
-          console.error("Error refreshing token:");
           store.dispatch({ type: "LOGOUT" });
           window.location.href = "/signin";
         }
       } else {
-        setTimeout(async () => {
-          const refreshToken = state.auth.refreshToken;
-          try {
-            await store.dispatch(refreshTokenAction(refreshToken));
-            const newToken = store.getState().auth.accessToken;
-            if (!newToken) {
-              throw new Error("Access token not found after refresh");
+        setTimeout(
+          async () => {
+            const refreshToken = state.auth.refreshToken;
+            try {
+              await store.dispatch(refreshTokenAction(refreshToken));
+              const newToken = store.getState().auth.accessToken;
+              if (!newToken) {
+                throw new Error("Access token not found after refresh");
+              }
+            } catch (error) {
+              store.dispatch({ type: "LOGOUT" });
+              window.location.href = "/signin";
             }
-          } catch (error) {
-            console.error("Error refreshing token:");
-            store.dispatch({ type: "LOGOUT" });
-            window.location.href = "/signin";
-          }
-        }, expiresIn - 300000);
+          },
+          expiresIn < 0 ? 0 : expiresIn
+        );
       }
     } else {
-      console.error("Access token not found");
       store.dispatch({ type: "LOGOUT" });
       window.location.href = "/signin";
     }

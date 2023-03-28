@@ -26,17 +26,15 @@ const postReducer = (state = initialState, action) => {
       };
     case types.GET_POSTS_SUCCESS:
       if (payload.page === 1) {
-        // If it's the first page, replace existing posts
         return {
           ...state,
-          posts: payload.posts || [],
+          posts: payload ? payload.posts : [],
           postError: null,
         };
       } else {
-        // If it's not the first page, append new posts to existing posts
         return {
           ...state,
-          posts: [...state.posts, ...(payload.posts || [])],
+          posts: [...state.posts, ...(payload ? payload.posts : [])],
           postError: null,
         };
       }
@@ -50,13 +48,16 @@ const postReducer = (state = initialState, action) => {
       if (payload.page === 1) {
         return {
           ...state,
-          communityPosts: payload.posts || [],
+          communityPosts: payload ? payload.posts : [],
           postError: null,
         };
       } else {
         return {
           ...state,
-          communityPosts: [...state.communityPosts, ...(payload.posts || [])],
+          communityPosts: [
+            ...state.communityPosts,
+            ...(payload ? payload.posts : []),
+          ],
           postError: null,
         };
       }
@@ -150,7 +151,7 @@ const postReducer = (state = initialState, action) => {
     case types.GET_SAVED_POSTS_SUCCESS:
       return {
         ...state,
-        savedPosts: payload || [],
+        savedPosts: payload ? payload : [],
         postError: null,
       };
     case types.SAVE_POST_FAIL:
@@ -164,7 +165,7 @@ const postReducer = (state = initialState, action) => {
     case types.GET_PUBLIC_POSTS_SUCCESS:
       return {
         ...state,
-        publicPosts: payload || [],
+        publicPosts: payload ? payload : [],
         postError: null,
       };
     case types.GET_PUBLIC_POSTS_FAIL:

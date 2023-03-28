@@ -21,28 +21,28 @@ const authReducer = (state = initialState, action) => {
     case types.SIGNUP_SUCCESS:
       return {
         ...state,
-        successMessage: payload || null,
+        successMessage: payload ? payload : null,
       };
 
     case types.SIGNUP_FAIL:
       return {
         ...state,
-        signUperror: payload || [],
+        signUperror: payload ? payload : [],
       };
 
     case types.SIGNIN_SUCCESS:
       return {
         ...state,
-        userData: payload?.user,
-        accessToken: payload?.accessToken,
-        refreshToken: payload?.refreshToken,
-        successMessage: payload || null,
+        userData: payload ? payload.user : null,
+        accessToken: payload ? payload.accessToken : null,
+        refreshToken: payload ? payload.refreshToken : null,
+        successMessage: payload ? payload : null,
       };
-      
+
     case types.SIGNIN_FAIL:
       return {
         ...state,
-        signInerror: payload,
+        signInerror: payload ? payload : null,
       };
 
     case types.LOGOUT:
@@ -60,8 +60,8 @@ const authReducer = (state = initialState, action) => {
     case types.REFRESH_TOKEN_SUCCESS:
       return {
         ...state,
-        accessToken: payload?.accessToken,
-        refreshToken: payload?.refreshToken,
+        accessToken: payload ? payload.accessToken : null,
+        refreshToken: payload ? payload.refreshToken : null,
       };
 
     case types.REFRESH_TOKEN_FAIL:
@@ -77,7 +77,7 @@ const authReducer = (state = initialState, action) => {
       };
 
     case GET_COMMUNITY_SUCCESS:
-      const moderators = payload?.moderators || [];
+      const moderators = payload ? payload.moderators : [];
       const isModerator = moderators.some(
         (moderator) => moderator === state.userData?._id
       );

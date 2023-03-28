@@ -27,7 +27,7 @@ const moderationReducer = (state = initialState, action) => {
     case GET_MOD_PROFILE_SUCCESS:
       return {
         ...state,
-        modProfile: payload.moderatorInfo,
+        modProfile: payload ? payload.moderatorInfo : null,
         modError: null,
       };
 
@@ -45,8 +45,8 @@ const moderationReducer = (state = initialState, action) => {
     case types.GET_COMMUNITY_MEMBERS_SUCCESS:
       return {
         ...state,
-        communityMembers: payload.members,
-        bannedUsers: payload.bannedUsers,
+        communityMembers: payload ? payload.members : [],
+        bannedUsers: payload ? payload.bannedUsers : [],
         modError: null,
       };
 

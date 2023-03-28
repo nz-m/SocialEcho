@@ -1,32 +1,8 @@
-import axios from "axios";
+import { COMMUNITY_API, handleApiError } from "./utils";
 
-const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-API.interceptors.request.use((req) => {
-  const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
-  if (accessToken) {
-    req.headers.Authorization = `Bearer ${accessToken}`;
-  }
-  return req;
-});
-
-const handleApiError = (error) => {
-  if (error.response && error.response.data && error.response.data.message) {
-    // The API returned an error message
-    return { error: error.response.data.message, data: null };
-  } else {
-    // An unexpected error occurred
-    return { error: "An unexpected error occurred.", data: null };
-  }
-};
 const getCommunity = async (communityName) => {
   try {
-    const { data } = await API.get(`/communities/${communityName}`);
+    const { data } = await COMMUNITY_API.get(`/communities/${communityName}`);
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
@@ -35,7 +11,7 @@ const getCommunity = async (communityName) => {
 
 const getJoinedCommunities = async () => {
   try {
-    const { data } = await API.get("/communities/member");
+    const { data } = await COMMUNITY_API.get("/communities/member");
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
@@ -44,7 +20,7 @@ const getJoinedCommunities = async () => {
 
 const getNotJoinedCommunities = async () => {
   try {
-    const { data } = await API.get("/communities/notmember");
+    const { data } = await COMMUNITY_API.get("/communities/notmember");
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
@@ -53,7 +29,9 @@ const getNotJoinedCommunities = async () => {
 
 const joinCommunity = async (communityName) => {
   try {
-    const { data } = await API.post(`/communities/${communityName}/join`);
+    const { data } = await COMMUNITY_API.post(
+      `/communities/${communityName}/join`
+    );
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
@@ -62,7 +40,9 @@ const joinCommunity = async (communityName) => {
 
 const leaveCommunity = async (communityName) => {
   try {
-    const { data } = await API.post(`/communities/${communityName}/leave`);
+    const { data } = await COMMUNITY_API.post(
+      `/communities/${communityName}/leave`
+    );
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
@@ -71,9 +51,12 @@ const leaveCommunity = async (communityName) => {
 
 const reportPost = async (communityName, info) => {
   try {
-    const { data } = await API.put(`/communities/${communityName}/report`, {
-      info,
-    });
+    const { data } = await COMMUNITY_API.put(
+      `/communities/${communityName}/report`,
+      {
+        info,
+      }
+    );
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
@@ -82,7 +65,7 @@ const reportPost = async (communityName, info) => {
 
 const getReportedPosts = async (communityName) => {
   try {
-    const { data } = await API.get(
+    const { data } = await COMMUNITY_API.get(
       `/communities/${communityName}/reported-posts`
     );
     return { error: null, data };
@@ -93,7 +76,7 @@ const getReportedPosts = async (communityName) => {
 
 const removeReportedPost = async (communityName, postId) => {
   try {
-    const { data } = await API.delete(
+    const { data } = await COMMUNITY_API.delete(
       `/communities/${communityName}/reported-posts/${postId}`
     );
     return { error: null, data };
@@ -104,7 +87,9 @@ const removeReportedPost = async (communityName, postId) => {
 
 const getCommunityMembers = async (communityName) => {
   try {
-    const { data } = await API.get(`/communities/${communityName}/members`);
+    const { data } = await COMMUNITY_API.get(
+      `/communities/${communityName}/members`
+    );
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
@@ -113,7 +98,9 @@ const getCommunityMembers = async (communityName) => {
 
 const getCommunityMods = async (communityName) => {
   try {
-    const { data } = await API.get(`/communities/${communityName}/moderators`);
+    const { data } = await COMMUNITY_API.get(
+      `/communities/${communityName}/moderators`
+    );
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
@@ -122,7 +109,7 @@ const getCommunityMods = async (communityName) => {
 
 const banUser = async (communityName, userId) => {
   try {
-    const { data } = await API.post(
+    const { data } = await COMMUNITY_API.post(
       `/communities/${communityName}/ban/${userId}`
     );
     return { error: null, data };
@@ -133,7 +120,7 @@ const banUser = async (communityName, userId) => {
 
 const unbanUser = async (communityName, userId) => {
   try {
-    const { data } = await API.post(
+    const { data } = await COMMUNITY_API.post(
       `/communities/${communityName}/unban/${userId}`
     );
     return { error: null, data };

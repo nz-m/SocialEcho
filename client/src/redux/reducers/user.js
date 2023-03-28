@@ -22,7 +22,7 @@ const user = (state = initialState, action) => {
     case types.GET_PUBLIC_USERS_SUCCESS:
       return {
         ...state,
-        publicUsers: payload,
+        publicUsers: payload || [],
         userError: null,
       };
 
@@ -32,9 +32,9 @@ const user = (state = initialState, action) => {
     case types.GET_PUBLIC_USER_PROFILE_SUCCESS:
       return {
         ...state,
-        publicUserProfile: payload,
+        publicUserProfile: payload || {},
         userError: null,
-        isFollowing: payload.isFollowing,
+        isFollowing: payload?.isFollowing ?? null,
       };
 
     case types.GET_PUBLIC_USER_PROFILE_FAIL:
@@ -43,7 +43,7 @@ const user = (state = initialState, action) => {
     case types.CHANGE_FOLLOW_STATUS_SUCCESS:
       return {
         ...state,
-        isFollowing: payload.isFollowing,
+        isFollowing: payload ? payload.isFollowing : null,
         userError: null,
       };
 
