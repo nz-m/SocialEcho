@@ -113,6 +113,7 @@ const Post = ({ post }) => {
             showModal={showModal}
             postId={post._id}
             onClose={() => toggleModal(false)}
+            prevPath={location.pathname}
           />
         )}
       </div>

@@ -23,7 +23,6 @@ const Following = () => {
   return (
     <div className="flex mx-6">
       <Leftbar />
-
       <div className="w-6/12 h-screen bg-white border border-gray-300 rounded-lg p-6">
         <h2 className="text-xl font-bold mb-4">People you're following</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

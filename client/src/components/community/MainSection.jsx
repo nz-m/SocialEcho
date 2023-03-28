@@ -29,7 +29,7 @@ const MainSection = () => {
       communityData &&
       communityData._id &&
       communityPosts.length % LIMIT === 0 &&
-      communityPosts.length >= LIMIT
+      communityPosts.length >= currentPage * LIMIT
     ) {
       dispatch(
         getComPostsAction(
@@ -90,14 +90,15 @@ const MainSection = () => {
                   <div className="text-xl">
                     {isLoading ? "Loading..." : memoizedCommunityPosts}
                   </div>
-                  {communityPosts.length > 0 && (
-                    <button
-                      onClick={handleLoadMore}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                      Load more
-                    </button>
-                  )}
+                  {communityPosts.length > 0 &&
+                    communityPosts.length % LIMIT === 0 && (
+                      <button
+                        onClick={handleLoadMore}
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      >
+                        Load more
+                      </button>
+                    )}
                 </>
               )}
               {activeTab === "You're following" && (
