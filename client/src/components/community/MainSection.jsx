@@ -13,7 +13,6 @@ const MainSection = () => {
   const communityData = useSelector((state) => state.community?.communityData);
   const communityPosts = useSelector((state) => state.posts?.communityPosts);
 
-  const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState("All posts");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
@@ -35,29 +34,16 @@ const MainSection = () => {
       !isLoadMoreLoading &&
       communityData?._id &&
       communityPosts.length % LIMIT === 0 &&
-      communityPosts.length >= currentPage * LIMIT
+      communityPosts.length >= LIMIT
     ) {
       setIsLoadMoreLoading(true);
       dispatch(
-        getComPostsAction(
-          communityData._id,
-          LIMIT,
-          communityPosts.length,
-          currentPage + 1
-        )
+        getComPostsAction(communityData._id, LIMIT, communityPosts.length)
       ).then(() => {
         setIsLoadMoreLoading(false);
-        setCurrentPage(currentPage + 1);
       });
     }
-  }, [
-    dispatch,
-    currentPage,
-    communityData,
-    communityPosts,
-    isLoadMoreLoading,
-    LIMIT,
-  ]);
+  }, [dispatch, communityData, communityPosts, isLoadMoreLoading, LIMIT]);
 
   const memoizedCommunityPosts = useMemo(() => {
     return communityPosts.map((post) => (

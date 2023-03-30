@@ -140,7 +140,7 @@ export const followUserAndFetchData =
       await dispatch(followUserAction(toFollowId));
       await dispatch(getPublicUsersAction());
       if (currentUser) {
-        await dispatch(getPostsAction(currentUser._id));
+        await dispatch(getPostsAction());
         await dispatch(getUserAction(currentUser._id));
         await dispatch(getSavedPostsAction());
       }

@@ -59,7 +59,7 @@ export const getPostsAction =
   };
 
 export const getComPostsAction =
-  (id, limit = 10, skip = 0, currentPage = 1) =>
+  (id, limit = 10, skip = 0) =>
   async (dispatch) => {
     try {
       const { error, data } = await api.getComPosts(id, limit, skip);
@@ -71,7 +71,7 @@ export const getComPostsAction =
       dispatch({
         type: types.GET_COMMUNITY_POSTS_SUCCESS,
         payload: {
-          page: currentPage,
+          page: skip / limit + 1,
           posts: data,
         },
         meta: {

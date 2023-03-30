@@ -18,7 +18,7 @@ const PostPage = () => {
 
   useEffect(() => {
     if (userData) {
-      dispatch(getPostsAction(userData._id));
+      dispatch(getPostsAction());
     }
   }, [userData, dispatch]);
 
@@ -30,7 +30,7 @@ const PostPage = () => {
 
       <div>
         <h1 className="text-2xl font-bold text-gray-700">Post</h1>
-        
+
         <PostView post={post} />
       </div>
 

@@ -136,7 +136,6 @@ const getPosts = async (req, res) => {
  * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not specified.
  * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them.
  * Defaults to 0 if not specified.
- * @param {Object} res - The response object from Express.
  *
  * @throws {Error} - If an error occurs while retrieving the posts.
  *
@@ -144,12 +143,24 @@ const getPosts = async (req, res) => {
  */
 const getCommunityPosts = async (req, res) => {
   try {
-    const id = req.params.id;
+    const communityId = req.params.id;
     const limit = parseInt(req.query.limit) || 10;
     const skip = parseInt(req.query.skip) || 0;
+    const userId = getUserFromToken(req);
+
+    const isMember = await Community.findOne({
+      _id: communityId,
+      members: userId,
+    });
+
+    if (!isMember) {
+      return res.status(401).json({
+        message: "Unauthorized to view posts in this community",
+      });
+    }
 
     const posts = await Post.find({
-      community: id,
+      community: communityId,
     })
       .sort({
         createdAt: -1,
@@ -251,6 +262,9 @@ const deletePost = async (req, res) => {
 };
 const likePost = async (req, res) => {
   try {
+    /**
+     * @type {string} id - The ID of the post to be liked.
+     */
     const id = req.params.id;
     const { userId } = req.body;
     const updatedPost = await Post.findOneAndUpdate(
@@ -402,6 +416,9 @@ const getComments = async (req, res) => {
  */
 const saveOrUnsavePost = async (req, res, operation) => {
   try {
+    /**
+     * @type {string} id - The ID of the post to be saved or unsaved.
+     */
     const id = req.params.id;
     const userId = getUserFromToken(req);
     if (!userId) {

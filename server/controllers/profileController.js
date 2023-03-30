@@ -263,7 +263,7 @@ const unfollowUser = async (req, res) => {
 /**
  * Retrieves the users that the current user is following, including their name, avatar, location,
  * and the date when they were followed, sorted by the most recent follow date.
- * 
+ *
  * @async
  * @function getFollowingUsers
  *

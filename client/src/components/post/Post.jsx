@@ -7,10 +7,6 @@ import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
 
 const Post = ({ post }) => {
-  console.log(
-    "Post.jsx rendered for this id",
-    post.body.slice(0, 10) + post._id
-  );
   const navigate = useNavigate();
   const location = useLocation();
   const userData = useSelector((state) => state.auth?.userData);

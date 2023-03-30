@@ -30,7 +30,7 @@ const CommentForm = ({ communityId }) => {
       try {
         await dispatch(addCommentAction(postId, newComment));
         await dispatch(getCommentsAction(postId));
-        await dispatch(getPostsAction(userData._id));
+        await dispatch(getPostsAction());
         await dispatch(getComPostsAction(communityId));
         setIsLoading(false);
         setBody("");
