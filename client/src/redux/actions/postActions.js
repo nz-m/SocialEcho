@@ -28,10 +28,10 @@ export const createPostAction = (formData) => async (dispatch) => {
 };
 
 export const getPostsAction =
-  (userId, limit = 10, skip = 0) =>
+  (limit = 10, skip = 0) =>
   async (dispatch) => {
     try {
-      const { error, data } = await api.getPosts(userId, limit, skip);
+      const { error, data } = await api.getPosts(limit, skip);
 
       if (error) {
         throw new Error(error);

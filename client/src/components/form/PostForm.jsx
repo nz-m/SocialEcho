@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 
 const PostForm = () => {
   const community = useSelector((state) => state.community?.communityData);
-  const { userData: user } = useSelector((state) => state.auth) ?? {};
+  const user = useSelector((state) => state.auth?.userData);
 
   const [body, setBody] = useState("");
   const [file, setFile] = useState(null);
@@ -23,8 +23,7 @@ const PostForm = () => {
     setBody(event.target.value);
   };
 
-  const allowedFileTypes =
-    /^image\/(jpeg|png|gif|webp|bmp|svg\+xml)|video\/(mpeg|mp4|avi|webm|x-matroska|quicktime|ogg)$/;
+  const allowedFileTypes = /^image\/|video\//;
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -60,7 +59,7 @@ const PostForm = () => {
 
     try {
       await dispatch(createPostAction(formData));
-      await dispatch(getPostsAction(user._id));
+      await dispatch(getPostsAction());
       await dispatch(getComPostsAction(community._id));
       setBody("");
       setFile(null);

@@ -1,27 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getComMembersAction,
-  unbanUserAction,
-} from "../../redux/actions/communityActions";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import { getComMembersAction } from "../../redux/actions/communityActions";
+import UnbanUserModal from "../modals/UnbanUserModal";
 
 const BannerMembersList = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const communityName = location.pathname.split("/")[2] || "";
 
+  const [unbanUserModalVisibility, setBanUserModalVisibility] = useState({});
+  const toggleUnbanUserModal = (userId, visible) => {
+    setBanUserModalVisibility((prevVisibility) => ({
+      ...prevVisibility,
+      [userId]: visible,
+    }));
+  };
+
   useEffect(() => {
     dispatch(getComMembersAction(communityName));
   }, [dispatch, communityName]);
 
-  const { bannedUsers } = useSelector((state) => state.moderation) || {};
-
-  const unbanHandler = async (userId) => {
-    await dispatch(unbanUserAction(communityName, userId));
-    dispatch(getComMembersAction(communityName));
-  };
+  const bannedUsers =
+    useSelector((state) => state.moderation.bannedUsers) || [];
 
   return (
     <div className="flex flex-col">
@@ -49,12 +51,21 @@ const BannerMembersList = () => {
               </div>
               <button
                 onClick={() => {
-                  unbanHandler(bannedMember._id);
+                  toggleUnbanUserModal(bannedMember._id, true);
                 }}
                 className="ml-2 bg-sky-500 hover:bg-sky-700 text-white font-bold rounded px-2 py-1 text-sm"
               >
                 Unban user
               </button>
+              <UnbanUserModal
+                key={bannedMember._id}
+                show={unbanUserModalVisibility[bannedMember._id] || false}
+                onClose={() => {
+                  toggleUnbanUserModal(bannedMember._id, false);
+                }}
+                userId={bannedMember._id}
+                communityName={communityName}
+              />
             </div>
           ))}
       </div>
@@ -62,4 +73,4 @@ const BannerMembersList = () => {
   );
 };
 
-export default BannerMembersList;
+export default memo(BannerMembersList);

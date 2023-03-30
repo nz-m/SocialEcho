@@ -3,18 +3,17 @@ import { useDispatch } from "react-redux";
 import LoadingSpinner from "../spinner/LoadingSpinner";
 import {
   getComMembersAction,
-  banUserAction,
+  unbanUserAction,
 } from "../../redux/actions/communityActions";
-
 const UnbanUserModal = ({ show, onClose, userId, communityName }) => {
-  const [banning, setBanning] = useState(false);
+  const [unbanning, setUnbanning] = useState(false);
   const dispatch = useDispatch();
 
-  const banHandler = async () => {
-    setBanning(true);
-    await dispatch(banUserAction(communityName, userId));
+  const unbanHandler = async () => {
+    setUnbanning(true);
+    await dispatch(unbanUserAction(communityName, userId));
     await dispatch(getComMembersAction(communityName));
-    setBanning(false);
+    setUnbanning(false);
     onClose();
   };
   return (
@@ -61,19 +60,19 @@ const UnbanUserModal = ({ show, onClose, userId, communityName }) => {
           </div>
           <div className="mt-5 sm:mt-6 flex justify-center space-x-2">
             <button
-              disabled={banning}
+              disabled={unbanning}
               onClick={onClose}
               className="w-1/2 rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
             >
               Cancel
             </button>
             <button
-              disabled={banning}
-              onClick={banHandler}
+              disabled={unbanning}
+              onClick={unbanHandler}
               className="w-1/2 rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm"
             >
-              {banning ? (
-                <LoadingSpinner loadingText={"banning..."} />
+              {unbanning ? (
+                <LoadingSpinner loadingText={"unbanning..."} />
               ) : (
                 <span>Unban User</span>
               )}

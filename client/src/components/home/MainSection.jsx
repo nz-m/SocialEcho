@@ -17,7 +17,7 @@ const MainSection = () => {
 
   useEffect(() => {
     if (userData) {
-      dispatch(getPostsAction(userData._id, LIMIT, 0)).finally(() => {
+      dispatch(getPostsAction(LIMIT, 0)).finally(() => {
         setIsLoading(false);
       });
     }
@@ -26,16 +26,16 @@ const MainSection = () => {
   const handleLoadMore = useCallback(() => {
     if (!isLoading && posts.length % LIMIT === 0 && posts.length >= LIMIT) {
       setIsLoadMoreLoading(true);
-      dispatch(getPostsAction(userData._id, LIMIT, posts.length)).finally(
-        () => {
-          setIsLoadMoreLoading(false);
-        }
-      );
+      dispatch(getPostsAction(LIMIT, posts.length)).finally(() => {
+        setIsLoadMoreLoading(false);
+      });
     }
-  }, [dispatch, isLoading, posts, LIMIT, userData]);
+  }, [dispatch, isLoading, posts, LIMIT]);
 
   const memoizedPosts = useMemo(() => {
-    return posts.map((post) => <MemoizedPost key={post._id} post={post} />);
+    return posts.map((post, index) => (
+      <MemoizedPost key={`${post._id}-${index}`} post={post} />
+    ));
   }, [posts]);
 
   return (

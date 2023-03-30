@@ -13,11 +13,9 @@ const createPost = async (formData) => {
   }
 };
 
-const getPosts = async (userId, limit = 10, skip = 0) => {
+const getPosts = async (limit = 10, skip = 0) => {
   try {
-    const { data } = await API.get(
-      `/posts?userId=${userId}&limit=${limit}&skip=${skip}`
-    );
+    const { data } = await API.get(`/posts?limit=${limit}&skip=${skip}`);
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
