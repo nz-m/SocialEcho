@@ -33,22 +33,19 @@ export const tokenMiddleware = (store) => (next) => async (action) => {
           window.location.href = "/signin";
         }
       } else {
-        setTimeout(
-          async () => {
-            const refreshToken = state.auth.refreshToken;
-            try {
-              await store.dispatch(refreshTokenAction(refreshToken));
-              const newToken = store.getState().auth.accessToken;
-              if (!newToken) {
-                throw new Error("Access token not found after refresh");
-              }
-            } catch (error) {
-              store.dispatch({ type: "LOGOUT" });
-              window.location.href = "/signin";
+        setTimeout(async () => {
+          const refreshToken = state.auth.refreshToken;
+          try {
+            await store.dispatch(refreshTokenAction(refreshToken));
+            const newToken = store.getState().auth.accessToken;
+            if (!newToken) {
+              throw new Error("Access token not found after refresh");
             }
-          },
-          expiresIn < 0 ? 0 : expiresIn
-        );
+          } catch (error) {
+            store.dispatch({ type: "LOGOUT" });
+            window.location.href = "/signin";
+          }
+        }, 3300000);
       }
     } else {
       store.dispatch({ type: "LOGOUT" });

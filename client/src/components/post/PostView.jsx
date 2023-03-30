@@ -14,7 +14,8 @@ const PostView = ({ post }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);
-  const { body, fileUrl, user, community, createdAt, comments } = post;
+  const { body, fileUrl, user, community, createdAt, comments, savedByCount } =
+    post;
   const [isReported, setIsReported] = useState(null);
 
   const isImageFile = useMemo(() => {
@@ -124,6 +125,9 @@ const PostView = ({ post }) => {
           </div>
           <div className="flex items-center gap-2">
             <Save postId={post._id} />
+            <span>
+              Saved by {savedByCount} {savedByCount === 1 ? "person" : "people"}
+            </span>
             {isReported === null ? null : isReported ? (
               <button disabled className="flex items-center text-xl gap-1">
                 {" "}

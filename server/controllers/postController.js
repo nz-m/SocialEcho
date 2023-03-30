@@ -57,7 +57,8 @@ const createPost = async (req, res) => {
 };
 
 /**
- * Retrieves the posts for a given user, including pagination, sorted by creation date.
+ * Retrieves the posts for a given user, including pagination, the number of posts saved by each user,
+ * sorted by creation date.
  *
  * @async
  * @function getPosts
@@ -97,10 +98,18 @@ const getPosts = async (req, res) => {
       .limit(limit)
       .lean();
 
-    const formattedPosts = posts.map((post) => ({
-      ...post,
-      createdAt: dayjs(post.createdAt).fromNow(),
-    }));
+    const formattedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const savedByCount = await User.countDocuments({
+          savedPosts: post._id,
+        });
+        return {
+          ...post,
+          createdAt: dayjs(post.createdAt).fromNow(),
+          savedByCount,
+        };
+      })
+    );
 
     res.status(200).json(formattedPosts);
   } catch (error) {
@@ -111,7 +120,7 @@ const getPosts = async (req, res) => {
 };
 
 /**
- * Retrieves the posts for a given community, including the post information,
+ * Retrieves the posts for a given community, including the post information, the number of posts saved by each user,
  * the user who created it, and the community it belongs to.
  *
  * @async
@@ -145,10 +154,18 @@ const getCommunityPosts = async (req, res) => {
       .skip(skip)
       .limit(limit)
       .lean();
-    const formattedPosts = posts.map((post) => ({
-      ...post,
-      createdAt: dayjs(post.createdAt).fromNow(),
-    }));
+    const formattedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const savedByCount = await User.countDocuments({
+          savedPosts: post._id,
+        });
+        return {
+          ...post,
+          createdAt: dayjs(post.createdAt).fromNow(),
+          savedByCount,
+        };
+      })
+    );
 
     res.status(200).json(formattedPosts);
   } catch (error) {

@@ -51,8 +51,8 @@ const MainSection = () => {
       });
     }
   }, [
-    currentPage,
     dispatch,
+    currentPage,
     communityData,
     communityPosts,
     isLoadMoreLoading,

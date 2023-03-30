@@ -1,29 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getComMembersAction,
-  banUserAction,
-  getCommunityAction,
-} from "../../redux/actions/communityActions";
+import { getComMembersAction } from "../../redux/actions/communityActions";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import BanUserModal from "../modals/BanUserModal";
 
 const MembersList = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const communityName = location.pathname.split("/")[2] || "";
 
+  const [banUserModalVisibility, setBanUserModalVisibility] = useState({});
+  const toggleBanUserModal = (userId, visible) => {
+    setBanUserModalVisibility((prev) => ({
+      ...prev,
+      [userId]: visible,
+    }));
+  };
+
   useEffect(() => {
     dispatch(getComMembersAction(communityName));
   }, [dispatch, communityName]);
 
   const { communityMembers } = useSelector((state) => state.moderation) || {};
-
-  const banHandler = async (userId) => {
-    await dispatch(banUserAction(communityName, userId));
-    await dispatch(getComMembersAction(communityName));
-    dispatch(getCommunityAction(communityName));
-  };
 
   return (
     <div className="flex flex-col">
@@ -51,12 +50,20 @@ const MembersList = () => {
               </div>
               <button
                 onClick={() => {
-                  banHandler(member._id);
+                  toggleBanUserModal(member._id, true);
                 }}
                 className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded px-2 py-1 text-sm"
               >
                 Ban user
               </button>
+              <BanUserModal
+                show={banUserModalVisibility[member._id]}
+                onClose={() => {
+                  toggleBanUserModal(member._id, false);
+                }}
+                userId={member._id}
+                communityName={communityName}
+              />
             </div>
           ))}
       </div>

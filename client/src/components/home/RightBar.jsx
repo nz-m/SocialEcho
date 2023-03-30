@@ -24,9 +24,9 @@ const RightBar = () => {
     }));
   };
 
-  const { userData: currentUser } = useSelector((state) => state.auth) ?? {};
-  const { publicUsers: recommendedUsers } =
-    useSelector((state) => state.user) ?? {};
+  const currentUser = useSelector((state) => state.auth?.userData);
+  const recommendedUsers = useSelector((state) => state.user?.publicUsers);
+  const memoizedUsers = useMemo(() => recommendedUsers, [recommendedUsers]);
 
   const currentUserIsModerator = currentUser?.role === "moderator";
   useEffect(() => {
@@ -129,14 +129,14 @@ const RightBar = () => {
           <div className="card mt-4">
             <div className="card-body">
               <h5 className="card-title mb-3">Popular Users to Follow</h5>
-              {recommendedUsers?.length === 0 && (
+              {memoizedUsers?.length === 0 && (
                 <div className="text-center italic text-gray-400">
                   No users to follow. Check back later
                 </div>
               )}
               <ul className="list-group">
-                {recommendedUsers &&
-                  recommendedUsers.map((user) => (
+                {memoizedUsers?.length > 0 &&
+                  memoizedUsers.map((user) => (
                     <li
                       key={user._id}
                       className="list-group-item d-flex justify-content-between"

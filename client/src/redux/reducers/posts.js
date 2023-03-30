@@ -198,6 +198,42 @@ const postReducer = (state = initialState, action) => {
         ...state,
         postError: payload,
       };
+    case types.INCREASE_SAVED_BY_COUNT:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === payload
+            ? { ...post, savedByCount: post.savedByCount + 1 }
+            : post
+        ),
+        communityPosts: state.communityPosts.map((post) =>
+          post._id === payload
+            ? { ...post, savedByCount: post.savedByCount + 1 }
+            : post
+        ),
+        postError: null,
+      };
+    case types.DECREASE_SAVED_BY_COUNT:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === payload
+            ? {
+                ...post,
+                savedByCount: post.savedByCount - 1,
+              }
+            : post
+        ),
+        communityPosts: state.communityPosts.map((post) =>
+          post._id === payload
+            ? {
+                ...post,
+                savedByCount: post.savedByCount - 1,
+              }
+            : post
+        ),
+        postError: null,
+      };
 
     default:
       return state;

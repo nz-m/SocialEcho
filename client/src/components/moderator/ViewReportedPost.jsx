@@ -11,13 +11,13 @@ const ViewReportedPost = ({ post }) => {
   const { _id, body, fileUrl, user, createdAt } = post;
   const { name, avatar } = user;
   const createdAtString = new Date(createdAt).toDateString();
-  const onRemove = () => {
-    dispatch(deletePostAction(_id));
+  const onRemove = async () => {
+    await dispatch(deletePostAction(_id));
     navigate(-1);
   };
 
-  const onNoAction = () => {
-    dispatch(removeReportedPostAction(communityName, _id));
+  const onNoAction = async () => {
+    await dispatch(removeReportedPostAction(communityName, _id));
     navigate(-1);
   };
 

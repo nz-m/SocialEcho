@@ -2,9 +2,13 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import LeaveModal from "../modals/LeaveModal";
-
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import placeholder from "../../assets/placeholder.png";
+
+import {
+  useBannerLoading,
+  useIsModeratorUpdated,
+} from "../../hooks/useCommunityData";
 
 const RightBar = () => {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
@@ -22,31 +26,13 @@ const RightBar = () => {
   const communityData = useSelector((state) => state.community?.communityData);
   const isModerator = useSelector((state) => state.auth?.isModerator);
 
-  const [isModeratorUpdated, setIsModeratorUpdated] = useState(false);
-
   const { name, description, members, rules, banner } = useMemo(
     () => communityData || {},
     [communityData]
   );
 
-  const [bannerLoaded, setBannerLoaded] = useState(false);
-
-  useEffect(() => {
-    if (banner) {
-      const image = new Image();
-      image.onload = () => setBannerLoaded(true);
-      image.src = banner;
-    }
-    return () => {
-      setBannerLoaded(false);
-    };
-  }, [banner]);
-
-  useEffect(() => {
-    if (isModerator !== null) {
-      setIsModeratorUpdated(true);
-    }
-  }, [isModerator]);
+  const bannerLoaded = useBannerLoading(banner);
+  const isModeratorUpdated = useIsModeratorUpdated(isModerator);
 
   if (!communityData) {
     return <div>Loading...</div>;

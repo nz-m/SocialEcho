@@ -1,9 +1,9 @@
-import {configureStore} from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers";
-import {tokenMiddleware} from "../middlewares/tokenMiddleware";
-import {isValidToken} from "../utils/authUtils";
-import {refreshTokenAction} from "./actions/refreshTokenAction";
+import { tokenMiddleware } from "../middlewares/tokenMiddleware";
+import { isValidToken } from "../utils/authUtils";
+import { refreshTokenAction } from "./actions/refreshTokenAction";
 
 const createAppStore = async () => {
   try {

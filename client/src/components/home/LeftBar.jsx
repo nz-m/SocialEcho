@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, memo } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutAction } from "../../redux/actions/authActions";
@@ -19,7 +19,9 @@ const Leftbar = () => {
     dispatch(getJoinedCommunitiesAction());
   }, [dispatch]);
 
-  const visibleCommunities = joinedCommunities?.slice(0, 5);
+  const visibleCommunities = useMemo(() => {
+    return joinedCommunities?.slice(0, 5);
+  }, [joinedCommunities]);
 
   const communityLinks = useMemo(() => {
     return visibleCommunities?.map((community) => ({
@@ -44,7 +46,7 @@ const Leftbar = () => {
           <Link to="/profile">Profile</Link>
           <Link to="/saved">Saved</Link>
           <Link to="/following">Following</Link>
-          {joinedCommunities ? (
+          {communityLinks && communityLinks.length > 0 ? (
             <div>
               <h3 className="mb-2">Communities you're in</h3>
               <ul>
@@ -62,7 +64,7 @@ const Leftbar = () => {
               </div>
             </div>
           ) : (
-            <div>Loading communities...</div>
+            <div>No communities found.</div>
           )}
         </div>
         <div className="flex flex-col items-center justify-center">
@@ -78,11 +80,10 @@ const Leftbar = () => {
               Logout
             </button>
           )}
-          <p className="text-sm">&copy; 2023 SocialEcho</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Leftbar;
+export default memo(Leftbar);

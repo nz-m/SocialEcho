@@ -325,6 +325,26 @@ export const getSavedPostsAction = () => async (dispatch) => {
   }
 };
 
+export const increaseSavedByCount = (postId) => async (dispatch) => {
+  dispatch({
+    type: types.INCREASE_SAVED_BY_COUNT,
+    payload: postId,
+    meta: {
+      requiresAuth: true,
+    },
+  });
+};
+
+export const decreaseSavedByCount = (postId) => async (dispatch) => {
+  dispatch({
+    type: types.DECREASE_SAVED_BY_COUNT,
+    payload: postId,
+    meta: {
+      requiresAuth: true,
+    },
+  });
+};
+
 export const getPublicPostsAction = (publicUserId) => async (dispatch) => {
   try {
     const { error, data } = await api.getPublicPosts(publicUserId);

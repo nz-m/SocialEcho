@@ -21,12 +21,15 @@ const authReducer = (state = initialState, action) => {
     case types.SIGNUP_SUCCESS:
       return {
         ...state,
+        signInerror: null,
         successMessage: payload ? payload : null,
       };
 
     case types.SIGNUP_FAIL:
       return {
         ...state,
+        successMessage: null,
+        signInerror: null,
         signUperror: payload ? payload : [],
       };
 
@@ -36,12 +39,15 @@ const authReducer = (state = initialState, action) => {
         userData: payload ? payload.user : null,
         accessToken: payload ? payload.accessToken : null,
         refreshToken: payload ? payload.refreshToken : null,
+        signInerror: null,
         successMessage: payload ? payload : null,
       };
 
     case types.SIGNIN_FAIL:
       return {
         ...state,
+        successMessage: null,
+        signUperror: [],
         signInerror: payload ? payload : null,
       };
 

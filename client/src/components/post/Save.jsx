@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { HiShoppingCart } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import {
   savePostAction,
   unsavePostAction,
   getSavedPostsAction,
+  increaseSavedByCount,
+  decreaseSavedByCount,
 } from "../../redux/actions/postActions";
 
 const Save = ({ postId }) => {
@@ -13,27 +15,25 @@ const Save = ({ postId }) => {
   const [saved, setSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const savedPosts = useSelector((state) => state.posts?.savedPosts);
-  const savedPostsIds = useRef(savedPosts.map((post) => post._id));
+  const savedPostsIds = savedPosts.map((post) => post._id);
 
   useEffect(() => {
-    const fetchSavedPosts = async () => {
-      await dispatch(getSavedPostsAction());
-    };
-    fetchSavedPosts();
+    dispatch(getSavedPostsAction());
   }, [dispatch]);
 
   useEffect(() => {
-    if (savedPostsIds.current.includes(postId)) {
+    if (savedPostsIds.includes(postId)) {
       setSaved(true);
     } else {
       setSaved(false);
     }
-  }, [postId]);
+  }, [postId, savedPostsIds]);
 
   const handleSave = async () => {
     try {
       setIsSaving(true);
       await dispatch(savePostAction(postId));
+      dispatch(increaseSavedByCount(postId));
       setSaved(true);
     } finally {
       setIsSaving(false);
@@ -44,6 +44,7 @@ const Save = ({ postId }) => {
     try {
       setIsSaving(true);
       await dispatch(unsavePostAction(postId));
+      dispatch(decreaseSavedByCount(postId));
       setSaved(false);
     } finally {
       setIsSaving(false);
@@ -62,4 +63,4 @@ const Save = ({ postId }) => {
   );
 };
 
-export default Save;
+export default memo(Save);
