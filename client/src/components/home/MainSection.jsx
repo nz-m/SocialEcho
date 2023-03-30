@@ -33,9 +33,7 @@ const MainSection = () => {
   }, [dispatch, isLoading, posts, LIMIT]);
 
   const memoizedPosts = useMemo(() => {
-    return posts.map((post, index) => (
-      <MemoizedPost key={`${post._id}-${index}`} post={post} />
-    ));
+    return posts.map((post) => <MemoizedPost key={post._id} post={post} />);
   }, [posts]);
 
   return (
