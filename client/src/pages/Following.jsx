@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Leftbar from "../components/home/LeftBar";
 import Rightbar from "../components/home/RightBar";
-import ProfileCard from "../components/profile/ProfileCard";
+import PublicProfileCard from "../components/profile/PublicProfileCard";
 import { useSelector, useDispatch } from "react-redux";
 import { getFollowingUsersAction } from "../redux/actions/userActions";
 
@@ -19,7 +19,6 @@ const Following = () => {
 
     fetchFollowingUsers();
   }, [dispatch]);
-
   return (
     <div className="flex mx-6">
       <Leftbar />
@@ -30,12 +29,11 @@ const Following = () => {
             <div>Loading...</div>
           ) : (
             followingUsers?.map((user) => (
-              <ProfileCard key={user._id} user={user} />
+              <PublicProfileCard key={user._id} user={user} />
             ))
           )}
         </div>
       </div>
-
       <Rightbar />
     </div>
   );

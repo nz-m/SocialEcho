@@ -1,4 +1,5 @@
 import * as types from "../constants/communityConstants";
+import { LOGOUT } from "../constants/authConstants";
 
 const initialState = {
   communityData: null,
@@ -12,6 +13,16 @@ const communityReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case LOGOUT:
+      return {
+        ...state,
+        communityData: null,
+        joinedCommunities: [],
+        notJoinedCommunities: [],
+        reportedPosts: [],
+        communityError: null,
+      };
+
     case types.GET_COMMUNITY_SUCCESS:
       return {
         ...state,

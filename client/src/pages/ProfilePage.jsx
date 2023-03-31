@@ -8,9 +8,7 @@ const ProfilePage = () => {
     <div className="mx-6">
       <div className="flex justify-between">
         <Leftbar />
-
         <UserProfile />
-
         <RightBar />
       </div>
     </div>

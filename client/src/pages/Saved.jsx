@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import Leftbar from "../components/home/LeftBar";
 import RightBar from "../components/home/RightBar";
 import SavedPost from "../components/post/SavedPost";
-
 const Saved = () => {
   const dispatch = useDispatch();
 
@@ -33,7 +32,6 @@ const Saved = () => {
           )}
         </div>
       </div>
-
       <RightBar />
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
@@ -6,15 +6,23 @@ import {
   getPublicUserAction,
   getPublicUsersAction,
   unfollowUserAction,
+  followUserAction,
 } from "../../redux/actions/userActions";
 import PublicPost from "./PublicPost";
+import LoadingSpinner from "../spinner/LoadingSpinner";
 const PublicProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
 
+  const [followLoading, setFollowLoading] = useState(false);
+  const [unfollowLoading, setUnfollowLoading] = useState(false);
+
   const userProfile = useSelector((state) => state.user?.publicUserProfile);
   const isUserFollowing = useSelector((state) => state.user?.isFollowing);
+  const isModerator = useSelector(
+    (state) => state.auth?.userData?.role === "moderator"
+  );
 
   const publicUserId = location.pathname.split("/")[2];
 
@@ -23,8 +31,17 @@ const PublicProfile = () => {
   }, [dispatch, isUserFollowing, publicUserId]);
 
   const handleUnfollow = async (publicUserId) => {
+    setUnfollowLoading(true);
     await dispatch(unfollowUserAction(publicUserId));
     dispatch(getPublicUsersAction());
+    setUnfollowLoading(false);
+  };
+
+  const handleFollow = async (publicUserId) => {
+    setFollowLoading(true);
+    await dispatch(followUserAction(publicUserId));
+    dispatch(getPublicUsersAction());
+    setFollowLoading(false);
   };
 
   if (!userProfile) {
@@ -49,6 +66,10 @@ const PublicProfile = () => {
     postsLast30Days,
     commonCommunities,
   } = userProfile;
+
+  if (!userProfile) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="w-6/12 mx-auto">
       <button
@@ -162,7 +183,11 @@ const PublicProfile = () => {
               type="button"
               className="bg-white text-red-500 border border-red-500 rounded-full py-1 px-4 text-sm font-semibold"
             >
-              Unfollow
+              {unfollowLoading ? (
+                <LoadingSpinner loadingText="Unfollowing..." />
+              ) : (
+                "Unfollow"
+              )}
             </button>
           </>
         ) : (
@@ -173,6 +198,19 @@ const PublicProfile = () => {
               <span className="font-semibold">{totalFollowers} followers</span>
             )}
           </p>
+        )}
+        {!isModerator && !isFollowing && (
+          <button
+            onClick={() => handleFollow(publicUserId)}
+            type="button"
+            className="bg-sky-700 text-white border border-sky-700 rounded-full py-1 px-4 text-sm font-semibold"
+          >
+            {followLoading ? (
+              <LoadingSpinner loadingText="following..." />
+            ) : (
+              "Follow"
+            )}
+          </button>
         )}
       </div>
       {isUserFollowing && <PublicPost publicUserId={publicUserId} />}

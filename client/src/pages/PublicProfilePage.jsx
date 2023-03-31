@@ -8,7 +8,6 @@ const PublicProfilePage = () => {
     <div className="mx-6">
       <div className="flex justify-between">
         <Leftbar />
-
         <PublicProfile />
         <RightBar />
       </div>

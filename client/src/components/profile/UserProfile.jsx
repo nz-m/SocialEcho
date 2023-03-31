@@ -1,141 +1,76 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserAction } from "../../redux/actions/userActions";
 import PostOnProfile from "../post/PostOnProfile";
-import { Link } from "react-router-dom";
+import SelfProfileCard from "./SelfProfileCard";
+import SelfInfoCard from "./SelfInfoCard";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
-
+  const [loading, setLoading] = useState(false);
   const userData = useSelector((state) => state.auth?.userData);
   const user = useSelector((state) => state.user?.user);
-
-  const posts = user.posts;
+  const posts = user?.posts;
 
   useEffect(() => {
-    dispatch(getUserAction(userData._id));
+    const fetchUser = async () => {
+      setLoading(true);
+      await dispatch(getUserAction(userData._id));
+      setLoading(false);
+    };
+    fetchUser();
   }, [dispatch, userData._id]);
 
-  let posttoShow = null;
+  const MemoizedPostOnProfile = React.memo(PostOnProfile);
+
+  let postToShow = null;
 
   if (posts) {
-    const postsWithUser = posts.map((post) => {
-      return {
-        ...post,
-        createdAt: new Date(post.createdAt).toLocaleString("en-US", {
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          hour12: true,
-        }),
-      };
-    });
-    posttoShow = postsWithUser
+    const postsWithUser = posts.map((post) => ({
+      ...post,
+      createdAt: new Date(post.createdAt).toLocaleString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      }),
+    }));
+
+    postToShow = postsWithUser
       .reverse()
-      .map((post) => <PostOnProfile key={post._id} post={post} />);
+      .map((post) => <MemoizedPostOnProfile key={post._id} post={post} />);
   }
+
   return (
-    <div className="w-6/12 mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center">
-          <img
-            className="w-16 h-16 rounded-full mr-4"
-            src={user.avatar}
-            alt="Profile"
-          ></img>
+    <>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          <SelfProfileCard user={user} />
+          {user?.totalPosts && <SelfInfoCard user={user} />}
+
           <div>
-            <h2 className="text-2xl font-bold">{user.name}</h2>
-            {user.bio ? (
-              <p className="text-gray-600">{user.bio}</p>
-            ) : (
-              <p className="text-gray-400">bio not added</p>
+            {postToShow && postToShow.length === 0 && (
+              <p className="text-gray-600">No posts available.</p>
             )}
 
-            {user.location ? (
-              <p className="text-gray-600">{user.location}</p>
+            {loading ? (
+              <div>Loading posts...</div>
             ) : (
-              <p className="text-gray-400">Location not added</p>
+              <div className="border-2">
+                <h3 className="text-lg font-bold mb-4">
+                  Your most recent posts
+                </h3>
+                {postToShow}
+              </div>
             )}
           </div>
-        </div>
-        <Link
-          to="/edit-profile"
-          state={{ userInfo: user }}
-          className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
-        >
-          Edit Profile
-        </Link>
-      </div>
-
-      <div className="mb-8">
-        <h3 className="text-lg font-bold mb-4">Interests</h3>
-        {user.interests &&
-          user.interests.filter((interest) => interest !== "").length > 0 && (
-            <ul className="list-disc list-inside">
-              {user.interests.map((interest, i) => {
-                return <span key={i}>{interest} </span>;
-              })}
-            </ul>
-          )}
-        {user.interests &&
-          user.interests.filter((interest) => interest !== "").length === 0 && (
-            <p className="text-gray-600">
-              No interests have been set yet. Add some interests to let people
-              know more about you.
-            </p>
-          )}
-      </div>
-      {user.totalPosts !== undefined && (
-        <div className="mb-4">
-          {user.totalPosts === 0 ? (
-            <span>
-              You haven't created any posts in any communities yet. You're a
-              member of {user.totalCommunities} communit
-              {user.totalCommunities === 1 ? "y" : "ies"} since joining on{" "}
-              {new Date(user.createdAt).toLocaleString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </span>
-          ) : (
-            <span>
-              In {user.duration}, You've created {user.totalPosts}{" "}
-              {user.totalPosts === 1 ? "post" : "posts"} across{" "}
-              {user.totalPostCommunities}{" "}
-              {user.totalPostCommunities === 1 ? "community" : "communities"}{" "}
-              since joining on{" "}
-              {new Date(user.createdAt).toLocaleString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-              {user.totalCommunities === 0 ? (
-                <span>
-                  . Currently you are not a member of any communities.
-                </span>
-              ) : (
-                <span>
-                  . You're a member of {user.totalCommunities} communit
-                  {user.totalCommunities === 1 ? "y" : "ies"}!
-                </span>
-              )}
-            </span>
-          )}
-        </div>
+        </>
       )}
-
-      <div>
-        <h3 className="text-lg font-bold mb-4">Your posts</h3>
-
-        {posttoShow && posttoShow.length === 0 && (
-          <p className="text-gray-600">No posts available.</p>
-        )}
-        {posttoShow}
-      </div>
-    </div>
+    </>
   );
 };
 

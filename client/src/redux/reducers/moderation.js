@@ -1,4 +1,6 @@
 import * as types from "../constants/communityConstants";
+import { LOGOUT } from "../constants/authConstants";
+
 import {
   GET_MOD_PROFILE_SUCCESS,
   GET_MOD_PROFILE_FAIL,
@@ -17,6 +19,17 @@ const moderationReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case LOGOUT:
+      return {
+        ...state,
+        isModerator: false,
+        modProfile: null,
+        communityMembers: [],
+        communityMods: [],
+        bannedUsers: [],
+        modError: null,
+      };
+
     case SET_MODERATOR:
       return {
         ...state,

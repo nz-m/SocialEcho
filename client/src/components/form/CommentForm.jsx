@@ -26,14 +26,14 @@ const CommentForm = ({ communityId }) => {
       post: postId,
     };
     if (userData) {
-      setIsLoading(true);
       try {
+        setIsLoading(true);
         await dispatch(addCommentAction(postId, newComment));
         await dispatch(getCommentsAction(postId));
-        await dispatch(getPostsAction());
-        await dispatch(getComPostsAction(communityId));
         setIsLoading(false);
         setBody("");
+        await dispatch(getPostsAction());
+        await dispatch(getComPostsAction(communityId));
       } catch (error) {
         setIsLoading(false);
         // handle error
@@ -55,9 +55,13 @@ const CommentForm = ({ communityId }) => {
           />
         </div>
         <button
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-          type="submit"
-          disabled={isLoading} // disable button while isLoading is true
+            className={`${isLoading ? "bg-gray-500" : "bg-blue-500"} text-white py-2 px-4 rounded hover:bg-blue-600`}
+            type="submit"
+            disabled={isLoading}
+            style={{
+              opacity: isLoading ? 0.5 : 1,
+              cursor: isLoading ? "not-allowed" : "pointer"
+            }}
         >
           {isLoading ? "Loading..." : "Comment"}{" "}
         </button>

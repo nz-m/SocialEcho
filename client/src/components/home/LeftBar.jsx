@@ -45,7 +45,11 @@ const Leftbar = () => {
           <Link to="/home">Home</Link>
           <Link to="/profile">Profile</Link>
           <Link to="/saved">Saved</Link>
-          <Link to="/following">Following</Link>
+          
+          {user && user.role === "general" && (
+            <Link to="/following">Following</Link>
+          )}
+
           {communityLinks && communityLinks.length > 0 ? (
             <div>
               <h3 className="mb-2">Communities you're in</h3>

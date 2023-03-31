@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
 
-const ProfileCard = ({ user }) => {
+const PublicProfileCard = ({ user }) => {
   const followingSince = new Date(user.followingSince).toLocaleString("en-US", {
     year: "numeric",
     month: "long",
@@ -39,4 +39,4 @@ const ProfileCard = ({ user }) => {
   );
 };
 
-export default memo(ProfileCard);
+export default memo(PublicProfileCard);

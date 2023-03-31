@@ -1,4 +1,5 @@
 import * as types from "../constants/postConstants";
+import { LOGOUT } from "../constants/authConstants";
 
 const initialState = {
   posts: [],
@@ -14,6 +15,18 @@ const postReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case LOGOUT:
+      return {
+        ...state,
+        posts: [],
+        publicPosts: [],
+        communityPosts: [],
+        followingUsersPosts: [],
+        comments: [],
+        savedPosts: [],
+        postError: null,
+      };
+
     case types.CREATE_POST_SUCCESS:
       return {
         ...state,

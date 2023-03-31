@@ -35,7 +35,6 @@ const MyCommunities = () => {
   return (
     <div className="flex mx-6">
       <Leftbar />
-
       <div className="flex flex-wrap justify-center">{communityCards}</div>
       <Rightbar />
     </div>

@@ -27,13 +27,10 @@ const PostPage = () => {
   return (
     <div className="flex mx-6">
       <Leftbar />
-
       <div>
         <h1 className="text-2xl font-bold text-gray-700">Post</h1>
-
         <PostView post={post} />
       </div>
-
       <CommentSidebar />
     </div>
   );

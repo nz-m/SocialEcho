@@ -1,4 +1,5 @@
 import * as types from "../constants/userConstants";
+import { LOGOUT } from "../constants/authConstants";
 
 const initialState = {
   user: {},
@@ -13,6 +14,17 @@ const user = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case LOGOUT:
+      return {
+        ...state,
+        user: {},
+        publicUsers: [],
+        publicUserProfile: {},
+        followingUsers: [],
+        isFollowing: null,
+        userError: null,
+      };
+
     case types.GET_USER_SUCCESS:
       return { ...state, user: payload, userError: null };
 

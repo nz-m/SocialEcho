@@ -93,7 +93,8 @@ const MainSection = () => {
                     {isLoading ? "Loading..." : memoizedCommunityPosts}
                   </div>
                   {communityPosts.length > 0 &&
-                    communityPosts.length % LIMIT === 0 && (
+                    communityPosts.length >= LIMIT &&
+                    !isLoadMoreLoading && (
                       <button
                         onClick={handleLoadMore}
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

@@ -7,9 +7,7 @@ const Home = () => {
   return (
     <div className="flex mx-6">
       <Leftbar />
-
       <MainSection />
-
       <Rightbar />
     </div>
   );

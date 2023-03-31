@@ -291,10 +291,14 @@ const likePost = async (req, res) => {
         message: "Post not found. It may have been deleted already",
       });
     }
-
+    const savedByCount = await User.countDocuments({
+      savedPosts: updatedPost._id,
+    });
     const formattedPost = {
       ...updatedPost.toObject(),
       createdAt: dayjs(updatedPost.createdAt).fromNow(),
+        savedByCount,
+
     };
 
     res.status(200).json(formattedPost);
@@ -332,10 +336,15 @@ const unlikePost = async (req, res) => {
         message: "Post not found. It may have been deleted already",
       });
     }
+    const savedByCount = await User.countDocuments({
+        savedPosts: updatedPost._id,
+        });
 
     const formattedPost = {
       ...updatedPost.toObject(),
       createdAt: dayjs(updatedPost.createdAt).fromNow(),
+        savedByCount,
+
     };
 
     res.status(200).json(formattedPost);
