@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useState, useCallback } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getComPostsAction } from "../../redux/actions/postActions";
 import PostForm from "../form/PostForm";
@@ -22,14 +22,14 @@ const MainSection = () => {
     const fetchInitialPosts = async () => {
       setIsLoading(true);
       if (communityData?._id) {
-        await dispatch(getComPostsAction(communityData._id));
+        dispatch(getComPostsAction(communityData._id));
       }
       setIsLoading(false);
     };
     fetchInitialPosts();
   }, [dispatch, communityData]);
 
-  const handleLoadMore = useCallback(() => {
+  const handleLoadMore = () => {
     if (
       !isLoadMoreLoading &&
       communityData?._id &&
@@ -39,11 +39,11 @@ const MainSection = () => {
       setIsLoadMoreLoading(true);
       dispatch(
         getComPostsAction(communityData._id, LIMIT, communityPosts.length)
-      ).then(() => {
+      ).finally(() => {
         setIsLoadMoreLoading(false);
       });
     }
-  }, [dispatch, communityData, communityPosts, isLoadMoreLoading, LIMIT]);
+  };
 
   const memoizedCommunityPosts = useMemo(() => {
     return communityPosts.map((post) => (
@@ -92,15 +92,17 @@ const MainSection = () => {
                   <div className="text-xl">
                     {isLoading ? "Loading..." : memoizedCommunityPosts}
                   </div>
-                  {communityPosts.length > 0 &&
+                  {!isLoading &&
                     communityPosts.length >= LIMIT &&
-                    !isLoadMoreLoading && (
-                      <button
-                        onClick={handleLoadMore}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                      >
-                        {isLoadMoreLoading ? "Loading..." : "Load more"}
-                      </button>
+                    communityPosts.length % LIMIT === 0 && (
+                      <div className="flex justify-center">
+                        <button
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          onClick={handleLoadMore}
+                        >
+                          {isLoadMoreLoading ? "Loading..." : "Load More"}
+                        </button>
+                      </div>
                     )}
                 </>
               )}

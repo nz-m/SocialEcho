@@ -14,11 +14,9 @@ const EditProfileForm = () => {
   const [location, setLocation] = useState(
     userInfo.location ? userInfo.location : ""
   );
-  const [interests, setInterests] = useState([
-    userInfo.interests && userInfo.interests[0] ? userInfo.interests[0] : "",
-    userInfo.interests && userInfo.interests[1] ? userInfo.interests[1] : "",
-    userInfo.interests && userInfo.interests[2] ? userInfo.interests[2] : "",
-  ]);
+  const [interests, setInterests] = useState(
+    userInfo.interests ? userInfo.interests : ""
+  );
 
   const handlebioChange = (event) => {
     setbio(event.target.value);
@@ -28,10 +26,8 @@ const EditProfileForm = () => {
     setLocation(event.target.value);
   };
 
-  const handleInterestChange = (index, event) => {
-    const newInterests = [...interests];
-    newInterests[index] = event.target.value;
-    setInterests(newInterests);
+  const handleInterestChange = (event) => {
+    setInterests(event.target.value);
   };
 
   const formData = {
@@ -39,13 +35,14 @@ const EditProfileForm = () => {
     location,
     interests,
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await dispatch(updateUserAction(userInfo._id, formData));
       setbio("");
       setLocation("");
-      setInterests(["", "", ""]);
+      setInterests("");
       navigate(-1);
     } catch (error) {
       // handle error
@@ -70,7 +67,7 @@ const EditProfileForm = () => {
       >
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2" htmlFor="bio">
-            bio:
+            Bio:
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -100,25 +97,23 @@ const EditProfileForm = () => {
             className="block text-gray-700 font-bold mb-2"
             htmlFor="interests"
           >
-            Interests:
+            Interests (separate by comma) :
           </label>
-          {interests.map((interest, index) => (
-            <input
-              key={index}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id={`interest_${index}`}
-              type="text"
-              value={interest}
-              onChange={(event) => handleInterestChange(index, event)}
-            />
-          ))}
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="interest"
+            type="text"
+            value={interests}
+            onChange={handleInterestChange}
+            maxLength={100}
+          />
         </div>
         <div className="flex items-center justify-between">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             type="submit"
           >
-            Save Changes
+            Done
           </button>
         </div>
       </form>

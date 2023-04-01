@@ -48,27 +48,18 @@ const UserProfile = () => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <>
+        <div className="border-2">
           <SelfProfileCard user={user} />
-          {user?.totalPosts && <SelfInfoCard user={user} />}
+            <SelfInfoCard user={user} />
+            
+          <h3 className="text-lg font-bold mb-4">Your most recent posts</h3>
 
-          <div>
-            {postToShow && postToShow.length === 0 && (
-              <p className="text-gray-600">No posts available.</p>
-            )}
-
-            {loading ? (
-              <div>Loading posts...</div>
-            ) : (
-              <div className="border-2">
-                <h3 className="text-lg font-bold mb-4">
-                  Your most recent posts
-                </h3>
-                {postToShow}
-              </div>
-            )}
-          </div>
-        </>
+          {postToShow?.length === 0 ? (
+            <p className="text-gray-600">No posts available.</p>
+          ) : (
+            postToShow
+          )}
+        </div>
       )}
     </>
   );

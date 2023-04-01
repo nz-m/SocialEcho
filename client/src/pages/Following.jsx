@@ -27,10 +27,14 @@ const Following = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {loading ? (
             <div>Loading...</div>
-          ) : (
-            followingUsers?.map((user) => (
+          ) : followingUsers?.length > 0 ? (
+            followingUsers.map((user) => (
               <PublicProfileCard key={user._id} user={user} />
             ))
+          ) : (
+            <div className="text-gray-500 text-center py-10">
+              You're not following anyone yet.
+            </div>
           )}
         </div>
       </div>

@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 
 const SelfProfileCard = ({ user }) => {
   return (
-    <div>
+    <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center">
           <img
-            className="w-16 h-16 rounded-full mr-4"
+            className="w-20 h-20 rounded-full mr-4"
             src={user.avatar}
             alt="Profile"
           ></img>
@@ -16,7 +16,7 @@ const SelfProfileCard = ({ user }) => {
             {user.bio ? (
               <p className="text-gray-600">{user.bio}</p>
             ) : (
-              <p className="text-gray-400">bio not added</p>
+              <p className="text-gray-400">Bio not added</p>
             )}
 
             {user.location ? (
@@ -37,21 +37,20 @@ const SelfProfileCard = ({ user }) => {
 
       <div className="mb-8">
         <h3 className="text-lg font-bold mb-4">Interests</h3>
-        {user.interests &&
-          user.interests.filter((interest) => interest !== "").length > 0 && (
-            <ul className="list-disc list-inside">
-              {user.interests.map((interest, i) => {
-                return <span key={i}>{interest} </span>;
-              })}
-            </ul>
-          )}
-        {user.interests &&
-          user.interests.filter((interest) => interest !== "").length === 0 && (
-            <p className="text-gray-600">
-              No interests have been set yet. Add some interests to let people
-              know more about you.
-            </p>
-          )}
+        {user.interests ? (
+          <ul className="list-disc list-inside">
+            {user.interests.split(",").map((interest, i) => (
+              <li key={i} className="text-gray-600">
+                {interest.trim()}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-600">
+            No interests have been set yet. Add some interests to let people
+            know more about you.
+          </p>
+        )}
       </div>
     </div>
   );

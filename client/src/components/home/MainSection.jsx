@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useEffect, useCallback, useState } from "react";
+import React, { memo, useMemo, useEffect, useState } from "react";
 import { getPostsAction } from "../../redux/actions/postActions";
 import { useSelector, useDispatch } from "react-redux";
 import Post from "../post/Post";
@@ -23,14 +23,14 @@ const MainSection = () => {
     }
   }, [userData, dispatch, LIMIT]);
 
-  const handleLoadMore = useCallback(() => {
+  const handleLoadMore = () => {
     if (!isLoading && posts.length % LIMIT === 0 && posts.length >= LIMIT) {
       setIsLoadMoreLoading(true);
       dispatch(getPostsAction(LIMIT, posts.length)).finally(() => {
         setIsLoadMoreLoading(false);
       });
     }
-  }, [dispatch, isLoading, posts, LIMIT]);
+  };
 
   const memoizedPosts = useMemo(() => {
     return posts.map((post) => <MemoizedPost key={post._id} post={post} />);

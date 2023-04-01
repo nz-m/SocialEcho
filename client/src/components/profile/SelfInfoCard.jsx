@@ -2,49 +2,47 @@ import React from "react";
 
 const SelfInfoCard = ({ user }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      {user.totalPosts === 0 ? (
-        <p className="text-gray-600">
-          You haven't created any posts in any communities yet. You're a member
-          of {user.totalCommunities} communit
-          {user.totalCommunities === 1 ? "y" : "ies"} since joining on{" "}
-          <span className="font-medium">
-            {new Date(user.createdAt).toLocaleString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </span>
-        </p>
-      ) : (
-        <p className="text-gray-600">
-          In <span className="font-medium">{user.duration}</span>, you've
-          created <span className="font-medium">{user.totalPosts}</span>{" "}
-          {user.totalPosts === 1 ? "post" : "posts"} across{" "}
-          <span className="font-medium">{user.totalPostCommunities}</span>{" "}
-          {user.totalPostCommunities === 1 ? "community" : "communities"} since
-          joining on{" "}
-          <span className="font-medium">
-            {new Date(user.createdAt).toLocaleString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </span>
-          {user.totalCommunities === 0 ? (
-            <span>. Currently you are not a member of any communities.</span>
-          ) : (
-            <span>
-              . You're a member of{" "}
-              <span className="font-medium">
-                {user.totalCommunities}{" "}
-                {user.totalCommunities === 1 ? "community" : "communities"}
-              </span>
-              !
-            </span>
-          )}
-        </p>
+    <div className="bg-white rounded-lg shadow-md p-6 space-y-2">
+      <div className="flex flex-wrap items-center justify-between">
+        <h3 className="text-lg font-medium text-gray-800">Profile Summary</h3>
+        <div className="text-sm text-gray-500">
+          Joined {user.duration} ago (
+          {new Date(user.createdAt).toLocaleDateString()})
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center justify-between">
+        <div className="text-sm text-gray-500">Total Posts</div>
+        <div className="text-lg font-medium text-gray-800">
+          {user.totalPosts}
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center justify-between">
+        <div className="text-sm text-gray-500">Total Communities</div>
+        <div className="text-lg font-medium text-gray-800">
+          {user.totalCommunities}
+        </div>
+      </div>
+      {user.totalPosts > 0 && (
+        <div className="flex flex-wrap items-center justify-between">
+          <div className="text-sm text-gray-500">Posts in Communities</div>
+          <div className="text-lg font-medium text-gray-800">
+            {user.totalPosts} in {user.totalPostCommunities}{" "}
+            {user.totalPostCommunities === 1 ? "community" : "communities"}
+          </div>
+        </div>
       )}
+      <div className="flex flex-wrap items-center justify-between">
+        <div className="text-sm text-gray-500">Followers</div>
+        <div className="text-lg font-medium text-gray-800">
+          {user.followers?.length ?? 0}
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center justify-between">
+        <div className="text-sm text-gray-500">Following</div>
+        <div className="text-lg font-medium text-gray-800">
+          {user.following?.length ?? 0}
+        </div>
+      </div>
     </div>
   );
 };

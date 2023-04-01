@@ -45,9 +45,8 @@ const userSchema = new Schema(
     },
 
     interests: {
-      type: [String],
-      maxlength: 3,
-      default: [],
+      type: String,
+      default: "",
     },
 
     role: {
