@@ -24,7 +24,7 @@ const SignIn = () => {
   const signInerror = useSelector((state) => state.auth?.signInerror);
   const successMessage = useSelector((state) => state.auth?.successMessage);
   return (
-    <section className="bg-white dark:bg-gray-900">
+    <section className="bg-[#f6fbff] ">
       <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
         {signInerror && (
           <div
@@ -46,12 +46,8 @@ const SignIn = () => {
           </div>
         )}
         <form className="w-full max-w-md">
-          <img
-            className="w-auto h-7 sm:h-8"
-            src="https://merakiui.com/images/logo.svg"
-            alt=""
-          />
-          <h1 className="mt-3 text-2xl font-semibold text-gray-800 capitalize sm:text-3xl dark:text-white">
+         
+          <h1 className="mt-3 text-2xl font-semibold text-gray-800 capitalize sm:text-3xl ">
             sign In
           </h1>
           <div className="relative flex items-center mt-8">
@@ -76,7 +72,7 @@ const SignIn = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
               type="email"
-              className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11   focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               placeholder="Email address"
             />
           </div>
@@ -102,7 +98,7 @@ const SignIn = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               type="password"
-              className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg   focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               placeholder="Password"
             />
           </div>
@@ -117,12 +113,12 @@ const SignIn = () => {
                 "Sign in"
               )}
             </button>
-            <p className="mt-4 text-center text-gray-600 dark:text-gray-400">
+            <p className="mt-4 text-center text-gray-600 ">
               or sign in with
             </p>
             <a
               href="#"
-              className="flex items-center justify-center px-6 py-3 mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+              className="flex items-center justify-center px-6 py-3 mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg hover:bg-gray-50 "
             >
               <svg className="w-6 h-6 mx-2" viewBox="0 0 40 40">
                 <path
