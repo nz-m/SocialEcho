@@ -5,12 +5,12 @@ import RightBar from "../components/home/RightBar";
 
 const ProfilePage = () => {
   return (
-    <div className="mx-6">
-      <div className="flex justify-between">
+
+      <div className="flex lg:gap-10 lg:px-48  mx-auto">
         <Leftbar />
         <UserProfile />
         <RightBar />
-      </div>
+   
     </div>
   );
 };

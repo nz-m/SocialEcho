@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutAction } from "../../redux/actions/authActions";
 import { useEffect } from "react";
 import { getJoinedCommunitiesAction } from "../../redux/actions/communityActions";
-
+import avater from '../../assets/rownok.jpg'
+import {BsThreeDots} from 'react-icons/bs'
 const Leftbar = () => {
   const dispatch = useDispatch();
   const logout = () => {
@@ -31,21 +32,18 @@ const Leftbar = () => {
   }, [visibleCommunities]);
 
   return (
-    <div className="w-3/12 h-screen bg-white sticky top-0">
-      <div className="flex flex-col h-full justify-between py-8 pr-7">
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="text-4xl">Site Logo</h1>
-          <h4>
-            <div>
-              {user && <h1 className="font-bold text-blue-500">{user.name}</h1>}
-            </div>
-          </h4>
+    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
+      <div className="flex flex-col h-full justify-between">
+        <div className="flex gap-2 justify-between">
+         <img className="rounded-full w-10" src={avater} alt="user" />
+            {user && <p className="font-bold text-blue-500 capitalize text-sm">{user.name}</p>}
+            <BsThreeDots className="cursor-pointer"/>
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-start">
           <Link to="/home">Home</Link>
           <Link to="/profile">Profile</Link>
           <Link to="/saved">Saved</Link>
-          
+
           {user && user.role === "general" && (
             <Link to="/following">Following</Link>
           )}

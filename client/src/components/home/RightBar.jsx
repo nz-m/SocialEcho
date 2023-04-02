@@ -79,7 +79,7 @@ const RightBar = () => {
       {currentUserIsModerator ? (
         <ModeratorProfile />
       ) : (
-        <div className="w-3/12 h-screen bg-white sticky top-0">
+        <div className="w-3/12 h-screen bg-white sticky top-0 px-10 py-10">
           {currentLocation !== "/communities" && (
             <div className="card">
               <div className="card-body">

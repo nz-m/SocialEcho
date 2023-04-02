@@ -67,7 +67,7 @@ const Post = ({ post }) => {
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <img
-              className="w-[800px] h-auto rounded-xl mt-3"
+              className=" h-auto rounded-xl mt-3"
               src={fileUrl}
               alt={body}
               loading="lazy"
@@ -75,7 +75,7 @@ const Post = ({ post }) => {
           ) : (
             fileUrl && (
               <video
-                className="w-[800px] h-auto rounded-xl mt-3"
+                className=" h-auto rounded-xl mt-3"
                 src={fileUrl}
                 controls
               />

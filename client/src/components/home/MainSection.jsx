@@ -37,10 +37,8 @@ const MainSection = () => {
   }, [posts]);
 
   return (
-    <div className="w-6/12">
-      <div className="flex justify-center items-center h-32 bg-gray-200 rounded-lg shadow-xl mb-4">
-        <h1 className="text-2xl font-bold text-gray-700">Welcome</h1>
-      </div>
+    <div className="w-6/12 px-10 py-10">
+   
       {postError && <div className="text-red-500">{postError}</div>}
       <div>{memoizedPosts}</div>
       {isLoading && <div>Loading...</div>}
