@@ -55,19 +55,9 @@ module.exports = {
       },
     },
   },
-  daisyui: {
-    themes: [
-      {
-        light: {
-          ...require("daisyui/src/colors/themes")["[data-theme=light]"],
-          primary: "#0096C7",
-          "primary-focus": "#5F9BAE",
-        },
-      },
-    ],
-  },
+ 
   plugins: [
-    require("daisyui"),
+  
     require("@tailwindcss/line-clamp"),
     require("tw-elements/dist/plugin"),
   ],
