@@ -40,7 +40,7 @@ module.exports = {
           300: "#2e2e2e",
         },
         primary: {
-          DEFAULT: "#0096C7",
+          DEFAULT: "#3b82f6",
           50: "#F7C6C6",
           100: "#F5B4B4",
           200: "#F09090",
@@ -55,9 +55,8 @@ module.exports = {
       },
     },
   },
- 
+
   plugins: [
-  
     require("@tailwindcss/line-clamp"),
     require("tw-elements/dist/plugin"),
   ],

@@ -46,7 +46,6 @@ const SignIn = () => {
           </div>
         )}
         <form className="w-full max-w-md">
-         
           <h1 className="mt-3 text-2xl font-semibold text-gray-800 capitalize sm:text-3xl ">
             sign In
           </h1>
@@ -113,13 +112,8 @@ const SignIn = () => {
                 "Sign in"
               )}
             </button>
-            <p className="mt-4 text-center text-gray-600 ">
-              or sign in with
-            </p>
-            <a
-              href="#"
-              className="flex items-center justify-center px-6 py-3 mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg hover:bg-gray-50 "
-            >
+            <p className="mt-4 text-center text-gray-600 ">or</p>
+            <p className="flex items-center justify-center px-6 py-3 mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg hover:bg-gray-50 ">
               <svg className="w-6 h-6 mx-2" viewBox="0 0 40 40">
                 <path
                   d="M36.3425 16.7358H35V16.6667H20V23.3333H29.4192C28.045 27.2142 24.3525 30 20 30C14.4775 30 10 25.5225 10 20C10 14.4775 14.4775 9.99999 20 9.99999C22.5492 9.99999 24.8683 10.9617 26.6342 12.5325L31.3483 7.81833C28.3717 5.04416 24.39 3.33333 20 3.33333C10.7958 3.33333 3.33335 10.7958 3.33335 20C3.33335 29.2042 10.7958 36.6667 20 36.6667C29.2042 36.6667 36.6667 29.2042 36.6667 20C36.6667 18.8825 36.5517 17.7917 36.3425 16.7358Z"
@@ -139,13 +133,13 @@ const SignIn = () => {
                 />
               </svg>
               <span className="mx-2">Sign in with Google</span>
-            </a>
+            </p>
             <div className="mt-6 text-center ">
               <Link
                 to="/signup"
                 className="text-sm text-blue-500 hover:underline dark:text-blue-400"
               >
-                Sign Up
+                Don't have an account? Sign up
               </Link>
             </div>
           </div>
