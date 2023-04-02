@@ -191,12 +191,25 @@ const getCommunityPosts = async (req, res) => {
   }
 };
 
+/**
+ * Retrieves the posts of the users that the current user is following in a given community
+ *
+ * @async
+ * @function getFollowingUsersPosts
+ *
+ * @param {string} req.params.id - The ID of the community to retrieve the posts for.
+ * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not specified.
+ * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them.
+ * Defaults to 0 if not specified.
+ *
+ * @throws {Error} - If an error occurs while retrieving the posts.
+ *
+ * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ */
 const getFollowingUsersPosts = async (req, res) => {
   try {
     const userId = getUserFromToken(req);
     const communityId = req.params.id;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = parseInt(req.query.skip) || 0;
 
     const following = await Relationship.find({
       follower: userId,
@@ -216,8 +229,7 @@ const getFollowingUsersPosts = async (req, res) => {
       })
       .populate("user", "name avatar")
       .populate("community", "name")
-      .skip(skip)
-      .limit(limit)
+      .limit(20)
       .lean();
 
     const formattedPosts = posts.map((post) => ({
@@ -297,8 +309,7 @@ const likePost = async (req, res) => {
     const formattedPost = {
       ...updatedPost.toObject(),
       createdAt: dayjs(updatedPost.createdAt).fromNow(),
-        savedByCount,
-
+      savedByCount,
     };
 
     res.status(200).json(formattedPost);
@@ -337,14 +348,13 @@ const unlikePost = async (req, res) => {
       });
     }
     const savedByCount = await User.countDocuments({
-        savedPosts: updatedPost._id,
-        });
+      savedPosts: updatedPost._id,
+    });
 
     const formattedPost = {
       ...updatedPost.toObject(),
       createdAt: dayjs(updatedPost.createdAt).fromNow(),
-        savedByCount,
-
+      savedByCount,
     };
 
     res.status(200).json(formattedPost);
