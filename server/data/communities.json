@@ -1,0 +1,167 @@
+[
+  {
+    "name": "Programming",
+    "description": "Discussions about programming languages, tools and techniques",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Programming.jpg",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Music",
+    "description": "Talk about your favorite songs, artists and genres",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Music.jpg",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Gaming",
+    "description": "All things gaming - from retro to the latest releases",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Gaming.jpg",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Education",
+    "description": "Discussions about learning, teaching and educational resources",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Education.jpg",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Career",
+    "description": "Advice and support for job seekers, career changers and professionals",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Technology",
+    "description": "Discussions about gadgets, software, hardware and emerging technologies",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+
+  {
+    "name": "Sports",
+    "description": "Talk about your favorite sports, teams and players",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Travel",
+    "description": "A community for sharing travel stories, tips and recommendations.",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Food",
+    "description": "A community for sharing food stories, tips and recommendations.",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Movies",
+    "description": "A community for sharing movie stories, tips and recommendations.",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Books",
+    "description": "A community for sharing book stories, tips and recommendations.",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Fitness",
+    "description": "A community for sharing workout routines, fitness challenges and healthy eating habits.",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Health",
+    "description": "An informative place for people who are looking to improve their health and well-being.",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Finance",
+    "description": "A community for sharing finance stories, tips and recommendations.",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Politics",
+    "description": "A community for sharing political stories, tips and recommendations.",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  },
+  {
+    "name": "Fashion",
+    "description": "A community for sharing fashion stories, tips and recommendations.",
+    "moderators": [],
+    "members": [],
+    "bannedUsers": [],
+    "posts": [],
+    "reportedPosts": [],
+    "rules": []
+  }
+]

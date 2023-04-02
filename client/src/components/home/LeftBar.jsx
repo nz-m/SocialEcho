@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useMemo, memo } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { logoutAction } from "../../redux/actions/authActions";
 import { useEffect } from "react";
 import { getJoinedCommunitiesAction } from "../../redux/actions/communityActions";
@@ -12,43 +10,25 @@ const Leftbar = () => {
   const logout = () => {
     dispatch(logoutAction());
   };
-  const user = useSelector((state) => state.auth.userData);
+  const user = useSelector((state) => state.auth?.userData);
+  const joinedCommunities = useSelector(
+    (state) => state.community?.joinedCommunities
+  );
 
   useEffect(() => {
     dispatch(getJoinedCommunitiesAction());
   }, [dispatch]);
 
-  const joinedCommunities = useSelector(
-    (state) => state.community.joinedCommunities
-  );
+  const visibleCommunities = useMemo(() => {
+    return joinedCommunities?.slice(0, 5);
+  }, [joinedCommunities]);
 
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
-  };
-
-  if (!joinedCommunities) {
-    return null;
-    // later add a loading spinner
-  }
-
-  const communityLinks = joinedCommunities.map((community) => ({
-    href: `/community/${community.name}`,
-    label: community.name,
-  }));
-
-  const links = [
-    { href: "/home", label: "Home" },
-    { href: "/profile", label: "Profile" },
-    { href: "/saved", label: "Saved" },
-    {
-      href: "#",
-      label: "Joined Communities",
-      onClick: toggleDropdown,
-      dropdown: true,
-    },
-  ];
+  const communityLinks = useMemo(() => {
+    return visibleCommunities?.map((community) => ({
+      href: `/community/${community.name}`,
+      label: community.name,
+    }));
+  }, [visibleCommunities]);
 
   return (
     <div className="w-3/12 h-screen bg-white sticky top-0">
@@ -62,43 +42,34 @@ const Leftbar = () => {
           </h4>
         </div>
         <div className="flex flex-col items-center">
-          {links.map((link) => {
-            if (link.dropdown) {
-              return (
-                <div key={link.label}>
-                  <button
-                    onClick={link.onClick}
-                    className="block py-2 px-4 hover:bg-[#E6F7FF] hover:rounded-md hover:text-[#000] text-right hover:font-bold"
-                  >
-                    {link.label} ▼
-                  </button>
-                  {dropdownVisible && (
-                    <div className="flex flex-col items-center">
-                      {communityLinks.map((communityLink) => (
-                        <Link
-                          to={communityLink.href}
-                          key={communityLink.href}
-                          className="block py-2 px-4 hover:bg-[#E6F7FF] hover:rounded-md hover:text-[#000] text-right"
-                        >
-                          {communityLink.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            } else {
-              return (
-                <Link
-                  to={link.href}
-                  key={link.href}
-                  className="block py-2 px-4 hover:bg-[#E6F7FF] hover:rounded-md hover:text-[#000] hover:font-bold text-right"
-                >
-                  {link.label}
+          <Link to="/home">Home</Link>
+          <Link to="/profile">Profile</Link>
+          <Link to="/saved">Saved</Link>
+          
+          {user && user.role === "general" && (
+            <Link to="/following">Following</Link>
+          )}
+
+          {communityLinks && communityLinks.length > 0 ? (
+            <div>
+              <h3 className="mb-2">Communities you're in</h3>
+              <ul>
+                {communityLinks.map((communityLink) => (
+                  <li key={communityLink.href}>
+                    <Link to={communityLink.href}>{communityLink.label}</Link>
+                  </li>
+                ))}
+              </ul>
+
+              <div>
+                <Link to="/my-communities">
+                  See all ({joinedCommunities.length})
                 </Link>
-              );
-            }
-          })}
+              </div>
+            </div>
+          ) : (
+            <div>No communities found.</div>
+          )}
         </div>
         <div className="flex flex-col items-center justify-center">
           <div className="flex">
@@ -109,19 +80,14 @@ const Leftbar = () => {
           </div>
 
           {user && (
-            <button
-              onClick={logout}
-              type="button"
-              className="inline-block rounded bg-danger px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-danger-600 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-danger-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-danger-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]"
-            >
+            <button onClick={logout} type="button">
               Logout
             </button>
           )}
-          <p className="text-sm">&copy; 2023 SocialEcho</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Leftbar;
+export default memo(Leftbar);

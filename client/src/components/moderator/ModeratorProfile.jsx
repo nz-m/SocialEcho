@@ -9,7 +9,7 @@ const ModeratorProfile = () => {
     dispatch(getModProfileAction());
   }, [dispatch]);
 
-  const moderator = useSelector((state) => state.moderation.modProfile);
+  const moderator = useSelector((state) => state.moderation?.modProfile);
   if (!moderator) return null; // later add a loading spinner
 
   return (

@@ -8,14 +8,9 @@ export function isValidToken(token) {
     return false;
   }
 
-  const decodedPayload = JSON.parse(atob(payload));
+  const decodedPayload = JSON.parse(window.atob(payload));
 
-  // Check if token is expired
-  const expiryTime = decodedPayload.exp * 1000; // convert from seconds to milliseconds
+  const expiryTime = decodedPayload.exp * 1000;
   const currentTime = Date.now();
-  if (expiryTime <= currentTime) {
-    return false;
-  }
-
-  return true;
+  return expiryTime > currentTime;
 }

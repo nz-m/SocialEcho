@@ -1,16 +1,4 @@
-import axios from "axios";
-
-const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-});
-
-API.interceptors.request.use((req) => {
-  const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
-  if (accessToken) {
-    req.headers.Authorization = `Bearer ${accessToken}`;
-  }
-  return req;
-});
+import { API, handleApiError } from "./utils";
 
 const signIn = async (formData) => {
   try {
@@ -21,7 +9,7 @@ const signIn = async (formData) => {
     });
     return { error: null, data: res.data };
   } catch (err) {
-    return { error: err, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -34,24 +22,23 @@ const signUp = async (formData) => {
     });
     return { error: null, data: res.data };
   } catch (err) {
-    return { error: err, data: null };
+    return {
+      error: err.response.data.errors,
+      data: null,
+    };
   }
 };
 
-const logout = async (refreshToken) => {
+const logout = async () => {
   try {
-    const res = await API.post(
-      "/users/logout",
-      { refreshToken },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const res = await API.post("/users/logout", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return { error: null, data: res.data };
   } catch (err) {
-    return { error: err, data: null };
+    return handleApiError(err);
   }
 };
 
@@ -60,7 +47,7 @@ const getModProfile = async () => {
     const res = await API.get("/users/moderator");
     return { error: null, data: res.data };
   } catch (err) {
-    return { error: err, data: null };
+    return handleApiError(err);
   }
 };
 

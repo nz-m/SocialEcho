@@ -1,28 +1,52 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { HiOutlineHandThumbUp, HiHandThumbUp } from "react-icons/hi2";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   likePostAction,
   unlikePostAction,
 } from "../../redux/actions/postActions";
-import { useSelector } from "react-redux";
-import { useState } from "react";
 
 const Like = ({ post }) => {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.auth.userData);
-
-  const [liked, setLiked] = useState(post.likes.includes(userData.id));
-
   const { _id, likes } = post;
+  const userData = useSelector((state) => state.auth?.userData);
 
-  const toggleLike = (e) => {
-    if (liked) {
-      dispatch(unlikePostAction(_id, userData.id));
-      setLiked(false);
-    } else {
-      dispatch(likePostAction(_id, userData.id));
-      setLiked(true);
+  const [likeState, setLikeState] = useState({
+    liked: post.likes.includes(userData._id),
+    localLikes: likes.length,
+  });
+
+  useEffect(() => {
+    setLikeState({
+      liked: post.likes.includes(userData._id),
+      localLikes: post.likes.length,
+    });
+  }, [post.likes, userData._id]);
+
+  const toggleLike = async (e) => {
+    e.preventDefault();
+    const optimisticLikes = likeState.liked
+      ? likeState.localLikes - 1
+      : likeState.localLikes + 1;
+
+    setLikeState((prevState) => ({
+      ...prevState,
+      liked: !prevState.liked,
+      localLikes: optimisticLikes,
+    }));
+
+    try {
+      if (likeState.liked) {
+        dispatch(unlikePostAction(_id, userData._id));
+      } else {
+        dispatch(likePostAction(_id, userData._id));
+      }
+    } catch (error) {
+      setLikeState((prevState) => ({
+        ...prevState,
+        liked: !prevState.liked,
+        localLikes: optimisticLikes,
+      }));
     }
   };
 
@@ -32,7 +56,8 @@ const Like = ({ post }) => {
         onClick={toggleLike}
         className="flex items-center text-xl cursor-pointer gap-1"
       >
-        {liked ? <HiHandThumbUp /> : <HiOutlineHandThumbUp />} {likes.length}
+        {likeState.liked ? <HiHandThumbUp /> : <HiOutlineHandThumbUp />}{" "}
+        {likeState.localLikes}
       </button>
     </>
   );

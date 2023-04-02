@@ -1,70 +1,101 @@
+import * as types from "../constants/authConstants";
 import {
-  SIGNUP,
-  SIGNIN,
-  LOGOUT,
-  REFRESH_TOKEN_SUCCESS,
-  REFRESH_TOKEN_FAIL,
-} from "../actions/authActions";
-import { GET_COMMUNITY } from "../actions/communityActions";
+  GET_COMMUNITY_SUCCESS,
+  GET_COMMUNITY_FAIL,
+} from "../constants/communityConstants";
 
 const initialState = {
   userData: null,
   refreshToken: null,
   accessToken: null,
-  signupErr: [],
+  signUperror: [],
+  signInerror: null,
+  successMessage: null,
   isModerator: false,
 };
 
 const authReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case SIGNUP:
+  const { type, payload } = action;
+
+  switch (type) {
+    case types.SIGNUP_SUCCESS:
       return {
         ...state,
-        userData: action.data.data,
-        refreshToken: action.data.refreshToken,
-        accessToken: action.data.accessToken,
-        signupErr: action.data ? action.data : [],
+        signInerror: null,
+        successMessage: payload ? payload : null,
       };
 
-    case SIGNIN:
-      const { user, accessToken, refreshToken } = action.data;
-      localStorage.setItem("profile", JSON.stringify(action.data));
-      return { ...state, userData: user, accessToken, refreshToken };
-    case LOGOUT:
-      localStorage.clear();
+    case types.SIGNUP_FAIL:
+      return {
+        ...state,
+        successMessage: null,
+        signInerror: null,
+        signUperror: payload ? payload : [],
+      };
+
+    case types.SIGNIN_SUCCESS:
+      return {
+        ...state,
+        userData: payload ? payload.user : null,
+        accessToken: payload ? payload.accessToken : null,
+        refreshToken: payload ? payload.refreshToken : null,
+        signInerror: null,
+        successMessage: payload ? payload : null,
+      };
+
+    case types.SIGNIN_FAIL:
+      return {
+        ...state,
+        successMessage: null,
+        signUperror: [],
+        signInerror: payload ? payload : null,
+      };
+
+    case types.LOGOUT:
       return {
         ...state,
         userData: null,
-        accessToken: null,
         refreshToken: null,
-      };
-    case REFRESH_TOKEN_SUCCESS:
-      const profile = JSON.parse(localStorage.getItem("profile"));
-      const payload = action.payload;
-      localStorage.setItem(
-        "profile",
-        JSON.stringify({ ...profile, ...payload })
-      );
-      return {
-        ...state,
-        accessToken: payload.accessToken,
-        refreshToken: payload.refreshToken,
+        accessToken: null,
+        signInerror: null,
+        signUperror: [],
+        successMessage: null,
+        isModerator: false,
       };
 
-    case REFRESH_TOKEN_FAIL:
-      localStorage.clear();
+    case types.REFRESH_TOKEN_SUCCESS:
       return {
         ...state,
+        accessToken: payload ? payload.accessToken : null,
+        refreshToken: payload ? payload.refreshToken : null,
       };
 
-    case GET_COMMUNITY:
-      const moderators = action.payload?.moderators || [];
+    case types.REFRESH_TOKEN_FAIL:
+      return {
+        ...state,
+        userData: null,
+        refreshToken: null,
+        accessToken: null,
+        signUperror: [],
+        signInerror: null,
+        successMessage: null,
+        isModerator: false,
+      };
+
+    case GET_COMMUNITY_SUCCESS:
+      const moderators = payload ? payload.moderators : [];
       const isModerator = moderators.some(
-        (moderator) => moderator === state.userData?.id
+        (moderator) => moderator === state.userData?._id
       );
       return {
         ...state,
         isModerator,
+      };
+
+    case GET_COMMUNITY_FAIL:
+      return {
+        ...state,
+        isModerator: false,
       };
 
     default:

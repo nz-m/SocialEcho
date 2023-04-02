@@ -1,43 +1,63 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState, useMemo } from "react";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import LeaveModal from "../modals/LeaveModal";
 import { getCommunityAction } from "../../redux/actions/communityActions";
-import { leaveFetchData } from "../../middlewares/joinLeaveFetch";
+import placeholder from "../../assets/placeholder.png";
+
+import {
+  useBannerLoading,
+  useIsModeratorUpdated,
+} from "../../hooks/useCommunityData";
 
 const RightBar = () => {
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { communityName } = useParams();
+
+  const toggleLeaveModal = () => {
+    setShowLeaveModal(!showLeaveModal);
+  };
 
   useEffect(() => {
     dispatch(getCommunityAction(communityName));
   }, [dispatch, communityName]);
 
-  const communityData = useSelector((state) => state.community.communityData);
-  const isModerator = useSelector((state) => state.auth.isModerator);
-  const [isModeratorUpdated, setIsModeratorUpdated] = useState(false);
+  const communityData = useSelector((state) => state.community?.communityData);
+  const isModerator = useSelector((state) => state.auth?.isModerator);
 
-  const { name, description, members, rules } = communityData || {};
+  const { name, description, members, rules, banner } = useMemo(
+    () => communityData || {},
+    [communityData]
+  );
 
-  const leaveCommunityHandler = () => {
-    dispatch(leaveFetchData(communityName));
-    navigate("/");
-  };
-  useEffect(() => {
-    if (isModerator !== null) {
-      setIsModeratorUpdated(true);
-    }
-  }, [isModerator]);
+  const bannerLoaded = useBannerLoading(banner);
+  const isModeratorUpdated = useIsModeratorUpdated(isModerator);
 
   if (!communityData) {
-    return null;
-    // later add a loading spinner
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="w-1/4 p-4 h-screen bg-white sticky top-0">
       <div className="bg-white rounded-md  p-4">
-        <h2>A banner goes here</h2>
+        {bannerLoaded ? (
+          <img
+            src={banner}
+            alt="community banner"
+            className="w-full h-40 rounded-md object-cover mb-4"
+            onError={(e) => {
+              e.target.src = placeholder;
+            }}
+          />
+        ) : (
+          <img
+            src={placeholder}
+            alt="community banner placeholder"
+            className="w-full h-40 rounded-md object-cover mb-4"
+          />
+        )}
+
         <h2 className="text-lg font-bold mb-4">{name}</h2>
         <h3>{description}</h3>
         <div className="flex items-center text-gray-500 mb-4">
@@ -56,23 +76,20 @@ const RightBar = () => {
 
           {isModeratorUpdated && !isModerator && (
             <button
-              onClick={leaveCommunityHandler}
+              onClick={toggleLeaveModal}
               className="text-white btn-primary btn-sm"
             >
               Leave Community
             </button>
           )}
+          {
+            <LeaveModal
+              show={showLeaveModal}
+              toggle={toggleLeaveModal}
+              communityName={communityName}
+            />
+          }
         </div>
-        {/* 
-        {moderators && moderators.length > 0 && (
-          <div className="text-gray-500 mb-4">
-            <span className="font-bold">Moderators:</span>{" "}
-            {moderators.map((moderator) => moderator.name).join(", ")}
-          </div>
-
-          Moderators: an array of ids
-        )} */}
-
         {rules && rules.length > 0 && (
           <div className="text-gray-500 mb-4">
             <span className="font-bold">Community Guidelines:</span>

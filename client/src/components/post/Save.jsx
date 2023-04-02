@@ -1,29 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { HiShoppingCart } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import {
   savePostAction,
   unsavePostAction,
   getSavedPostsAction,
+  increaseSavedByCount,
+  decreaseSavedByCount,
 } from "../../redux/actions/postActions";
 
 const Save = ({ postId }) => {
   const dispatch = useDispatch();
 
   const [saved, setSaved] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const savedPosts = useSelector((state) => state.posts?.savedPosts);
+  const savedPostsIds = savedPosts.map((post) => post._id);
 
   useEffect(() => {
-    const fetchSavedPosts = async () => {
-      await dispatch(getSavedPostsAction());
-      setIsFetching(false);
-    };
-
-    fetchSavedPosts();
+    dispatch(getSavedPostsAction());
   }, [dispatch]);
-
-  const savedPosts = useSelector((state) => state.posts.savedPosts);
-  const savedPostsIds = savedPosts.map((post) => post._id);
 
   useEffect(() => {
     if (savedPostsIds.includes(postId)) {
@@ -31,34 +27,40 @@ const Save = ({ postId }) => {
     } else {
       setSaved(false);
     }
-  }, [savedPostsIds, postId]);
+  }, [postId, savedPostsIds]);
 
-  const handleSave = () => {
-    dispatch(savePostAction(postId));
-    setSaved(true);
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      await dispatch(savePostAction(postId));
+      dispatch(increaseSavedByCount(postId));
+      setSaved(true);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const handleUnsave = () => {
-    dispatch(unsavePostAction(postId));
-    setSaved(false);
+  const handleUnsave = async () => {
+    try {
+      setIsSaving(true);
+      await dispatch(unsavePostAction(postId));
+      dispatch(decreaseSavedByCount(postId));
+      setSaved(false);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
-    <>
-      {isFetching ? (
-        "Loading..."
-      ) : (
-        <button
-          key={postId}
-          onClick={saved ? handleUnsave : handleSave}
-          className="flex items-center text-xl gap-1"
-        >
-          <HiShoppingCart />
-          {saved ? "Remove from Saved" : "Save"}
-        </button>
-      )}
-    </>
+    <button
+      onClick={saved ? handleUnsave : handleSave}
+      className="flex items-center text-xl gap-1"
+      disabled={isSaving}
+    >
+      <HiShoppingCart />
+      {isSaving ? "Saving..." : saved ? "Remove from Saved" : "Save"}
+    </button>
   );
 };
 
-export default Save;
+export default memo(Save);

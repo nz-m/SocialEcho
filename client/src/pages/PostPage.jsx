@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 const PostPage = () => {
   const { postId } = useParams();
   const dispatch = useDispatch();
+
   const userData = useSelector((state) => state.auth?.userData);
   const post = useSelector((state) =>
     state.posts?.posts.find((post) => post._id === postId)
@@ -17,7 +18,7 @@ const PostPage = () => {
 
   useEffect(() => {
     if (userData) {
-      dispatch(getPostsAction(userData.id));
+      dispatch(getPostsAction());
     }
   }, [userData, dispatch]);
 
@@ -26,11 +27,10 @@ const PostPage = () => {
   return (
     <div className="flex mx-6">
       <Leftbar />
-
       <div>
+        <h1 className="text-2xl font-bold text-gray-700">Post</h1>
         <PostView post={post} />
       </div>
-
       <CommentSidebar />
     </div>
   );

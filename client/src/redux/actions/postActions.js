@@ -1,191 +1,372 @@
 import * as api from "../api/postAPI";
+import * as types from "../constants/postConstants";
 
-export const CREATE_POST = "CREATE_POST";
-export const GET_POSTS = "GET_POSTS";
-export const GET_COMMUNITY_POSTS = "GET_COMMUNITY_POSTS";
-export const DELETE_POST = "DELETE_POST";
-export const DELETE_COMMENT = "DELETE_COMMENT";
-export const GET_COMMENTS = "GET_COMMENTS";
-export const UPDATE_POST = "UPDATE_POST";
-export const LIKE_POST = "LIKE_POST";
-export const UNLIKE_POST = "UNLIKE_POST";
-export const SAVE_POST = "SAVE_POST";
-export const UNSAVE_POST = "UNSAVE_POST";
-export const GET_SAVED_POSTS = "GET_SAVED_POSTS";
-
-//  TODO: Remove console.log(error) from all actions and replace with error handling
-
-export const createPostAction = (formData, callback) => async (dispatch) => {
+export const createPostAction = (formData) => async (dispatch) => {
   try {
-    const { data } = await api.createPost(formData);
+    const { error, data } = await api.createPost(formData);
+
+    if (error) {
+      throw new Error(error);
+    }
+
     dispatch({
-      type: CREATE_POST,
+      type: types.CREATE_POST_SUCCESS,
       payload: data,
       meta: {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getPostsAction = (userId, callback) => async (dispatch) => {
-  try {
-    const { data } = await api.getPosts(userId);
     dispatch({
-      type: GET_POSTS,
-      payload: data,
+      type: types.CREATE_POST_FAIL,
+      payload: error.message,
       meta: {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
-  } catch (error) {
-    console.log(error);
   }
 };
 
-export const getComPostsAction = (id, callback) => async (dispatch) => {
-  try {
-    const { data } = await api.getComPosts(id);
-    dispatch({
-      type: GET_COMMUNITY_POSTS,
-      payload: data,
-      meta: {
-        requiresAuth: true,
-      },
-    });
-    if (callback) callback();
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const getPostsAction =
+  (limit = 10, skip = 0) =>
+  async (dispatch) => {
+    try {
+      const { error, data } = await api.getPosts(limit, skip);
 
-export const deletePostAction = (id, callback) => async (dispatch) => {
+      if (error) {
+        throw new Error(error);
+      }
+
+      dispatch({
+        type: types.GET_POSTS_SUCCESS,
+        payload: {
+          page: skip / limit + 1,
+          posts: data,
+        },
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: types.GET_POSTS_FAIL,
+        payload: error,
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    }
+  };
+
+export const getComPostsAction =
+  (id, limit = 10, skip = 0) =>
+  async (dispatch) => {
+    try {
+      const { error, data } = await api.getComPosts(id, limit, skip);
+
+      if (error) {
+        throw new Error(error);
+      }
+
+      dispatch({
+        type: types.GET_COMMUNITY_POSTS_SUCCESS,
+        payload: {
+          page: skip / limit + 1,
+          posts: data,
+        },
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: types.GET_COMMUNITY_POSTS_FAIL,
+        payload: error.message,
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    }
+  };
+
+export const getFollowingUsersPostsAction =
+  (communityName, limit = 10, skip = 0) =>
+  async (dispatch) => {
+    try {
+      const { error, data } = await api.getFollowingUsersPosts(
+        communityName,
+        limit,
+        skip
+      );
+
+      if (error) {
+        throw new Error(error);
+      }
+
+      dispatch({
+        type: types.GET_FOLLOWING_USERS_POSTS_SUCCESS,
+        payload: {
+          page: skip / limit + 1,
+          posts: data,
+        },
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: types.GET_FOLLOWING_USERS_POSTS_FAIL,
+        payload: error.message,
+        meta: {
+          requiresAuth: true,
+        },
+      });
+    }
+  };
+
+export const deletePostAction = (id) => async (dispatch) => {
   try {
-    await api.deletePost(id);
+    const { error } = await api.deletePost(id);
+
+    if (error) {
+      throw new Error(error);
+    }
+
     dispatch({
-      type: DELETE_POST,
+      type: types.DELETE_POST_SUCCESS,
       payload: id,
       meta: {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.DELETE_POST_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
   }
 };
 
 // like post
-export const likePostAction = (id, userId, callback) => async (dispatch) => {
+export const likePostAction = (id, userId) => async (dispatch) => {
   try {
-    const { data } = await api.likePost(id, userId);
+    const { error, data } = await api.likePost(id, userId);
+
+    if (error) {
+      throw new Error(error);
+    }
+
     dispatch({
-      type: LIKE_POST,
+      type: types.LIKE_POST_SUCCESS,
       payload: data,
       meta: {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.LIKE_POST_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
   }
 };
 
 // unlike post
-export const unlikePostAction = (id, userId, callback) => async (dispatch) => {
+export const unlikePostAction = (id, userId) => async (dispatch) => {
   try {
-    const { data } = await api.unlikePost(id, userId);
+    const { error, data } = await api.unlikePost(id, userId);
+    if (error) {
+      throw new Error(error);
+    }
     dispatch({
-      type: UNLIKE_POST,
+      type: types.UNLIKE_POST_SUCCESS,
       payload: data,
       meta: {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.UNLIKE_POST_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
   }
 };
 
 // add comment
-export const addCommentAction = (postId, newComment, callback) => async () => {
+export const addCommentAction = (postId, newComment) => async (dispatch) => {
   try {
-    await api.addComment(postId, newComment);
-    if (callback) callback();
+    const { error } = await api.addComment(postId, newComment);
+
+    if (error) {
+      throw new Error(error);
+    }
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.ADD_COMMENT_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
   }
 };
 
-//get comments
-export const getCommentsAction = (id, callback) => async (dispatch) => {
+export const getCommentsAction = (id) => async (dispatch) => {
   try {
-    const { data } = await api.getComments(id);
+    const { error, data } = await api.getComments(id);
+
+    if (error) {
+      throw new Error(error);
+    }
+
     dispatch({
-      type: GET_COMMENTS,
+      type: types.GET_COMMENTS_SUCCESS,
       payload: data,
       meta: {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.GET_COMMENTS_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
   }
 };
 
-// save post
-export const savePostAction = (id, callback) => async (dispatch) => {
+export const savePostAction = (id) => async (dispatch) => {
   try {
-    const { data } = await api.savePost(id);
+    const { error, data } = await api.savePost(id);
+
+    if (error) {
+      throw new Error(error);
+    }
+
     dispatch({
-      type: SAVE_POST,
+      type: types.SAVE_POST_SUCCESS,
       payload: data,
       meta: {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.SAVE_POST_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
   }
 };
 
-// unsave post
-export const unsavePostAction = (id, callback) => async (dispatch) => {
+export const unsavePostAction = (id) => async (dispatch) => {
   try {
-    const { data } = await api.unsavePost(id);
+    const { error, data } = await api.unsavePost(id);
+
+    if (error) {
+      throw new Error(error);
+    }
+
     dispatch({
-      type: UNSAVE_POST,
+      type: types.UNSAVE_POST_SUCCESS,
       payload: data,
       meta: {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.UNSAVE_POST_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
   }
 };
 
-export const getSavedPostsAction = (callback) => async (dispatch) => {
+export const getSavedPostsAction = () => async (dispatch) => {
   try {
-    const { data } = await api.getSavedPosts();
+    const { error, data } = await api.getSavedPosts();
+
+    if (error) {
+      throw new Error(error);
+    }
+
     dispatch({
-      type: GET_SAVED_POSTS,
+      type: types.GET_SAVED_POSTS_SUCCESS,
       payload: data,
       meta: {
         requiresAuth: true,
       },
     });
-    if (callback) callback();
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.GET_SAVED_POSTS_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  }
+};
+
+export const increaseSavedByCount = (postId) => async (dispatch) => {
+  dispatch({
+    type: types.INCREASE_SAVED_BY_COUNT,
+    payload: postId,
+    meta: {
+      requiresAuth: true,
+    },
+  });
+};
+
+export const decreaseSavedByCount = (postId) => async (dispatch) => {
+  dispatch({
+    type: types.DECREASE_SAVED_BY_COUNT,
+    payload: postId,
+    meta: {
+      requiresAuth: true,
+    },
+  });
+};
+
+export const getPublicPostsAction = (publicUserId) => async (dispatch) => {
+  try {
+    const { error, data } = await api.getPublicPosts(publicUserId);
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    dispatch({
+      type: types.GET_PUBLIC_POSTS_SUCCESS,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: types.GET_PUBLIC_POSTS_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
   }
 };

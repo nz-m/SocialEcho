@@ -1,19 +1,55 @@
 import jwt_decode from "jwt-decode";
 import { refreshTokenAction } from "../redux/actions/refreshTokenAction";
 
+/**
+ * Middleware for refreshing JWT access token before it expires.
+ *
+ * @param {Object} store - The Redux store
+ * @returns {function} The middleware function
+ *
+ * @description
+ * This middleware checks if an action requires authentication by looking for the `requiresAuth` property in the action's `meta` field.
+ * If the action requires authentication, it checks if the JWT access token is present in the state and not expired.
+ * If the token is expired, it tries to refresh it using the JWT refresh token.
+ * If the refresh succeeds, it gets the new access token from the state and continues with the original action.
+ * If the refresh fails, it logs out the user and redirects them to the login page.
+ */
 export const tokenMiddleware = (store) => (next) => async (action) => {
   if (action.meta && action.meta.requiresAuth) {
     const state = store.getState();
     const token = state.auth.accessToken;
-    const expiresIn = token ? jwt_decode(token).exp * 1000 - Date.now() : 0;
-    if (!token || expiresIn < 300000) {
-      // Refresh token if it does not exist or expires in less than 5 minutes
-      const refreshToken = state.auth.refreshToken;
-      try {
-        await store.dispatch(refreshTokenAction(refreshToken));
-      } catch (error) {
-        store.dispatch({ type: "LOGOUT" });
+    if (token) {
+      const expiresIn = jwt_decode(token).exp * 1000 - Date.now();
+      if (expiresIn < 300000) {
+        const refreshToken = state.auth.refreshToken;
+        try {
+          await store.dispatch(refreshTokenAction(refreshToken));
+          const newToken = store.getState().auth.accessToken;
+          if (!newToken) {
+            throw new Error("Access token not found after refresh");
+          }
+        } catch (error) {
+          store.dispatch({ type: "LOGOUT" });
+          window.location.href = "/signin";
+        }
+      } else {
+        setTimeout(async () => {
+          const refreshToken = state.auth.refreshToken;
+          try {
+            await store.dispatch(refreshTokenAction(refreshToken));
+            const newToken = store.getState().auth.accessToken;
+            if (!newToken) {
+              throw new Error("Access token not found after refresh");
+            }
+          } catch (error) {
+            store.dispatch({ type: "LOGOUT" });
+            window.location.href = "/signin";
+          }
+        }, 3300000);
       }
+    } else {
+      store.dispatch({ type: "LOGOUT" });
+      window.location.href = "/signin";
     }
   }
   return next(action);

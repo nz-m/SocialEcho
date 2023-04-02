@@ -13,33 +13,32 @@ const CommentForm = ({ communityId }) => {
   const dispatch = useDispatch();
 
   const { postId } = useParams();
+  const userData = useSelector((state) => state.auth?.userData);
 
-  const userData = useSelector((state) => state.auth.userData);
   const [body, setBody] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newComment = {
       body,
-      user: userData.id,
+      user: userData._id,
       post: postId,
     };
     if (userData) {
-      dispatch(
-        addCommentAction(postId, newComment, () =>
-          dispatch(
-            getCommentsAction(postId, () =>
-              dispatch(
-                getPostsAction(userData.id, () =>
-                  dispatch(getComPostsAction(communityId))
-                )
-              )
-            )
-          )
-        )
-      );
+      try {
+        setIsLoading(true);
+        await dispatch(addCommentAction(postId, newComment));
+        await dispatch(getCommentsAction(postId));
+        setIsLoading(false);
+        setBody("");
+        await dispatch(getPostsAction());
+        await dispatch(getComPostsAction(communityId));
+      } catch (error) {
+        setIsLoading(false);
+        // handle error
+      }
     }
-    setBody("");
   };
 
   return (
@@ -56,10 +55,15 @@ const CommentForm = ({ communityId }) => {
           />
         </div>
         <button
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-          type="submit"
+            className={`${isLoading ? "bg-gray-500" : "bg-blue-500"} text-white py-2 px-4 rounded hover:bg-blue-600`}
+            type="submit"
+            disabled={isLoading}
+            style={{
+              opacity: isLoading ? 0.5 : 1,
+              cursor: isLoading ? "not-allowed" : "pointer"
+            }}
         >
-          Comment
+          {isLoading ? "Loading..." : "Comment"}{" "}
         </button>
       </form>
     </div>

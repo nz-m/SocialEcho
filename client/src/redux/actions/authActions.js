@@ -1,43 +1,42 @@
 import * as api from "../api/authAPI";
+import * as types from "../constants/authConstants";
 
-export const SIGNUP = "SIGNUP";
-export const SIGNIN = "SIGNIN";
-export const LOGOUT = "LOGOUT";
-
-export const REFRESH_TOKEN_SUCCESS = "REFRESH_TOKEN_SUCCESS";
-export const REFRESH_TOKEN_FAIL = "REFRESH_TOKEN_FAIL";
-export const GET_MOD_PROFILE = "GET_MOD_PROFILE";
-
-// action creators
+export const setInitialAuthState = (navigate) => async (dispatch) => {
+  await dispatch({ type: types.LOGOUT });
+  navigate("/signin");
+};
 
 export const logoutAction = () => async (dispatch) => {
   try {
-    const { refreshToken } = JSON.parse(localStorage.getItem("profile"));
-    const { data } = await api.logout(refreshToken);
-    dispatch({ type: LOGOUT, payload: data });
+    const { data } = await api.logout();
+    localStorage.removeItem("profile");
+    dispatch({ type: types.LOGOUT, payload: data });
   } catch (error) {
-    console.log(error.message);
+    dispatch({ type: types.LOGOUT, payload: types.ERROR_MESSAGE });
   }
 };
 
 export const signUpAction = (formData, navigate) => async (dispatch) => {
   try {
     const response = await api.signUp(formData);
-    const { error, data } = response;
+    const { error } = response;
     if (error) {
       dispatch({
-        type: SIGNUP,
-        data: error.response.data.errors,
+        type: types.SIGNUP_FAIL,
+        payload: error,
       });
     } else {
       dispatch({
-        type: SIGNUP,
-        data,
+        type: types.SIGNUP_SUCCESS,
+        payload: types.SIGNUP_SUCCESS_MESSAGE,
       });
       navigate("/signin");
     }
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.SIGNUP_FAIL,
+      payload: types.ERROR_MESSAGE,
+    });
   }
 };
 
@@ -46,28 +45,48 @@ export const signInAction = (formData, navigate) => async (dispatch) => {
     const response = await api.signIn(formData);
     const { error, data } = response;
     if (error) {
-      console.log(error.response.data.errors);
-      // handle error
-    } else {
       dispatch({
-        type: SIGNIN,
-        data,
+        type: types.SIGNIN_FAIL,
+        payload: error,
+      });
+    } else {
+      const { user, accessToken, refreshToken, accessTokenUpdatedAt } = data;
+      const profile = {
+        user,
+        accessToken,
+        refreshToken,
+        accessTokenUpdatedAt,
+      };
+      localStorage.setItem("profile", JSON.stringify(profile));
+      dispatch({
+        type: types.SIGNIN_SUCCESS,
+        payload: profile,
       });
       navigate("/");
     }
   } catch (error) {
-    console.log(error);
+    await dispatch({
+      type: types.SIGNIN_FAIL,
+      payload: types.ERROR_MESSAGE,
+    });
+    navigate("/signin");
   }
 };
 
 export const getModProfileAction = () => async (dispatch) => {
   try {
-    const { data } = await api.getModProfile();
+    const { error, data } = await api.getModProfile();
+    if (error) {
+      throw new Error(error);
+    }
     dispatch({
-      type: GET_MOD_PROFILE,
+      type: types.GET_MOD_PROFILE_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: types.GET_MOD_PROFILE_FAIL,
+      payload: types.ERROR_MESSAGE,
+    });
   }
 };

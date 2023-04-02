@@ -21,7 +21,7 @@ function fileUpload(req, res, next) {
     },
   });
 
-  // Initialize Multer
+  // Initialize Multer with all image and video file types
   const upload = multer({
     storage: storage,
     limits: {
@@ -29,14 +29,8 @@ function fileUpload(req, res, next) {
     },
     fileFilter: (req, file, cb) => {
       if (
-        file.mimetype === "image/jpeg" ||
-        file.mimetype === "image/jpg" ||
-        file.mimetype === "image/png" ||
-        file.mimetype === "image/gif" ||
-        file.mimetype === "image/webp" ||
-        file.mimetype === "video/mpeg" ||
-        file.mimetype === "video/mp4" ||
-        file.mimetype === "video/avi"
+        file.mimetype.startsWith("image/") ||
+        file.mimetype.startsWith("video/")
       ) {
         cb(null, true);
       } else {

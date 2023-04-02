@@ -1,30 +1,64 @@
-import React from "react";
-import Post from "../post/Post";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import React, { memo, useMemo, useEffect, useState } from "react";
 import { getPostsAction } from "../../redux/actions/postActions";
+import { useSelector, useDispatch } from "react-redux";
+import Post from "../post/Post";
+
+const MemoizedPost = memo(Post);
+
 const MainSection = () => {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.auth?.userData);
+  const [isLoading, setIsLoading] = useState(true);
+  const postError = useSelector((state) => state.posts?.postError);
   const posts = useSelector((state) => state.posts?.posts);
+  const userData = useSelector((state) => state.auth?.userData);
+
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+  const LIMIT = 10;
 
   useEffect(() => {
     if (userData) {
-      dispatch(getPostsAction(userData.id));
+      dispatch(getPostsAction(LIMIT, 0)).finally(() => {
+        setIsLoading(false);
+      });
     }
-  }, [userData, dispatch]);
+  }, [userData, dispatch, LIMIT]);
 
-  if (!posts) return null; // add loading spinner here
+  const handleLoadMore = () => {
+    if (!isLoading && posts.length % LIMIT === 0 && posts.length >= LIMIT) {
+      setIsLoadMoreLoading(true);
+      dispatch(getPostsAction(LIMIT, posts.length)).finally(() => {
+        setIsLoadMoreLoading(false);
+      });
+    }
+  };
+
+  const memoizedPosts = useMemo(() => {
+    return posts.map((post) => <MemoizedPost key={post._id} post={post} />);
+  }, [posts]);
+
   return (
     <div className="w-6/12">
       <div className="flex justify-center items-center h-32 bg-gray-200 rounded-lg shadow-xl mb-4">
         <h1 className="text-2xl font-bold text-gray-700">Welcome</h1>
       </div>
-      <div>
-        {posts.map((post) => (
-          <Post key={post._id} post={post} />
-        ))}
-      </div>
+      {postError && <div className="text-red-500">{postError}</div>}
+      <div>{memoizedPosts}</div>
+      {isLoading && <div>Loading...</div>}
+      {!isLoading && posts.length >= LIMIT && posts.length % LIMIT === 0 && (
+        <div className="flex justify-center">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={handleLoadMore}
+          >
+            {isLoadMoreLoading ? "Loading..." : "Load More"}
+          </button>
+        </div>
+      )}
+      {!isLoading && posts.length === 0 && (
+        <div className="text-gray-500 text-center py-10">
+          No posts to show. Join a communtiy and post something.
+        </div>
+      )}
     </div>
   );
 };

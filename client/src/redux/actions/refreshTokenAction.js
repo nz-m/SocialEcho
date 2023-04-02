@@ -13,12 +13,23 @@ API.interceptors.request.use((req) => {
   }
   return req;
 });
-
 export const refreshTokenAction = (refreshToken) => async (dispatch) => {
   try {
-    const response = await API.post("/users/refresh-token", { refreshToken });
-    dispatch({ type: "REFRESH_TOKEN_SUCCESS", payload: response.data });
+    const response = await API.post("/users/refresh-token", {
+      refreshToken,
+    });
+    const profile = JSON.parse(localStorage.getItem("profile"));
+    const payload = response.data;
+    localStorage.setItem("profile", JSON.stringify({ ...profile, ...payload }));
+    dispatch({
+      type: "REFRESH_TOKEN_SUCCESS",
+      payload: payload,
+    });
   } catch (error) {
-    dispatch({ type: "REFRESH_TOKEN_FAIL", payload: error.response.data });
+    localStorage.removeItem("profile");
+    dispatch({
+      type: "REFRESH_TOKEN_FAIL",
+      payload: error.response.data,
+    });
   }
 };

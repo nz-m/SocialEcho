@@ -1,28 +1,27 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { MdOutlineReport } from "react-icons/md";
-import { deletePostAction } from "../../redux/actions/postActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
+import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
 
 const Post = ({ post }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const location = useLocation();
   const userData = useSelector((state) => state.auth?.userData);
 
   const { body, fileUrl, user, community, createdAt, comments } = post;
 
-  // Memoize the file extension check to avoid recomputing it unnecessarily
   const isImageFile = useMemo(() => {
     const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
     const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
     return validExtensions.includes(fileExtension);
   }, [fileUrl]);
 
-  const deleteHandler = () => {
-    dispatch(deletePostAction(post._id));
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = (value) => {
+    setShowModal(value);
   };
 
   return (
@@ -37,8 +36,21 @@ const Post = ({ post }) => {
             loading="lazy"
           />
           <div className="">
-            <p className="text-lg font-semibold">{user.name}</p>
-            <p className="text-sm text-gray-500">{community.name}</p>
+            {userData._id === user._id ? (
+              <Link to="/profile" className="text-lg font-semibold">
+                {user.name}
+              </Link>
+            ) : (
+              <Link to={`/user/${user._id}`} className="text-lg font-semibold">
+                {user.name}
+              </Link>
+            )}
+            <Link
+              to={`/community/${community.name}`}
+              className="text-sm text-gray-500"
+            >
+              {community.name}
+            </Link>
           </div>
         </div>
         <p>{createdAt}</p>
@@ -74,7 +86,6 @@ const Post = ({ post }) => {
 
       <div className="flex items-center justify-between mt-4">
         <div className="flex items-center gap-2">
-          {/* like button here */}
           <Like post={post} />
           <Link to={`/post/${post._id}`}>
             <button className="flex items-center text-xl gap-1">
@@ -85,9 +96,9 @@ const Post = ({ post }) => {
           </Link>
         </div>
         <div className="flex items-center gap-2">
-          {userData?.id === post.user._id && (
+          {userData?._id === post.user._id && (
             <button
-              onClick={deleteHandler}
+              onClick={() => toggleModal(true)}
               className="flex items-center text-xl gap-1"
             >
               {" "}
@@ -96,6 +107,15 @@ const Post = ({ post }) => {
             </button>
           )}
         </div>
+
+        {showModal && (
+          <DeleteModal
+            showModal={showModal}
+            postId={post._id}
+            onClose={() => toggleModal(false)}
+            prevPath={location.pathname}
+          />
+        )}
       </div>
     </div>
   );

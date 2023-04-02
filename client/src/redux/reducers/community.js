@@ -1,76 +1,136 @@
-import {
-  GET_COMMUNITY,
-  GET_JOINED_COMMUNITIES,
-  GET_NOT_JOINED_COMMUNITIES,
-  JOIN_COMMUNITY,
-  LEAVE_COMMUNITY,
-  REPORT_POST,
-  GET_REPORTED_POSTS,
-  DELETE_REPORTED_POST,
-} from "../actions/communityActions";
+import * as types from "../constants/communityConstants";
+import { LOGOUT } from "../constants/authConstants";
 
 const initialState = {
   communityData: null,
   joinedCommunities: [],
   notJoinedCommunities: [],
   reportedPosts: [],
+  communityError: null,
 };
 
 const communityReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case GET_COMMUNITY:
+    case LOGOUT:
       return {
         ...state,
-        communityData: payload || null,
+        communityData: null,
+        joinedCommunities: [],
+        notJoinedCommunities: [],
+        reportedPosts: [],
+        communityError: null,
       };
-    case GET_JOINED_COMMUNITIES:
+
+    case types.GET_COMMUNITY_SUCCESS:
       return {
         ...state,
-        joinedCommunities: payload || [],
+        communityData: payload ? payload : null,
+        communityError: null,
       };
-    case GET_NOT_JOINED_COMMUNITIES:
+    case types.GET_COMMUNITY_FAIL:
       return {
         ...state,
-        notJoinedCommunities: payload || [],
+        communityError: payload,
       };
-    case JOIN_COMMUNITY:
+
+    case types.GET_JOINED_COMMUNITIES_SUCCESS:
+      return {
+        ...state,
+        joinedCommunities: payload ? payload : [],
+        communityError: null,
+      };
+    case types.GET_JOINED_COMMUNITIES_FAIL:
+      return {
+        ...state,
+        communityError: payload,
+      };
+
+    case types.GET_NOT_JOINED_COMMUNITIES_SUCCESS:
+      return {
+        ...state,
+        notJoinedCommunities: payload ? payload : [],
+        communityError: null,
+      };
+    case types.GET_NOT_JOINED_COMMUNITIES_FAIL:
+      return {
+        ...state,
+        communityError: payload,
+      };
+
+    case types.JOIN_COMMUNITY_SUCCESS:
       return {
         ...state,
         joinedCommunities: [...state.joinedCommunities, payload],
         notJoinedCommunities: state.notJoinedCommunities.filter(
           (community) => community.name !== payload.name
         ),
+        communityError: null,
       };
-    case LEAVE_COMMUNITY:
+    case types.JOIN_COMMUNITY_FAIL:
+      return {
+        ...state,
+        communityError: payload,
+      };
+
+    case types.LEAVE_COMMUNITY_SUCCESS:
       return {
         ...state,
         joinedCommunities: state.joinedCommunities.filter(
           (community) => community.name !== payload.name
         ),
         notJoinedCommunities: [...state.notJoinedCommunities, payload],
+        communityError: null,
       };
 
-    case REPORT_POST:
+    case types.LEAVE_COMMUNITY_FAIL:
+      return {
+        ...state,
+        communityError: payload,
+      };
+
+    case types.REPORT_POST_SUCCESS:
       return {
         ...state,
         communityData: {
           ...state.communityData,
           reportedPosts: [...state.communityData.reportedPosts, payload],
         },
+        communityError: null,
       };
-    case GET_REPORTED_POSTS:
+    case types.REPORT_POST_FAIL:
       return {
         ...state,
-        reportedPosts: payload || [],
+        communityError: payload,
       };
-    case DELETE_REPORTED_POST:
+
+    case types.GET_REPORTED_POSTS_SUCCESS:
+      return {
+        ...state,
+        reportedPosts: payload ? payload : [],
+        communityError: null,
+      };
+
+    case types.GET_REPORTED_POSTS_FAIL:
+      return {
+        ...state,
+        communityError: payload,
+      };
+
+    case types.DELETE_REPORTED_POST_SUCCESS:
       return {
         ...state,
         reportedPosts: state.reportedPosts.filter(
           (post) => post._id !== payload
         ),
+        communityError: null,
+      };
+
+    case types.DELETE_REPORTED_POST_FAIL:
+      return {
+        ...state,
+        communityError: payload,
       };
 
     default:

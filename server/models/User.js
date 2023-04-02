@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
 const userSchema = new Schema(
   {
     name: {
@@ -22,28 +21,32 @@ const userSchema = new Schema(
     avatar: {
       type: String,
     },
-    // communities: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Community",
-    //   },
-    // ],
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
 
     location: {
       type: String,
+      default: "",
     },
 
     bio: {
       type: String,
-    },
-
-    profession: {
-      type: String,
+      default: "",
     },
 
     interests: {
-      type: [String],
-      maxlength: 3,
+      type: String,
+      default: "",
     },
 
     role: {
@@ -51,13 +54,6 @@ const userSchema = new Schema(
       enum: ["general", "moderator", "admin"],
       default: "general",
     },
-
-    posts: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Post",
-      },
-    ],
 
     savedPosts: [
       {
@@ -71,7 +67,7 @@ const userSchema = new Schema(
     timestamps: true,
   }
 );
-
+// If user chooses to delete their account (Not implemented)
 userSchema.pre("remove", async function (next) {
   try {
     // Todo: user avatar delete (fs.unlink/ promisify)
@@ -84,6 +80,18 @@ userSchema.pre("remove", async function (next) {
     await this.model("Community").updateMany(
       { members: this._id },
       { $pull: { members: this._id } }
+    );
+
+    // Remove all relationships where the user is the follower
+    await this.model("Relationship").deleteMany({ follower: this._id });
+
+    // Remove all relationships where the user is the following
+    await this.model("Relationship").deleteMany({ following: this._id });
+
+    // Remove all reported posts by the user
+    await this.model("Community").updateMany(
+      { "reportedPosts.user": this._id },
+      { $pull: { reportedPosts: { user: this._id } } }
     );
 
     next();

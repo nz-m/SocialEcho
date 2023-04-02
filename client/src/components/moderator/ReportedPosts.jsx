@@ -18,9 +18,14 @@ const ReportedPosts = () => {
 
   return (
     <div className="shadow-md">
-      {reportedPosts.map((reportedPost) => (
-        <ReportedPost key={reportedPost._id} reportedPost={reportedPost} />
-      ))}
+      <h3>Reported Posts</h3>
+      {reportedPosts.length === 0 ? (
+        <p>No posts to show</p>
+      ) : (
+        reportedPosts.map((reportedPost) => (
+          <ReportedPost key={reportedPost._id} reportedPost={reportedPost} />
+        ))
+      )}
     </div>
   );
 };
