@@ -33,14 +33,14 @@ const PublicProfile = () => {
   const handleUnfollow = async (publicUserId) => {
     setUnfollowLoading(true);
     await dispatch(unfollowUserAction(publicUserId));
-    dispatch(getPublicUsersAction());
+    await dispatch(getPublicUsersAction());
     setUnfollowLoading(false);
   };
 
   const handleFollow = async (publicUserId) => {
     setFollowLoading(true);
     await dispatch(followUserAction(publicUserId));
-    dispatch(getPublicUsersAction());
+    await dispatch(getPublicUsersAction());
     setFollowLoading(false);
   };
 
