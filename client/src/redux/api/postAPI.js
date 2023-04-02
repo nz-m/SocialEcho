@@ -112,11 +112,9 @@ const getPublicPosts = async (publicUserId) => {
   }
 };
 
-const getFollowingUsersPosts = async (id, limit = 10, skip = 0) => {
+const getFollowingUsersPosts = async (communityId) => {
   try {
-    const { data } = await API.get(
-      `/posts/${id}/following?limit=${limit}&skip=${skip}`
-    );
+    const { data } = await API.get(`/posts/${communityId}/following`);
 
     return { error: null, data };
   } catch (err) {

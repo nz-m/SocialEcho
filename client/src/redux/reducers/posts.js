@@ -83,22 +83,11 @@ const postReducer = (state = initialState, action) => {
       };
 
     case types.GET_FOLLOWING_USERS_POSTS_SUCCESS:
-      if (payload.page === 1) {
-        return {
-          ...state,
-          followingUsersPosts: payload ? payload.posts : [],
-          postError: null,
-        };
-      } else {
-        return {
-          ...state,
-          followingUsersPosts: [
-            ...state.followingUsersPosts,
-            ...(payload ? payload.posts : []),
-          ],
-          postError: null,
-        };
-      }
+      return {
+        ...state,
+        followingUsersPosts: payload ? payload : [],
+        postError: null,
+      };
 
     case types.GET_FOLLOWING_USERS_POSTS_FAIL:
       return {
