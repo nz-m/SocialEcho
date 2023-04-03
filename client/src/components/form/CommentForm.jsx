@@ -36,9 +36,8 @@ const CommentForm = ({ communityId }) => {
         setBody("");
         await dispatch(getPostsAction());
         await dispatch(getComPostsAction(communityId));
-      } catch (error) {
+      } finally {
         setIsLoading(false);
-        // handle error
       }
     }
   };

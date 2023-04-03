@@ -203,7 +203,7 @@ const PublicProfile = () => {
           <button
             onClick={() => handleFollow(publicUserId)}
             type="button"
-            className="bg-sky-700 text-white border border-sky-700 rounded-full py-1 px-4 text-sm font-semibold"
+            className="bg-blue-500 text-white border border-blue-500 rounded-full py-1 px-4 text-sm font-semibold"
           >
             {followLoading ? (
               <LoadingSpinner loadingText="following..." />
