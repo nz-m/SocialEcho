@@ -98,15 +98,15 @@ const PublicProfile = () => {
         <p>{bio}</p>
       </div>
       <div className="flex flex-wrap">
-        {interests &&
-          interests.map((interest) => (
-            <span
-              key={interest}
-              className="bg-gray-200 text-gray-800 text-sm font-semibold rounded-full py-1 px-2 mr-2 mb-2"
-            >
-              {interest}
-            </span>
-          ))}
+        {interests && (
+          <ul className="list-disc list-inside">
+            {interests.split(",").map((interest, i) => (
+              <li key={i} className="text-gray-600">
+                {interest.trim()}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
       <div className="my-4">
         <p>Joined on {joinedOn}</p>

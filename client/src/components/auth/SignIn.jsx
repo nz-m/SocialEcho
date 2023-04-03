@@ -24,7 +24,7 @@ const SignIn = () => {
   const signInerror = useSelector((state) => state.auth?.signInerror);
   const successMessage = useSelector((state) => state.auth?.successMessage);
   return (
-    <section className="bg-[#f6fbff] ">
+    <section className="bg-[#F6F7FA]">
       <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
         {signInerror && (
           <div
