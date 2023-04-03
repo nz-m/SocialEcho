@@ -85,10 +85,10 @@ const Leftbar = () => {
 
           {communityLinks && communityLinks.length > 0 ? (
             <div>
-              <div className="w-full flex gap-12">
+              <div className="w-full flex gap-8">
                 <h3 className="mb-2 text-lg">Communities </h3>
                 <Link className="flex gap-2" to="/my-communities">
-                  <p className="text-primary"> See all</p>
+                  <p className="text-primary "> See all</p>
                   <p className="bg-primary px-2 py-2 w-5 h-5 flex justify-center items-center -mt-3 rounded-full text-white text-[10px]">
                   {joinedCommunities.length}
                   </p>

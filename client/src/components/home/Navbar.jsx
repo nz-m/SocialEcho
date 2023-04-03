@@ -4,7 +4,7 @@ import notification from '../../assets/notification.svg'
 const Navbar = () => {
   return (
     <div className="lg:px-48 mx-auto sticky top-0 left-0">
-    <div className="flex justify-between items-center bg-white px-10">
+    <div className="flex justify-between items-center bg-white rounded-md px-10">
       <img className="w-24 " src={Logo} alt="logo" />
       <div className="relative">
         <span className="absolute inset-y-0 left-0 flex items-center pl-3">
