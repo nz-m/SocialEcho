@@ -1,7 +1,7 @@
 import React from "react";
-import Leftbar from "../components/home/LeftBar";
+import LeftBar from "../components/home/LeftBar";
 import MainSection from "../components/home/MainSection";
-import Rightbar from "../components/home/RightBar";
+import RightBar from "../components/home/RightBar";
 
 import Navbar from "../components/home/Navbar";
 const Home = () => {
@@ -9,9 +9,9 @@ const Home = () => {
     <div className="bg-[#F6F7FA]">
       <Navbar />
       <div className="flex lg:px-48 mx-auto bg-[#F6F7FA]">
-        <Leftbar />
+        <LeftBar />
         <MainSection />
-        <Rightbar />
+        <RightBar />
       </div>
     </div>
   );
