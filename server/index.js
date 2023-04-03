@@ -1,11 +1,13 @@
 require("dotenv").config();
+const express = require("express");
 
 const userRouter = require("./routes/userRouter");
 const postRouter = require("./routes/postRouter");
 const communityRouter = require("./routes/communityRouter");
+const contextAuthRouter = require("./routes/contextAuthRouter");
 
-const express = require("express");
 const app = express();
+
 const cors = require("cors");
 const morgan = require("morgan");
 const passport = require("passport");
@@ -50,11 +52,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 require("./config/passport.js");
 
+
 //routes
 app.use("/check-connectivity", (req, res) => {
   res.status(200).json({ message: "Server is up and running!" });
 });
-
+app.use("/context-auth", contextAuthRouter);
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
 app.use("/communities", communityRouter);

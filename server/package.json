@@ -14,10 +14,13 @@
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-useragent": "^1.0.15",
     "express-validator": "^6.14.3",
+    "geoip-lite": "^1.4.7",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.0",
     "kleur": "^4.1.5",
@@ -32,6 +35,7 @@
     "eslint": "^8.2.0",
     "husky": "^7.0.4",
     "jest": "^27.4.5",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "prettier": "2.8.7"
   }
 }
