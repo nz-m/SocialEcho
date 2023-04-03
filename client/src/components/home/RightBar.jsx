@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ModeratorProfile from "../moderator/ModeratorProfile";
 import JoinModal from "../modals/JoinModal";
 import LoadingSpinner from "../spinner/LoadingSpinner";
-
+import {HiOutlineUserPlus} from 'react-icons/hi2'
 const RightBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -79,33 +79,52 @@ const RightBar = () => {
       {currentUserIsModerator ? (
         <ModeratorProfile />
       ) : (
-        <div className="w-3/12 h-screen bg-white sticky top-0 px-10 py-10">
+        <div className="w-4/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
           {currentLocation !== "/communities" && (
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title mb-3">Suggested Communities</h5>
+            
+              <div className="">
+                <div className="flex items-end justify-between mb-6">
+                <h5 className="font-semibold text-base">Suggested Communities</h5>
+                {remainingCount > 0 && (
+                  <MemoizedLink
+                    to="/communities"
+                    className=" text-blue-500 font-medium flex "
+                  >
+                    See More 
+                    <p className="bg-primary px-2 py-2 w-5 h-5 flex justify-center items-center -mt-3 rounded-full text-white text-[10px]">
+                    {remainingCount}
+                  </p>
+                   
+                  </MemoizedLink>
+                )}
+                </div>
+               
                 {notJoinedCommunities?.length === 0 && (
                   <div className="text-center italic text-gray-400">
-                    No communities to join. Check back later
+                  😢  No communities to join. Check back later
                   </div>
                 )}
-                <ul className="list-group">
+                <ul className="flex flex-col gap-3">
                   {visibleCommunities?.map((community) => (
                     <li
                       key={community._id}
-                      className="list-group-item d-flex align-items-center"
+                      className="flex items-start justify-between"
                     >
+                      <div className="flex">
                       <img
                         src={community.banner || placeholder}
                         className="h-10 w-10 rounded-full mr-4"
                         alt="community"
                       />
-                      <span>{community.name}</span>
+                      <span className="text-lg font-medium">{community.name}</span>
+                      </div>
+                  
                       <button
                         onClick={() => toggleJoinModal(community._id, true)}
-                        className="btn btn-primary btn-sm ms-2"
+                        className="px-2 py-1 border border-primary text-primary rounded-md flex gap-1 justify-between items-center hover:bg-primary group transition duration-500"
                       >
-                        Join
+                        <p className="group-hover:text-white">Join</p>
+                        <HiOutlineUserPlus className="group-hover:text-white"/>
                       </button>
                       <JoinModal
                         show={joinModalVisibility[community._id] || false}
@@ -115,31 +134,24 @@ const RightBar = () => {
                     </li>
                   ))}
                 </ul>
-                {remainingCount > 0 && (
-                  <MemoizedLink
-                    to="/communities"
-                    className="text-center block text-blue-500 font-medium mt-2"
-                  >
-                    See More ({remainingCount})
-                  </MemoizedLink>
-                )}
+              
               </div>
-            </div>
+           
           )}
-          <div className="card mt-4">
-            <div className="card-body">
-              <h5 className="card-title mb-3">Popular Users to Follow</h5>
+          <div className="">
+            <div className="">
+              <h5 className=" my-5 text-base font-semibold">Popular Users to Follow</h5>
               {memoizedUsers?.length === 0 && (
                 <div className="text-center italic text-gray-400">
                   No users to follow. Check back later
                 </div>
               )}
-              <ul className="list-group">
+              <ul className="flex flex-col gap-5">
                 {memoizedUsers?.length > 0 &&
                   memoizedUsers.map((user) => (
                     <li
                       key={user._id}
-                      className="list-group-item d-flex justify-content-between"
+                      className="flex justify-between"
                     >
                       <div className="flex items-center">
                         <img
@@ -154,20 +166,19 @@ const RightBar = () => {
                           >
                             {user.name}
                           </MemoizedLink>
-                          <div className="text-gray-500 text-sm">
-                            {user.location}
-                          </div>
+                        
                           <div>Followers: {user.followerCount}</div>
                         </div>
                       </div>
                       <button
                         onClick={() => followUserHandler(user._id)}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        className="px-2 border border-primary text-primary rounded-md  hover:bg-primary group transition duration-500"
                       >
                         {followLoading[user._id] ? (
                           <LoadingSpinner />
                         ) : (
-                          <span>Follow</span>
+                          <p className="group-hover:text-white flex items-center gap-2">Follow
+                        <HiOutlineUserPlus className="group-hover:text-white"/></p>
                         )}
                       </button>
                     </li>
