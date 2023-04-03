@@ -58,11 +58,37 @@ export const getPostsAction =
     }
   };
 
+export const getSelfPostAction = (id) => async (dispatch) => {
+  try {
+    const { error, data } = await api.getPost(id);
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    dispatch({
+      type: types.GET_POST_SUCCESS,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: types.GET_POST_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  }
+};
+
 export const getComPostsAction =
-  (id, limit = 10, skip = 0) =>
+  (communityId, limit = 10, skip = 0) =>
   async (dispatch) => {
     try {
-      const { error, data } = await api.getComPosts(id, limit, skip);
+      const { error, data } = await api.getComPosts(communityId, limit, skip);
 
       if (error) {
         throw new Error(error);

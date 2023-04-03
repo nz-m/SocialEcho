@@ -8,6 +8,7 @@ import ProfilePage from "./pages/ProfilePage";
 import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PostPage from "./pages/PostPage";
+import SelfPostPage from "./pages/SelfPostPage";
 import ReportPost from "./components/community/ReportPost";
 import ReportedPostPage from "./pages/ReportedPostPage";
 import Saved from "./pages/Saved";
@@ -42,6 +43,8 @@ const App = () => {
             element={<ReportedPostPage />}
           />
           <Route path="/post/:postId" element={<PostPage />} />
+          <Route path="/my/post/:postId" element={<SelfPostPage />} />
+
           <Route
             path="/community/:communityName/moderator"
             element={<Moderator />}

@@ -5,6 +5,7 @@ import {
   getCommentsAction,
   getPostsAction,
   getComPostsAction,
+  getSelfPostAction,
 } from "../../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -30,6 +31,7 @@ const CommentForm = ({ communityId }) => {
         setIsLoading(true);
         await dispatch(addCommentAction(postId, newComment));
         await dispatch(getCommentsAction(postId));
+        await dispatch(getSelfPostAction(postId));
         setIsLoading(false);
         setBody("");
         await dispatch(getPostsAction());
@@ -55,13 +57,15 @@ const CommentForm = ({ communityId }) => {
           />
         </div>
         <button
-            className={`${isLoading ? "bg-gray-500" : "bg-blue-500"} text-white py-2 px-4 rounded hover:bg-blue-600`}
-            type="submit"
-            disabled={isLoading}
-            style={{
-              opacity: isLoading ? 0.5 : 1,
-              cursor: isLoading ? "not-allowed" : "pointer"
-            }}
+          className={`${
+            isLoading ? "bg-gray-500" : "bg-blue-500"
+          } text-white py-2 px-4 rounded hover:bg-blue-600`}
+          type="submit"
+          disabled={isLoading}
+          style={{
+            opacity: isLoading ? 0.5 : 1,
+            cursor: isLoading ? "not-allowed" : "pointer",
+          }}
         >
           {isLoading ? "Loading..." : "Comment"}{" "}
         </button>

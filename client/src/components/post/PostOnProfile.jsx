@@ -21,7 +21,7 @@ const PostOnProfile = ({ post }) => {
       }`}
       onClick={() => {
         if (isMember) {
-          navigate(`/post/${post._id}`, {
+          navigate(`/my/post/${post._id}`, {
             state: { from: location.pathname },
           });
         }

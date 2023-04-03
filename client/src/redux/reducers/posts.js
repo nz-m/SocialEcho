@@ -4,6 +4,7 @@ import { LOGOUT } from "../constants/authConstants";
 const initialState = {
   posts: [],
   publicPosts: [],
+  selfPost: null,
   communityPosts: [],
   followingUsersPosts: [],
   comments: [],
@@ -19,6 +20,7 @@ const postReducer = (state = initialState, action) => {
       return {
         ...state,
         posts: [],
+        selfPost: null,
         publicPosts: [],
         communityPosts: [],
         followingUsersPosts: [],
@@ -38,6 +40,18 @@ const postReducer = (state = initialState, action) => {
         ...state,
         postError: payload,
       };
+    case types.GET_POST_SUCCESS:
+      return {
+        ...state,
+        selfPost: payload,
+        postError: null,
+      };
+    case types.GET_POST_FAIL:
+      return {
+        ...state,
+        postError: payload,
+      };
+
     case types.GET_POSTS_SUCCESS:
       if (payload.page === 1) {
         return {

@@ -56,6 +56,30 @@ const createPost = async (req, res) => {
   }
 };
 
+const getPost = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const post = await Post.findById(id)
+      .populate("user", "name avatar")
+      .populate("community", "name")
+      .lean();
+
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found",
+      });
+    }
+
+    post.createdAt = dayjs(post.createdAt).fromNow();
+
+    res.status(200).json(post);
+  } catch (error) {
+    return res.status(409).json({
+      message: "Error getting post",
+    });
+  }
+};
+
 /**
  * Retrieves the posts for current user, including pagination, the number of posts saved by each user,
  * sorted by creation date.
@@ -143,7 +167,7 @@ const getPosts = async (req, res) => {
  */
 const getCommunityPosts = async (req, res) => {
   try {
-    const communityId = req.params.id;
+    const communityId = req.params.communityId;
     const limit = parseInt(req.query.limit) || 10;
     const skip = parseInt(req.query.skip) || 0;
     const userId = getUserFromToken(req);
@@ -584,6 +608,7 @@ const getPublicPosts = async (req, res) => {
 };
 
 module.exports = {
+  getPost,
   getPosts,
   createPost,
   getCommunityPosts,

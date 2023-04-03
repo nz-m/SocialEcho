@@ -17,9 +17,10 @@ router.patch("/:id/like", postController.likePost);
 router.patch("/:id/unlike", postController.unlikePost);
 router.post("/:id/comment", postController.addComment);
 router.get("/:id/comment", postController.getComments);
+router.get("/:id", postController.getPost);
 router.get("/", postController.getPosts);
 router.post("/", fileUpload, postController.createPost);
 router.delete("/:id", postController.deletePost);
-router.get("/:id", postController.getCommunityPosts);
+router.get("/community/:communityId", postController.getCommunityPosts);
 
 module.exports = router;

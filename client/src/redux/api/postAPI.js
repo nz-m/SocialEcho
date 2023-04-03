@@ -13,6 +13,15 @@ const createPost = async (formData) => {
   }
 };
 
+const getPost = async (id) => {
+  try {
+    const { data } = await API.get(`/posts/${id}`);
+    return { error: null, data };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
+
 const getPosts = async (limit = 10, skip = 0) => {
   try {
     const { data } = await API.get(`/posts?limit=${limit}&skip=${skip}`);
@@ -22,9 +31,11 @@ const getPosts = async (limit = 10, skip = 0) => {
   }
 };
 
-const getComPosts = async (id, limit = 10, skip = 0) => {
+const getComPosts = async (communityId, limit = 10, skip = 0) => {
   try {
-    const { data } = await API.get(`/posts/${id}?limit=${limit}&skip=${skip}`);
+    const { data } = await API.get(
+      `/posts/community/${communityId}?limit=${limit}&skip=${skip}`
+    );
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
@@ -124,6 +135,7 @@ const getFollowingUsersPosts = async (communityId) => {
 
 export {
   createPost,
+  getPost,
   getPosts,
   getComPosts,
   deletePost,

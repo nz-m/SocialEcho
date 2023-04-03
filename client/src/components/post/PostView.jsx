@@ -126,8 +126,7 @@ const PostView = ({ post }) => {
           <div className="flex items-center gap-2">
             <Save postId={post._id} />
             <span>
-              Saved by {savedByCount}{" "}
-              {savedByCount === 1 ? "person" : "people"}
+              Saved by {savedByCount} {savedByCount === 1 ? "person" : "people"}
             </span>
             {isReported === null ? null : isReported ? (
               <button disabled className="flex items-center text-xl gap-1">
