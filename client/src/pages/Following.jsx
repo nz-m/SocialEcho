@@ -4,6 +4,7 @@ import Rightbar from "../components/home/RightBar";
 import PublicProfileCard from "../components/profile/PublicProfileCard";
 import { useSelector, useDispatch } from "react-redux";
 import { getFollowingUsersAction } from "../redux/actions/userActions";
+import Navbar from "../components/home/Navbar";
 
 const Following = () => {
   const dispatch = useDispatch();
@@ -20,9 +21,11 @@ const Following = () => {
     fetchFollowingUsers();
   }, [dispatch]);
   return (
-    <div className="flex mx-6">
+    <div className="bg-[#F6F7FA]">
+    <Navbar />
+    <div className="flex lg:px-40 mx-auto bg-[#F6F7FA]">
       <Leftbar />
-      <div className="w-6/12 h-screen bg-white border border-gray-300 rounded-lg p-6">
+      <div className="w-6/12 px-10 py-6">
         <h2 className="text-xl font-bold mb-4">People you're following</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {loading ? (
@@ -39,6 +42,7 @@ const Following = () => {
         </div>
       </div>
       <Rightbar />
+    </div>
     </div>
   );
 };

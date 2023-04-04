@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <div className="bg-[#F6F7FA]">
       <Navbar />
-      <div className="flex lg:px-48 mx-auto bg-[#F6F7FA]">
+      <div className="flex lg:px-40 mx-auto bg-[#F6F7FA]">
         <LeftBar />
         <MainSection />
         <RightBar />

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Leftbar from "../components/home/LeftBar";
 import RightBar from "../components/home/RightBar";
 import SavedPost from "../components/post/SavedPost";
+import Navbar from "../components/home/Navbar";
 const Saved = () => {
   const dispatch = useDispatch();
 
@@ -15,10 +16,12 @@ const Saved = () => {
   const savedPosts = useSelector((state) => state.posts?.savedPosts);
 
   return (
-    <div className="flex mx-6">
+    <div className="bg-[#F6F7FA]">
+    <Navbar />
+    <div className="flex lg:px-40 mx-auto bg-[#F6F7FA]">
       <Leftbar />
 
-      <div className="w-6/12">
+      <div className="w-6/12 px-10 py-6">
         <div className="flex flex-col items-center">
           <h1 className="text-2xl font-bold">Saved Posts</h1>
           {savedPosts && savedPosts.length > 0 ? (
@@ -33,6 +36,7 @@ const Saved = () => {
         </div>
       </div>
       <RightBar />
+    </div>
     </div>
   );
 };

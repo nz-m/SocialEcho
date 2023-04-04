@@ -85,7 +85,7 @@ const Leftbar = () => {
 
           {communityLinks && communityLinks.length > 0 ? (
             <div>
-              <div className="w-full flex gap-8">
+              <div className="w-full flex gap-12">
                 <h3 className="mb-2 text-lg">Communities </h3>
                 <Link className="flex gap-2" to="/my-communities">
                   <p className="text-primary "> See all</p>

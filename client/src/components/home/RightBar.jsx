@@ -80,17 +80,17 @@ const RightBar = () => {
       {currentUserIsModerator ? (
         <ModeratorProfile />
       ) : (
-        <div className="w-4/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
+        <div className="w-3.5/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
           {currentLocation !== "/communities" && (
             <div className="">
               <div className="flex items-end justify-between mb-6">
-                <h5 className="font-semibold text-base">
+                <h5 className="font-semibold text-sm">
                   Suggested Communities
                 </h5>
                 {remainingCount > 0 && (
                   <MemoizedLink
                     to="/communities"
-                    className=" text-blue-500 font-medium flex "
+                    className=" text-blue-500 font-medium flex text-xs"
                   >
                     See More
                     <p className="bg-primary px-2 py-2 w-5 h-5 flex justify-center items-center -mt-3 rounded-full text-white text-[10px]">
@@ -124,13 +124,14 @@ const RightBar = () => {
 
                     <button
                       onClick={() => toggleJoinModal(community._id, true)}
-                      className="bg-blue-500 text-white border border-blue-500
+                      className="bg-primary text-white border border-blue-500
                         hover:bg-blue-800 
-                         rounded-md py-1 px-4 text-sm font-semibold"
+                         rounded-md py-[5px] px-2 text-sm font-semibold"
                     >
                       <p className="group-hover:text-white flex items-center  gap-2">
-                        <IoIosPeople className="inline-block text-lg" />
+                      
                         Join
+                        <IoIosPeople className="inline-block text-lg" />
                       </p>
                     </button>
                     <JoinModal
@@ -145,7 +146,7 @@ const RightBar = () => {
           )}
           <div className="">
             <div className="">
-              <h5 className=" my-5 text-base font-semibold">
+              <h5 className=" my-5 text-sm font-semibold">
                 Popular Users to Follow
               </h5>
               {memoizedUsers?.length === 0 && (
@@ -156,7 +157,7 @@ const RightBar = () => {
               <ul className="flex flex-col gap-5">
                 {memoizedUsers?.length > 0 &&
                   memoizedUsers.map((user) => (
-                    <li key={user._id} className="flex items-center gap-5">
+                    <li key={user._id} className="flex justify-between items-center gap-5">
                       <div className="flex justify-content-between items-center">
                         <img
                           className="h-10 w-10 rounded-full mr-4"
@@ -175,16 +176,17 @@ const RightBar = () => {
                       </div>
                       <button
                         onClick={() => followUserHandler(user._id)}
-                        className="bg-blue-500 text-white border border-blue-500
+                        className="bg-primary text-white border border-blue-500
                         hover:bg-blue-800 
-                         rounded-md py-1 px-4 text-sm font-semibold"
+                         rounded-md py-[5px] px-2 text-sm font-semibold"
                       >
                         {followLoading[user._id] ? (
                           <LoadingSpinner />
                         ) : (
                           <p className="group-hover:text-white flex items-center gap-2">
-                            <BsPersonPlusFill className="inline-block text-lg" />
+                           
                             Follow
+                            <BsPersonPlusFill className="inline-block text-lg" />
                           </p>
                         )}
                       </button>

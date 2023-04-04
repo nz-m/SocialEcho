@@ -48,7 +48,7 @@ const UserProfile = () => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <div className="border-2">
+        <div className="w-6/12 px-10 py-6">
           <SelfProfileCard user={user} />
             <SelfInfoCard user={user} />
             

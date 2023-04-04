@@ -37,7 +37,7 @@ const MainSection = () => {
   }, [posts]);
 
   return (
-    <div className="w-6/12 px-10 py-10">
+    <div className="w-6/12 px-10 py-6">
    
       {postError && <div className="text-red-500">{postError}</div>}
       <div>{memoizedPosts}</div>

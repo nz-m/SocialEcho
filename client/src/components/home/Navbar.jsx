@@ -3,7 +3,7 @@ import Logo from '../../assets/SocialEcho.svg'
 import notification from '../../assets/notification.svg'
 const Navbar = () => {
   return (
-    <div className="lg:px-48 mx-auto sticky top-0 left-0">
+    <div className="lg:px-40 mx-auto sticky top-0 left-0">
     <div className="flex justify-between items-center bg-white rounded-md px-10">
       <img className="w-24 " src={Logo} alt="logo" />
       <div className="relative">
