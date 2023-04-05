@@ -5,6 +5,7 @@ import { getJoinedCommunitiesAction } from "../redux/actions/communityActions";
 import JoinedCommunityCard from "../components/community/JoinedCommunityCard";
 import Leftbar from "../components/home/LeftBar";
 import Rightbar from "../components/home/RightBar";
+import Navbar from "../components/home/Navbar";
 const MyCommunities = () => {
   const dispatch = useDispatch();
 
@@ -33,10 +34,13 @@ const MyCommunities = () => {
   }, [joinedCommunities]);
 
   return (
-    <div className="flex mx-6">
+    <div className="bg-[#F6F7FA]">
+      <Navbar />
+      <div className="flex lg:px-40 mx-auto bg-[#F6F7FA]">
       <Leftbar />
-      <div className="flex flex-wrap justify-center">{communityCards}</div>
+      <div className="flex flex-wrap justify-center w-6/12 px-10 py-6">{communityCards}</div>
       <Rightbar />
+    </div>
     </div>
   );
 };

@@ -39,8 +39,8 @@ const RightBar = () => {
   }
 
   return (
-    <div className="w-1/4 p-4 h-screen bg-white sticky top-0">
-      <div className="bg-white rounded-md  p-4">
+    <div className="w-3.5/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
+      <div className="bg-white rounded-md p-4">
         {bannerLoaded ? (
           <img
             src={banner}

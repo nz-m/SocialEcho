@@ -52,11 +52,11 @@ const MainSection = () => {
   }, [communityPosts]);
 
   return (
-    <div className="flex-grow h-full bg-gray-100">
+    <div className="w-11/12 px-10 py-6">
       {isLoading || !communityData ? (
         <div>Loading...</div>
       ) : (
-        <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+        <div className="">
           <h1 className="text-2xl font-semibold text-gray-900">
             This is {communityData?.name} community (in main section)
           </h1>
