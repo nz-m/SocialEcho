@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutAction } from "../../redux/actions/authActions";
 import { useEffect } from "react";
 import { getJoinedCommunitiesAction } from "../../redux/actions/communityActions";
-import avater from "../../assets/rownok.jpg";
 import { BsThreeDots } from "react-icons/bs";
 import {
   HiOutlineHome,
@@ -42,7 +41,7 @@ const Leftbar = () => {
     <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
       <div className="flex flex-col h-full justify-between">
         <div className="flex gap-2 justify-between">
-          <img className="rounded-full w-10" src={avater} alt="user" />
+          <img className="rounded-full w-10" src={user.avatar} alt="user" />
           {user && (
             <p className="font-bold text-primary capitalize text-sm">
               {user.name}
@@ -90,9 +89,8 @@ const Leftbar = () => {
                 <Link className="flex gap-2" to="/my-communities">
                   <p className="text-primary "> See all</p>
                   <p className="bg-primary px-2 py-2 w-5 h-5 flex justify-center items-center -mt-3 rounded-full text-white text-[10px]">
-                  {joinedCommunities.length}
+                    {joinedCommunities.length}
                   </p>
-                 
                 </Link>
               </div>
               <ul>
@@ -108,10 +106,12 @@ const Leftbar = () => {
           )}
         </div>
         <div className="flex flex-col items-center justify-center">
-       
-
           {user && (
-            <button className="px-4 py-1 border border-red-500 hover:bg-red-400 transition duration-500 hover:text-white text-red-500 rounded-lg" onClick={logout} type="button">
+            <button
+              className="px-4 py-1 border border-red-500 hover:bg-red-400 transition duration-500 hover:text-white text-red-500 rounded-lg"
+              onClick={logout}
+              type="button"
+            >
               Logout
             </button>
           )}

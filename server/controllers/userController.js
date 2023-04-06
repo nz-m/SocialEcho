@@ -69,6 +69,7 @@ const signin = async (req, res) => {
         name: existingUser.name,
         email: existingUser.email,
         role: existingUser.role,
+        avatar: existingUser.avatar,
       },
     });
   } catch (err) {

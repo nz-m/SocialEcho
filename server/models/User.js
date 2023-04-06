@@ -67,38 +67,6 @@ const userSchema = new Schema(
     timestamps: true,
   }
 );
-// If user chooses to delete their account (Not implemented)
-userSchema.pre("remove", async function (next) {
-  try {
-    // Todo: user avatar delete (fs.unlink/ promisify)
-
-    // Remove all posts and comments by the user
-    await this.model("Post").deleteMany({ user: this._id });
-    await this.model("Comment").deleteMany({ user: this._id });
-
-    // Remove the user from all communities they belong to
-    await this.model("Community").updateMany(
-      { members: this._id },
-      { $pull: { members: this._id } }
-    );
-
-    // Remove all relationships where the user is the follower
-    await this.model("Relationship").deleteMany({ follower: this._id });
-
-    // Remove all relationships where the user is the following
-    await this.model("Relationship").deleteMany({ following: this._id });
-
-    // Remove all reported posts by the user
-    await this.model("Community").updateMany(
-      { "reportedPosts.user": this._id },
-      { $pull: { reportedPosts: { user: this._id } } }
-    );
-
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
 
 const User = mongoose.model("User", userSchema);
 
