@@ -3,8 +3,11 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpAction } from "../../redux/actions/authActions";
 import { Link } from "react-router-dom";
+import ContextAuthModal from "../modals/ContextAuthModal";
+import LoadingSpinner from "../spinner/LoadingSpinner";
 
 const SignupForm = () => {
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,16 +44,22 @@ const SignupForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const [isConsentGiven, setIsConsentGiven] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
     formData.append("avatar", avatar);
     formData.append("role", "general");
-
-    dispatch(signUpAction(formData, navigate));
+    formData.append("isConsentGiven", isConsentGiven);
+    await dispatch(signUpAction(formData, navigate, isConsentGiven));
+    setLoading(false);
+    setIsConsentGiven(false);
   };
 
   return (
@@ -58,8 +67,9 @@ const SignupForm = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign up for an account{" "}
+            Sign up for an account
           </h2>
+
           {signUperror &&
             Array.isArray(signUperror) &&
             signUperror.map((err, i) => (
@@ -74,17 +84,17 @@ const SignupForm = () => {
                   className="block sm:inline
                     ml - 2 mr - 2 "
                 >
-                  {err}{" "}
-                </span>{" "}
+                  {err}
+                </span>
               </div>
-            ))}{" "}
-        </div>{" "}
+            ))}
+        </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="name" className="sr-only">
-                Name{" "}
-              </label>{" "}
+                Name
+              </label>
               <input
                 id="name"
                 name="name"
@@ -95,12 +105,12 @@ const SignupForm = () => {
                 value={name}
                 onChange={handleNameChange}
                 required
-              />{" "}
-            </div>{" "}
+              />
+            </div>
             <div>
               <label htmlFor="email" className="sr-only">
-                Email address{" "}
-              </label>{" "}
+                Email address
+              </label>
               <input
                 id="email"
                 name="email"
@@ -111,12 +121,12 @@ const SignupForm = () => {
                 placeholder="Email address"
                 value={email}
                 onChange={handleEmailChange}
-              />{" "}
-            </div>{" "}
+              />
+            </div>
             <div>
               <label htmlFor="password" className="sr-only">
-                Password{" "}
-              </label>{" "}
+                Password
+              </label>
               <input
                 id="password"
                 name="password"
@@ -127,12 +137,12 @@ const SignupForm = () => {
                 placeholder="Password"
                 value={password}
                 onChange={handlePasswordChange}
-              />{" "}
-            </div>{" "}
+              />
+            </div>
             <div>
               <label htmlFor="avatar" className="sr-only">
-                Avatar{" "}
-              </label>{" "}
+                Avatar
+              </label>
               <input
                 id="avatar"
                 name="avatar"
@@ -142,30 +152,60 @@ const SignupForm = () => {
                 placeholder="Avatar"
                 onChange={handleAvatarChange}
                 required
-              />{" "}
-            </div>{" "}
-          </div>{" "}
+              />
+            </div>
+          </div>
+
           <div>
             <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={loading}
+              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              }`}
             >
-              Sign up{" "}
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <LoadingSpinner loadingText={"Please wait..."} />
+                </div>
+              ) : (
+                "Sign up"
+              )}
             </button>
+
             <div className="mt-4 text-center">
               <p className="text-sm text-gray-600">
-                Already have an account ?{" "}
+                Already have an account ?
                 <Link
                   to="/signin"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Sign in
-                </Link>{" "}
-              </p>{" "}
-            </div>{" "}
-          </div>{" "}
-        </form>{" "}
-      </div>{" "}
+                </Link>
+              </p>
+            </div>
+            <div onClick={() => setIsModalOpen(true)}>
+              {isConsentGiven ? (
+                <p className="mt-2 text-center font-bold text-sm text-green-600 cursor-pointer">
+                  Contextual authentication is enabled.
+                </p>
+              ) : (
+                <p className="mt-2 text-center font-bold text-sm text-orange-400 cursor-pointer">
+                  Contextual authentication is disabled.
+                </p>
+              )}
+            </div>
+            <div>
+              <ContextAuthModal
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                setIsConsentGiven={setIsConsentGiven}
+              />
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

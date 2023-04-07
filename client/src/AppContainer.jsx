@@ -4,12 +4,7 @@
  *
  * @component
  * @returns {JSX.Element} The rendered React component
- *
- * @example
- * return (
- *   <AppContainer />
- * )
- *
+ * 
  * @description
  * This component sets up the Redux store using `createAppStore()` and
  * checks server status using an HTTP GET request to `/check-connectivity`.

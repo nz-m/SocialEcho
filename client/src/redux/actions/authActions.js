@@ -16,29 +16,41 @@ export const logoutAction = () => async (dispatch) => {
   }
 };
 
-export const signUpAction = (formData, navigate) => async (dispatch) => {
-  try {
-    const response = await api.signUp(formData);
-    const { error } = response;
-    if (error) {
+export const signUpAction =
+  (formData, navigate, isConsentGiven = false) =>
+  async (dispatch) => {
+    try {
+      const response = await api.signUp(formData);
+      const { error } = response;
+      if (error) {
+        dispatch({
+          type: types.SIGNUP_FAIL,
+          payload: error,
+        });
+      } else {
+        if (!isConsentGiven) {
+          dispatch({
+            type: types.SIGNUP_SUCCESS,
+            payload: types.SIGNUP_SUCCESS_MESSAGE,
+          });
+          navigate("/signin");
+        }
+
+        if (isConsentGiven) {
+          dispatch({
+            type: types.SIGNUP_SUCCESS,
+            payload: types.SIGNUP_SUCCESS_MESSAGE,
+          });
+          navigate("/verify-email");
+        }
+      }
+    } catch (error) {
       dispatch({
         type: types.SIGNUP_FAIL,
-        payload: error,
+        payload: types.ERROR_MESSAGE,
       });
-    } else {
-      dispatch({
-        type: types.SIGNUP_SUCCESS,
-        payload: types.SIGNUP_SUCCESS_MESSAGE,
-      });
-      navigate("/signin");
     }
-  } catch (error) {
-    dispatch({
-      type: types.SIGNUP_FAIL,
-      payload: types.ERROR_MESSAGE,
-    });
-  }
-};
+  };
 
 export const signInAction = (formData, navigate) => async (dispatch) => {
   try {

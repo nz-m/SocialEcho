@@ -174,7 +174,7 @@ const getUser = async (req, res, next) => {
  *
  * @throws {Error} If an error occurs while hashing the user password, or saving the new user to the database.
  */
-const addUser = async (req, res) => {
+const addUser = async (req, res, next) => {
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -197,9 +197,16 @@ const addUser = async (req, res) => {
 
   try {
     await newUser.save();
-    res.status(200).json({
-      message: "User added successfully",
-    });
+    if (newUser.isNew) {
+      throw new Error("Failed to add user");
+    }
+    if (req.body.isConsentGiven === "false") {
+      res.status(201).json({
+        message: "User added successfully",
+      });
+    } else {
+      next();
+    }
   } catch (err) {
     res.status(400).json({
       message: err.message,

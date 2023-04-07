@@ -2,7 +2,7 @@ import React from "react";
 
 const SelfInfoCard = ({ user }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 space-y-2 my-5 shadow-2xl shadow-[#F3F8FF]">
+    <div className="bg-white rounded-lg shadow-md p-6 space-y-2 my-5 shadow-[#F3F8FF]">
       <div className="flex flex-wrap items-center justify-between">
         <h3 className="text-lg font-medium text-gray-800">Profile Summary</h3>
         <div className="text-sm text-gray-500">

@@ -13,7 +13,6 @@ const rl = readline.createInterface({
 
 mongoose.set("strictQuery", false);
 
-// Connect to the database
 mongoose
   .connect("mongodb://127.0.0.1:27017/db_socialecho", {
     useNewUrlParser: true,
@@ -30,11 +29,9 @@ mongoose
 
 async function start() {
   try {
-    // Get the community names from the database
     const communities = await Community.find({}, { name: 1, _id: 0 });
     const communityNames = communities.map((community) => community.name);
 
-    // Prompt the user to choose a community to remove the moderator from
     const communityName = await promptUserInput(
       kleur
         .yellow()
@@ -45,25 +42,21 @@ async function start() {
 
     const chosenCommunity = await Community.findOne({ name: communityName });
 
-    // Check if the community exists
     if (!chosenCommunity) {
       LOG(kleur.red().bold("❌ Error! Community does not exist."));
       process.exit(1);
     }
 
-    // Check if the community has any moderators
     if (chosenCommunity.moderators.length === 0) {
       LOG(kleur.red().bold("❌ Error! Community has no moderators."));
       process.exit(1);
     }
 
-    // Get the moderators of the community
     const moderators = await User.find(
       { _id: { $in: chosenCommunity.moderators } },
       { email: 1, name: 1 }
     );
 
-    // Prompt the user to choose a moderator to remove
     const modChoice = await promptUserChoice(
       kleur
         .white()
@@ -78,7 +71,6 @@ async function start() {
       return;
     }
 
-    // Remove the moderator from the community
     await Community.findOneAndUpdate(
       { name: communityName },
       {
@@ -98,7 +90,6 @@ async function start() {
   }
 }
 
-// Prompt the user for input
 function promptUserInput(promptText, options) {
   return new Promise((resolve) => {
     if (options && options.length > 0) {

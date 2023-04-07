@@ -5,13 +5,11 @@ const Community = require("../models/Community");
 const kleur = require("kleur");
 const LOG = console.log;
 
-// Set up the readline interface for user input
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 mongoose.set("strictQuery", false);
-// Connect to the database
 mongoose
   .connect(
     "mongodb://127.0.0.1:27017/db_socialecho",
@@ -31,10 +29,8 @@ mongoose
 
 async function start() {
   try {
-    // Get the moderators from the database
     const moderators = await User.find({ role: "moderator" });
 
-    // Prompt the user to choose a moderator to add
     const modChoice = await promptUserChoice(
       kleur
         .cyan()
@@ -49,11 +45,9 @@ async function start() {
       return;
     }
 
-    // Get the community names from the database
     const communities = await Community.find({}, { name: 1, _id: 0 });
     const communityNames = communities.map((community) => community.name);
 
-    // Prompt the user to choose a community to add the moderator to
     const communityName = await promptUserInput(
       kleur
         .cyan()
@@ -66,7 +60,6 @@ async function start() {
 
     const chosenCommunity = await Community.findOne({ name: communityName });
 
-    // Check if the community exists
     if (!chosenCommunity) {
       LOG(
         kleur
@@ -79,7 +72,6 @@ async function start() {
       process.exit(1);
     }
 
-    // Check if the chosen moderator is already a moderator of the community
     if (
       chosenCommunity.moderators.length > 0 &&
       chosenCommunity.moderators.includes(moderatorToAdd._id)
@@ -98,7 +90,6 @@ async function start() {
 
       process.exit(1);
     }
-    // Add the moderator to the community
     await Community.findOneAndUpdate(
       { name: communityName },
       {
@@ -129,7 +120,6 @@ async function start() {
   }
 }
 
-// Prompt the user for input
 function promptUserInput(promptText, options) {
   return new Promise((resolve) => {
     if (options && options.length > 0) {

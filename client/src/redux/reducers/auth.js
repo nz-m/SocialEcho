@@ -22,6 +22,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         signInerror: null,
+        signUperror: [],
         successMessage: payload ? payload : null,
       };
 

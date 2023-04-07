@@ -61,7 +61,6 @@ const addUserValidatorHandler = (req, res, next) => {
         console.log(`${filePath} was deleted`);
       });
     }
-
     res
       .status(400)
       .json({ errors: Object.values(mappedErrors).map((error) => error.msg) });

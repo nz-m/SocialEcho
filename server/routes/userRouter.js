@@ -26,6 +26,8 @@ const {
   addUserValidatorHandler,
 } = require("../middlewares/users/usersValidator");
 
+const { sendVerificationEmail } = require("../middlewares/users/verifyEmail");
+
 const avatarUpload = require("../middlewares/users/avatarUpload");
 
 const requireAuth = passport.authenticate("jwt", { session: false });
@@ -44,7 +46,8 @@ router.post(
   avatarUpload,
   addUserValidator,
   addUserValidatorHandler,
-  addUser
+  addUser,
+  sendVerificationEmail
 );
 
 router.post("/refresh-token", refreshToken);

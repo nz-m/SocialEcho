@@ -1,11 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import CommunityPage from "./pages/CommunityPage";
 import Moderator from "./pages/Moderator";
 import SignupForm from "./components/auth/SignupForm";
 import SignIn from "./components/auth/SignIn";
 import ProfilePage from "./pages/ProfilePage";
-import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PostPage from "./pages/PostPage";
 import SelfPostPage from "./pages/SelfPostPage";
@@ -14,13 +15,14 @@ import ReportedPostPage from "./pages/ReportedPostPage";
 import Saved from "./pages/Saved";
 import EditProfileForm from "./components/form/EditProfileForm";
 import PublicProfilePage from "./pages/PublicProfilePage";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
 import AllCommunities from "./pages/AllCommunities";
 import MyCommunities from "./pages/MyCommunities";
 import Following from "./pages/Following";
+import VerifyEmail from "./pages/VerifyEmail";
+import EmailVerifiedMessage from "./pages/EmailVerifiedMessage";
+
 const App = () => {
-  const user = useSelector((state) => state.auth.userData);
+  const user = useSelector((state) => state.auth?.userData);
   return (
     <div>
       <Routes>
@@ -29,6 +31,9 @@ const App = () => {
           path="/signin"
           element={user ? <Navigate to="/" /> : <SignIn />}
         />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/email-verified" element={<EmailVerifiedMessage />} />
+
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
