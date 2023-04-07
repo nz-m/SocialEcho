@@ -17,7 +17,7 @@ export const logoutAction = () => async (dispatch) => {
 };
 
 export const signUpAction =
-  (formData, navigate, isConsentGiven = false) =>
+  (formData, navigate, isConsentGiven = false,email) =>
   async (dispatch) => {
     try {
       const response = await api.signUp(formData);
@@ -41,7 +41,7 @@ export const signUpAction =
             type: types.SIGNUP_SUCCESS,
             payload: types.SIGNUP_SUCCESS_MESSAGE,
           });
-          navigate("/verify-email");
+          navigate("/auth/verify", { state: email });
         }
       }
     } catch (error) {

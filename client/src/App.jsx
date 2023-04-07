@@ -31,7 +31,7 @@ const App = () => {
           path="/signin"
           element={user ? <Navigate to="/" /> : <SignIn />}
         />
-        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/auth/verify" element={<VerifyEmail />} />
         <Route path="/email-verified" element={<EmailVerifiedMessage />} />
 
         <Route element={<PrivateRoute />}>

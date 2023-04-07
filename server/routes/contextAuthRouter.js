@@ -7,11 +7,15 @@ const {
   addContextData,
 } = require("../controllers/authController");
 
+const {
+  verifyEmailValidation,
+  verifyEmail,
+} = require("../middlewares/users/verifyEmail");
+
 router.use(useragent.express());
 
+router.get("/verify", verifyEmailValidation, verifyEmail);
 router.get("/:id", getContextData);
 router.post("/", addContextData);
-
-router.get;
 
 module.exports = router;

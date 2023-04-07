@@ -57,7 +57,7 @@ const SignupForm = () => {
     formData.append("avatar", avatar);
     formData.append("role", "general");
     formData.append("isConsentGiven", isConsentGiven);
-    await dispatch(signUpAction(formData, navigate, isConsentGiven));
+    await dispatch(signUpAction(formData, navigate, isConsentGiven, email));
     setLoading(false);
     setIsConsentGiven(false);
   };
