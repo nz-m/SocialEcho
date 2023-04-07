@@ -26,9 +26,9 @@ const MyCommunities = () => {
     return joinedCommunities.map((community) => (
       <div
         key={community._id}
-        className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-4"
+        className="grid grid-cols-2 gap-5" 
       >
-        <JoinedCommunityCard community={community} />
+        <JoinedCommunityCard  className="grid grid-cols-2 gap-5"  community={community} />
       </div>
     ));
   }, [joinedCommunities]);

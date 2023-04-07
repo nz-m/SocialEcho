@@ -5,7 +5,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
-
+import {BiDotsHorizontalRounded} from 'react-icons/bi'
 const Post = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,9 +25,9 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="px-6 py-6 rounded-xl shadow-xl bg-white border border-gray-100">
-      <div className="flex justify-between">
-        <div className="flex gap-2">
+    <div className="px-6 py-6 rounded-xl shadow-xl bg-white shadow-[#F3F8FF] mb-6">
+      <div className="flex items-start justify-between">
+        <div className="flex  gap-2">
           <img
             className="rounded-full overflow-hidden"
             src={user.avatar}
@@ -35,13 +35,13 @@ const Post = ({ post }) => {
             style={{ width: "50px" }}
             loading="lazy"
           />
-          <div className="">
+          <div className="flex flex-col">
             {userData._id === user._id ? (
-              <Link to="/profile" className="text-lg font-semibold">
+              <Link to="/profile" className="text-base font-semibold capitalize">
                 {user.name}
               </Link>
             ) : (
-              <Link to={`/user/${user._id}`} className="text-lg font-semibold">
+              <Link to={`/user/${user._id}`} className="text-base font-semibold capitalize">
                 {user.name}
               </Link>
             )}
@@ -53,7 +53,11 @@ const Post = ({ post }) => {
             </Link>
           </div>
         </div>
-        <p>{createdAt}</p>
+        <div className="flex items-center gap-2">
+        <p className="text-sm text-gray-500">{createdAt}</p>
+        <BiDotsHorizontalRounded className="text-lg cursor-pointer"/>
+        </div>
+       
       </div>
       <div
         className="cursor-pointer"
@@ -63,7 +67,7 @@ const Post = ({ post }) => {
           });
         }}
       >
-        <p className="text-lg">{body}</p>
+        <p className="text-md text-justify mt-2">{body}</p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <img

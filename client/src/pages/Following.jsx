@@ -27,7 +27,7 @@ const Following = () => {
       <Leftbar />
       <div className="w-6/12 px-10 py-6">
         <h2 className="text-xl font-bold mb-4">People you're following</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
           {loading ? (
             <div>Loading...</div>
           ) : followingUsers?.length > 0 ? (
