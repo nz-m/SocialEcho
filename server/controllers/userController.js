@@ -169,6 +169,7 @@ const getUser = async (req, res, next) => {
  * @param {string} req.body.email - The email of the user to be added.
  * @param {string} req.body.password - The password of the user to be added.
  * @param {Object} req.files - The files attached to the request object (for avatar).
+ * @param {Function} next - The next middleware function to call if consent is given by the user to enable context based auth.
  *
  * @returns {Object} The response object with a success message if the user is added successfully.
  *

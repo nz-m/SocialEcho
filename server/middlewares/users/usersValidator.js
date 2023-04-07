@@ -28,7 +28,9 @@ const addUserValidator = [
       try {
         const user = await User.findOne({ email: value });
         if (user) {
-          throw new Error("Email already in use");
+          throw new Error(
+            "There is already an account associated with this email address"
+          );
         }
       } catch (err) {
         throw err;

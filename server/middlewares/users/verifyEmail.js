@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const UserPreferece = require("../../models/UserPreference");
+const UserPreference = require("../../models/UserPreference");
 const User = require("../../models/User");
 const EmailVerification = require("../../models/EmailVerification");
 const { body, query, validationResult } = require("express-validator");
@@ -82,50 +82,34 @@ const verifyEmail = async (req, res) => {
   const { code, email } = req.query;
 
   try {
-    // Check if email is already verified by matching with email of the User model which has isEmailVerified model
-    const isVerified = await User.findOne({
-      email: email,
-      isEmailVerified: true,
-    });
+    const [isVerified, verification] = await Promise.all([
+      User.findOne({ email, isEmailVerified: true }),
+      EmailVerification.findOne({ email, verificationCode: code }),
+    ]);
 
     if (isVerified) {
       return res.status(400).json({ message: "Email is already verified" });
     }
 
-    // Check if verification code is valid by matching with email and verificationCode of the EmailVerification model
-    const verification = await EmailVerification.findOne({
-      email: email,
-      verificationCode: code,
-    });
-
     if (!verification) {
-      return res.status(400).json({
-        message: "Verification code is invalid or has expired",
-      });
+      return res
+        .status(400)
+        .json({ message: "Verification code is invalid or has expired" });
     }
 
-    // Update the User model with isEmailVerified: true
     const updatedUser = await User.findOneAndUpdate(
-      {
-        email: email,
-      },
-      {
-        isEmailVerified: true,
-      },
-      {
-        new: true,
-      }
-    );
+      { email },
+      { isEmailVerified: true },
+      { new: true }
+    ).exec();
 
-    // Delete all verification codes from the EmailVerification model for the given email
-    await EmailVerification.deleteMany({ email: email });
-
-    const newUserPreference = new UserPreferece({
-      user: updatedUser._id,
-      enableContextBasedAuth: true,
-    });
-
-    await newUserPreference.save();
+    await Promise.all([
+      EmailVerification.deleteMany({ email }).exec(),
+      new UserPreference({
+        user: updatedUser,
+        enableContextBasedAuth: true,
+      }).save(),
+    ]);
 
     return res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
