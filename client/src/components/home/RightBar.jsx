@@ -40,8 +40,8 @@ const RightBar = () => {
   );
 
   const [visibleCommunities, remainingCount] = useMemo(() => {
-    const visibleCommunities = notJoinedCommunities?.slice(0, 5);
-    const remainingCount = Math.max((notJoinedCommunities?.length || 0) - 5, 0);
+    const visibleCommunities = notJoinedCommunities?.slice(0, 4);
+    const remainingCount = Math.max((notJoinedCommunities?.length || 0) - 4, 0);
     return [visibleCommunities, remainingCount];
   }, [notJoinedCommunities]);
 
@@ -80,10 +80,10 @@ const RightBar = () => {
       {currentUserIsModerator ? (
         <ModeratorProfile />
       ) : (
-        <div className="w-3.5/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
+        <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
           {currentLocation !== "/communities" && (
             <div className="">
-              <div className="flex items-end justify-between mb-6">
+              <div className="flex items-end justify-between mb-4">
                 <h5 className="font-semibold text-sm">
                   Suggested Communities
                 </h5>
@@ -102,31 +102,33 @@ const RightBar = () => {
 
               {notJoinedCommunities?.length === 0 && (
                 <div className="text-center italic text-gray-400">
-                  😢 No communities to join. Check back later
+                   No communities to join. Check back later
                 </div>
               )}
-              <ul className="flex flex-col gap-3">
+              <ul className="flex flex-col gap-3 ">
                 {visibleCommunities?.map((community) => (
                   <li
                     key={community._id}
-                    className="flex items-start justify-between"
+                    className="flex items-center justify-between bg-white shadow-2xl shadow-[#f2f5fc]  border border-slate-100 px-2 py-1 rounded-lg"
                   >
-                    <div className="flex">
+                    <div className="flex items-center">
                       <img
                         src={community.banner || placeholder}
-                        className="h-10 w-10 rounded-full mr-4"
+                        className="h-8 w-8 rounded-full mr-4"
                         alt="community"
                       />
-                      <span className="text-lg font-medium">
-                        {community.name}
-                      </span>
+                      <div className="text-base font-medium flex flex-col">
+                        <p>  {community.name}</p>
+                      
+                       <p className="text-xs text-gray-400">3.2k</p>
+                      </div>
                     </div>
 
                     <button
                       onClick={() => toggleJoinModal(community._id, true)}
-                      className="bg-primary text-white border border-blue-500
-                        hover:bg-blue-800 
-                         rounded-md py-[5px] px-2 text-sm font-semibold"
+                      className=" text-primary border border-dashed border-blue-500
+                        hover:bg-primary 
+                         rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
                     >
                       <p className="group-hover:text-white flex items-center  gap-2">
                       
@@ -144,9 +146,9 @@ const RightBar = () => {
               </ul>
             </div>
           )}
-          <div className="">
-            <div className="">
-              <h5 className=" my-5 text-sm font-semibold">
+          
+          <hr className="my-3"/>
+              <h5 className=" mb-4 text-sm font-semibold">
                 Popular Users to Follow
               </h5>
               {memoizedUsers?.length === 0 && (
@@ -154,31 +156,31 @@ const RightBar = () => {
                   No users to follow. Check back later
                 </div>
               )}
-              <ul className="flex flex-col gap-5">
+              <ul className="flex flex-col gap-3">
                 {memoizedUsers?.length > 0 &&
                   memoizedUsers.map((user) => (
-                    <li key={user._id} className="flex justify-between items-center gap-5">
+                    <li key={user._id} className="flex justify-between items-center gap-5 bg-white shadow-2xl shadow-[#f2f5fc]  border border-slate-100 px-2 py-1 rounded-lg">
                       <div className="flex justify-content-between items-center">
                         <img
-                          className="h-10 w-10 rounded-full mr-4"
+                          className="h-8 w-8 rounded-full mr-4"
                           src={user.avatar}
                           alt={user.name}
                         />
                         <div>
                           <MemoizedLink
                             to={`/user/${user._id}`}
-                            className="font-medium"
+                            className="font-medium text-base line-clamp-1"
                           >
                             {user.name}
                           </MemoizedLink>
-                          <div>Followers: {user.followerCount}</div>
+                          <div className="text-xs text-slate-400">Followers: {user.followerCount}</div>
                         </div>
                       </div>
                       <button
                         onClick={() => followUserHandler(user._id)}
-                        className="bg-primary text-white border border-blue-500
-                        hover:bg-blue-800 
-                         rounded-md py-[5px] px-2 text-sm font-semibold"
+                        className="text-primary border border-dashed border-blue-500
+                        hover:bg-primary 
+                         rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
                       >
                         {followLoading[user._id] ? (
                           <LoadingSpinner />
@@ -193,8 +195,8 @@ const RightBar = () => {
                     </li>
                   ))}
               </ul>
-            </div>
-          </div>
+            
+        
         </div>
       )}
     </>

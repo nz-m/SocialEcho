@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import JoinModal from "../modals/JoinModal";
 import placeholder from "../../assets/placeholder.png";
-
+import {MdOutlineGroupAdd} from 'react-icons/md'
 const CommunityCard = ({ community }) => {
   const [joinModalVisibility, setJoinModalVisibility] = useState({});
 
@@ -12,34 +12,43 @@ const CommunityCard = ({ community }) => {
     }));
   };
   return (
-    <div className="w-full rounded-lg shadow-md lg:max-w-sm">
+    <div className="shadow-2xl shadow-[#F3F8FF] bg-white px-4 py-2 w-full rounded-lg flex justify-between items-center">
+      
+      <div className="w-full flex items-center ">
       <img
-        className="object-cover w-full h-48"
+        className="object-cover rounded-full w-10 h-10 mr-4"
         src={community.banner || placeholder}
         alt=""
         loading="lazy"
       />
-      <div className="p-4">
-        <h4 className="text-xl font-semibold tracking-tight text-blue-600">
+      <div className="">
+      <h4 className="text-base font-semibold ">
           {community.name}
         </h4>
         <p className="text-gray-700 mb-2">{community.members.length} members</p>
 
-        <p className="mb-2 leading-normal">
-          {community.description.substring(0, 100)}...
-        </p>
-        <button
-          onClick={() => toggleJoinModal(community._id, true)}
-          className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow"
-        >
-          Join
-        </button>
-        <JoinModal
-          show={joinModalVisibility[community._id] || false}
-          onClose={() => toggleJoinModal(community._id, false)}
-          community={community}
-        />
       </div>
+      
+     
+    
+      </div>
+     
+      <div className="">
+  
+     
+  <button
+    onClick={() => toggleJoinModal(community._id, true)}
+    className="px-2.5 py-2.5 bg-primary shadow-2xl shadow-[#F3F8FF] hover:bg-transparent group hover:border rounded-xl hover:border-primary transition duration-300"
+  >
+    <MdOutlineGroupAdd className="text-lg text-white group-hover:text-primary"/>
+    
+  </button>
+  <JoinModal
+    show={joinModalVisibility[community._id] || false}
+    onClose={() => toggleJoinModal(community._id, false)}
+    community={community}
+  />
+</div>
     </div>
   );
 };
