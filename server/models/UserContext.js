@@ -3,6 +3,16 @@ const { encryptField, decryptField } = require("../utils/encryption");
 
 const userContextSchema = new mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+
     ip: {
       type: String,
       required: true,
@@ -16,24 +26,6 @@ const userContextSchema = new mongoose.Schema(
       get: decryptField,
     },
     city: {
-      type: String,
-      required: true,
-      set: encryptField,
-      get: decryptField,
-    },
-    latitude: {
-      type: String,
-      required: true,
-      set: encryptField,
-      get: decryptField,
-    },
-    longitude: {
-      type: String,
-      required: true,
-      set: encryptField,
-      get: decryptField,
-    },
-    timezone: {
       type: String,
       required: true,
       set: encryptField,

@@ -50,6 +50,7 @@ const sendVerificationEmail = async (req, res) => {
       email,
       verificationCode,
       messageId: info.messageId,
+      for: "signup",
     });
 
     await newVerification.save();
@@ -63,7 +64,72 @@ const sendVerificationEmail = async (req, res) => {
   }
 };
 
-const verifyEmail = async (req, res) => {
+const sendLoginVerificationEmail = async (req, res) => {
+  const USER = decryptData(process.env.EMAIL);
+  const PASS = decryptData(process.env.PASSWORD);
+
+  const mismatchedProps = req.mismatchedProps;
+  const currentContextData = req.currentContextData;
+
+  const userId = req.user._id;
+  const email = req.user.email;
+  const name = req.user.name;
+
+  const verificationCode = Math.floor(10000 + Math.random() * 90000);
+  const verificationLink = `${BASE_URL}/auth/verify?code=${verificationCode}&email=${email}`;
+
+  try {
+    // transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      service: EMAIL_SERVICE,
+      auth: {
+        user: USER,
+        pass: PASS,
+      },
+    });
+
+    let info = await transporter.sendMail({
+      from: `"SocialEcho" <${USER}>`,
+      to: email,
+      subject: "New login attempt detected",
+      html: `
+      <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+  <p>Hi ${name},</p>
+  <p>Our system has detected that a new login was attempted using the following details:</p>
+  <ul style="list-style: none; padding-left: 0;">
+    <li><strong>IP Address:</strong> ${currentContextData.ip}</li>
+    <li><strong>Location:</strong> ${currentContextData.city}, ${currentContextData.country}</li>
+    <li><strong>Device:</strong> ${currentContextData.device} ${currentContextData.deviceType}</li>
+    <li><strong>Browser:</strong> ${currentContextData.browser}</li>
+    <li><strong>Operating System:</strong> ${currentContextData.os}</li>
+    <li><strong>Platform:</strong> ${currentContextData.platform}</li>
+  </ul>
+  <p>Please verify that this login was authorized. If you believe this was an unauthorized attempt, please contact our support team immediately.</p>
+</div>
+
+      `,
+    });
+
+    const newVerification = new EmailVerification({
+      email,
+      verificationCode,
+      messageId: info.messageId,
+      for: "login",
+    });
+
+    await newVerification.save();
+
+    res.status(400).json({
+      message:
+        "A new login attempt was detected. An email has been sent to you for verification. Follow the instructions in the email to verify your identity.",
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+const verifyEmail = async (req, res, next) => {
   const { code, email } = req.query;
 
   try {
@@ -96,7 +162,9 @@ const verifyEmail = async (req, res) => {
       }).save(),
     ]);
 
-    return res.status(200).json({ message: "Email verified successfully" });
+    req.userId = updatedUser._id;
+    req.email = updatedUser.email;
+    next();
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
@@ -106,4 +174,5 @@ module.exports = {
   sendVerificationEmail,
   verifyEmail,
   verifyEmailValidation,
+  sendLoginVerificationEmail,
 };

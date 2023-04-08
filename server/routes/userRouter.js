@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const useragent = require("express-useragent");
+const requestIp = require("request-ip");
 
 const {
   getUsers,
@@ -26,7 +28,10 @@ const {
   addUserValidatorHandler,
 } = require("../middlewares/users/usersValidator");
 
-const { sendVerificationEmail } = require("../middlewares/users/verifyEmail");
+const {
+  sendVerificationEmail,
+  sendLoginVerificationEmail,
+} = require("../middlewares/users/verifyEmail");
 
 const avatarUpload = require("../middlewares/users/avatarUpload");
 
@@ -51,8 +56,13 @@ router.post(
 );
 
 router.post("/refresh-token", refreshToken);
-
-router.post("/signin", signin);
+router.post(
+  "/signin",
+  useragent.express(),
+  requestIp.mw(),
+  signin,
+  sendLoginVerificationEmail
+);
 router.post("/logout", logout);
 
 module.exports = router;

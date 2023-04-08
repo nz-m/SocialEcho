@@ -1,41 +1,59 @@
 const UserContext = require("../models/UserContext");
 const geoip = require("geoip-lite");
 
-const getContextData = async (req, res) => {
+const verifyContextData = async (req, existingUser) => {
   try {
-    const userContextData = await UserContext.findById(req.params.id);
+    const { _id } = existingUser;
+    const userContextData = await UserContext.findOne({ user: _id });
 
-    const ip = userContextData.ip;
-    const browser = userContextData.browser;
-    const version = userContextData.version;
-    const platform = userContextData.platform;
-    const os = userContextData.os;
-    const device = userContextData.device;
-    const deviceType = userContextData.deviceType;
-    const country = userContextData.country;
-    const city = userContextData.city;
-    const latitude = userContextData.latitude;
-    const longitude = userContextData.longitude;
-    const timezone = userContextData.timezone;
+    if (!userContextData) {
+      return "no_context_data";
+    }
 
-    res.status(200).json({
-      message: `Your IP is ${ip}. You are using ${browser} ${version} on ${platform} ${os} ${device} ${deviceType} from ${country} ${city} ${latitude} ${longitude} ${timezone}`,
-    });
+    const { ip, browser, device, deviceType, country, city } = userContextData;
+    const currentContextData = getCurrentContextData(req);
+
+    const mismatchedProps = [];
+
+    if (ip !== currentContextData.ip) {
+      mismatchedProps.push("ip");
+    }
+    if (browser !== currentContextData.browser) {
+      mismatchedProps.push("browser");
+    }
+    if (device !== currentContextData.device) {
+      mismatchedProps.push("device");
+    }
+    if (deviceType !== currentContextData.deviceType) {
+      mismatchedProps.push("deviceType");
+    }
+    if (country !== currentContextData.country) {
+      mismatchedProps.push("country");
+    }
+    if (city !== currentContextData.city) {
+      mismatchedProps.push("city");
+    }
+
+    if (mismatchedProps.length > 0) {
+      return {
+        mismatchedProps: mismatchedProps,
+        currentContextData: currentContextData,
+      };
+    }
+
+    return "match";
   } catch (error) {
-    res.status(500).json({
-      message: "Internal server error",
-    });
+    return "error";
   }
 };
 
 const addContextData = async (req, res) => {
+  const userId = req.userId;
+  const email = req.email;
   const ip = req.ip || "N/A";
   const location = geoip.lookup(ip) || "N/A";
   const country = location.country ? location.country.toString() : "N/A";
   const city = location.city ? location.city.toString() : "N/A";
-  const latitude = location.ll?.[0] ? location.ll[0].toString() : "N/A";
-  const longitude = location.ll?.[1] ? location.ll[1].toString() : "N/A";
-  const timezone = location.timezone ? location.timezone.toString() : "N/A";
   const browser = req.useragent.browser
     ? req.useragent.browser.toString()
     : "N/A";
@@ -61,12 +79,11 @@ const addContextData = async (req, res) => {
     : "unknown";
 
   const newUserContext = new UserContext({
+    user: userId,
+    email,
     ip,
     country,
     city,
-    latitude,
-    longitude,
-    timezone,
     browser,
     version,
     platform,
@@ -77,15 +94,61 @@ const addContextData = async (req, res) => {
 
   try {
     await newUserContext.save();
-    res.status(200).json({ message: "Context data saved successfully!" });
+    res.status(200).json({
+      message: "Email verification process was successful",
+    });
   } catch (error) {
     res.status(500).json({
-      message: "Error while saving context data",
+      message: "Internal server error",
     });
   }
 };
 
+const getCurrentContextData = (req) => {
+  const ip = req.clientIp || "N/A";
+  const location = geoip.lookup(ip) || "N/A";
+  const country = location.country ? location.country.toString() : "N/A";
+  const city = location.city ? location.city.toString() : "N/A";
+  const browser = req.useragent.browser
+    ? req.useragent.browser.toString()
+    : "N/A";
+  const version = req.useragent.version
+    ? req.useragent.version.toString()
+    : "N/A";
+  const platform = req.useragent.platform
+    ? req.useragent.platform.toString()
+    : "N/A";
+  const os = req.useragent.os ? req.useragent.os.toString() : "N/A";
+  const device = req.useragent.device ? req.useragent.device.toString() : "N/A";
+
+  const isMobile = req.useragent.isMobile || false;
+  const isDesktop = req.useragent.isDesktop || false;
+  const isTablet = req.useragent.isTablet || false;
+
+  const deviceType = isMobile
+    ? "mobile"
+    : isDesktop
+    ? "desktop"
+    : isTablet
+    ? "tablet"
+    : "unknown";
+
+  const currentContextData = {
+    ip,
+    country,
+    city,
+    browser,
+    version,
+    platform,
+    os,
+    device,
+    deviceType,
+  };
+
+  return currentContextData;
+};
+
 module.exports = {
-  getContextData,
+  verifyContextData,
   addContextData,
 };
