@@ -38,7 +38,7 @@ const Leftbar = () => {
   }, [visibleCommunities]);
 
   return (
-    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
+    <div className="w-3/12 h-[86vh] bg-white sticky top-20 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
       <div className="flex flex-col h-full justify-between">
         <div className="flex gap-2 justify-between">
           <img className="rounded-full w-10" src={user.avatar} alt="user" />
