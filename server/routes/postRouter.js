@@ -5,7 +5,6 @@ const fileUpload = require("../middlewares/post/fileUpload");
 const passport = require("passport");
 const requireAuth = passport.authenticate("jwt", { session: false });
 
-// Apply authentication middleware to all routes
 router.use(requireAuth);
 
 router.get("/:publicUserId/userPosts", postController.getPublicPosts);

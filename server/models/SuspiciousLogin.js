@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const { encryptField, decryptField } = require("../utils/encryption");
 
-const userContextSchema = new mongoose.Schema(
+const SuspiciousLoginSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -15,55 +14,46 @@ const userContextSchema = new mongoose.Schema(
     ip: {
       type: String,
       required: true,
-      set: encryptField,
-      get: decryptField,
     },
     country: {
       type: String,
       required: true,
-      set: encryptField,
-      get: decryptField,
     },
     city: {
       type: String,
       required: true,
-      set: encryptField,
-      get: decryptField,
     },
     browser: {
       type: String,
       required: true,
-      set: encryptField,
-      get: decryptField,
     },
     platform: {
       type: String,
       required: true,
-      set: encryptField,
-      get: decryptField,
     },
     os: {
       type: String,
       required: true,
-      set: encryptField,
-      get: decryptField,
     },
     device: {
       type: String,
       required: true,
-      set: encryptField,
-      get: decryptField,
     },
     deviceType: {
       type: String,
       required: true,
-      set: encryptField,
-      get: decryptField,
     },
-    isTrusted: {
+    isPending: {
       type: Boolean,
-      required: true,
       default: true,
+    },
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
+    isRejected: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -71,6 +61,9 @@ const userContextSchema = new mongoose.Schema(
   }
 );
 
-const UserContext = mongoose.model("UserContext", userContextSchema);
+const SuspiciousLogin = mongoose.model(
+  "SuspiciousLogin",
+  SuspiciousLoginSchema
+);
 
-module.exports = UserContext;
+module.exports = SuspiciousLogin;

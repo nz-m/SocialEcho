@@ -59,7 +59,6 @@ const sendVerificationEmail = async (req, res) => {
       message: `Verification email was successfully sent to ${email}`,
     });
   } catch (err) {
-    console.error(err.message);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
@@ -93,21 +92,22 @@ const sendLoginVerificationEmail = async (req, res) => {
       to: email,
       subject: "New login attempt detected",
       html: `
-      <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
-  <p>Hi ${name},</p>
-  <p>Our system has detected that a new login was attempted using the following details:</p>
-  <ul style="list-style: none; padding-left: 0;">
-    <li><strong>IP Address:</strong> ${currentContextData.ip}</li>
-    <li><strong>Location:</strong> ${currentContextData.city}, ${currentContextData.country}</li>
-    <li><strong>Device:</strong> ${currentContextData.device} ${currentContextData.deviceType}</li>
-    <li><strong>Browser:</strong> ${currentContextData.browser}</li>
-    <li><strong>Operating System:</strong> ${currentContextData.os}</li>
-    <li><strong>Platform:</strong> ${currentContextData.platform}</li>
-  </ul>
-  <p>Please verify that this login was authorized. If you believe this was an unauthorized attempt, please contact our support team immediately.</p>
-</div>
+          <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+      <p>Hi ${name},</p>
+      <p>Our system has detected that a new login was attempted using the following details:</p>
+      <ul style="list-style: none; padding-left: 0;">
+        <li><strong>Time:</strong> ${currentContextData.time}</li>
+        <li><strong>IP Address:</strong> ${currentContextData.ip}</li>
+        <li><strong>Location:</strong> ${currentContextData.city}, ${currentContextData.country}</li>
+        <li><strong>Device:</strong> ${currentContextData.device} ${currentContextData.deviceType}</li>
+        <li><strong>Browser:</strong> ${currentContextData.browser}</li>
+        <li><strong>Operating System:</strong> ${currentContextData.os}</li>
+        <li><strong>Platform:</strong> ${currentContextData.platform}</li>
+      </ul>
+      <p>Please verify that this login was authorized. If you believe this was an unauthorized attempt, please contact our support team immediately.</p>
+    </div>
 
-      `,
+          `,
     });
 
     const newVerification = new EmailVerification({
@@ -119,12 +119,10 @@ const sendLoginVerificationEmail = async (req, res) => {
 
     await newVerification.save();
 
-    res.status(400).json({
-      message:
-        "A new login attempt was detected. An email has been sent to you for verification. Follow the instructions in the email to verify your identity.",
+    res.status(401).json({
+      message: `Access blocked due to suspicious activity. Verification email was sent to your email address.`,
     });
   } catch (err) {
-    console.error(err.message);
     res.status(500).json({ message: "Something went wrong" });
   }
 };

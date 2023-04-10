@@ -77,7 +77,7 @@ const RightBar = () => {
           {isModeratorUpdated && !isModerator && (
             <button
               onClick={toggleLeaveModal}
-              className="text-white btn-primary btn-sm"
+              className="text-blue-500 ml-2 hover:underline"
             >
               Leave Community
             </button>

@@ -5,7 +5,6 @@ const passport = require("passport");
 const communityController = require("../controllers/communityController");
 const requireAuth = passport.authenticate("jwt", { session: false });
 
-// Apply authentication middleware to all routes
 router.use(requireAuth);
 
 router.get("/notmember", communityController.getNotMemberCommunities);
@@ -28,6 +27,5 @@ router.post("/", communityController.createCommunity);
 router.post("/:name/add-all-rules", communityController.addRulesToCommunity);
 router.post("/rules", communityController.addRules);
 router.patch("/:name/add-moderators", communityController.addModToCommunity);
-// router.post("/rule", communityController.addRule);
 
 module.exports = router;

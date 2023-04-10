@@ -58,8 +58,8 @@ router.post(
 router.post("/refresh-token", refreshToken);
 router.post(
   "/signin",
-  useragent.express(),
   requestIp.mw(),
+  useragent.express(),
   signin,
   sendLoginVerificationEmail
 );

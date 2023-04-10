@@ -1,68 +1,77 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "./pages/Home";
-import CommunityPage from "./pages/CommunityPage";
-import Moderator from "./pages/Moderator";
-import SignupForm from "./components/auth/SignupForm";
-import SignIn from "./components/auth/SignIn";
-import ProfilePage from "./pages/ProfilePage";
-import PrivateRoute from "./PrivateRoute";
-import PostPage from "./pages/PostPage";
-import SelfPostPage from "./pages/SelfPostPage";
-import ReportPost from "./components/community/ReportPost";
-import ReportedPostPage from "./pages/ReportedPostPage";
-import Saved from "./pages/Saved";
-import EditProfileForm from "./components/form/EditProfileForm";
-import PublicProfilePage from "./pages/PublicProfilePage";
-import AllCommunities from "./pages/AllCommunities";
-import MyCommunities from "./pages/MyCommunities";
-import Following from "./pages/Following";
-import VerifyEmail from "./pages/VerifyEmail";
-import EmailVerifiedMessage from "./pages/EmailVerifiedMessage";
+
+const Home = lazy(() => import("./pages/Home"));
+const CommunityPage = lazy(() => import("./pages/CommunityPage"));
+const Moderator = lazy(() => import("./pages/Moderator"));
+const SignupForm = lazy(() => import("./components/auth/SignupForm"));
+const SignIn = lazy(() => import("./components/auth/SignIn"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const PrivateRoute = lazy(() => import("./PrivateRoute"));
+const PostPage = lazy(() => import("./pages/PostPage"));
+const SelfPostPage = lazy(() => import("./pages/SelfPostPage"));
+const ReportPost = lazy(() => import("./components/community/ReportPost"));
+const ReportedPostPage = lazy(() => import("./pages/ReportedPostPage"));
+const Saved = lazy(() => import("./pages/Saved"));
+const EditProfileForm = lazy(() => import("./components/form/EditProfileForm"));
+const PublicProfilePage = lazy(() => import("./pages/PublicProfilePage"));
+const AllCommunities = lazy(() => import("./pages/AllCommunities"));
+const MyCommunities = lazy(() => import("./pages/MyCommunities"));
+const Following = lazy(() => import("./pages/Following"));
+const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
+const EmailVerifiedMessage = lazy(() => import("./pages/EmailVerifiedMessage"));
+const SigninWarning = lazy(() => import("./pages/SigninWarning"));
 
 const App = () => {
   const user = useSelector((state) => state.auth?.userData);
+
   return (
     <div>
-      <Routes>
-        <Route path="/signup" element={<SignupForm />} />
-        <Route
-          path="/signin"
-          element={user ? <Navigate to="/" /> : <SignIn />}
-        />
-        <Route path="/auth/verify" element={<VerifyEmail />} />
-        <Route path="/email-verified" element={<EmailVerifiedMessage />} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/signup" element={<SignupForm />} />
+          <Route
+            path="/signin"
+            element={user ? <Navigate to="/" /> : <SignIn />}
+          />
+          <Route path="/auth/verify" element={<VerifyEmail />} />
+          <Route path="/email-verified" element={<EmailVerifiedMessage />} />
+          <Route path="/access-denied" element={<SigninWarning />} />
 
-        <Route element={<PrivateRoute />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/community/:communityName" element={<CommunityPage />} />
-          <Route
-            path="/community/:communityName/report"
-            element={<ReportPost />}
-          />
-          <Route
-            path="/community/:communityName/reported-post"
-            element={<ReportedPostPage />}
-          />
-          <Route path="/post/:postId" element={<PostPage />} />
-          <Route path="/my/post/:postId" element={<SelfPostPage />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route
+              path="/community/:communityName"
+              element={<CommunityPage />}
+            />
+            <Route
+              path="/community/:communityName/report"
+              element={<ReportPost />}
+            />
+            <Route
+              path="/community/:communityName/reported-post"
+              element={<ReportedPostPage />}
+            />
+            <Route path="/post/:postId" element={<PostPage />} />
+            <Route path="/my/post/:postId" element={<SelfPostPage />} />
 
-          <Route
-            path="/community/:communityName/moderator"
-            element={<Moderator />}
-          />
-          <Route path="/saved" element={<Saved />} />
-          <Route path="/edit-profile" element={<EditProfileForm />} />
-          <Route path="/user/:userId" element={<PublicProfilePage />} />
-          <Route path="/communities" element={<AllCommunities />} />
-          <Route path="/my-communities" element={<MyCommunities />} />
-          <Route path="/following" element={<Following />} />
-        </Route>
-        <Route path="*" element={<h1>404 Not Found</h1>} />
-      </Routes>
+            <Route
+              path="/community/:communityName/moderator"
+              element={<Moderator />}
+            />
+            <Route path="/saved" element={<Saved />} />
+            <Route path="/edit-profile" element={<EditProfileForm />} />
+            <Route path="/user/:userId" element={<PublicProfilePage />} />
+            <Route path="/communities" element={<AllCommunities />} />
+            <Route path="/my-communities" element={<MyCommunities />} />
+            <Route path="/following" element={<Following />} />
+          </Route>
+          <Route path="*" element={<h1>404 Not Found</h1>} />
+        </Routes>
+      </Suspense>
     </div>
   );
 };

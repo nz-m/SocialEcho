@@ -56,6 +56,20 @@ const signin = async (req, res, next) => {
         });
       }
 
+      if (contextDataResult === "already_exists") {
+        logger.error(
+          "Multiple signin attempts detected without verifying identity."
+        );
+        return res.status(401).json({
+          message: `This account has been temporarily blocked due to suspicious login activity. We have already sent a verification email to your registered email address. 
+          Please follow the instructions in the email to verify your identity and gain access to your account.
+
+          Please note that repeated attempts to log in without verifying your identity will result in this device being permanently blocked from accessing your account.
+          
+          Thank you for your cooperation`,
+        });
+      }
+
       if (contextDataResult.mismatchedProps) {
         const mismatchedProps = contextDataResult.mismatchedProps;
         const currentContextData = contextDataResult.currentContextData;
