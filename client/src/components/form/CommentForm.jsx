@@ -44,21 +44,22 @@ const CommentForm = ({ communityId }) => {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold">Leave a Comment</h2>
+     
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+        <div className="my-4">
           <textarea
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
             name="body"
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            required
+            required placeholder="write a comment"
           />
         </div>
+        <div className="flex justify-end">
         <button
           className={`${
-            isLoading ? "bg-gray-500" : "bg-blue-500"
-          } text-white py-2 px-4 rounded hover:bg-blue-600`}
+            isLoading ? "bg-gray-500" : "rounded-md py-1 px-2 text-sm font-semibold group transition duration-300 text-primary border border-dashed border-blue-500"
+          } hover:bg-primary  py-2 px-4 rounded hover:text-white`}
           type="submit"
           disabled={isLoading}
           style={{
@@ -68,6 +69,8 @@ const CommentForm = ({ communityId }) => {
         >
           {isLoading ? "Loading..." : "Comment"}{" "}
         </button>
+        </div>
+       
       </form>
     </div>
   );

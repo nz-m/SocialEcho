@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo } from "react";
-import { HiShoppingCart } from "react-icons/hi";
+import { HiOutlineFolderOpen } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import {
   savePostAction,
@@ -57,7 +57,7 @@ const Save = ({ postId }) => {
       className="flex items-center text-xl gap-1"
       disabled={isSaving}
     >
-      <HiShoppingCart />
+      <HiOutlineFolderOpen />
       {isSaving ? "Saving..." : saved ? "Remove from Saved" : "Save"}
     </button>
   );

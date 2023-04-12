@@ -34,31 +34,39 @@ const CommentSidebar = () => {
   };
 
   return (
-    <div className="w-3/12 h-screen bg-white sticky top-0">
+    <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
       {currentComments.length > 0 && (
-        <div className="mt-8">
+        <div className="">
           <h2 className="text-lg font-semibold mb-4">Recent Comments</h2>
           {currentComments.map((comment) => (
-            <div key={comment._id} className="flex items-start mb-4">
+            <div key={comment._id} className="flex flex-col mb-4 border px-3 py-3 rounded-lg">
+              <div className="flex items-start justify-start ">
               <img
                 src={comment.user.avatar}
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full mr-2"
               />
-              <div>
-                <div className="flex items-center mb-1">
-                  <h3 className="mr-2 font-semibold">{comment.user.name}</h3>
-                  <span className="text-gray-500 text-sm">
+              
+                <div className="flex flex-col items-start">
+                  <h3 className=" font-semibold text-base">{comment.user.name}</h3>
+                  <span className="text-gray-500 text-xs">
                     {comment.createdAt}
                   </span>
                 </div>
-                <p>{comment.body}</p>
+               
               </div>
+             
+              <p>{comment.body}</p>
+             
             </div>
+            
           ))}
           {currentComments.length < comments.length && (
-            <button onClick={handleLoadMore}>Load More</button>
+            <button className="text-primary border border-dashed border-blue-500
+            hover:bg-primary 
+             rounded-md py-1 px-2 text-sm font-semibold group transition duration-300" onClick={handleLoadMore}>Load More</button>
           )}
+          
         </div>
       )}
     </div>

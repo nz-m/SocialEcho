@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { MdOutlineReport } from "react-icons/md";
+import { HiOutlineArchiveBox,HiOutlineInformationCircle } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import Save from "./Save";
 import Like from "./Like";
 import CommentForm from "../form/CommentForm";
-import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
+import { HiOutlineChatBubbleOvalLeft ,HiOutlineChevronLeft} from "react-icons/hi2";
 import DeleteModal from "../modals/DeleteModal";
-
+import {IoIosArrowBack} from 'react-icons/io'
 const PostView = ({ post }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -58,10 +58,11 @@ const PostView = ({ post }) => {
     navigate(-1);
   };
   return (
-    <div className="px-6 py-6 rounded-xl shadow-xl bg-white border border-gray-100">
-      <span className="text-blue-500 font-bold">
-        <button onClick={handleBack}>Go back</button>
-      </span>
+    <div className="w-6/12 px-5 py-5 bg-white shadow-2xl shadow-[#F3F8FF] my-5 rounded-lg">
+      <p className="border border-dashed border-primary cursor-pointer px-2 py-2 w-7 h-7 flex justify-center items-center mb-3 rounded-full">
+       <IoIosArrowBack className="text-primary text-xl font-semibold" onClick={handleBack}/>
+       
+      </p>
 
       <div className="flex justify-between">
         <div className="flex gap-2">
@@ -72,7 +73,7 @@ const PostView = ({ post }) => {
             style={{ width: "50px" }}
             loading="lazy"
           />
-          <div className="">
+          <div className="flex flex-col">
             {userData._id === user._id ? (
               <Link to="/profile" className="text-lg font-semibold">
                 {user.name}
@@ -94,11 +95,11 @@ const PostView = ({ post }) => {
       </div>
 
       <div>
-        <p className="text-lg">{body}</p>
+        <p className="text-lg mt-3">{body}</p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <img
-              className="w-[800px] h-auto rounded-xl mt-3"
+              className="w-full h-auto rounded-xl mt-3"
               src={fileUrl}
               alt={body}
               loading="lazy"
@@ -106,7 +107,7 @@ const PostView = ({ post }) => {
           ) : (
             fileUrl && (
               <video
-                className="w-[800px] h-auto rounded-xl mt-3"
+                className="w-full h-auto rounded-xl mt-3"
                 src={fileUrl}
                 controls
               />
@@ -125,13 +126,13 @@ const PostView = ({ post }) => {
           </div>
           <div className="flex items-center gap-2">
             <Save postId={post._id} />
-            <span>
+            {/* <span>
               Saved by {savedByCount} {savedByCount === 1 ? "person" : "people"}
-            </span>
+            </span> */}
             {isReported === null ? null : isReported ? (
               <button disabled className="flex items-center text-xl gap-1">
                 {" "}
-                <MdOutlineReport />
+                <HiOutlineInformationCircle />
                 Reported
               </button>
             ) : (
@@ -140,7 +141,7 @@ const PostView = ({ post }) => {
                 className="flex items-center text-xl gap-1"
               >
                 {" "}
-                <MdOutlineReport />
+                <HiOutlineInformationCircle />
                 Report
               </button>
             )}
@@ -151,7 +152,7 @@ const PostView = ({ post }) => {
                 className="flex items-center text-xl gap-1"
               >
                 {" "}
-                <MdOutlineReport />
+                <HiOutlineArchiveBox />
                 Delete
               </button>
             )}

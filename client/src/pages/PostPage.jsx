@@ -1,5 +1,6 @@
 import React from "react";
 import Leftbar from "../components/home/LeftBar";
+import Navbar from "../components/home/Navbar";
 import PostView from "../components/post/PostView";
 import CommentSidebar from "../components/post/CommentSidebar";
 import { useSelector, useDispatch } from "react-redux";
@@ -25,13 +26,15 @@ const PostPage = () => {
   if (!post) return null; // add loading spinner here
 
   return (
-    <div className="flex mx-6">
-      <Leftbar />
-      <div>
-        <h1 className="text-2xl font-bold text-gray-700">Post</h1>
-        <PostView post={post} />
+    <div className="bg-[#F6F7FA]">
+      <Navbar />
+      <div className="flex lg:px-40 gap-10 mx-auto bg-[#F6F7FA]">
+        <Leftbar />
+
+        <PostView  post={post} />
+
+        <CommentSidebar />
       </div>
-      <CommentSidebar />
     </div>
   );
 };
