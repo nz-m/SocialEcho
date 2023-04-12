@@ -85,7 +85,7 @@ const PostView = ({ post }) => {
             )}
             <Link
               to={`/community/${community.name}`}
-              className="text-sm text-gray-500"
+              className="text-xs text-gray-500"
             >
               {community.name}
             </Link>

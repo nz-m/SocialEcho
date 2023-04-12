@@ -108,7 +108,7 @@ const Leftbar = () => {
         <div className="flex flex-col items-center justify-center">
           {user && (
             <button
-              className="px-4 py-1 border border-red-500 hover:bg-red-400 transition duration-500 hover:text-white text-red-500 rounded-lg"
+              className="px-4 py-1 border border-dashed border-red-500 hover:bg-red-400 transition duration-500 hover:text-white text-red-500 rounded-lg"
               onClick={logout}
               type="button"
             >

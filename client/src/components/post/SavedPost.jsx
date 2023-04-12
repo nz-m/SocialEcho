@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import Like from "./Like";
-
+import {IoIosArrowBack} from 'react-icons/io'
 const SavedPost = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,9 +21,10 @@ const SavedPost = ({ post }) => {
 
   return (
     <div className="px-6 py-6 rounded-xl shadow-xl bg-white border border-gray-100">
-      <span className="text-blue-500 font-bold">
-        <button onClick={handleBack}>Go back</button>
-      </span>
+       <p className="border border-dashed border-primary cursor-pointer px-2 py-2 w-7 h-7 flex justify-center items-center mb-3 rounded-full">
+       <IoIosArrowBack className="text-primary text-xl font-semibold" onClick={handleBack}/>
+       
+      </p>
       <div className="flex justify-between">
         <div className="flex gap-2">
           <img
@@ -35,7 +36,7 @@ const SavedPost = ({ post }) => {
           />
           <div className="">
             <p className="text-lg font-semibold">{user.name}</p>
-            <p className="text-sm text-gray-500">{community.name}</p>
+            <p className="text-xs text-gray-500">{community.name}</p>
           </div>
         </div>
         <p>{createdAt}</p>
@@ -48,7 +49,7 @@ const SavedPost = ({ post }) => {
           });
         }}
       >
-        <p className="text-lg">{body}</p>
+        <p className="text-lg mt-3">{body}</p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <img

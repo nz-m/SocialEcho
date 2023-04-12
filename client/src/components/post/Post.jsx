@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { MdOutlineReport } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
+import { HiOutlineChatBubbleOvalLeft,HiOutlineArchiveBox } from "react-icons/hi2";
 import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
 import {BiDotsHorizontalRounded} from 'react-icons/bi'
@@ -106,8 +105,8 @@ const Post = ({ post }) => {
               className="flex items-center text-xl gap-1"
             >
               {" "}
-              <MdOutlineReport />
-              Delete
+              <HiOutlineArchiveBox className="text-red-500"/>
+              
             </button>
           )}
         </div>

@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Fragment, useRef, useState, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { joinCommunityAndFetchData } from "../../redux/actions/communityActions";
-
+import {IoIosPeople} from 'react-icons/io'
+import {HiUsers} from 'react-icons/hi2'
 import LoadingSpinner from "../spinner/LoadingSpinner";
 
 const JoinModal = memo(({ show, onClose, community }) => {
@@ -64,30 +65,27 @@ const JoinModal = memo(({ show, onClose, community }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all flex flex-col items-center">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+                    className="text-xl font-medium leading-6 flex gap-2 items-center text-primary"
                   >
-                    Join Community : {community.name}
+                   <IoIosPeople className="text-xl text-primary"/> 
+                   <div className="relative">
+                   {community.name}
+                  <p className="absolute -top-3 -right-4 bg-primary text-white w-5 h-5 flex justify-center items-center text-xs rounded-full">{community.members.length}</p>
+                    </div>
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p>
-                      <span className="font-bold">Description:</span>{" "}
-                      {community.description}
-                    </p>
-                    <p>
-                      <span className="font-bold">Members:</span>{" "}
-                      {community.members.length}
-                    </p>
+                  
 
-                    <p className="text-sm text-gray-500">
+                    <p className="text-base text-center text-gray-700">
                       Are you sure you want to join this community? You can
                       always leave later.
                     </p>
                   </div>
 
-                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  <div className=" px-4 py-3 sm:flex gap-6 sm:px-6">
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
@@ -111,8 +109,10 @@ const JoinModal = memo(({ show, onClose, community }) => {
                     </button>
                   </div>
                 </Dialog.Panel>
+                
               </Transition.Child>
             </div>
+            
           </div>
         </Dialog>
       </Transition>
