@@ -52,20 +52,18 @@ const MainSection = () => {
   }, [communityPosts]);
 
   return (
-    <div className="w-11/12 px-10 py-6">
+    <div className="w-6/12 px-10 py-5">
       {isLoading || !communityData ? (
         <div>Loading...</div>
       ) : (
         <div className="">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            This is {communityData?.name} community (in main section)
-          </h1>
+
           <div className="flex flex-col mt-4">
             <ul className="flex border-b">
               <li
                 className={`${
                   activeTab === "All posts"
-                    ? "border-blue-500 text-blue-600"
+                    ? "border-blue-500  text-blue-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 } flex-1 cursor-pointer text-center py-4 px-1 border-b-2 font-medium`}
                 onClick={() => setActiveTab("All posts")}

@@ -9,6 +9,7 @@ import {
   useBannerLoading,
   useIsModeratorUpdated,
 } from "../../hooks/useCommunityData";
+import {HiUserGroup,HiOutlineCheckBadge} from "react-icons/hi2";
 
 const RightBar = () => {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
@@ -39,8 +40,17 @@ const RightBar = () => {
   }
 
   return (
-    <div className="w-3.5/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
-      <div className="bg-white rounded-md p-4">
+    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg overflow-y-auto">
+      <div className="bg-white rounded-md">
+        <div className="flex justify-between">
+          <h2 className="text-lg font-bold mb-4">{name}</h2>
+          <div className="flex items-center gap-2 text-primary mb-4">
+            <HiUserGroup/>
+            <span className="mr-2">{members?.length || 0}   members</span>
+
+          </div>
+        </div>
+
         {bannerLoaded ? (
           <img
             src={banner}
@@ -58,12 +68,9 @@ const RightBar = () => {
           />
         )}
 
-        <h2 className="text-lg font-bold mb-4">{name}</h2>
+
         <h3>{description}</h3>
-        <div className="flex items-center text-gray-500 mb-4">
-          <span className="mr-2">{members?.length || 0}</span>
-          joined members
-        </div>
+
         <div>
           {isModerator && (
             <Link
@@ -77,7 +84,7 @@ const RightBar = () => {
           {isModeratorUpdated && !isModerator && (
             <button
               onClick={toggleLeaveModal}
-              className="text-blue-500 ml-2 hover:underline"
+              className="px-4 shadow-lg shadow-red-50 py-1 border border-red-400 hover:text-white hover:bg-red-400 text-red-400 rounded-2xl my-2"
             >
               Leave Community
             </button>
@@ -91,11 +98,13 @@ const RightBar = () => {
           }
         </div>
         {rules && rules.length > 0 && (
-          <div className="text-gray-500 mb-4">
+          <div className="text-slate-900 mb-4">
             <span className="font-bold">Community Guidelines:</span>
-            <ul className="list-disc list-inside">
+            <ul className="flex flex-col gap-2">
               {rules.map((rule) => (
-                <li key={rule._id}>{rule.rule}</li>
+                <li key={rule._id} className='flex items-start gap-2 '>
+                  <HiOutlineCheckBadge className='text-lg flex-shrink-0 mt-1'/>
+                  {rule.rule}</li>
               ))}
             </ul>
           </div>

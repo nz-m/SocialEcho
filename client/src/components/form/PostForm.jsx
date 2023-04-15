@@ -71,7 +71,7 @@ const PostForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 shadow-md">
+    <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 shadow-xl shadow-[#F3F8FF]">
       <div className="mb-4">
         <label htmlFor="body" className="block text-gray-700 font-bold mb-2">
           Share something with your community:

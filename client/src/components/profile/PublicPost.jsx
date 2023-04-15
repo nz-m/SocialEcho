@@ -23,11 +23,11 @@ const PublicPost = ({ publicUserId }) => {
 
   return (
     <div className="my-4">
-      <h1 className="text-2xl font-bold">Posts</h1>
+      <h1 className="text-2xl font-bold my-3">Posts</h1>
       {publicPosts?.length === 0 ? (
         <p>No posts yet</p>
       ) : (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="flex gap-4 flex-wrap">
           {publicPosts?.map((post) => (
             <Post key={post._id} post={post} />
           ))}

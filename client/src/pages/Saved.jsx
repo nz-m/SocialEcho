@@ -21,9 +21,9 @@ const Saved = () => {
     <div className="flex lg:px-40 mx-auto bg-[#F6F7FA]">
       <Leftbar />
 
-      <div className="w-6/12 px-10 py-6">
-        <div className="flex flex-col items-center">
-          <h1 className="text-2xl font-bold">Saved Posts</h1>
+      <div className="w-6/12 px-10 py-5">
+        <div className="flex flex-col mb-3">
+
           {savedPosts && savedPosts.length > 0 ? (
             <div className="flex flex-col items-center">
               {savedPosts.reverse().map((post) => (
@@ -31,7 +31,7 @@ const Saved = () => {
               ))}
             </div>
           ) : (
-            <div>You have not saved any posts yet.</div>
+            <div className='text-3xl font-medium'>You have not saved any posts yet.</div>
           )}
         </div>
       </div>
