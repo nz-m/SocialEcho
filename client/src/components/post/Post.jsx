@@ -1,10 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { HiOutlineChatBubbleOvalLeft,HiOutlineArchiveBox } from "react-icons/hi2";
+import {
+  HiOutlineChatBubbleOvalLeft,
+  HiOutlineArchiveBox,
+} from "react-icons/hi2";
 import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
-import {BiDotsHorizontalRounded} from 'react-icons/bi'
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 const Post = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,11 +39,17 @@ const Post = ({ post }) => {
           />
           <div className="flex flex-col">
             {userData._id === user._id ? (
-              <Link to="/profile" className="text-base font-semibold capitalize">
+              <Link
+                to="/profile"
+                className="text-base font-semibold capitalize"
+              >
                 {user.name}
               </Link>
             ) : (
-              <Link to={`/user/${user._id}`} className="text-base font-semibold capitalize">
+              <Link
+                to={`/user/${user._id}`}
+                className="text-base font-semibold capitalize"
+              >
                 {user.name}
               </Link>
             )}
@@ -53,10 +62,9 @@ const Post = ({ post }) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-        <p className="text-sm text-gray-500">{createdAt}</p>
-        <BiDotsHorizontalRounded className="text-lg cursor-pointer"/>
+          <p className="text-sm text-gray-500">{createdAt}</p>
+          <BiDotsHorizontalRounded className="text-lg cursor-pointer" />
         </div>
-       
       </div>
       <div
         className="cursor-pointer"
@@ -105,8 +113,7 @@ const Post = ({ post }) => {
               className="flex items-center text-xl gap-1"
             >
               {" "}
-              <HiOutlineArchiveBox className="text-red-500"/>
-              
+              <HiOutlineArchiveBox className="text-red-500" />
             </button>
           )}
         </div>

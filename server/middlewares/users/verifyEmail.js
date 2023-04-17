@@ -30,7 +30,6 @@ const sendVerificationEmail = async (req, res) => {
   const verificationLink = `${BASE_URL}/auth/verify?code=${verificationCode}&email=${email}`;
 
   try {
-    // transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
       service: EMAIL_SERVICE,
       auth: {
@@ -57,70 +56,6 @@ const sendVerificationEmail = async (req, res) => {
 
     res.status(200).json({
       message: `Verification email was successfully sent to ${email}`,
-    });
-  } catch (err) {
-    res.status(500).json({ message: "Something went wrong" });
-  }
-};
-
-const sendLoginVerificationEmail = async (req, res) => {
-  const USER = decryptData(process.env.EMAIL);
-  const PASS = decryptData(process.env.PASSWORD);
-
-  const mismatchedProps = req.mismatchedProps;
-  const currentContextData = req.currentContextData;
-
-  const userId = req.user._id;
-  const email = req.user.email;
-  const name = req.user.name;
-
-  const verificationCode = Math.floor(10000 + Math.random() * 90000);
-  const verificationLink = `${BASE_URL}/auth/verify?code=${verificationCode}&email=${email}`;
-
-  try {
-    // transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-      service: EMAIL_SERVICE,
-      auth: {
-        user: USER,
-        pass: PASS,
-      },
-    });
-
-    let info = await transporter.sendMail({
-      from: `"SocialEcho" <${USER}>`,
-      to: email,
-      subject: "New login attempt detected",
-      html: `
-          <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
-      <p>Hi ${name},</p>
-      <p>Our system has detected that a new login was attempted using the following details:</p>
-      <ul style="list-style: none; padding-left: 0;">
-        <li><strong>Time:</strong> ${currentContextData.time}</li>
-        <li><strong>IP Address:</strong> ${currentContextData.ip}</li>
-        <li><strong>Location:</strong> ${currentContextData.city}, ${currentContextData.country}</li>
-        <li><strong>Device:</strong> ${currentContextData.device} ${currentContextData.deviceType}</li>
-        <li><strong>Browser:</strong> ${currentContextData.browser}</li>
-        <li><strong>Operating System:</strong> ${currentContextData.os}</li>
-        <li><strong>Platform:</strong> ${currentContextData.platform}</li>
-      </ul>
-      <p>Please verify that this login was authorized. If you believe this was an unauthorized attempt, please contact our support team immediately.</p>
-    </div>
-
-          `,
-    });
-
-    const newVerification = new EmailVerification({
-      email,
-      verificationCode,
-      messageId: info.messageId,
-      for: "login",
-    });
-
-    await newVerification.save();
-
-    res.status(401).json({
-      message: `Access blocked due to suspicious activity. Verification email was sent to your email address.`,
     });
   } catch (err) {
     res.status(500).json({ message: "Something went wrong" });
@@ -172,5 +107,4 @@ module.exports = {
   sendVerificationEmail,
   verifyEmail,
   verifyEmailValidation,
-  sendLoginVerificationEmail,
 };

@@ -43,15 +43,11 @@ const SuspiciousLoginSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isPending: {
-      type: Boolean,
-      default: true,
-    },
-    isApproved: {
+    isTrusted: {
       type: Boolean,
       default: false,
     },
-    isRejected: {
+    isBlocked: {
       type: Boolean,
       default: false,
     },

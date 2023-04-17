@@ -17,9 +17,10 @@ export const logoutAction = () => async (dispatch) => {
 };
 
 export const signUpAction =
-  (formData, navigate, isConsentGiven = false,email) =>
+  (formData, navigate, isConsentGiven = false, email) =>
   async (dispatch) => {
     try {
+      localStorage.removeItem("profile");
       const response = await api.signUp(formData);
       const { error } = response;
       if (error) {

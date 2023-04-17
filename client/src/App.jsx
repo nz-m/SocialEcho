@@ -21,7 +21,8 @@ const MyCommunities = lazy(() => import("./pages/MyCommunities"));
 const Following = lazy(() => import("./pages/Following"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const EmailVerifiedMessage = lazy(() => import("./pages/EmailVerifiedMessage"));
-const SigninWarning = lazy(() => import("./pages/SigninWarning"));
+const BlockDevice = lazy(() => import("./pages/BlockDevice"));
+const LoginVerified = lazy(() => import("./pages/LoginVerified"));
 
 const App = () => {
   const user = useSelector((state) => state.auth?.userData);
@@ -37,7 +38,8 @@ const App = () => {
           />
           <Route path="/auth/verify" element={<VerifyEmail />} />
           <Route path="/email-verified" element={<EmailVerifiedMessage />} />
-          <Route path="/access-denied" element={<SigninWarning />} />
+          <Route path="/block-device" element={<BlockDevice />} />
+          <Route path="/verify-login" element={<LoginVerified />} />
 
           <Route element={<PrivateRoute />}>
             <Route path="/" element={<Home />} />

@@ -46,6 +46,14 @@ const signin = async (req, res, next) => {
     if (isContextAuthEnabled) {
       const contextDataResult = await verifyContextData(req, existingUser);
 
+      if (contextDataResult === "blocked") {
+        logger.error("User device is blocked");
+        return res.status(401).json({
+          message:
+            "Your device has been blocked due to suspicious login activity. Please contact support for assistance.",
+        });
+      }
+
       if (
         contextDataResult === "no_context_data" ||
         contextDataResult === "error"
@@ -60,6 +68,7 @@ const signin = async (req, res, next) => {
         logger.error(
           "Multiple signin attempts detected without verifying identity."
         );
+
         return res.status(401).json({
           message: `This account has been temporarily blocked due to suspicious login activity. We have already sent a verification email to your registered email address. 
           Please follow the instructions in the email to verify your identity and gain access to your account.
@@ -90,7 +99,6 @@ const signin = async (req, res, next) => {
           req.mismatchedProps = mismatchedProps;
           req.currentContextData = currentContextData;
           req.user = existingUser;
-
           return next();
         }
       }

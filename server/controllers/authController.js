@@ -65,6 +65,19 @@ const verifyContextData = async (req, existingUser) => {
     };
 
     const currentContextData = getCurrentContextData(req);
+    // When signing in from trusted device
+    if (
+      currentContextData.ip === userContextData.ip &&
+      currentContextData.country === userContextData.country &&
+      currentContextData.city === userContextData.city &&
+      currentContextData.browser === userContextData.browser &&
+      currentContextData.platform === userContextData.platform &&
+      currentContextData.os === userContextData.os &&
+      currentContextData.device === userContextData.device &&
+      currentContextData.deviceType === userContextData.deviceType
+    ) {
+      return "match";
+    }
 
     const oldSuspiciousContextData = await SuspiciousLogin.findOne({
       user: _id,
@@ -78,18 +91,22 @@ const verifyContextData = async (req, existingUser) => {
       deviceType: currentContextData.deviceType,
     });
 
-    let newSuspiciousData = {};
+    if (oldSuspiciousContextData) {
+      if (oldSuspiciousContextData.isBlocked) return "blocked";
+      if (oldSuspiciousContextData.isTrusted) return "match";
+    }
 
+    let newSuspiciousData = {};
     if (
       oldSuspiciousContextData &&
-      oldSuspiciousContextData.ip !== userContextData.ip &&
-      oldSuspiciousContextData.country !== userContextData.country &&
-      oldSuspiciousContextData.city !== userContextData.city &&
-      oldSuspiciousContextData.browser !== userContextData.browser &&
-      oldSuspiciousContextData.platform !== userContextData.platform &&
-      oldSuspiciousContextData.os !== userContextData.os &&
-      oldSuspiciousContextData.device !== userContextData.device &&
-      oldSuspiciousContextData.deviceType !== userContextData.deviceType
+      (oldSuspiciousContextData.ip !== userContextData.ip ||
+        oldSuspiciousContextData.country !== userContextData.country ||
+        oldSuspiciousContextData.city !== userContextData.city ||
+        oldSuspiciousContextData.browser !== userContextData.browser ||
+        oldSuspiciousContextData.platform !== userContextData.platform ||
+        oldSuspiciousContextData.os !== userContextData.os ||
+        oldSuspiciousContextData.device !== userContextData.device ||
+        oldSuspiciousContextData.deviceType !== userContextData.deviceType)
     ) {
       const {
         ip: suspiciousIp,
@@ -173,6 +190,7 @@ const verifyContextData = async (req, existingUser) => {
       const res = await newSuspiciousLogin.save();
 
       newSuspiciousData = {
+        id: res._id,
         time: res.createdAt.toLocaleString(),
         ip: res.ip,
         country: res.country,

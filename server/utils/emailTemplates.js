@@ -111,4 +111,36 @@ const verifyEmailHTML = (name, verificationLink, verificationCode) => `<div
       </div>
     </div>`;
 
-module.exports = { verifyEmailHTML };
+const verifyLoginHTML = (
+  name,
+  verificationLink,
+  blockLink,
+  currentContextData
+) => `
+          <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+      <p>Hi ${name},</p>
+      <p>Our system has detected that a new login was attempted using the following details:</p>
+      <ul style="list-style: none; padding-left: 0;">
+        <li><strong>Time:</strong> ${currentContextData.time}</li>
+        <li><strong>IP Address:</strong> ${currentContextData.ip}</li>
+        <li><strong>Location:</strong> ${currentContextData.city}, ${currentContextData.country}</li>
+        <li><strong>Device:</strong> ${currentContextData.device} ${currentContextData.deviceType}</li>
+        <li><strong>Browser:</strong> ${currentContextData.browser}</li>
+        <li><strong>Operating System:</strong> ${currentContextData.os}</li>
+        <li><strong>Platform:</strong> ${currentContextData.platform}</li>
+      </ul>
+      <p>If this was you, please click the button below to verify your login.</p>
+      <a href="${verificationLink}" style="display: inline-block; padding: 10px 20px; background-color: #1da1f2; color: #fff; text-decoration: none; border-radius: 5px;">Verify Login</a>
+    <p>Alternatively, you can copy and paste the following link into your browser:</p>
+    <p>${verificationLink}</p>
+    <p>If this was not you, please click the button below to block this login attempt.</p>
+    <a href="${blockLink}" style="display: inline-block; padding: 10px 20px; background-color: #1da1f2; color: #fff; text-decoration: none; border-radius: 5px;">Block Login</a>
+    <p>Alternatively, you can copy and paste the following link into your browser:</p>
+    <p>${blockLink}</p>
+    
+      <p>Please verify that this login was authorized. If you believe this was an unauthorized attempt, please contact our support team immediately.</p>
+    </div>
+
+          `;
+
+module.exports = { verifyEmailHTML, verifyLoginHTML };

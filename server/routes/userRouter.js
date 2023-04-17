@@ -28,10 +28,10 @@ const {
   addUserValidatorHandler,
 } = require("../middlewares/users/usersValidator");
 
+const { sendVerificationEmail } = require("../middlewares/users/verifyEmail");
 const {
-  sendVerificationEmail,
   sendLoginVerificationEmail,
-} = require("../middlewares/users/verifyEmail");
+} = require("../middlewares/users/verifyLogin");
 
 const avatarUpload = require("../middlewares/users/avatarUpload");
 
