@@ -117,11 +117,12 @@ const verifyLoginHTML = (
   blockLink,
   currentContextData
 ) => `
-          <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
-      <p>Hi ${name},</p>
-      <p>Our system has detected that a new login was attempted using the following details:</p>
+  <div style="background-color: #F4F4F4; padding: 20px;">
+    <div style="background-color: #fff; padding: 20px; border-radius: 10px;">
+      <h1 style="color: black; font-size: 24px; margin-bottom: 20px;">New login attempt detected</h1>
+      <p>Dear ${name},</p>
+      <p>Our system has detected that a new login was attempted from the following device and location at ${currentContextData.time}:</p>
       <ul style="list-style: none; padding-left: 0;">
-        <li><strong>Time:</strong> ${currentContextData.time}</li>
         <li><strong>IP Address:</strong> ${currentContextData.ip}</li>
         <li><strong>Location:</strong> ${currentContextData.city}, ${currentContextData.country}</li>
         <li><strong>Device:</strong> ${currentContextData.device} ${currentContextData.deviceType}</li>
@@ -129,18 +130,17 @@ const verifyLoginHTML = (
         <li><strong>Operating System:</strong> ${currentContextData.os}</li>
         <li><strong>Platform:</strong> ${currentContextData.platform}</li>
       </ul>
-      <p>If this was you, please click the button below to verify your login.</p>
-      <a href="${verificationLink}" style="display: inline-block; padding: 10px 20px; background-color: #1da1f2; color: #fff; text-decoration: none; border-radius: 5px;">Verify Login</a>
-    <p>Alternatively, you can copy and paste the following link into your browser:</p>
-    <p>${verificationLink}</p>
-    <p>If this was not you, please click the button below to block this login attempt.</p>
-    <a href="${blockLink}" style="display: inline-block; padding: 10px 20px; background-color: #1da1f2; color: #fff; text-decoration: none; border-radius: 5px;">Block Login</a>
-    <p>Alternatively, you can copy and paste the following link into your browser:</p>
-    <p>${blockLink}</p>
-    
-      <p>Please verify that this login was authorized. If you believe this was an unauthorized attempt, please contact our support team immediately.</p>
+      <p>If this was you, please click the button below to verify your login:</p>
+      <div style="text-align: center;">
+        <a href="${verificationLink}" style="display: inline-block; padding: 10px 20px; background-color: #1da1f2; color: #fff; text-decoration: none; border-radius: 5px; margin-bottom: 20px;">Verify Login</a>
+      </div>
+      <p>If you believe this was an unauthorized attempt, please click the button below to block this login:</p>
+      <div style="text-align: center;">
+        <a href="${blockLink}" style="display: inline-block; padding: 10px 20px; background-color: #E0245E; color: #fff; text-decoration: none; border-radius: 5px; margin-bottom: 20px;">Block Login</a>
+      </div>
+      <p>Please verify that this login was authorized. If you have any questions or concerns, please contact our customer support team.</p>
     </div>
-
-          `;
+  </div>
+`;
 
 module.exports = { verifyEmailHTML, verifyLoginHTML };

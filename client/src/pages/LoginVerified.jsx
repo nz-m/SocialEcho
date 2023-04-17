@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
+import { Link } from "react-router-dom";
 import axios from "axios";
-
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 const LoginVerified = () => {
@@ -13,7 +13,7 @@ const LoginVerified = () => {
   const idFromUrl = searchParams.get("id");
   const emailFromUrl = searchParams.get("email");
 
-  const handleVerify = () => {
+  const handleVerify = useCallback(() => {
     const verifyUrl = `${BASE_URL}/auth/verify-login?id=${idFromUrl}&email=${emailFromUrl}`;
     axios
       .get(verifyUrl)
@@ -25,7 +25,7 @@ const LoginVerified = () => {
       .catch((err) => {
         setIsVerified(false);
       });
-  };
+  }, [idFromUrl, emailFromUrl, setIsVerified]);
 
   useEffect(() => {
     // Automatically trigger handleVerify if both id and email are present in the URL
@@ -36,11 +36,18 @@ const LoginVerified = () => {
 
   if (!isVerified) {
     return (
-      <p>
-        You may not have been verified yet. Please check your email for a link
-        to verify your account. If you have already verified your account,
-        please try logging in again.
-      </p>
+      <div className="bg-yellow-200 text-black p-4 rounded-lg shadow-md flex justify-center items-center">
+        <p className="text-center">
+          You may not have been verified yet. Please check your email for a link
+          to verify your account. If you have already verified your account,
+          please try
+          <Link className="text-blue-500 font-bold" to="/signin">
+            {" "}
+            logging in{" "}
+          </Link>
+          again.
+        </p>
+      </div>
     );
   }
 

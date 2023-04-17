@@ -30,7 +30,7 @@ const getCurrentContextData = (req) => {
     ? "tablet"
     : "unknown";
 
-  const currentContextData = {
+  return {
     ip,
     country,
     city,
@@ -40,8 +40,54 @@ const getCurrentContextData = (req) => {
     device,
     deviceType,
   };
+};
 
-  return currentContextData;
+const isTrustedDevice = (currentContextData, userContextData) => {
+  return Object.keys(userContextData).every(
+    (key) => userContextData[key] === currentContextData[key]
+  );
+};
+
+const isSuspiciousContextChanged = (oldContextData, newContextData) =>
+  Object.keys(oldContextData).some(
+    (key) => oldContextData[key] !== newContextData[key]
+  );
+
+const isOldDataMatched = (oldSuspiciousContextData, userContextData) => {
+  return Object.keys(oldSuspiciousContextData).every(
+    (key) => oldSuspiciousContextData[key] === userContextData[key]
+  );
+};
+
+const getOldSuspiciousContextData = (_id, currentContextData) => {
+  return SuspiciousLogin.findOne({
+    user: _id,
+    ip: currentContextData.ip,
+    country: currentContextData.country,
+    city: currentContextData.city,
+    browser: currentContextData.browser,
+    platform: currentContextData.platform,
+    os: currentContextData.os,
+    device: currentContextData.device,
+    deviceType: currentContextData.deviceType,
+  });
+};
+
+const addNewSuspiciousLogin = async (_id, existingUser, currentContextData) => {
+  const newSuspiciousLogin = new SuspiciousLogin({
+    user: _id,
+    email: existingUser.email,
+    ip: currentContextData.ip,
+    country: currentContextData.country,
+    city: currentContextData.city,
+    browser: currentContextData.browser,
+    platform: currentContextData.platform,
+    os: currentContextData.os,
+    device: currentContextData.device,
+    deviceType: currentContextData.deviceType,
+  });
+
+  return await newSuspiciousLogin.save();
 };
 
 const verifyContextData = async (req, existingUser) => {
@@ -65,31 +111,15 @@ const verifyContextData = async (req, existingUser) => {
     };
 
     const currentContextData = getCurrentContextData(req);
-    // When signing in from trusted device
-    if (
-      currentContextData.ip === userContextData.ip &&
-      currentContextData.country === userContextData.country &&
-      currentContextData.city === userContextData.city &&
-      currentContextData.browser === userContextData.browser &&
-      currentContextData.platform === userContextData.platform &&
-      currentContextData.os === userContextData.os &&
-      currentContextData.device === userContextData.device &&
-      currentContextData.deviceType === userContextData.deviceType
-    ) {
+
+    if (isTrustedDevice(currentContextData, userContextData)) {
       return "match";
     }
 
-    const oldSuspiciousContextData = await SuspiciousLogin.findOne({
-      user: _id,
-      ip: currentContextData.ip,
-      country: currentContextData.country,
-      city: currentContextData.city,
-      browser: currentContextData.browser,
-      platform: currentContextData.platform,
-      os: currentContextData.os,
-      device: currentContextData.device,
-      deviceType: currentContextData.deviceType,
-    });
+    const oldSuspiciousContextData = await getOldSuspiciousContextData(
+      _id,
+      currentContextData
+    );
 
     if (oldSuspiciousContextData) {
       if (oldSuspiciousContextData.isBlocked) return "blocked";
@@ -99,14 +129,7 @@ const verifyContextData = async (req, existingUser) => {
     let newSuspiciousData = {};
     if (
       oldSuspiciousContextData &&
-      (oldSuspiciousContextData.ip !== userContextData.ip ||
-        oldSuspiciousContextData.country !== userContextData.country ||
-        oldSuspiciousContextData.city !== userContextData.city ||
-        oldSuspiciousContextData.browser !== userContextData.browser ||
-        oldSuspiciousContextData.platform !== userContextData.platform ||
-        oldSuspiciousContextData.os !== userContextData.os ||
-        oldSuspiciousContextData.device !== userContextData.device ||
-        oldSuspiciousContextData.deviceType !== userContextData.deviceType)
+      isSuspiciousContextChanged(oldSuspiciousContextData, currentContextData)
     ) {
       const {
         ip: suspiciousIp,
@@ -130,20 +153,12 @@ const verifyContextData = async (req, existingUser) => {
         suspiciousOs !== currentContextData.os
       ) {
         //  Suspicious login data found, but it doesn't match the current context data, so we add new suspicious login data
-        const newSuspiciousLogin = new SuspiciousLogin({
-          user: _id,
-          email: existingUser.email,
-          ip: currentContextData.ip,
-          country: currentContextData.country,
-          city: currentContextData.city,
-          browser: currentContextData.browser,
-          platform: currentContextData.platform,
-          os: currentContextData.os,
-          device: currentContextData.device,
-          deviceType: currentContextData.deviceType,
-        });
 
-        const res = await newSuspiciousLogin.save();
+        const res = await addNewSuspiciousLogin(
+          _id,
+          existingUser,
+          currentContextData
+        );
 
         newSuspiciousData = {
           time: res.createdAt.toLocaleString(),
@@ -162,36 +177,20 @@ const verifyContextData = async (req, existingUser) => {
       }
     } else if (
       oldSuspiciousContextData &&
-      oldSuspiciousContextData.ip === userContextData.ip &&
-      oldSuspiciousContextData.country === userContextData.country &&
-      oldSuspiciousContextData.city === userContextData.city &&
-      oldSuspiciousContextData.browser === userContextData.browser &&
-      oldSuspiciousContextData.platform === userContextData.platform &&
-      oldSuspiciousContextData.os === userContextData.os &&
-      oldSuspiciousContextData.device === userContextData.device &&
-      oldSuspiciousContextData.deviceType === userContextData.deviceType
+      isOldDataMatched(oldSuspiciousContextData, currentContextData)
     ) {
       return "match";
     } else {
       //  No previous suspicious login data found, so we create a new one
-      const newSuspiciousLogin = new SuspiciousLogin({
-        user: _id,
-        email: existingUser.email,
-        ip: currentContextData.ip,
-        country: currentContextData.country,
-        city: currentContextData.city,
-        browser: currentContextData.browser,
-        platform: currentContextData.platform,
-        os: currentContextData.os,
-        device: currentContextData.device,
-        deviceType: currentContextData.deviceType,
-      });
-
-      const res = await newSuspiciousLogin.save();
+      const res = await addNewSuspiciousLogin(
+        _id,
+        existingUser,
+        currentContextData
+      );
 
       newSuspiciousData = {
-        id: res._id,
         time: res.createdAt.toLocaleString(),
+        id: res._id,
         ip: res.ip,
         country: res.country,
         city: res.city,

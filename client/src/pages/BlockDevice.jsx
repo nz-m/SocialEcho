@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router";
 import axios from "axios";
 import LoadingSpinner from "../components/spinner/LoadingSpinner";
@@ -22,12 +22,13 @@ const BlockDevice = () => {
       .then((res) => {
         if (res.status === 200) {
           setLoading(false);
+          navigate("/signin");
         }
       })
       .catch((err) => {
         setLoading(false);
       });
-  }, [idFromUrl, emailFromUrl, setLoading]);
+  }, [idFromUrl, emailFromUrl, setLoading, navigate]);
 
   return (
     <div className="relative flex justify-center">
@@ -36,9 +37,7 @@ const BlockDevice = () => {
           <span
             className="hidden sm:inline-block sm:align-middle sm:h-screen"
             aria-hidden="true"
-          >
-            ​
-          </span>
+          ></span>
           <div className="relative inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl rtl:text-right sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
             <div>
               <div className="flex items-center justify-center">
@@ -65,8 +64,7 @@ const BlockDevice = () => {
                   Block Device
                 </h3>
                 <p className="mt-2 text-sm text-gray-500">
-                  Are you sure you want to block this device? You can unblock it
-                  later.
+                  Are you sure you want to block this device?
                 </p>
               </div>
             </div>
