@@ -28,7 +28,7 @@ const MembersList = () => {
 
   return (
     <div className="flex flex-col">
-      <h3 className="text-2xl font-bold">General Members</h3>
+
       <div className="flex flex-col">
         {communityMembers &&
           communityMembers.map((member) => {
@@ -36,30 +36,38 @@ const MembersList = () => {
             return (
               <div
                 key={member._id}
-                className="flex flex-row  items-center border border-black rounded-md my-2"
+                className="flex flex-col border border-gray-200  px-6 py-3 my-3 rounded-lg "
               >
-                <img
-                  src={member.avatar}
-                  alt="profile"
-                  className="w-10 h-10 rounded-full"
-                />
-                <Link to={`/user/${member._id}`} className="ml-2 font-bold">
-                  {member.name}
-                </Link>
-                <div className="flex flex-col">
-                  <p className="ml-2">{member.location}</p>
-                  <p className="ml-2">
-                    Joined: {new Date(member.createdAt).toDateString()}
-                  </p>
+                <div className="flex justify-between items-center">
+                  <div className="flex">
+                    <img
+                        src={member.avatar}
+                        alt="profile"
+                        className="w-16 h-16 rounded-full"
+                    />
+                    <div className="flex flex-col">
+                      <Link to={`/user/${member._id}`} className="ml-2 font-bold">
+                        {member.name}
+                      </Link>
+                      <p className="ml-2 text-xs">{member.location}</p>
+                      <p className="ml-2">
+                        Joined: {new Date(member.createdAt).toDateString()}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                      onClick={() => {
+                        toggleBanUserModal(member._id, true);
+                      }}
+                      className=" bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg px-4 py-2 h-9 flex justify-center items-center text-sm"
+                  >
+                    Ban user
+                  </button>
                 </div>
-                <button
-                  onClick={() => {
-                    toggleBanUserModal(member._id, true);
-                  }}
-                  className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded px-2 py-1 text-sm"
-                >
-                  Ban user
-                </button>
+
+
+
                 {modalVisible && (
                   <BanUserModal
                     key={member._id}

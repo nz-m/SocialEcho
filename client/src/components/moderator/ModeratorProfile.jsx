@@ -15,7 +15,7 @@ const ModeratorProfile = () => {
   if (!moderator) return null; // later add a loading spinner
 
   return (
-    <div className="flex flex-col gap-2 items-center justify-center bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
+    <div className="flex flex-col gap-2 items-center ">
       <img
         src={moderator.avatar}
         alt="user"

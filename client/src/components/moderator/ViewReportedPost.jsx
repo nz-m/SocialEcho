@@ -28,7 +28,7 @@ const ViewReportedPost = ({ post }) => {
   }, [fileUrl]);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-4">
+    <div className="shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg bg-white mx-10">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center">
           <img className="w-8 h-8 rounded-full mr-2" src={avatar} alt="user" />
@@ -54,7 +54,7 @@ const ViewReportedPost = ({ post }) => {
         )
       )}
 
-      <div className="flex justify-end">
+      <div className="flex justify-end mt-3">
         <button
           className="px-4 py-2 bg-red-500 text-white rounded-lg mr-2"
           onClick={onRemove}

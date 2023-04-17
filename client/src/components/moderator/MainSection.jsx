@@ -7,7 +7,7 @@ const MainSection = () => {
   const [activeTab, setActiveTab] = useState("Reported Posts");
 
   return (
-    <div className="flex flex-col mt-4">
+    <div className="flex flex-col  bg-white shadow-2xl shadow-[#F3F8FF] px-5 py-5 my-2 rounded-lg">
       <ul className="flex border-b">
         <li
           className={`${
@@ -41,7 +41,7 @@ const MainSection = () => {
           Banned Users
         </li>
       </ul>
-      <div className="mt-4 flex flex-col gap-4">
+      <div className="mt-4 flex flex-col gap-4 ">
         {activeTab === "Reported Posts" && <ReportedPosts />}
         {activeTab === "Members" && <MembersList />}
         {activeTab === "Banned Users" && <BannerMembersList />}

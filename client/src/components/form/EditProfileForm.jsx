@@ -51,7 +51,7 @@ const EditProfileForm = () => {
 
   return (
     <div className="flex flex-col gap-2 justify-center">
-      <div className="flex flex-col gap-2 justify-center">
+      <div className="">
         <h1 className="text-2xl font-semibold ">Edit Profile</h1>
         <button onClick={() => navigate(-1)} className="text-blue-500">
           Go back to profile

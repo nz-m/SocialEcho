@@ -40,7 +40,7 @@ const RightBar = () => {
   }
 
   return (
-    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg overflow-y-auto">
+    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg ">
       <div className="bg-white rounded-md">
         <div className="flex justify-between">
           <h2 className="text-lg font-bold mb-4">{name}</h2>
@@ -71,11 +71,11 @@ const RightBar = () => {
 
         <h3>{description}</h3>
 
-        <div>
+        <div className='my-4'>
           {isModerator && (
             <Link
               to={`/community/${communityName}/moderator`}
-              className="text-blue-500"
+              className="bg-primary px-4 py-2 text-white rounded-2xl "
             >
               Moderation Panel
             </Link>

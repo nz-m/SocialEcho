@@ -17,8 +17,8 @@ const ReportedPosts = () => {
   if (!reportedPosts) return null; // add loading spinner here
 
   return (
-    <div className="shadow-md">
-      <h3>Reported Posts</h3>
+    <div className="border border-slate-200 rounded-lg mt-3">
+
       {reportedPosts.length === 0 ? (
         <p>No posts to show</p>
       ) : (

@@ -11,7 +11,7 @@ const ReportedPost = ({ reportedPost }) => {
 
   return (
     <div
-      className="shadow-sm p-4"
+      className=" p-4"
       onClick={handleNavigateToPost}
       style={{ cursor: "pointer" }}
     >
@@ -22,12 +22,12 @@ const ReportedPost = ({ reportedPost }) => {
           alt="user avatar"
         />
         <div className="flex flex-col">
-          <span className="font-bold"> Reported By: {reportedBy.name}</span>
-          <span className="text-xs font-semibold">When : {reportDate}</span>
+          <span className="font-bold"> {reportedBy.name}</span>
+          <span className="text-xs ">When : {reportDate}</span>
 
           <div className="flex items-center gap-2">
-            <p className="text-xs text-gray-500 font-semibold">Reason:</p>
-            <p className="text-xs text-gray-500 font-semibold">
+            <p className="text-sm text-red-700 font-semibold">Reason:</p>
+            <p className="text-sm text-red-700 font-semibold">
               {reportReason}
             </p>
           </div>
