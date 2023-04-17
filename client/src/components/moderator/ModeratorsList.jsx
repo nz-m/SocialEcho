@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getComModsAction } from "../../redux/actions/communityActions";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import {IoTimerOutline} from "react-icons/io5";
+import {CiLocationOn} from "react-icons/ci";
 
 const ModeratorsList = () => {
   const dispatch = useDispatch();
@@ -27,14 +29,17 @@ const ModeratorsList = () => {
                 <img
                   src={moderator.avatar}
                   alt="profile"
-                  className="w-10 h-10 rounded-full"
+                  className="w-16 h-16 rounded-full"
                 />
 
                 <div className="flex flex-col">
-                    <p className="ml-2 font-bold">{moderator.name}</p>
-                  <p className="ml-2">{moderator.location}</p>
-                  <p className="ml-2">
-                    Joined: {new Date(moderator.createdAt).toDateString()}
+                    <p className="ml-2 font-bold line-clamp-1">{moderator.name}</p>
+                  <p className="ml-2 text-xs flex gap-1 items-center">
+                      <CiLocationOn/>
+                      {moderator.location}</p>
+                  <p className="ml-2 text-xs flex gap-1 items-center">
+                      <IoTimerOutline/>
+                    {new Date(moderator.createdAt).toDateString()}
                   </p>
                 </div>
               </Link>

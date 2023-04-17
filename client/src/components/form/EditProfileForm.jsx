@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { updateUserAction } from "../../redux/actions/userActions";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import {IoChevronBackCircleOutline} from "react-icons/io5";
 
 const EditProfileForm = () => {
   const navigate = useNavigate();
@@ -50,67 +51,59 @@ const EditProfileForm = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2 justify-center">
-      <div className="">
-        <h1 className="text-2xl font-semibold ">Edit Profile</h1>
-        <button onClick={() => navigate(-1)} className="text-blue-500">
-          Go back to profile
-        </button>
-        <p className="text-grey-500">
-          Please provide your bio, location and interests.
-        </p>
-      </div>
+    <div className="flex bg-slate-50 justify-center items-center md:h-screen shadow-2xl shadow-[#F3F8FF] rounded-lg">
+
 
       <form
         onSubmit={handleSubmit}
-        className="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        className="mx-auto bg-white  rounded-lg px-8 py-7 shadow-2xl shadow-[#F3F8FF]"
       >
+        <div className="mb-2 py-2">
+
+          <button onClick={() => navigate(-1)} className="text-blue-500">
+            <IoChevronBackCircleOutline className='text-3xl'/>
+          </button>
+          <p className="text-grey-700 font-semibold text-center">
+            Please provide your bio, location and interests.
+          </p>
+        </div>
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2" htmlFor="bio">
-            Bio:
-          </label>
+         
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="border border-slate-200 appearance-none rounded-md w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="bio"
             type="text"
             value={bio}
             onChange={handlebioChange}
+            placeholder='edit your bio'
           />
         </div>
         <div className="mb-4">
-          <label
-            className="block text-gray-700 font-bold mb-2"
-            htmlFor="location"
-          >
-            Location:
-          </label>
+
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="border border-slate-200 appearance-none rounded-md w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="location"
             type="text"
             value={location}
             onChange={handleLocationChange}
+            placeholder='location'
           />
         </div>
         <div className="mb-4">
-          <label
-            className="block text-gray-700 font-bold mb-2"
-            htmlFor="interests"
-          >
-            Interests (separate by comma) :
-          </label>
+
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="border border-slate-200 appearance-none rounded-md w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="interest"
             type="text"
             value={interests}
             onChange={handleInterestChange}
             maxLength={100}
+            placeholder=' Interests (separate by comma) :'
           />
         </div>
         <div className="flex items-center justify-between">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline w-full"
             type="submit"
           >
             Done

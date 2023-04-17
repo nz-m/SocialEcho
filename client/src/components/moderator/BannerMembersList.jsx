@@ -4,6 +4,8 @@ import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { getComMembersAction } from "../../redux/actions/communityActions";
 import UnbanUserModal from "../modals/UnbanUserModal";
+import {IoTimerOutline} from "react-icons/io5";
+import {CiLocationOn} from "react-icons/ci";
 
 const BannerMembersList = () => {
   const dispatch = useDispatch();
@@ -47,9 +49,12 @@ const BannerMembersList = () => {
                     <Link to={`/user/${bannedMember._id}`} className="ml-2 font-bold">
                       {bannedMember.name}
                     </Link>
-                    <p className="ml-2">{bannedMember.location}</p>
-                    <p className="ml-2">
-                      Joined: {new Date(bannedMember.createdAt).toDateString()}
+                    <p className="ml-2 text-xs flex gap-1 items-center">
+                      <CiLocationOn/>
+                      {bannedMember.location}</p>
+                    <p className="ml-2 text-xs flex gap-1 items-center">
+                      <IoTimerOutline />
+                       {new Date(bannedMember.createdAt).toDateString()}
                     </p>
                   </div>
                 </div>

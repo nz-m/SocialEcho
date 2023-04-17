@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import {IoTimerOutline} from "react-icons/io5";
 const ReportedPost = ({ reportedPost }) => {
   const navigate = useNavigate();
   const { post, reportedBy, reportReason, reportDate } = reportedPost;
@@ -17,13 +18,15 @@ const ReportedPost = ({ reportedPost }) => {
     >
       <div className="flex items-center gap-2">
         <img
-          className="w-10 h-10 rounded-full"
+          className="w-16 h-16 rounded-full"
           src={reportedBy.avatar}
           alt="user avatar"
         />
         <div className="flex flex-col">
           <span className="font-bold"> {reportedBy.name}</span>
-          <span className="text-xs ">When : {reportDate}</span>
+          <span className="text-xs flex items-center gap-1">
+            <IoTimerOutline/>
+            {reportDate}</span>
 
           <div className="flex items-center gap-2">
             <p className="text-sm text-red-700 font-semibold">Reason:</p>

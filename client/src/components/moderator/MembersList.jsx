@@ -4,6 +4,8 @@ import { getComMembersAction } from "../../redux/actions/communityActions";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import BanUserModal from "../modals/BanUserModal";
+import {CiLocationOn} from "react-icons/ci";
+import {IoTimerOutline} from "react-icons/io5";
 
 const MembersList = () => {
   const dispatch = useDispatch();
@@ -49,9 +51,12 @@ const MembersList = () => {
                       <Link to={`/user/${member._id}`} className="ml-2 font-bold">
                         {member.name}
                       </Link>
-                      <p className="ml-2 text-xs">{member.location}</p>
-                      <p className="ml-2">
-                        Joined: {new Date(member.createdAt).toDateString()}
+                      <p className="ml-2 text-xs flex gap-1 items-center">
+                          <CiLocationOn/>
+                        {member.location}</p>
+                      <p className="ml-2 flex gap-1 items-center text-xs">
+                        <IoTimerOutline/>
+                        {new Date(member.createdAt).toDateString()}
                       </p>
                     </div>
                   </div>
