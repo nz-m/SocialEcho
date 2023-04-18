@@ -5,7 +5,7 @@
   "proxy": "http://127.0.0.1:3001",
   "dependencies": {
     "@headlessui/react": "^1.7.13",
-    "@heroicons/react": "^2.0.16",
+    "@heroicons/react": "^1.0.6",
     "@reduxjs/toolkit": "^1.9.2",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@testing-library/jest-dom": "^5.16.5",

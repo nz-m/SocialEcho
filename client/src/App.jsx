@@ -23,6 +23,7 @@ const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const EmailVerifiedMessage = lazy(() => import("./pages/EmailVerifiedMessage"));
 const BlockDevice = lazy(() => import("./pages/BlockDevice"));
 const LoginVerified = lazy(() => import("./pages/LoginVerified"));
+const DevicesLocations = lazy(() => import("./pages/DevicesLocations"));
 
 const App = () => {
   const user = useSelector((state) => state.auth?.userData);
@@ -70,6 +71,7 @@ const App = () => {
             <Route path="/communities" element={<AllCommunities />} />
             <Route path="/my-communities" element={<MyCommunities />} />
             <Route path="/following" element={<Following />} />
+            <Route path="/devices-locations" element={<DevicesLocations />} />
           </Route>
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>

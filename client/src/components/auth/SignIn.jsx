@@ -46,7 +46,7 @@ const SignIn = () => {
           </div>
         )}
         <form className="w-full max-w-md">
-          <h1 className="mt-3 text-2xl font-semibold text-gray-800 capitalize sm:text-3xl ">
+          <h1 className="mt-3 text-2xl font-semibold text-gray-800 capitalize sm:text-3xl">
             sign In
           </h1>
           <div className="relative flex items-center mt-8">

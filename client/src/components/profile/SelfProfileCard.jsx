@@ -27,13 +27,14 @@ const SelfProfileCard = ({ user }) => {
             <h2 className="text-2xl font-bold text-center mt-5">{user.name}</h2>
             {user.bio ? (
               <p className="text-gray-600 flex items-center justify-center gap-2">
-                <GrContactInfo className="text-gray-500"/>
+                <GrContactInfo className="text-gray-500" />
                 {user.bio}
               </p>
             ) : (
               <p className="text-gray-400 flex items-center justify-center gap-2">
-                <GrContactInfo className="text-gray-500"/>
-                Bio not added</p>
+                <GrContactInfo className="text-gray-500" />
+                Bio not added
+              </p>
             )}
             <hr className="mt-3" />
           </div>
@@ -47,11 +48,13 @@ const SelfProfileCard = ({ user }) => {
             {user.location}
           </p>
         ) : (
-          <p className="text-gray-400 flex items-center gap-2"> 
-          <CiLocationOn className="text-lg font-semibold"/>
-          Location not added</p>
+          <p className="text-gray-400 flex items-center gap-2">
+            <CiLocationOn className="text-lg font-semibold" />
+            Location not added
+          </p>
         )}
       </div>
+
       <div className="">
         <h3 className="text-lg font-bold ">Interests</h3>
         {user.interests ? (
@@ -67,11 +70,19 @@ const SelfProfileCard = ({ user }) => {
           </ul>
         ) : (
           <p className="text-gray-600">
-             No interests have been set yet. Add some interests to let people
+            No interests have been set yet. Add some interests to let people
             know more about you.
           </p>
         )}
       </div>
+      <span className="flex flex-col justify-center items-center mt-3 border-t">
+        <Link
+          className="text-primary text-lg mt-3 cursor-pointer hover:underline"
+          to="/devices-locations"
+        >
+          Devices and Locations
+        </Link>
+      </span>
     </div>
   );
 };

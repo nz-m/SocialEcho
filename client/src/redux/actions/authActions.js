@@ -103,3 +103,57 @@ export const getModProfileAction = () => async (dispatch) => {
     });
   }
 };
+
+export const getContextAuthDataAction = () => async (dispatch) => {
+  try {
+    const { error, data } = await api.getContextAuthData();
+    if (error) {
+      throw new Error(error);
+    }
+    dispatch({
+      type: types.GET_CONTEXT_AUTH_DATA_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: types.GET_CONTEXT_AUTH_DATA_FAIL,
+      payload: types.ERROR_MESSAGE,
+    });
+  }
+};
+
+export const getTrustedContextAuthDataAction = () => async (dispatch) => {
+  try {
+    const { error, data } = await api.getTrustedContextAuthData();
+    if (error) {
+      throw new Error(error);
+    }
+    dispatch({
+      type: types.GET_TRUSTED_AUTH_CONTEXT_DATA_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: types.GET_TRUSTED_AUTH_CONTEXT_DATA_FAIL,
+      payload: types.ERROR_MESSAGE,
+    });
+  }
+};
+
+export const getUserPreferencesAction = () => async (dispatch) => {
+  try {
+    const { error, data } = await api.getUserPreferences();
+    if (error) {
+      throw new Error(error);
+    }
+    dispatch({
+      type: types.GET_USER_PREFERENCES_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: types.GET_USER_PREFERENCES_FAIL,
+      payload: types.ERROR_MESSAGE,
+    });
+  }
+};

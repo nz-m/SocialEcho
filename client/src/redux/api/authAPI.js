@@ -51,4 +51,39 @@ const getModProfile = async () => {
   }
 };
 
-export { signIn, signUp, logout, getModProfile };
+const getContextAuthData = async () => {
+  try {
+    const res = await API.get("/auth/context-data/primary");
+    return { error: null, data: res.data };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
+
+const getTrustedContextAuthData = async () => {
+  try {
+    const res = await API.get("/auth/context-data/trusted");
+    return { error: null, data: res.data };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
+
+const getUserPreferences = async () => {
+  try {
+    const res = await API.get("/auth/user-preferences");
+    return { error: null, data: res.data };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
+
+export {
+  signIn,
+  signUp,
+  logout,
+  getModProfile,
+  getContextAuthData,
+  getTrustedContextAuthData,
+  getUserPreferences,
+};

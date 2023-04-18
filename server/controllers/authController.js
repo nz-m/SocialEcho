@@ -1,6 +1,9 @@
 const UserContext = require("../models/UserContext");
+const UserPreference = require("../models/UserPreference");
 const SuspiciousLogin = require("../models/SuspiciousLogin");
 const geoip = require("geoip-lite");
+const getUserFromToken = require("../utils/getUserFromToken");
+const formatCreatedAt = require("../utils/timeConverter");
 
 const getCurrentContextData = (req) => {
   const ip = req.clientIp || "unknown";
@@ -161,7 +164,7 @@ const verifyContextData = async (req, existingUser) => {
         );
 
         newSuspiciousData = {
-          time: res.createdAt.toLocaleString(),
+          time: formatCreatedAt(res.createdAt),
           ip: res.ip,
           country: res.country,
           city: res.city,
@@ -189,7 +192,7 @@ const verifyContextData = async (req, existingUser) => {
       );
 
       newSuspiciousData = {
-        time: res.createdAt.toLocaleString(),
+        time: formatCreatedAt(res.createdAt),
         id: res._id,
         ip: res.ip,
         country: res.country,
@@ -291,7 +294,99 @@ const addContextData = async (req, res) => {
   }
 };
 
+const getAuthContextData = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const result = await UserContext.findOne({ user: userId });
+
+    if (!result) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    const userContextData = {
+      firstAdded: formatCreatedAt(result.createdAt),
+      ip: result.ip,
+      country: result.country,
+      city: result.city,
+      browser: result.browser,
+      platform: result.platform,
+      os: result.os,
+      device: result.device,
+      deviceType: result.deviceType,
+    };
+
+    res.status(200).json(userContextData);
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+const getTrustedAuthContextData = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const result = await SuspiciousLogin.find({
+      user: userId,
+      isTrusted: true,
+    });
+
+    const trustedAuthContextData = result.map((item) => {
+      return {
+        _id: item._id,
+        time: formatCreatedAt(item.createdAt),
+        ip: item.ip,
+        country: item.country,
+        city: item.city,
+        browser: item.browser,
+        platform: item.platform,
+        os: item.os,
+        device: item.device,
+        deviceType: item.deviceType,
+      };
+    });
+
+    res.status(200).json(trustedAuthContextData);
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+const getUserPreferences = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userPreferences = await UserPreference.findOne({ user: userId });
+
+    if (!userPreferences) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.status(200).json(userPreferences);
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   verifyContextData,
   addContextData,
+  getAuthContextData,
+  getTrustedAuthContextData,
+  getUserPreferences,
 };

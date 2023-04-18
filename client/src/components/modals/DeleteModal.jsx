@@ -1,6 +1,5 @@
 import { Fragment, useRef, useState, memo } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useDispatch } from "react-redux";
 import { deletePostAction } from "../../redux/actions/postActions";
 import LoadingSpinner from "../spinner/LoadingSpinner";
@@ -56,16 +55,25 @@ const DeleteModal = memo(({ showModal, postId, onClose, prevPath }) => {
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="flex flex-col items-center">
                     <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10 border border-dashed">
-                      <ExclamationTriangleIcon
-                        className="h-6 w-6 text-red-600"
-                        aria-hidden="true"
-                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                        />
+                      </svg>
                     </div>
                     <p className="text-base font-semibold mt-3 text-slate-800 text-center">
-                          Are you sure you want to delete? <br /> This action
-                           cannot be undo.
-                        </p>
-                   
+                      Are you sure you want to delete? <br /> This action cannot
+                      be undo.
+                    </p>
                   </div>
                 </div>
                 <div className="px-4 py-3 sm:flex sm:flex-row-reverse justify-center gap-5 sm:px-6">
