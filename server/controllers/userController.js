@@ -117,10 +117,6 @@ const signin = async (req, res, next) => {
       expiresIn: "7d",
     });
 
-    await RefreshToken.deleteOne({
-      user: existingUser._id,
-    });
-
     const newRefreshToken = new RefreshToken({
       user: existingUser._id,
       refreshToken,

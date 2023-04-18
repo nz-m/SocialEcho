@@ -14,7 +14,9 @@ const initialState = {
   isModerator: false,
   contextAuthData: null,
   trustedAuthContextData: [],
+  blockedAuthContextData: [],
   userPreferences: null,
+  contextAuthError: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -106,36 +108,64 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         contextAuthData: payload ? payload : null,
+        contextAuthError: null,
       };
 
     case types.GET_CONTEXT_AUTH_DATA_FAIL:
       return {
         ...state,
         contextAuthData: null,
+        contextAuthError: payload ? payload : null,
       };
 
     case types.GET_TRUSTED_AUTH_CONTEXT_DATA_SUCCESS:
       return {
         ...state,
         trustedAuthContextData: payload ? payload : [],
+        contextAuthError: null,
       };
 
     case types.GET_TRUSTED_AUTH_CONTEXT_DATA_FAIL:
       return {
         ...state,
         trustedAuthContextData: [],
+        contextAuthError: payload ? payload : null,
       };
 
     case types.GET_USER_PREFERENCES_SUCCESS:
       return {
         ...state,
         userPreferences: payload ? payload : null,
+        contextAuthError: null,
       };
 
     case types.GET_USER_PREFERENCES_FAIL:
       return {
         ...state,
         userPreferences: null,
+        contextAuthError: payload ? payload : null,
+      };
+
+    case types.GET_BLOCKED_AUTH_CONTEXT_DATA_SUCCESS:
+      return {
+        ...state,
+        blockedAuthContextData: payload ? payload : [],
+        contextAuthError: null,
+      };
+
+    case types.GET_BLOCKED_AUTH_CONTEXT_DATA_FAIL:
+      return {
+        ...state,
+        blockedAuthContextData: [],
+        contextAuthError: payload ? payload : null,
+      };
+
+    case types.DELETE_CONTEXT_AUTH_DATA_FAIL:
+    case types.UNBLOCK_CONTEXT_AUTH_DATA_FAIL:
+    case types.BLOCK_CONTEXT_AUTH_DATA_FAIL:
+      return {
+        ...state,
+        contextAuthError: payload ? payload : null,
       };
 
     default:

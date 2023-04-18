@@ -337,6 +337,7 @@ const getTrustedAuthContextData = async (req, res) => {
     const result = await SuspiciousLogin.find({
       user: userId,
       isTrusted: true,
+      isBlocked: false,
     });
 
     const trustedAuthContextData = result.map((item) => {
@@ -355,6 +356,42 @@ const getTrustedAuthContextData = async (req, res) => {
     });
 
     res.status(200).json(trustedAuthContextData);
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+const getBlockedAuthContextData = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const result = await SuspiciousLogin.find({
+      user: userId,
+      isBlocked: true,
+      isTrusted: false,
+    });
+
+    const blockedAuthContextData = result.map((item) => {
+      return {
+        _id: item._id,
+        time: formatCreatedAt(item.createdAt),
+        ip: item.ip,
+        country: item.country,
+        city: item.city,
+        browser: item.browser,
+        platform: item.platform,
+        os: item.os,
+        device: item.device,
+        deviceType: item.deviceType,
+      };
+    });
+
+    res.status(200).json(blockedAuthContextData);
   } catch (error) {
     res.status(500).json({
       message: "Internal server error",
@@ -383,10 +420,85 @@ const getUserPreferences = async (req, res) => {
   }
 };
 
+const deleteContextAuthData = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const contextId = req.params.contextId;
+
+    await SuspiciousLogin.deleteOne({ _id: contextId });
+
+    res.status(200).json({
+      message: "Data deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+const blockContextAuthData = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const contextId = req.params.contextId;
+
+    await SuspiciousLogin.findOneAndUpdate(
+      { _id: contextId },
+      { $set: { isBlocked: true, isTrusted: false } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Blocked successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+const unblockContextAuthData = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const contextId = req.params.contextId;
+
+    await SuspiciousLogin.findOneAndUpdate(
+      { _id: contextId },
+      { $set: { isBlocked: false, isTrusted: true } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Unblocked successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   verifyContextData,
   addContextData,
   getAuthContextData,
-  getTrustedAuthContextData,
   getUserPreferences,
+  getTrustedAuthContextData,
+  getBlockedAuthContextData,
+  deleteContextAuthData,
+  blockContextAuthData,
+  unblockContextAuthData,
 };

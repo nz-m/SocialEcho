@@ -69,9 +69,45 @@ const getTrustedContextAuthData = async () => {
   }
 };
 
+const getBlockedAuthContextData = async () => {
+  try {
+    const res = await API.get("/auth/context-data/blocked");
+    return { error: null, data: res.data };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
+
 const getUserPreferences = async () => {
   try {
     const res = await API.get("/auth/user-preferences");
+    return { error: null, data: res.data };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
+
+const deleteContextAuthData = async (contextId) => {
+  try {
+    const res = await API.delete(`/auth/context-data/${contextId}`);
+    return { error: null, data: res.data };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
+
+const blockContextAuthData = async (contextId) => {
+  try {
+    const res = await API.patch(`/auth/context-data/block/${contextId}`);
+    return { error: null, data: res.data };
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
+
+const unblockContextAuthData = async (contextId) => {
+  try {
+    const res = await API.patch(`/auth/context-data/unblock/${contextId}`);
     return { error: null, data: res.data };
   } catch (err) {
     return handleApiError(err);
@@ -84,6 +120,10 @@ export {
   logout,
   getModProfile,
   getContextAuthData,
-  getTrustedContextAuthData,
   getUserPreferences,
+  getTrustedContextAuthData,
+  getBlockedAuthContextData,
+  deleteContextAuthData,
+  blockContextAuthData,
+  unblockContextAuthData,
 };
