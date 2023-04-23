@@ -1,14 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { HiOutlineArchiveBox,HiOutlineInformationCircle } from "react-icons/hi2";
+import {
+  HiOutlineArchiveBox,
+  HiOutlineInformationCircle,
+} from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import Save from "./Save";
 import Like from "./Like";
 import CommentForm from "../form/CommentForm";
-import { HiOutlineChatBubbleOvalLeft ,HiOutlineChevronLeft} from "react-icons/hi2";
+import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import DeleteModal from "../modals/DeleteModal";
-import {IoIosArrowBack} from 'react-icons/io'
+import { IoIosArrowBack } from "react-icons/io";
 const PostView = ({ post }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -60,8 +63,10 @@ const PostView = ({ post }) => {
   return (
     <div className="w-6/12 px-5 py-5 bg-white shadow-2xl shadow-[#F3F8FF] my-5 rounded-lg">
       <p className="border border-dashed border-primary cursor-pointer px-2 py-2 w-7 h-7 flex justify-center items-center mb-3 rounded-full">
-       <IoIosArrowBack className="text-primary text-xl font-semibold" onClick={handleBack}/>
-       
+        <IoIosArrowBack
+          className="text-primary text-xl font-semibold"
+          onClick={handleBack}
+        />
       </p>
 
       <div className="flex justify-between">
@@ -126,9 +131,9 @@ const PostView = ({ post }) => {
           </div>
           <div className="flex items-center gap-2">
             <Save postId={post._id} />
-            {/* <span>
+            <span>
               Saved by {savedByCount} {savedByCount === 1 ? "person" : "people"}
-            </span> */}
+            </span>
             {isReported === null ? null : isReported ? (
               <button disabled className="flex items-center text-xl gap-1">
                 {" "}

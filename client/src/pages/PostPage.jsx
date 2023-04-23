@@ -5,7 +5,7 @@ import PostView from "../components/post/PostView";
 import CommentSidebar from "../components/post/CommentSidebar";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getPostsAction } from "../redux/actions/postActions";
+import { getPostAction, clearPostAction } from "../redux/actions/postActions";
 import { useParams } from "react-router-dom";
 
 const PostPage = () => {
@@ -13,15 +13,17 @@ const PostPage = () => {
   const dispatch = useDispatch();
 
   const userData = useSelector((state) => state.auth?.userData);
-  const post = useSelector((state) =>
-    state.posts?.posts.find((post) => post._id === postId)
-  );
+  const post = useSelector((state) => state.posts?.post);
 
   useEffect(() => {
-    if (userData) {
-      dispatch(getPostsAction());
+    if (userData?._id) {
+      dispatch(getPostAction(postId));
     }
-  }, [userData, dispatch]);
+
+    return () => {
+      dispatch(clearPostAction());
+    };
+  }, [dispatch, userData, postId]);
 
   if (!post) return null; // add loading spinner here
 
@@ -31,7 +33,7 @@ const PostPage = () => {
       <div className="flex lg:px-40 gap-10 mx-auto bg-[#F6F7FA]">
         <Leftbar />
 
-        <PostView  post={post} />
+        <PostView post={post} />
 
         <CommentSidebar />
       </div>

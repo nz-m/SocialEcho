@@ -1,6 +1,9 @@
 import React, { memo, useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getComPostsAction } from "../../redux/actions/postActions";
+import {
+  getComPostsAction,
+  clearCommunityPostsAction,
+} from "../../redux/actions/postActions";
 import PostForm from "../form/PostForm";
 import Post from "../post/Post";
 import FollowingUsersPosts from "./FollowingUsersPosts";
@@ -12,6 +15,9 @@ const MainSection = () => {
 
   const communityData = useSelector((state) => state.community?.communityData);
   const communityPosts = useSelector((state) => state.posts?.communityPosts);
+  const totalCommunityPosts = useSelector(
+    (state) => state.posts?.totalCommunityPosts
+  );
 
   const [activeTab, setActiveTab] = useState("All posts");
   const [isLoading, setIsLoading] = useState(false);
@@ -22,19 +28,24 @@ const MainSection = () => {
     const fetchInitialPosts = async () => {
       setIsLoading(true);
       if (communityData?._id) {
-        dispatch(getComPostsAction(communityData._id));
+        dispatch(getComPostsAction(communityData._id, LIMIT, 0)).finally(() => {
+          setIsLoading(false);
+        });
       }
-      setIsLoading(false);
     };
+
     fetchInitialPosts();
+
+    return () => {
+      dispatch(clearCommunityPostsAction());
+    };
   }, [dispatch, communityData]);
 
   const handleLoadMore = () => {
     if (
       !isLoadMoreLoading &&
-      communityData?._id &&
-      communityPosts.length % LIMIT === 0 &&
-      communityPosts.length >= LIMIT
+      communityPosts.length > 0 &&
+      communityPosts.length < totalCommunityPosts
     ) {
       setIsLoadMoreLoading(true);
       dispatch(
@@ -51,13 +62,13 @@ const MainSection = () => {
     ));
   }, [communityPosts]);
 
+  console.log(communityPosts);
   return (
     <div className="w-6/12 px-10 py-5">
       {isLoading || !communityData ? (
         <div>Loading...</div>
       ) : (
         <div className="">
-
           <div className="flex flex-col mt-4">
             <ul className="flex border-b">
               <li
@@ -91,8 +102,7 @@ const MainSection = () => {
                     {isLoading ? "Loading..." : memoizedCommunityPosts}
                   </div>
                   {!isLoading &&
-                    communityPosts.length >= LIMIT &&
-                    communityPosts.length % LIMIT === 0 && (
+                    communityPosts.length < totalCommunityPosts && (
                       <div className="flex justify-center">
                         <button
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

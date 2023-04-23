@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import {
-  createPostAction,
-  getPostsAction,
-  getComPostsAction,
-} from "../../redux/actions/postActions";
+import { createPostAction } from "../../redux/actions/postActions";
 import { useSelector } from "react-redux";
 
 const PostForm = () => {
@@ -59,8 +55,6 @@ const PostForm = () => {
 
     try {
       await dispatch(createPostAction(formData));
-      await dispatch(getPostsAction());
-      await dispatch(getComPostsAction(community._id));
       setBody("");
       setFile(null);
       event.target.reset();
@@ -71,7 +65,10 @@ const PostForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 shadow-xl shadow-[#F3F8FF]">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white rounded-lg p-6 shadow-xl shadow-[#F3F8FF]"
+    >
       <div className="mb-4">
         <label htmlFor="body" className="block text-gray-700 font-bold mb-2">
           Share something with your community:

@@ -27,38 +27,7 @@ export const createPostAction = (formData) => async (dispatch) => {
   }
 };
 
-export const getPostsAction =
-  (limit = 10, skip = 0) =>
-  async (dispatch) => {
-    try {
-      const { error, data } = await api.getPosts(limit, skip);
-
-      if (error) {
-        throw new Error(error);
-      }
-
-      dispatch({
-        type: types.GET_POSTS_SUCCESS,
-        payload: {
-          page: skip / limit + 1,
-          posts: data,
-        },
-        meta: {
-          requiresAuth: true,
-        },
-      });
-    } catch (error) {
-      dispatch({
-        type: types.GET_POSTS_FAIL,
-        payload: error,
-        meta: {
-          requiresAuth: true,
-        },
-      });
-    }
-  };
-
-export const getSelfPostAction = (id) => async (dispatch) => {
+export const getPostAction = (id) => async (dispatch) => {
   try {
     const { error, data } = await api.getPost(id);
 
@@ -84,9 +53,73 @@ export const getSelfPostAction = (id) => async (dispatch) => {
   }
 };
 
+export const clearPostAction = () => async (dispatch) => {
+  dispatch({
+    type: types.CLEAR_POST,
+    meta: {
+      requiresAuth: true,
+    },
+  });
+};
+
+export const getPostsAction = (limit, skip) => async (dispatch) => {
+  try {
+    const { error, data } = await api.getPosts(limit, skip);
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    dispatch({
+      type: types.GET_POSTS_SUCCESS,
+      payload: {
+        page: skip / limit + 1,
+        posts: data.formattedPosts,
+        totalPosts: data.totalPosts,
+      },
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: types.GET_POSTS_FAIL,
+      payload: error,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  }
+};
+
+export const getSelfPostAction = (id) => async (dispatch) => {
+  try {
+    const { error, data } = await api.getPost(id);
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    dispatch({
+      type: types.GET_SELF_POST_SUCCESS,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: types.GET_SELF_POST_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  }
+};
+
 export const getComPostsAction =
-  (communityId, limit = 10, skip = 0) =>
-  async (dispatch) => {
+  (communityId, limit, skip) => async (dispatch) => {
     try {
       const { error, data } = await api.getComPosts(communityId, limit, skip);
 
@@ -98,7 +131,8 @@ export const getComPostsAction =
         type: types.GET_COMMUNITY_POSTS_SUCCESS,
         payload: {
           page: skip / limit + 1,
-          posts: data,
+          posts: data.formattedPosts,
+          totalCommunityPosts: data.totalCommunityPosts,
         },
         meta: {
           requiresAuth: true,
@@ -114,6 +148,15 @@ export const getComPostsAction =
       });
     }
   };
+
+export const clearCommunityPostsAction = () => async (dispatch) => {
+  dispatch({
+    type: types.CLEAR_COMMUNITY_POSTS,
+    meta: {
+      requiresAuth: true,
+    },
+  });
+};
 
 export const getFollowingUsersPostsAction =
   (communityId) => async (dispatch) => {
@@ -168,7 +211,6 @@ export const deletePostAction = (id) => async (dispatch) => {
   }
 };
 
-// like post
 export const likePostAction = (id, userId) => async (dispatch) => {
   try {
     const { error, data } = await api.likePost(id, userId);
@@ -195,7 +237,6 @@ export const likePostAction = (id, userId) => async (dispatch) => {
   }
 };
 
-// unlike post
 export const unlikePostAction = (id, userId) => async (dispatch) => {
   try {
     const { error, data } = await api.unlikePost(id, userId);
@@ -220,7 +261,6 @@ export const unlikePostAction = (id, userId) => async (dispatch) => {
   }
 };
 
-// add comment
 export const addCommentAction = (postId, newComment) => async (dispatch) => {
   try {
     const { error } = await api.addComment(postId, newComment);

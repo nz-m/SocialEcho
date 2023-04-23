@@ -45,10 +45,16 @@ const createPost = async (req, res) => {
       });
     }
 
-    await newPost.save();
-    return res.status(201).json({
-      message: "Post created successfully",
-    });
+    const savedPost = await newPost.save();
+    const id = savedPost._id;
+    const post = await Post.findById(id)
+      .populate("user", "name avatar")
+      .populate("community", "name")
+      .lean();
+
+    post.createdAt = dayjs(post.createdAt).fromNow();
+
+    res.json(post);
   } catch (error) {
     return res.status(409).json({
       message: "Error creating post",
@@ -71,6 +77,12 @@ const getPost = async (req, res) => {
     }
 
     post.createdAt = dayjs(post.createdAt).fromNow();
+
+    const savedByCount = await User.countDocuments({
+      savedPosts: id,
+    });
+
+    post.savedByCount = savedByCount;
 
     res.status(200).json(post);
   } catch (error) {
@@ -127,20 +139,17 @@ const getPosts = async (req, res) => {
       .limit(limit)
       .lean();
 
-    const formattedPosts = await Promise.all(
-      posts.map(async (post) => {
-        const savedByCount = await User.countDocuments({
-          savedPosts: post._id,
-        });
-        return {
-          ...post,
-          createdAt: dayjs(post.createdAt).fromNow(),
-          savedByCount,
-        };
-      })
-    );
+    const formattedPosts = posts.map((post) => ({
+      ...post,
+      createdAt: dayjs(post.createdAt).fromNow(),
+    }));
 
-    res.status(200).json(formattedPosts);
+    const totalPosts = await Post.countDocuments();
+
+    res.status(200).json({
+      formattedPosts,
+      totalPosts,
+    });
   } catch (error) {
     res.status(404).json({
       message: "Posts not found",
@@ -194,20 +203,20 @@ const getCommunityPosts = async (req, res) => {
       .skip(skip)
       .limit(limit)
       .lean();
-    const formattedPosts = await Promise.all(
-      posts.map(async (post) => {
-        const savedByCount = await User.countDocuments({
-          savedPosts: post._id,
-        });
-        return {
-          ...post,
-          createdAt: dayjs(post.createdAt).fromNow(),
-          savedByCount,
-        };
-      })
-    );
 
-    res.status(200).json(formattedPosts);
+    const formattedPosts = posts.map((post) => ({
+      ...post,
+      createdAt: dayjs(post.createdAt).fromNow(),
+    }));
+
+    const totalCommunityPosts = await Post.countDocuments({
+      community: communityId,
+    });
+
+    res.status(200).json({
+      formattedPosts,
+      totalCommunityPosts,
+    });
   } catch (error) {
     res.status(500).json({
       message: "Server error",

@@ -2,6 +2,7 @@ import * as types from "../constants/postConstants";
 import { LOGOUT } from "../constants/authConstants";
 
 const initialState = {
+  post: null,
   posts: [],
   publicPosts: [],
   selfPost: null,
@@ -10,6 +11,8 @@ const initialState = {
   comments: [],
   savedPosts: [],
   postError: null,
+  totalPosts: 0,
+  totalCommunityPosts: 0,
 };
 
 const postReducer = (state = initialState, action) => {
@@ -19,6 +22,7 @@ const postReducer = (state = initialState, action) => {
     case LOGOUT:
       return {
         ...state,
+        post: null,
         posts: [],
         selfPost: null,
         publicPosts: [],
@@ -32,18 +36,21 @@ const postReducer = (state = initialState, action) => {
     case types.CREATE_POST_SUCCESS:
       return {
         ...state,
-        posts: [...state.posts, payload],
+        posts: [payload, ...state.posts],
+        communityPosts: [payload, ...state.communityPosts],
         postError: null,
       };
+
     case types.CREATE_POST_FAIL:
       return {
         ...state,
         postError: payload,
       };
+
     case types.GET_POST_SUCCESS:
       return {
         ...state,
-        selfPost: payload,
+        post: payload,
         postError: null,
       };
     case types.GET_POST_FAIL:
@@ -52,20 +59,53 @@ const postReducer = (state = initialState, action) => {
         postError: payload,
       };
 
+    case types.GET_SELF_POST_SUCCESS:
+      return {
+        ...state,
+        selfPost: payload,
+        postError: null,
+      };
+    case types.GET_SELF_POST_FAIL:
+      return {
+        ...state,
+        postError: payload,
+      };
+
+    case types.CLEAR_POST:
+      return {
+        ...state,
+        post: null,
+        comments: [],
+      };
+
+    case types.CLEAR_COMMUNITY_POSTS:
+      return {
+        ...state,
+        communityPosts: [],
+        totalCommunityPosts: 0,
+      };
+
     case types.GET_POSTS_SUCCESS:
       if (payload.page === 1) {
         return {
           ...state,
           posts: payload ? payload.posts : [],
+          totalPosts: payload ? payload.totalPosts : 0,
           postError: null,
         };
       } else {
+        const existingPosts = state.posts.map((post) => post._id);
+        const newPosts = (payload ? payload.posts : []).filter(
+          (post) => !existingPosts.includes(post._id)
+        );
         return {
           ...state,
-          posts: [...state.posts, ...(payload ? payload.posts : [])],
+          posts: [...state.posts, ...newPosts],
+          totalPosts: payload ? payload.totalPosts : 0,
           postError: null,
         };
       }
+
     case types.GET_POSTS_FAIL:
       return {
         ...state,
@@ -77,6 +117,7 @@ const postReducer = (state = initialState, action) => {
         return {
           ...state,
           communityPosts: payload ? payload.posts : [],
+          totalCommunityPosts: payload ? payload.totalCommunityPosts : 0,
           postError: null,
         };
       } else {
@@ -86,6 +127,7 @@ const postReducer = (state = initialState, action) => {
             ...state.communityPosts,
             ...(payload ? payload.posts : []),
           ],
+          totalCommunityPosts: payload ? payload.totalCommunityPosts : 0,
           postError: null,
         };
       }
@@ -117,6 +159,8 @@ const postReducer = (state = initialState, action) => {
           (post) => post._id !== payload
         ),
         postError: null,
+        totalPosts: state.totalPosts - 1,
+        totalCommunityPosts: state.totalCommunityPosts - 1,
       };
     case types.DELETE_POST_FAIL:
       return {
@@ -217,37 +261,27 @@ const postReducer = (state = initialState, action) => {
     case types.INCREASE_SAVED_BY_COUNT:
       return {
         ...state,
-        posts: state.posts.map((post) =>
-          post._id === payload
-            ? { ...post, savedByCount: post.savedByCount + 1 }
-            : post
-        ),
-        communityPosts: state.communityPosts.map((post) =>
-          post._id === payload
-            ? { ...post, savedByCount: post.savedByCount + 1 }
-            : post
-        ),
+        post:
+          state.post && state.post._id === payload
+            ? {
+                ...state.post,
+                savedByCount: state.post.savedByCount + 1,
+              }
+            : state.post,
+
         postError: null,
       };
     case types.DECREASE_SAVED_BY_COUNT:
       return {
         ...state,
-        posts: state.posts.map((post) =>
-          post._id === payload
+        post:
+          state.post && state.post._id === payload
             ? {
-                ...post,
-                savedByCount: post.savedByCount - 1,
+                ...state.post,
+                savedByCount: state.post.savedByCount - 1,
               }
-            : post
-        ),
-        communityPosts: state.communityPosts.map((post) =>
-          post._id === payload
-            ? {
-                ...post,
-                savedByCount: post.savedByCount - 1,
-              }
-            : post
-        ),
+            : state.post,
+
         postError: null,
       };
 
