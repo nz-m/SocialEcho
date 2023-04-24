@@ -1,4 +1,3 @@
-import React from 'react'
 import Logo from '../../assets/SocialEcho.svg'
 import notification from '../../assets/notification.svg'
 const Navbar = () => {

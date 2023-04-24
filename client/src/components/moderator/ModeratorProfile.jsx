@@ -2,7 +2,6 @@ import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getModProfileAction } from "../../redux/actions/authActions";
-import {HiOutlineUser} from "react-icons/hi2";
 import {MdOutlineMail,MdJoinInner} from "react-icons/md";
 
 const ModeratorProfile = () => {

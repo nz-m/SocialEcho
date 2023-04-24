@@ -5,7 +5,6 @@ import { Fragment, useRef, useState, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { joinCommunityAndFetchData } from "../../redux/actions/communityActions";
 import {IoIosPeople} from 'react-icons/io'
-import {HiUsers} from 'react-icons/hi2'
 import LoadingSpinner from "../spinner/LoadingSpinner";
 
 const JoinModal = memo(({ show, onClose, community }) => {
