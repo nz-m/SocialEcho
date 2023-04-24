@@ -17,13 +17,13 @@ const MainSection = () => {
   const LIMIT = 10;
 
   useEffect(() => {
-    if (userData && posts?.length === 0) {
+    if (userData) {
       setIsLoading(true);
       dispatch(getPostsAction(LIMIT, 0)).finally(() => {
         setIsLoading(false);
       });
     }
-  }, [userData, dispatch, LIMIT, posts]);
+  }, [userData, dispatch, LIMIT]);
 
   const handleLoadMore = () => {
     setIsLoadMoreLoading(true);
