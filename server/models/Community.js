@@ -20,7 +20,7 @@ const communitySchema = new Schema(
 
     moderators: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User",
         default: [],
       },
@@ -28,7 +28,7 @@ const communitySchema = new Schema(
 
     members: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User",
         default: [],
       },
@@ -36,7 +36,7 @@ const communitySchema = new Schema(
 
     bannedUsers: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User",
         default: [],
       },
@@ -51,8 +51,8 @@ const communitySchema = new Schema(
     reportedPosts: {
       type: [
         {
-          post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
-          reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+          post: { type: Schema.Types.ObjectId, ref: "Post" },
+          reportedBy: { type: Schema.Types.ObjectId, ref: "User" },
           reportReason: { type: String },
           reportDate: { type: Date, default: Date.now },
         },
@@ -63,11 +63,12 @@ const communitySchema = new Schema(
     rules: [
       {
         type: Schema.Types.ObjectId,
-        ref: "ModerationRule",
-        unique: true,
+        ref: "Rule",
+        default: [],
       },
     ],
   },
+
   {
     timestamps: true,
   }

@@ -1,5 +1,5 @@
 const Community = require("../models/Community");
-const ModerationRules = require("../models/ModerationRules");
+const Rule = require("../models/Rule");
 const User = require("../models/User");
 const getUserFromToken = require("../utils/getUserFromToken");
 const dayjs = require("dayjs");
@@ -47,7 +47,7 @@ const createCommunity = async (req, res) => {
 const addRules = async (req, res) => {
   const rules = req.body;
   try {
-    const savedRules = await ModerationRules.insertMany(rules);
+    const savedRules = await Rule.insertMany(rules);
     res.status(201).json(savedRules);
   } catch (error) {
     res.status(409).json({
@@ -59,7 +59,7 @@ const addRules = async (req, res) => {
 const addRulesToCommunity = async (req, res) => {
   try {
     const { name } = req.params;
-    const rules = await ModerationRules.find();
+    const rules = await Rule.find();
 
     const appliedRules = await Community.findOneAndUpdate(
       {

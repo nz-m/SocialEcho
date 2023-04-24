@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const moderationRuleSchema = new mongoose.Schema({
+const RuleSchema = new mongoose.Schema({
   rule: {
     type: String,
     required: true,
@@ -11,4 +11,4 @@ const moderationRuleSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("ModerationRule", moderationRuleSchema);
+module.exports = mongoose.model("Rule", RuleSchema);

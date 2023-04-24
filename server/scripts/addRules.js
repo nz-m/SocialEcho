@@ -1,7 +1,7 @@
 const readline = require("readline");
 const mongoose = require("mongoose");
 const Community = require("../models/Community");
-const ModerationRules = require("../models/ModerationRules");
+const Rule = require("../models/Rule");
 const kleur = require("kleur");
 const LOG = console.log;
 
@@ -27,7 +27,7 @@ const getCommunityNames = async () => {
 
 const getModerationRules = async () => {
   try {
-    return await ModerationRules.find();
+    return await Rule.find();
   } catch (error) {
     LOG(kleur.red().bold("⚠️ Error while getting rules"));
     process.exit(1);
@@ -61,19 +61,19 @@ const promptCommunityName = async () => {
 };
 
 const promptConfirmation = async (communityName, rules) => {
-  const ruleIds = rules.map((r) => r._id);
+  const ruleNames = rules.map((r) => r.rule);
   return new Promise((resolve) => {
     rl.question(
       kleur
         .yellow()
         .bold(
-          `Do you want to add the following ${
-            ruleIds.length
-          } rules to ${communityName}? (y/n)\n${JSON.stringify(
-            ruleIds,
+          `${JSON.stringify(
+            ruleNames,
             null,
             2
-          )}\n`
+          )}\nAre you sure you want to add these ${
+            ruleNames.length
+          } rules to ${communityName}? (Y/N)\n`
         ),
       (answer) => {
         if (answer.toLowerCase() === "y" || answer.toLowerCase() === "n") {
@@ -81,9 +81,9 @@ const promptConfirmation = async (communityName, rules) => {
         } else {
           LOG(
             kleur.red().bold("⚠️ Invalid input. Please enter either ") +
-              kleur.yellow().bold("y") +
+              kleur.blue().bold("Y") +
               kleur.red().bold(" or ") +
-              kleur.yellow().bold("n")
+              kleur.blue().bold("N")
           );
 
           promptConfirmation(communityName, rules);
