@@ -30,7 +30,7 @@ const Following = lazy(() => import("./pages/Following"));
 const DevicesLocations = lazy(() => import("./pages/DevicesLocations"));
 const MainSection = lazy(() => import("./components/home/MainSection"));
 const UserProfile = lazy(() => import("./components/profile/UserProfile"));
-const CommnityMainSection = lazy(() =>
+const CommunityMainSection = lazy(() =>
   import("./components/community/MainSection")
 );
 
@@ -100,7 +100,7 @@ const App = () => {
             element={
               <CommonLayout>
                 <Suspense fallback={<FallbackSpinner />}>
-                  <CommnityMainSection />
+                  <CommunityMainSection />
                 </Suspense>
                 <CommunityRightBar />
               </CommonLayout>
