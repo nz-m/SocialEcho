@@ -9,7 +9,7 @@ import {
   followUserAction,
 } from "../../redux/actions/userActions";
 import PublicPost from "./PublicPost";
-import LoadingSpinner from "../spinner/LoadingSpinner";
+import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { CiLocationOn } from "react-icons/ci";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import { FiUsers, FiUser, FiUserMinus } from "react-icons/fi";

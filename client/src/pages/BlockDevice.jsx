@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router";
 import axios from "axios";
-import LoadingSpinner from "../components/spinner/LoadingSpinner";
+import LoadingSpinner from "../components/loader/ButtonLoadingSpinner";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 

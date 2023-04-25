@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signUpAction } from "../../redux/actions/authActions";
 import { Link } from "react-router-dom";
 import ContextAuthModal from "../modals/ContextAuthModal";
-import LoadingSpinner from "../spinner/LoadingSpinner";
+import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 
 const SignupForm = () => {
   const [loading, setLoading] = useState(false);

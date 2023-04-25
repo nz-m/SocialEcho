@@ -2,7 +2,7 @@ import { Fragment, useRef, useState, memo } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useDispatch } from "react-redux";
 import { deletePostAction } from "../../redux/actions/postActions";
-import LoadingSpinner from "../spinner/LoadingSpinner";
+import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { useNavigate } from "react-router-dom";
 const DeleteModal = memo(({ showModal, postId, onClose, prevPath }) => {
   const dispatch = useDispatch();

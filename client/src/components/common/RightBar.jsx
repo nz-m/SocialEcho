@@ -9,7 +9,7 @@ import placeholder from "../../assets/placeholder.png";
 import { Link, useNavigate } from "react-router-dom";
 import ModeratorProfile from "../moderator/ModeratorProfile";
 import JoinModal from "../modals/JoinModal";
-import LoadingSpinner from "../spinner/LoadingSpinner";
+import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { IoIosPeople } from "react-icons/io";
 const RightBar = () => {

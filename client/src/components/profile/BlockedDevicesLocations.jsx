@@ -6,7 +6,8 @@ import {
   getUserPreferencesAction,
   unblockContextAuthDataAction,
 } from "../../redux/actions/authActions";
-import LoadingSpinner from "../spinner/LoadingSpinner";
+import LoadingSpinner from "../loader/ButtonLoadingSpinner";
+import CommonLoading from "../loader/CommonLoading";
 
 const BlockedDevicesLocations = () => {
   const [loading, setLoading] = useState({});
@@ -39,11 +40,13 @@ const BlockedDevicesLocations = () => {
       [contextId]: false,
     }));
   };
-
   if (!blockedContextAuthData) {
-    return <>Loading...</>;
+    return (
+      <div className="flex items-center justify-center">
+        <CommonLoading />
+      </div>
+    );
   }
-
   const blockedDevices = blockedContextAuthData?.map((device) => ({
     _id: device._id,
     device: device.device,
@@ -54,72 +57,6 @@ const BlockedDevicesLocations = () => {
     operatingSystem: device.os,
     time: device.time,
   }));
-
-  // const trustedDevices = [
-  //   {
-  //     _id: "1",
-  //     device: "MacBook Pro",
-  //     deviceType: "Laptop",
-  //     ipAddress: "123df.dfasdf",
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  //   {
-  //     _id: "2",
-  //     device: "iPhone 12 Pro",
-  //     deviceType: "Mobile",
-  //     ipAddress: "192.168.0.1",
-
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  //   {
-  //     _id: "3",
-  //     device: "MacBook Pro",
-  //     deviceType: "Laptop",
-  //     ipAddress: "192.168.0.1",
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  //   {
-  //     _id: "4",
-  //     device: "MacBook Pro",
-  //     deviceType: "Laptop",
-  //     ipAddress: "192.168.0.1",
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  //   {
-  //     _id: "3",
-  //     device: "MacBook Pro",
-  //     deviceType: "Laptop",
-  //     ipAddress: "192.168.0.1",
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  //   {
-  //     _id: "4",
-  //     device: "MacBook Pro",
-  //     deviceType: "Laptop",
-  //     ipAddress: "192.168.0.1",
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  // ];
 
   return (
     <div className="max-w-3xl mx-auto mt-12">

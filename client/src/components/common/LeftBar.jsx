@@ -1,10 +1,11 @@
-import { useMemo, memo } from "react";
+import { useMemo, memo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutAction } from "../../redux/actions/authActions";
 import { useEffect } from "react";
 import { getJoinedCommunitiesAction } from "../../redux/actions/communityActions";
 import { BsThreeDots } from "react-icons/bs";
+import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import {
   HiOutlineHome,
   HiOutlineUserCircle,
@@ -13,9 +14,13 @@ import {
 } from "react-icons/hi2";
 
 const Leftbar = () => {
+  const [loggingOut, setLoggingOut] = useState(false);
   const dispatch = useDispatch();
-  const logout = () => {
-    dispatch(logoutAction());
+
+  const logout = async () => {
+    setLoggingOut(true);
+    await dispatch(logoutAction());
+    setLoggingOut(false);
   };
   const user = useSelector((state) => state.auth?.userData);
   const joinedCommunities = useSelector(
@@ -108,11 +113,15 @@ const Leftbar = () => {
         <div className="flex flex-col items-center justify-center">
           {user && (
             <button
+              disabled={loggingOut}
               className="px-4 py-1 border border-dashed border-red-500 hover:bg-red-400 transition duration-500 hover:text-white text-red-500 rounded-lg"
               onClick={logout}
-              type="button"
             >
-              Logout
+              {loggingOut ? (
+                <LoadingSpinner loadingText={"Logging out..."} />
+              ) : (
+                "Logout"
+              )}
             </button>
           )}
         </div>

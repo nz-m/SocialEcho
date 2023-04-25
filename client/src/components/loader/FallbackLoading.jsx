@@ -1,6 +1,6 @@
 import { HashLoader } from "react-spinners";
 
-const FallbackSpinner = () => {
+const FallbackLoading = () => {
   return (
     <div className="flex justify-center items-center h-screen w-6/12">
       <div className="flex flex-col justify-center items-center">
@@ -10,4 +10,4 @@ const FallbackSpinner = () => {
   );
 };
 
-export default FallbackSpinner;
+export default FallbackLoading;

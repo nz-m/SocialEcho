@@ -7,7 +7,8 @@ import {
   getBlockedAuthContextDataAction,
   blockContextAuthDataAction,
 } from "../../redux/actions/authActions";
-import LoadingSpinner from "../spinner/LoadingSpinner";
+import LoadingSpinner from "../loader/ButtonLoadingSpinner";
+import CommonLoading from "../loader/CommonLoading";
 
 const TrustedDevicesLocations = () => {
   const [deleteLoading, setDeleteLoading] = useState({});
@@ -58,7 +59,12 @@ const TrustedDevicesLocations = () => {
   };
 
   if (!trustedAuthContextData) {
-    return <>Loading...</>;
+    return (
+      // <div className="flex items-center justify-center">
+      //   <CommonLoading />
+      // </div>
+      null
+    );
   }
 
   const trustedDevices = trustedAuthContextData?.map((device) => ({

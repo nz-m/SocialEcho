@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
 import CommonLayout from "./layouts/CommonLayout";
 import SelectiveLayout from "./layouts/SelectiveLayout";
-import FallbackSpinner from "./components/spinner/FallbackSpinner";
+import FallbackLoading from "./components/loader/FallbackLoading";
 
 import SignupForm from "./components/auth/SignupForm";
 import SignIn from "./components/auth/SignIn";
@@ -45,7 +45,7 @@ const App = () => {
             path="/"
             element={
               <CommonLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <MainSection />
                 </Suspense>
 
@@ -57,7 +57,7 @@ const App = () => {
             path="/home"
             element={
               <CommonLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <MainSection />
                 </Suspense>
                 <RightBar />
@@ -68,7 +68,7 @@ const App = () => {
             path="/profile"
             element={
               <SelectiveLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <UserProfile />
                 </Suspense>
               </SelectiveLayout>
@@ -79,7 +79,7 @@ const App = () => {
             path="/post/:postId"
             element={
               <CommonLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <PostPage />
                 </Suspense>
               </CommonLayout>
@@ -89,7 +89,7 @@ const App = () => {
             path="/my/post/:postId"
             element={
               <CommonLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <SelfPostPage />
                 </Suspense>
               </CommonLayout>
@@ -99,7 +99,7 @@ const App = () => {
             path="/community/:communityName"
             element={
               <CommonLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <CommunityMainSection />
                 </Suspense>
                 <CommunityRightBar />
@@ -114,7 +114,7 @@ const App = () => {
             path="/community/:communityName/reported-post"
             element={
               <CommonLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <ReportedPostPage />
                 </Suspense>
                 <CommunityRightBar />
@@ -126,7 +126,7 @@ const App = () => {
             path="/community/:communityName/moderator"
             element={
               <CommonLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <Moderator />
                 </Suspense>
               </CommonLayout>
@@ -136,7 +136,7 @@ const App = () => {
             path="/saved"
             element={
               <SelectiveLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <Saved />
                 </Suspense>
               </SelectiveLayout>
@@ -147,7 +147,7 @@ const App = () => {
             path="/user/:userId"
             element={
               <SelectiveLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <PublicProfile />
                 </Suspense>
               </SelectiveLayout>
@@ -157,7 +157,7 @@ const App = () => {
             path="/communities"
             element={
               <SelectiveLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <AllCommunities />
                 </Suspense>
               </SelectiveLayout>
@@ -167,7 +167,7 @@ const App = () => {
             path="/my-communities"
             element={
               <SelectiveLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <MyCommunities />
                 </Suspense>
               </SelectiveLayout>
@@ -177,7 +177,7 @@ const App = () => {
             path="/following"
             element={
               <SelectiveLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <Following />
                 </Suspense>
               </SelectiveLayout>
@@ -187,7 +187,7 @@ const App = () => {
             path="/devices-locations"
             element={
               <SelectiveLayout>
-                <Suspense fallback={<FallbackSpinner />}>
+                <Suspense fallback={<FallbackLoading />}>
                   <DevicesLocations />
                 </Suspense>
               </SelectiveLayout>
