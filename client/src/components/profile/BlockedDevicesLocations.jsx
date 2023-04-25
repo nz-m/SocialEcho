@@ -1,29 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   getTrustedContextAuthDataAction,
   getBlockedAuthContextDataAction,
-  getUserPreferencesAction,
   unblockContextAuthDataAction,
 } from "../../redux/actions/authActions";
 import LoadingSpinner from "../loader/ButtonLoadingSpinner";
-import CommonLoading from "../loader/CommonLoading";
 
-const BlockedDevicesLocations = () => {
+
+const BlockedDevicesLocations = ({
+  blockedContextAuthData,
+  userPreferences,
+}) => {
   const [loading, setLoading] = useState({});
   const dispatch = useDispatch();
-  const blockedContextAuthData = useSelector(
-    (state) => state.auth?.blockedAuthContextData
-  );
-  const userPreferences = useSelector((state) => state.auth?.userPreferences);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(getUserPreferencesAction());
-      await dispatch(getBlockedAuthContextDataAction());
-    };
-    fetchData();
-  }, [dispatch]);
 
   const handleUnblock = async (contextId) => {
     setLoading((prevState) => ({
@@ -40,13 +30,7 @@ const BlockedDevicesLocations = () => {
       [contextId]: false,
     }));
   };
-  if (!blockedContextAuthData) {
-    return (
-      <div className="flex items-center justify-center">
-        <CommonLoading />
-      </div>
-    );
-  }
+
   const blockedDevices = blockedContextAuthData?.map((device) => ({
     _id: device._id,
     device: device.device,

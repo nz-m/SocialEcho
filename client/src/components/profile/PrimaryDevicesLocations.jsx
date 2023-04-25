@@ -1,23 +1,4 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  getContextAuthDataAction,
-  getUserPreferencesAction,
-} from "../../redux/actions/authActions";
-
-const PrimaryDevicesLocations = () => {
-  const dispatch = useDispatch();
-  const contextAuthData = useSelector((state) => state.auth?.contextAuthData);
-  const userPreferences = useSelector((state) => state.auth?.userPreferences);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(getUserPreferencesAction());
-      await dispatch(getContextAuthDataAction());
-    };
-    fetchData();
-  }, [dispatch]);
-
+const PrimaryDevicesLocations = ({ contextAuthData, userPreferences }) => {
   const primaryDevice = {
     "First Added": contextAuthData?.firstAdded,
     "IP Address": contextAuthData?.ip,

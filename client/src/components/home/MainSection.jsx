@@ -1,7 +1,8 @@
-import React, { memo, useMemo, useEffect, useState } from "react";
+import { memo, useMemo, useEffect, useState } from "react";
 import { getPostsAction } from "../../redux/actions/postActions";
 import { useSelector, useDispatch } from "react-redux";
 import Post from "../post/Post";
+import CommonLoading from "../loader/CommonLoading";
 
 const MemoizedPost = memo(Post);
 
@@ -12,8 +13,8 @@ const MainSection = () => {
   const posts = useSelector((state) => state.posts?.posts);
   const totalPosts = useSelector((state) => state.posts?.totalPosts);
   const userData = useSelector((state) => state.auth?.userData);
-
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+
   const LIMIT = 10;
 
   useEffect(() => {
@@ -38,13 +39,21 @@ const MainSection = () => {
   return (
     <div className="w-6/12 px-10 py-5">
       {postError && <div className="text-red-500">{postError}</div>}
-      <div>{memoizedPosts}</div>
-      {isLoading && <div>Loading...</div>}
+
+      {isLoading ? (
+        <div className="flex justify-center h-screen items-center">
+          <CommonLoading />
+        </div>
+      ) : (
+        <div>{memoizedPosts}</div>
+      )}
+
       {!isLoading && posts.length > 0 && posts.length < totalPosts && (
         <div className="flex justify-center">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleLoadMore}
+            disabled={isLoadMoreLoading}
           >
             {isLoadMoreLoading ? "Loading..." : "Load More"}
           </button>

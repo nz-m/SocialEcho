@@ -17,7 +17,6 @@ import LoginVerified from "./pages/LoginVerified";
 import CommunityRightBar from "./components/community/RightBar";
 import RightBar from "./components/common/RightBar";
 
-/****************  Lazy Loading  ***************/
 const Moderator = lazy(() => import("./pages/Moderator"));
 const PostPage = lazy(() => import("./pages/PostPage"));
 const SelfPostPage = lazy(() => import("./pages/SelfPostPage"));

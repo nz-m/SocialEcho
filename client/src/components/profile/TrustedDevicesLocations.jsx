@@ -1,31 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   getTrustedContextAuthDataAction,
-  getUserPreferencesAction,
   deleteContextAuthDataAction,
   getBlockedAuthContextDataAction,
   blockContextAuthDataAction,
 } from "../../redux/actions/authActions";
 import LoadingSpinner from "../loader/ButtonLoadingSpinner";
-import CommonLoading from "../loader/CommonLoading";
 
-const TrustedDevicesLocations = () => {
+const TrustedDevicesLocations = ({
+  trustedAuthContextData,
+  userPreferences,
+}) => {
   const [deleteLoading, setDeleteLoading] = useState({});
   const [blockLoading, setBlockLoading] = useState({});
   const dispatch = useDispatch();
-  const trustedAuthContextData = useSelector(
-    (state) => state.auth?.trustedAuthContextData
-  );
-  const userPreferences = useSelector((state) => state.auth?.userPreferences);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(getUserPreferencesAction());
-      await dispatch(getTrustedContextAuthDataAction());
-    };
-    fetchData();
-  }, [dispatch]);
 
   const handleDelete = async (contextId) => {
     setDeleteLoading((prevState) => ({
@@ -58,15 +47,6 @@ const TrustedDevicesLocations = () => {
     }));
   };
 
-  if (!trustedAuthContextData) {
-    return (
-      // <div className="flex items-center justify-center">
-      //   <CommonLoading />
-      // </div>
-      null
-    );
-  }
-
   const trustedDevices = trustedAuthContextData?.map((device) => ({
     _id: device._id,
     device: device.device,
@@ -77,72 +57,6 @@ const TrustedDevicesLocations = () => {
     operatingSystem: device.os,
     time: device.time,
   }));
-
-  // const trustedDevices = [
-  //   {
-  //     _id: "1",
-  //     device: "MacBook Pro",
-  //     deviceType: "Laptop",
-  //     ipAddress: "123df.dfasdf",
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  //   {
-  //     _id: "2",
-  //     device: "iPhone 12 Pro",
-  //     deviceType: "Mobile",
-  //     ipAddress: "192.168.0.1",
-
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  //   {
-  //     _id: "3",
-  //     device: "MacBook Pro",
-  //     deviceType: "Laptop",
-  //     ipAddress: "192.168.0.1",
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  //   {
-  //     _id: "4",
-  //     device: "MacBook Pro",
-  //     deviceType: "Laptop",
-  //     ipAddress: "192.168.0.1",
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  //   {
-  //     _id: "3",
-  //     device: "MacBook Pro",
-  //     deviceType: "Laptop",
-  //     ipAddress: "192.168.0.1",
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  //   {
-  //     _id: "4",
-  //     device: "MacBook Pro",
-  //     deviceType: "Laptop",
-  //     ipAddress: "192.168.0.1",
-  //     location: "New York, USA",
-  //     browser: "Chrome",
-  //     operatingSystem: "MacOS",
-  //     time: "March 12th, 2023 12:00 AM",
-  //   },
-  // ];
 
   return (
     <div className="max-w-3xl mx-auto mt-12">

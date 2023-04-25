@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserAction } from "../../redux/actions/userActions";
 import PostOnProfile from "../post/PostOnProfile";
 import SelfProfileCard from "./SelfProfileCard";
 import SelfInfoCard from "./SelfInfoCard";
+import CommonLoading from "../loader/CommonLoading";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -21,37 +22,42 @@ const UserProfile = () => {
     fetchUser();
   }, [dispatch, userData._id]);
 
-  const MemoizedPostOnProfile = React.memo(PostOnProfile);
+  const MemoizedPostOnProfile = memo(PostOnProfile);
 
   let postToShow = null;
 
-  if (posts) {
-    const postsWithUser = posts.map((post) => ({
-      ...post,
-      createdAt: new Date(post.createdAt).toLocaleString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      }),
-    }));
+  // if (posts) {
+  //   const postsWithUser = posts.map((post) => ({
+  //     ...post,
+  //     createdAt: new Date(post.createdAt).toLocaleString("en-US", {
+  //       month: "long",
+  //       day: "numeric",
+  //       year: "numeric",
+  //       hour: "numeric",
+  //       minute: "numeric",
+  //       hour12: true,
+  //     }),
+  //   }));
 
-    postToShow = postsWithUser
-      .reverse()
-      .map((post) => <MemoizedPostOnProfile key={post._id} post={post} />);
-  }
+  // postToShow = postsWithUser
+  //   .reverse()
+  //   .map((post) => <MemoizedPostOnProfile key={post._id} post={post} />);
+
+  postToShow = posts?.map((post) => (
+    <MemoizedPostOnProfile key={post._id} post={post} />
+  ));
 
   return (
     <>
       {loading ? (
-        <div>Loading...</div>
+        <div className="w-6/12 flex items-center justify-center h-screen">
+          <CommonLoading />
+        </div>
       ) : (
         <div className="w-6/12 px-10 py-6">
           <SelfProfileCard user={user} />
-            <SelfInfoCard user={user} />
-            
+          <SelfInfoCard user={user} />
+
           <h3 className="text-lg font-bold mb-4">Your most recent posts</h3>
 
           {postToShow?.length === 0 ? (
