@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import LeaveModal from "../modals/LeaveModal";
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import placeholder from "../../assets/placeholder.png";
+import CommonLoading from "../loader/CommonLoading";
 
 import {
   useBannerLoading,
@@ -36,11 +37,15 @@ const RightBar = () => {
   const isModeratorUpdated = useIsModeratorUpdated(isModerator);
 
   if (!communityData) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-3/12 flex justify-center h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded">
+        <CommonLoading />
+      </div>
+    );
   }
 
   return (
-    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg ">
+    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded">
       <div className="bg-white rounded-md">
         <div className="flex justify-between">
           <h2 className="text-lg font-bold mb-4">{name}</h2>

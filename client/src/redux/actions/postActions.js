@@ -62,6 +62,15 @@ export const clearPostAction = () => async (dispatch) => {
   });
 };
 
+export const clearPostsAction = () => async (dispatch) => {
+  dispatch({
+    type: types.CLEAR_POSTS,
+    meta: {
+      requiresAuth: true,
+    },
+  });
+};
+
 export const getPostsAction = (limit, skip) => async (dispatch) => {
   try {
     const { error, data } = await api.getPosts(limit, skip);

@@ -74,6 +74,7 @@ const BlockDevice = () => {
                   Cancel
                 </button>
                 <button
+                  disabled={loading}
                   onClick={handleBlock}
                   className="w-full px-4 py-2 mt-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-600 rounded-md sm:w-auto sm:mt-0 hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 focus:ring-opacity-40"
                 >

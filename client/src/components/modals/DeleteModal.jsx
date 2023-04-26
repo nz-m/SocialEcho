@@ -83,6 +83,7 @@ const DeleteModal = memo(({ showModal, postId, onClose, prevPath }) => {
                     hover:bg-red-500 
                      rounded-md py-1 px-2 text-sm font-semibold hover:text-white transition duration-300"
                     onClick={deleteHandler}
+                    disabled={loading}
                   >
                     {loading ? (
                       <LoadingSpinner loadingText="Deleting..." />

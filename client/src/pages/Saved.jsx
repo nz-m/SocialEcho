@@ -21,7 +21,7 @@ const Saved = () => {
             ))}
           </div>
         ) : (
-          <div className="text-3xl font-medium">
+          <div className="text-center text-gray-500 font-medium">
             You have not saved any posts yet.
           </div>
         )}

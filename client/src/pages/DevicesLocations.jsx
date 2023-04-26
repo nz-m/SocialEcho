@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import TrustedDevicesLocations from "../components/profile/TrustedDevicesLocations";
@@ -15,6 +15,7 @@ import {
 
 const DevicesLocations = () => {
   const dispatch = useDispatch();
+  const [dateFetched, setDateFetched] = useState(false);
 
   const userPreferences = useSelector((state) => state.auth?.userPreferences);
   const contextAuthData = useSelector((state) => state.auth?.contextAuthData);
@@ -31,17 +32,13 @@ const DevicesLocations = () => {
       await dispatch(getContextAuthDataAction());
       await dispatch(getTrustedContextAuthDataAction());
       await dispatch(getBlockedAuthContextDataAction());
+      setDateFetched(true);
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, dateFetched]);
 
-  if (
-    !userPreferences ||
-    !contextAuthData ||
-    !trustedAuthContextData ||
-    !blockedContextAuthData
-  ) {
+  if (!dateFetched) {
     return (
       <div className="w-6/12 flex items-center justify-center h-screen">
         <CommonLoading />
@@ -49,19 +46,25 @@ const DevicesLocations = () => {
     );
   }
 
+  if (!userPreferences || !contextAuthData) {
+    return (
+      <div className="w-6/12 flex justify-center h-screen">
+        Context-based authentication is diabled for your account. By enabling
+        context-based authentication, you will be able to manage your devices
+        and their locations, as well as manage your trusted and blocked devices.
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1">
-      <PrimaryDevicesLocations
-        contextAuthData={contextAuthData}
-        userPreferences={userPreferences}
-      />
+      <PrimaryDevicesLocations contextAuthData={contextAuthData} />
+
       <TrustedDevicesLocations
         trustedAuthContextData={trustedAuthContextData}
-        userPreferences={userPreferences}
       />
       <BlockedDevicesLocations
         blockedContextAuthData={blockedContextAuthData}
-        userPreferences={userPreferences}
       />
     </div>
   );

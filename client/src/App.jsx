@@ -47,7 +47,6 @@ const App = () => {
                 <Suspense fallback={<FallbackLoading />}>
                   <MainSection />
                 </Suspense>
-
                 <RightBar />
               </CommonLayout>
             }

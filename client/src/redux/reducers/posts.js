@@ -78,6 +78,13 @@ const postReducer = (state = initialState, action) => {
         comments: [],
       };
 
+    case types.CLEAR_POSTS:
+      return {
+        ...state,
+        posts: [],
+        totalPosts: 0,
+      };
+
     case types.CLEAR_COMMUNITY_POSTS:
       return {
         ...state,

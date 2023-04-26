@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getPublicUserAction,
   getPublicUsersAction,
@@ -14,13 +14,16 @@ import { CiLocationOn } from "react-icons/ci";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import { FiUsers, FiUser, FiUserMinus } from "react-icons/fi";
 import { HiOutlineDocumentText } from "react-icons/hi2";
+import CommonLoading from "../loader/CommonLoading";
 const PublicProfile = () => {
   const location = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [followLoading, setFollowLoading] = useState(false);
   const [unfollowLoading, setUnfollowLoading] = useState(false);
 
+  const userData = useSelector((state) => state.auth?.userData);
   const userProfile = useSelector((state) => state.user?.publicUserProfile);
   const isUserFollowing = useSelector((state) => state.user?.isFollowing);
   const isModerator = useSelector(
@@ -32,6 +35,12 @@ const PublicProfile = () => {
   useEffect(() => {
     dispatch(getPublicUserAction(publicUserId));
   }, [dispatch, isUserFollowing, publicUserId]);
+
+  useEffect(() => {
+    if (publicUserId === userData?._id) {
+      navigate("/profile", { replace: true });
+    }
+  }, [publicUserId, userData, navigate]);
 
   const handleUnfollow = async (publicUserId) => {
     setUnfollowLoading(true);
@@ -48,7 +57,11 @@ const PublicProfile = () => {
   };
 
   if (!userProfile) {
-    return null;
+    return (
+      <div className="w-6/12 flex justify-center items-center">
+        <CommonLoading />
+      </div>
+    );
   }
 
   const {
@@ -59,7 +72,6 @@ const PublicProfile = () => {
     role,
     interests,
     totalPosts,
-    // communities, 
     totalCommunities,
     joinedOn,
     totalFollowers,
@@ -70,11 +82,8 @@ const PublicProfile = () => {
     commonCommunities,
   } = userProfile;
 
-  if (!userProfile) {
-    return <div>Loading...</div>;
-  }
   return (
-    <div className="w-6/12 px-10 py-5 ">
+    <div className="w-6/12 px-10 py-5">
       <div className="bg-white px-6 py-6 rounded-xl shadow-2xl shadow-[#F3F8FF]">
         <div className=" flex flex-col items-center justify-center bg-white py-6">
           <div className="relative">
@@ -149,7 +158,7 @@ const PublicProfile = () => {
               <>
                 You both are members of{" "}
                 {commonCommunities?.slice(0, 2).map((c, index) => (
-                  <React.Fragment key={c._id}>
+                  <Fragment key={c._id}>
                     <Link
                       className="text-sky-700 font-bold hover:underline"
                       to={`/community/${c.name}`}
@@ -158,7 +167,7 @@ const PublicProfile = () => {
                     </Link>
                     {index === 0 && commonCommunities.length > 2 ? ", " : ""}
                     {index === 0 && commonCommunities.length > 1 ? " and " : ""}
-                  </React.Fragment>
+                  </Fragment>
                 ))}
                 {commonCommunities?.length > 2 && (
                   <span>

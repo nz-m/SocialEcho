@@ -330,6 +330,7 @@ const getAuthContextData = async (req, res) => {
 const getTrustedAuthContextData = async (req, res) => {
   try {
     const userId = getUserFromToken(req);
+
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
