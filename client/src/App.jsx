@@ -1,6 +1,8 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { getTitleFromRoute } from "./utils/docTitle";
 import CommonLayout from "./layouts/CommonLayout";
 import SelectiveLayout from "./layouts/SelectiveLayout";
 import FallbackLoading from "./components/loader/FallbackLoading";
@@ -35,9 +37,14 @@ const CommunityMainSection = lazy(() =>
 
 const App = () => {
   const user = useSelector((state) => state.auth?.userData);
+  const location = useLocation();
 
   return (
     <>
+      <Helmet>
+        <title>{getTitleFromRoute(location.pathname)}</title>
+      </Helmet>
+
       <Routes>
         <Route element={<PrivateRoute />}>
           <Route

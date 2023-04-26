@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
   addCommentAction,
   getCommentsAction,
-  getPostsAction,
+  getPostAction,
   getComPostsAction,
   getSelfPostAction,
 } from "../../redux/actions/postActions";
@@ -34,7 +34,8 @@ const CommentForm = ({ communityId }) => {
         await dispatch(getSelfPostAction(postId));
         setIsLoading(false);
         setBody("");
-        await dispatch(getPostsAction());
+
+        await dispatch(getPostAction(postId));
         await dispatch(getComPostsAction(communityId));
       } finally {
         setIsLoading(false);
@@ -44,7 +45,6 @@ const CommentForm = ({ communityId }) => {
 
   return (
     <div>
-     
       <form onSubmit={handleSubmit}>
         <div className="my-4">
           <textarea
@@ -52,25 +52,27 @@ const CommentForm = ({ communityId }) => {
             name="body"
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            required placeholder="write a comment"
+            required
+            placeholder="write a comment"
           />
         </div>
         <div className="flex justify-end">
-        <button
-          className={`${
-            isLoading ? "bg-gray-500" : "rounded-md py-1 px-2 text-sm font-semibold group transition duration-300 text-primary border border-dashed border-blue-500"
-          } hover:bg-primary  py-2 px-4 rounded hover:text-white`}
-          type="submit"
-          disabled={isLoading}
-          style={{
-            opacity: isLoading ? 0.5 : 1,
-            cursor: isLoading ? "not-allowed" : "pointer",
-          }}
-        >
-          {isLoading ? "Loading..." : "Comment"}{" "}
-        </button>
+          <button
+            className={`${
+              isLoading
+                ? "bg-gray-500"
+                : "rounded-md py-1 px-2 text-sm font-semibold group transition duration-300 text-primary border border-dashed border-blue-500"
+            } hover:bg-primary  py-2 px-4 rounded hover:text-white`}
+            type="submit"
+            disabled={isLoading}
+            style={{
+              opacity: isLoading ? 0.5 : 1,
+              cursor: isLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            {isLoading ? "Loading..." : "Comment"}{" "}
+          </button>
         </div>
-       
       </form>
     </div>
   );

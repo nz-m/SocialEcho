@@ -41,12 +41,6 @@ const communitySchema = new Schema(
         default: [],
       },
     ],
-    posts: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Post",
-      },
-    ],
 
     reportedPosts: {
       type: [
@@ -74,15 +68,6 @@ const communitySchema = new Schema(
   }
 );
 
-communitySchema.pre("remove", async function (next) {
-  try {
-    const postIds = this.posts.map((post) => post.toString());
-    await this.model("Post").deleteMany({ _id: { $in: postIds } });
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
 const Community = mongoose.model("Community", communitySchema);
 
 module.exports = Community;

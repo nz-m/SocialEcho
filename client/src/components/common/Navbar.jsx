@@ -1,12 +1,13 @@
 import { memo } from "react";
-import Logo from "../../assets/SocialEcho.svg";
+import Logo from "../../assets/SocialEcho.png";
+import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <div className="lg:px-40 mx-auto sticky top-0 left-0">
       <div className="flex justify-between items-center bg-white rounded-md px-10">
-        <div className="w-24">
+        <Link to="/" className="w-36 h-full object-contain">
           <img src={Logo} alt="logo" />
-        </div>
+        </Link>
         <div className="relative">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3">
             <svg
