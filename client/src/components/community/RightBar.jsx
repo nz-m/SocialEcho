@@ -14,6 +14,7 @@ import { HiUserGroup, HiOutlineCheckBadge } from "react-icons/hi2";
 
 const RightBar = () => {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
+
   const dispatch = useDispatch();
   const { communityName } = useParams();
 

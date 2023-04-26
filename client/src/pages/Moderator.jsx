@@ -1,4 +1,3 @@
-import React from "react";
 import MainSection from "../components/moderator/MainSection";
 import ModeratorsList from "../components/moderator/ModeratorsList";
 

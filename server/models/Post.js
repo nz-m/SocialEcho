@@ -49,11 +49,9 @@ postSchema.pre("remove", async function (next) {
   try {
     if (this.fileUrl) {
       const filename = path.basename(this.fileUrl);
-      console.log(filename);
       const deleteFilePromise = promisify(fs.unlink)(
         path.join(__dirname, "../assets/userFiles", filename)
       );
-      console.log(path.join(__dirname, "../assets/userFiles", filename));
       await deleteFilePromise;
     }
     const commentIds = this.comments.map((comment) => comment.toString());
