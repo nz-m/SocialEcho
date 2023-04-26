@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   HiOutlineArchiveBox,
   HiOutlineInformationCircle,
@@ -12,13 +12,23 @@ import CommentForm from "../form/CommentForm";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import DeleteModal from "../modals/DeleteModal";
 import { IoIosArrowBack } from "react-icons/io";
+import CommonLoading from "../loader/CommonLoading";
 const PostView = ({ post }) => {
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);
-  const { body, fileUrl, user, community, createdAt, comments, savedByCount } =
-    post;
+  const {
+    body,
+    fileUrl,
+    user,
+    community,
+    createdAt,
+    dateTime,
+    comments,
+    savedByCount,
+  } = post;
   const [isReported, setIsReported] = useState(null);
 
   const isImageFile = useMemo(() => {
@@ -30,8 +40,8 @@ const PostView = ({ post }) => {
   const communityData = useSelector((state) => state.community.communityData);
   const userId = userData._id;
   useEffect(() => {
-    dispatch(getCommunityAction(community.name));
-  }, [dispatch, community.name]);
+    dispatch(getCommunityAction(community.name)).then(() => setLoading(false));
+  }, [dispatch, community.name, loading]);
 
   useEffect(() => {
     if (communityData && userId) {
@@ -60,6 +70,15 @@ const PostView = ({ post }) => {
   const handleBack = () => {
     navigate(-1);
   };
+
+  if (loading) {
+    return (
+      <div className="w-6/12 flex items-center justify-center h-screen">
+        <CommonLoading />
+      </div>
+    );
+  }
+
   return (
     <div className="w-6/12 px-5 py-5 bg-white shadow-2xl shadow-[#F3F8FF] my-5 rounded-lg">
       <p className="border border-dashed border-primary cursor-pointer px-2 py-2 w-7 h-7 flex justify-center items-center mb-3 rounded-full">
@@ -134,6 +153,7 @@ const PostView = ({ post }) => {
             <span>
               Saved by {savedByCount} {savedByCount === 1 ? "person" : "people"}
             </span>
+            <span>{dateTime}</span>
             {isReported === null ? null : isReported ? (
               <button disabled className="flex items-center text-xl gap-1">
                 {" "}

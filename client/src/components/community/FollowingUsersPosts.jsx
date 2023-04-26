@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getFollowingUsersPostsAction } from "../../redux/actions/postActions";
+import CommonLoading from "../loader/CommonLoading";
 import Post from "../post/Post";
 
 const MemoizedPost = memo(Post);
@@ -34,7 +35,9 @@ const FollowingUsersPosts = ({ communityData }) => {
   return (
     <div className="flex-grow h-full bg-gray-100">
       {isLoading || !communityData ? (
-        <div>Loading...</div>
+        <div className="flex items-center justify-center">
+          <CommonLoading />
+        </div>
       ) : (
         <>
           {followingUsersPosts.length > 0 ? (

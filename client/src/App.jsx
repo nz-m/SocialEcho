@@ -1,82 +1,209 @@
 import React, { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
+import CommonLayout from "./layouts/CommonLayout";
+import SelectiveLayout from "./layouts/SelectiveLayout";
+import FallbackLoading from "./components/loader/FallbackLoading";
 
-const Home = lazy(() => import("./pages/Home"));
-const CommunityPage = lazy(() => import("./pages/CommunityPage"));
+import SignupForm from "./components/auth/SignupForm";
+import SignIn from "./components/auth/SignIn";
+import PrivateRoute from "./PrivateRoute";
+import ReportPost from "./components/community/ReportPost";
+import EditProfileForm from "./components/form/EditProfileForm";
+import VerifyEmail from "./pages/VerifyEmail";
+import EmailVerifiedMessage from "./pages/EmailVerifiedMessage";
+import BlockDevice from "./pages/BlockDevice";
+import LoginVerified from "./pages/LoginVerified";
+import CommunityRightBar from "./components/community/RightBar";
+import RightBar from "./components/common/RightBar";
+
 const Moderator = lazy(() => import("./pages/Moderator"));
-const SignupForm = lazy(() => import("./components/auth/SignupForm"));
-const SignIn = lazy(() => import("./components/auth/SignIn"));
-const ProfilePage = lazy(() => import("./pages/ProfilePage"));
-const PrivateRoute = lazy(() => import("./PrivateRoute"));
 const PostPage = lazy(() => import("./pages/PostPage"));
 const SelfPostPage = lazy(() => import("./pages/SelfPostPage"));
-const ReportPost = lazy(() => import("./components/community/ReportPost"));
 const ReportedPostPage = lazy(() => import("./pages/ReportedPostPage"));
 const Saved = lazy(() => import("./pages/Saved"));
-const EditProfileForm = lazy(() => import("./components/form/EditProfileForm"));
-const PublicProfilePage = lazy(() => import("./pages/PublicProfilePage"));
+const PublicProfile = lazy(() => import("./components/profile/PublicProfile"));
 const AllCommunities = lazy(() => import("./pages/AllCommunities"));
 const MyCommunities = lazy(() => import("./pages/MyCommunities"));
 const Following = lazy(() => import("./pages/Following"));
-const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
-const EmailVerifiedMessage = lazy(() => import("./pages/EmailVerifiedMessage"));
-const BlockDevice = lazy(() => import("./pages/BlockDevice"));
-const LoginVerified = lazy(() => import("./pages/LoginVerified"));
 const DevicesLocations = lazy(() => import("./pages/DevicesLocations"));
+const MainSection = lazy(() => import("./components/home/MainSection"));
+const UserProfile = lazy(() => import("./components/profile/UserProfile"));
+const CommunityMainSection = lazy(() =>
+  import("./components/community/MainSection")
+);
 
 const App = () => {
   const user = useSelector((state) => state.auth?.userData);
 
   return (
-    <div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          <Route path="/signup" element={<SignupForm />} />
+    <>
+      <Routes>
+        <Route element={<PrivateRoute />}>
           <Route
-            path="/signin"
-            element={user ? <Navigate to="/" /> : <SignIn />}
+            path="/"
+            element={
+              <CommonLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <MainSection />
+                </Suspense>
+                <RightBar />
+              </CommonLayout>
+            }
           />
-          <Route path="/auth/verify" element={<VerifyEmail />} />
-          <Route path="/email-verified" element={<EmailVerifiedMessage />} />
-          <Route path="/block-device" element={<BlockDevice />} />
-          <Route path="/verify-login" element={<LoginVerified />} />
+          <Route
+            path="/home"
+            element={
+              <CommonLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <MainSection />
+                </Suspense>
+                <RightBar />
+              </CommonLayout>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <SelectiveLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <UserProfile />
+                </Suspense>
+              </SelectiveLayout>
+            }
+          />
 
-          <Route element={<PrivateRoute />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route
-              path="/community/:communityName"
-              element={<CommunityPage />}
-            />
-            <Route
-              path="/community/:communityName/report"
-              element={<ReportPost />}
-            />
-            <Route
-              path="/community/:communityName/reported-post"
-              element={<ReportedPostPage />}
-            />
-            <Route path="/post/:postId" element={<PostPage />} />
-            <Route path="/my/post/:postId" element={<SelfPostPage />} />
+          <Route
+            path="/post/:postId"
+            element={
+              <CommonLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <PostPage />
+                </Suspense>
+              </CommonLayout>
+            }
+          />
+          <Route
+            path="/my/post/:postId"
+            element={
+              <CommonLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <SelfPostPage />
+                </Suspense>
+              </CommonLayout>
+            }
+          />
+          <Route
+            path="/community/:communityName"
+            element={
+              <CommonLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <CommunityMainSection />
+                </Suspense>
+                <CommunityRightBar />
+              </CommonLayout>
+            }
+          />
+          <Route
+            path="/community/:communityName/report"
+            element={<ReportPost />}
+          />
+          <Route
+            path="/community/:communityName/reported-post"
+            element={
+              <CommonLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <ReportedPostPage />
+                </Suspense>
+                <CommunityRightBar />
+              </CommonLayout>
+            }
+          />
 
-            <Route
-              path="/community/:communityName/moderator"
-              element={<Moderator />}
-            />
-            <Route path="/saved" element={<Saved />} />
-            <Route path="/edit-profile" element={<EditProfileForm />} />
-            <Route path="/user/:userId" element={<PublicProfilePage />} />
-            <Route path="/communities" element={<AllCommunities />} />
-            <Route path="/my-communities" element={<MyCommunities />} />
-            <Route path="/following" element={<Following />} />
-            <Route path="/devices-locations" element={<DevicesLocations />} />
-          </Route>
-          <Route path="*" element={<h1>404 Not Found</h1>} />
-        </Routes>
-      </Suspense>
-    </div>
+          <Route
+            path="/community/:communityName/moderator"
+            element={
+              <CommonLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <Moderator />
+                </Suspense>
+              </CommonLayout>
+            }
+          />
+          <Route
+            path="/saved"
+            element={
+              <SelectiveLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <Saved />
+                </Suspense>
+              </SelectiveLayout>
+            }
+          />
+          <Route path="/edit-profile" element={<EditProfileForm />} />
+          <Route
+            path="/user/:userId"
+            element={
+              <SelectiveLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <PublicProfile />
+                </Suspense>
+              </SelectiveLayout>
+            }
+          />
+          <Route
+            path="/communities"
+            element={
+              <SelectiveLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <AllCommunities />
+                </Suspense>
+              </SelectiveLayout>
+            }
+          />
+          <Route
+            path="/my-communities"
+            element={
+              <SelectiveLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <MyCommunities />
+                </Suspense>
+              </SelectiveLayout>
+            }
+          />
+          <Route
+            path="/following"
+            element={
+              <SelectiveLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <Following />
+                </Suspense>
+              </SelectiveLayout>
+            }
+          />
+          <Route
+            path="/devices-locations"
+            element={
+              <SelectiveLayout>
+                <Suspense fallback={<FallbackLoading />}>
+                  <DevicesLocations />
+                </Suspense>
+              </SelectiveLayout>
+            }
+          />
+        </Route>
+        <Route path="/signup" element={<SignupForm />} />
+        <Route
+          path="/signin"
+          element={user ? <Navigate to="/" /> : <SignIn />}
+        />
+        <Route path="/auth/verify" element={<VerifyEmail />} />
+        <Route path="/email-verified" element={<EmailVerifiedMessage />} />
+        <Route path="/block-device" element={<BlockDevice />} />
+        <Route path="/verify-login" element={<LoginVerified />} />
+        <Route path="*" element={<h1>404 Not Found</h1>} />
+      </Routes>
+    </>
   );
 };
 

@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-import Leftbar from "../components/home/LeftBar";
-import Rightbar from "../components/home/RightBar";
+import { useEffect, useState } from "react";
 import PublicProfileCard from "../components/profile/PublicProfileCard";
 import { useSelector, useDispatch } from "react-redux";
 import { getFollowingUsersAction } from "../redux/actions/userActions";
-import Navbar from "../components/home/Navbar";
+import CommonLoading from "../components/loader/CommonLoading";
 
 const Following = () => {
   const dispatch = useDispatch();
@@ -20,17 +18,20 @@ const Following = () => {
 
     fetchFollowingUsers();
   }, [dispatch]);
-  return (
-    <div className="bg-[#F6F7FA]">
-    <Navbar />
-    <div className="flex lg:px-40 mx-auto bg-[#F6F7FA]">
-      <Leftbar />
-      <div className="w-6/12 px-10 py-6">
-        <h2 className="text-xl font-bold mb-4">People you're following</h2>
+
+return (
+  <div className="w-6/12 px-10 py-6">
+    {loading ? (
+      <div className="flex items-center justify-center h-screen">
+        <CommonLoading />
+      </div>
+    ) : (
+      <>
+        <h2 className="text-xl font-bold mb-4 text-center">
+          People you're following
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
-          {loading ? (
-            <div>Loading...</div>
-          ) : followingUsers?.length > 0 ? (
+          {followingUsers?.length > 0 ? (
             followingUsers.map((user) => (
               <PublicProfileCard key={user._id} user={user} />
             ))
@@ -40,10 +41,10 @@ const Following = () => {
             </div>
           )}
         </div>
-      </div>
-      <Rightbar />
-    </div>
-    </div>
-  );
+      </>
+    )}
+  </div>
+);
+
 };
 export default Following;

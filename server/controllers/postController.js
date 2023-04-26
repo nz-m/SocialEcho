@@ -2,6 +2,7 @@ const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
 const getUserFromToken = require("../utils/getUserFromToken");
+const formatCreatedAt = require("../utils/timeConverter");
 
 const Post = require("../models/Post");
 const Community = require("../models/Community");
@@ -75,6 +76,8 @@ const getPost = async (req, res) => {
         message: "Post not found",
       });
     }
+
+    post.dateTime = formatCreatedAt(post.createdAt);
 
     post.createdAt = dayjs(post.createdAt).fromNow();
 
@@ -232,8 +235,7 @@ const getCommunityPosts = async (req, res) => {
  *
  * @param {string} req.params.id - The ID of the community to retrieve the posts for.
  * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not specified.
- * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them.
- * Defaults to 0 if not specified.
+ * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them. Defaults to 0 if not specified.
  *
  * @throws {Error} - If an error occurs while retrieving the posts.
  *
@@ -610,7 +612,12 @@ const getPublicPosts = async (req, res) => {
       .limit(10)
       .exec();
 
-    res.status(200).json(publicPosts);
+    const formattedPosts = publicPosts.map((post) => ({
+      ...post.toObject(),
+      createdAt: dayjs(post.createdAt).fromNow(),
+    }));
+
+    res.status(200).json(formattedPosts);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

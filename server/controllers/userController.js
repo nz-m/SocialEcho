@@ -5,6 +5,7 @@ const RefreshToken = require("../models/RefreshToken");
 const Post = require("../models/Post");
 const Community = require("../models/Community");
 const UserPreference = require("../models/UserPreference");
+const formatCreatedAt = require("../utils/timeConverter");
 const { logger } = require("../utils/logger");
 const { verifyContextData } = require("./authController");
 const getUserFromToken = require("../utils/getUserFromToken");
@@ -205,12 +206,15 @@ const getUser = async (req, res, next) => {
     const posts = await Post.find({ user: user._id })
       .populate("community", "name members")
       .limit(20)
-      .lean();
+      .lean()
+      .sort({ createdAt: -1 });
+
     user.posts = posts.map((post) => ({
       ...post,
       isMember: post.community?.members
         .map((member) => member.toString())
         .includes(user._id.toString()),
+      createdAt: formatCreatedAt(post.createdAt),
     }));
 
     res.status(200).json(user);

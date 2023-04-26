@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Post from "../post/Post";
 import { useSelector, useDispatch } from "react-redux";
 import { getPublicPostsAction } from "../../redux/actions/postActions";
+import CommonLoading from "../loader/CommonLoading";
 
 const PublicPost = ({ publicUserId }) => {
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,11 @@ const PublicPost = ({ publicUserId }) => {
   }, [dispatch, publicUserId]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center">
+        <CommonLoading />
+      </div>
+    );
   }
 
   return (

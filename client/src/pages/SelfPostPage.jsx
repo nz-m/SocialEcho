@@ -1,5 +1,3 @@
-import React from "react";
-import Leftbar from "../components/home/LeftBar";
 import PostView from "../components/post/PostView";
 import CommentSidebar from "../components/post/CommentSidebar";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,12 +21,10 @@ const SelfPostPage = () => {
   if (!post) return null; // add loading spinner here
 
   return (
-    <div className="flex mx-6">
-      <Leftbar />
-      <h1 className="text-2xl font-bold text-gray-700">Post</h1>
+    <>
       <PostView post={post} />
       <CommentSidebar />
-    </div>
+    </>
   );
 };
 

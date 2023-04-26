@@ -24,11 +24,11 @@
     "react-router": "^6.8.1",
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
+    "react-spinners": "^0.13.8",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
     "tw-elements": "^1.0.0-beta1",
-    "web-vitals": "^2.1.4",
-    "yup": "^1.0.2"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -7,7 +7,12 @@ const SelfInfoCard = ({ user }) => {
         <h3 className="text-lg font-medium text-gray-800">Profile Summary</h3>
         <div className="text-sm text-gray-500">
           Joined {user.duration} ago (
-          {new Date(user.createdAt).toLocaleDateString()})
+          {new Date(user.createdAt).toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
+          )
         </div>
       </div>
       <div className="flex flex-wrap items-center justify-between">

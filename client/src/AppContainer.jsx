@@ -4,7 +4,7 @@
  *
  * @component
  * @returns {JSX.Element} The rendered React component
- * 
+ *
  * @description
  * This component sets up the Redux store using `createAppStore()` and
  * checks server status using an HTTP GET request to `/check-connectivity`.
@@ -51,7 +51,11 @@ const AppContainer = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen text-bold text-2xl">
+        Loading store....
+      </div>
+    );
   }
 
   if (error) {

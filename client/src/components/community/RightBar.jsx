@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import LeaveModal from "../modals/LeaveModal";
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import placeholder from "../../assets/placeholder.png";
+import CommonLoading from "../loader/CommonLoading";
 
 import {
   useBannerLoading,
   useIsModeratorUpdated,
 } from "../../hooks/useCommunityData";
-import {HiUserGroup,HiOutlineCheckBadge} from "react-icons/hi2";
+import { HiUserGroup, HiOutlineCheckBadge } from "react-icons/hi2";
 
 const RightBar = () => {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
@@ -36,18 +37,21 @@ const RightBar = () => {
   const isModeratorUpdated = useIsModeratorUpdated(isModerator);
 
   if (!communityData) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-3/12 flex justify-center h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded">
+        <CommonLoading />
+      </div>
+    );
   }
 
   return (
-    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg ">
+    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded">
       <div className="bg-white rounded-md">
         <div className="flex justify-between">
           <h2 className="text-lg font-bold mb-4">{name}</h2>
           <div className="flex items-center gap-2 text-primary mb-4">
-            <HiUserGroup/>
-            <span className="mr-2">{members?.length || 0}   members</span>
-
+            <HiUserGroup />
+            <span className="mr-2">{members?.length || 0} members</span>
           </div>
         </div>
 
@@ -68,10 +72,9 @@ const RightBar = () => {
           />
         )}
 
-
         <h3>{description}</h3>
 
-        <div className='my-4'>
+        <div className="my-4">
           {isModerator && (
             <Link
               to={`/community/${communityName}/moderator`}
@@ -102,9 +105,10 @@ const RightBar = () => {
             <span className="font-bold">Community Guidelines:</span>
             <ul className="flex flex-col gap-2">
               {rules.map((rule) => (
-                <li key={rule._id} className='flex items-start gap-2 '>
-                  <HiOutlineCheckBadge className='text-lg flex-shrink-0 mt-1'/>
-                  {rule.rule}</li>
+                <li key={rule._id} className="flex items-start gap-2 ">
+                  <HiOutlineCheckBadge className="text-lg flex-shrink-0 mt-1" />
+                  {rule.rule}
+                </li>
               ))}
             </ul>
           </div>

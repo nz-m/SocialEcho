@@ -1,6 +1,6 @@
 import React from "react";
 
-const LoadingSpinner = ({ loadingText }) => {
+const ButtonLoadingSpinner = ({ loadingText }) => {
   return (
     <div className="flex justify-center items-center">
       <span className="mr-2">
@@ -32,4 +32,4 @@ const LoadingSpinner = ({ loadingText }) => {
   );
 };
 
-export default LoadingSpinner;
+export default ButtonLoadingSpinner;

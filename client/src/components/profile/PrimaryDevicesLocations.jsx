@@ -1,23 +1,4 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  getContextAuthDataAction,
-  getUserPreferencesAction,
-} from "../../redux/actions/authActions";
-
-const PrimaryDevicesLocations = () => {
-  const dispatch = useDispatch();
-  const contextAuthData = useSelector((state) => state.auth?.contextAuthData);
-  const userPreferences = useSelector((state) => state.auth?.userPreferences);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(getUserPreferencesAction());
-      await dispatch(getContextAuthDataAction());
-    };
-    fetchData();
-  }, [dispatch]);
-
+const PrimaryDevicesLocations = ({ contextAuthData }) => {
   const primaryDevice = {
     "First Added": contextAuthData?.firstAdded,
     "IP Address": contextAuthData?.ip,
@@ -38,22 +19,14 @@ const PrimaryDevicesLocations = () => {
         </h2>
 
         <div className="mt-6 border-t border-gray-200 pt-6">
-          {userPreferences?.enableContextBasedAuth && (
-            <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-              {Object.entries(primaryDevice).map(([key, value]) => (
-                <div key={key} className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">{key}</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
-
-          {!userPreferences?.enableContextBasedAuth && (
-            <span className="text-sm font-medium text-gray-900">
-              Context Based Authentication is disabled in your account
-            </span>
-          )}
+          <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+            {Object.entries(primaryDevice).map(([key, value]) => (
+              <div key={key} className="sm:col-span-1">
+                <dt className="text-sm font-medium text-gray-500">{key}</dt>
+                <dd className="mt-1 text-sm text-gray-900">{value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </div>

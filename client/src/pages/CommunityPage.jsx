@@ -1,8 +1,8 @@
 import React from "react";
-import Leftbar from "../components/home/LeftBar";
+import Leftbar from "../components/common/LeftBar";
 import MainSection from "../components/community/MainSection";
 import RightBar from "../components/community/RightBar";
-import Navbar from "../components/home/Navbar";
+import Navbar from "../components/common/Navbar";
 
 const CommunityPage = () => {
   return (
