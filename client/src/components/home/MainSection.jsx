@@ -62,7 +62,6 @@ const MainSection = () => {
       </div>
     );
   }
-
   return (
     <div className="w-6/12 px-10 py-5">
       {postError && <div className="text-red-500">{postError}</div>}

@@ -16,15 +16,15 @@ const ContextAuthModal = ({
               Context-Based Authentication
             </h2>
             <p className="mb-6 text-gray-600">
-              To enhance the security of your account, we would like to provide
-              context-based authentication. By opting in to this feature,
-              certain information about your device and location, including your
-              current location, device, browser info, and IP address, will be
-              securely stored in our database, and will be used to verify your
-              identity when you sign in from a new location or device. This
-              information will be encrypted and will not be shared with any
-              third party. Please note that email verification is required to
-              enable this feature. Would you like to enable this feature?
+              To enhance the security of your account, we offer context-based
+              authentication. By enabling this feature, we will process certain
+              information about your device and location, including your current
+              location, device, browser info, and IP address. This information
+              will be used to verify your identity when you sign in from a new
+              location or device, and will be encrypted and kept confidential.
+              Please note that email verification is required to enable this
+              feature. Would you like to enable context-based authentication and
+              enhance the security of your account?
             </p>
             <div className="flex justify-end">
               <button
@@ -41,7 +41,7 @@ const ContextAuthModal = ({
                   setIsConsentGiven(true);
                   handleCloseModal();
                 }}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
+                className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
               >
                 Yes, enable
               </button>

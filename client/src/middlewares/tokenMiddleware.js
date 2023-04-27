@@ -8,7 +8,6 @@ export const tokenMiddleware = (store) => (next) => async (action) => {
     if (token) {
       const expiresIn = jwt_decode(token).exp * 1000 - Date.now();
       if (expiresIn < 300000) {
-        // if token expires in less than 5 mins (300000ms)
         const refreshToken = state.auth.refreshToken;
         try {
           await store.dispatch(refreshTokenAction(refreshToken));
@@ -18,12 +17,10 @@ export const tokenMiddleware = (store) => (next) => async (action) => {
           }
         } catch (error) {
           store.dispatch({ type: "LOGOUT" });
-          window.location.href = "/signin";
         }
       }
     } else {
       store.dispatch({ type: "LOGOUT" });
-      window.location.href = "/signin";
     }
   }
   return next(action);
