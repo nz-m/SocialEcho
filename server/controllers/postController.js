@@ -147,7 +147,11 @@ const getPosts = async (req, res) => {
       createdAt: dayjs(post.createdAt).fromNow(),
     }));
 
-    const totalPosts = await Post.countDocuments();
+    const totalPosts = await Post.countDocuments({
+      community: {
+        $in: communityIds,
+      },
+    });
 
     res.status(200).json({
       formattedPosts,
