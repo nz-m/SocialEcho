@@ -81,11 +81,9 @@ const getPost = async (req, res) => {
 
     post.createdAt = dayjs(post.createdAt).fromNow();
 
-    const savedByCount = await User.countDocuments({
+    post.savedByCount = await User.countDocuments({
       savedPosts: id,
     });
-
-    post.savedByCount = savedByCount;
 
     res.status(200).json(post);
   } catch (error) {
@@ -253,6 +251,7 @@ const getFollowingUsersPosts = async (req, res) => {
     const following = await Relationship.find({
       follower: userId,
     });
+
     const followingIds = following.map(
       (relationship) => relationship.following
     );
@@ -300,7 +299,6 @@ const deletePost = async (req, res) => {
   try {
     const id = req.params.id;
     const post = await Post.findById(id);
-    if (!post) throw new Error("Post not found");
     await post.remove();
     res.status(200).json({
       message: "Post deleted successfully",

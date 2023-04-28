@@ -26,11 +26,11 @@ const getCurrentContextData = (req) => {
   const isTablet = req.useragent.isTablet || false;
 
   const deviceType = isMobile
-    ? "mobile"
+    ? "Mobile"
     : isDesktop
-    ? "desktop"
+    ? "Desktop"
     : isTablet
-    ? "tablet"
+    ? "Tablet"
     : "unknown";
 
   return {
@@ -262,11 +262,11 @@ const addContextData = async (req, res) => {
   const isTablet = req.useragent.isTablet || false;
 
   const deviceType = isMobile
-    ? "mobile"
+    ? "Mobile"
     : isDesktop
-    ? "desktop"
+    ? "Desktop"
     : isTablet
-    ? "tablet"
+    ? "Tablet"
     : "unknown";
 
   const newUserContext = new UserContext({
