@@ -88,7 +88,7 @@ const RightBar = () => {
   const currentLocation = window.location.pathname;
 
   return (
-    <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded">
+    <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded z-10">
       {currentLocation !== "/communities" && (
         <div className="">
           <div className="flex items-end justify-between mb-4">

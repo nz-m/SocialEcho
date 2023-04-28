@@ -5,8 +5,8 @@ const fileUpload = require("../middlewares/post/fileUpload");
 const passport = require("passport");
 const requireAuth = passport.authenticate("jwt", { session: false });
 
+router.get("/search-post", postController.searchPosts);
 router.use(requireAuth);
-
 router.get("/:publicUserId/userPosts", postController.getPublicPosts);
 router.get("/saved", postController.getSavedPosts);
 router.get("/:id/following", postController.getFollowingUsersPosts);

@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const RefreshToken = require("../models/RefreshToken");
+const Token = require("../models/Token");
 const Post = require("../models/Post");
 const Community = require("../models/Community");
 const UserPreference = require("../models/UserPreference");
@@ -118,7 +118,7 @@ const signin = async (req, res, next) => {
       expiresIn: "7d",
     });
 
-    const newRefreshToken = new RefreshToken({
+    const newRefreshToken = new Token({
       user: existingUser._id,
       refreshToken,
       accessToken,
@@ -269,6 +269,7 @@ const addUser = async (req, res, next) => {
     if (newUser.isNew) {
       throw new Error("Failed to add user");
     }
+
     if (req.body.isConsentGiven === "false") {
       res.status(201).json({
         message: "User added successfully",
@@ -287,7 +288,7 @@ const logout = async (req, res) => {
   try {
     const accessToken = req.headers.authorization?.split(" ")[1] ?? null;
     if (accessToken) {
-      await RefreshToken.deleteOne({ accessToken });
+      await Token.deleteOne({ accessToken });
       logger.info(`User with access token ${accessToken} has logged out`);
     }
     return res.status(200).json({
@@ -304,7 +305,7 @@ const logout = async (req, res) => {
 const refreshToken = async (req, res) => {
   try {
     const { refreshToken } = req.body;
-    const existingToken = await RefreshToken.findOne({
+    const existingToken = await Token.findOne({
       refreshToken,
     });
     if (!existingToken) {

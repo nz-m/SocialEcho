@@ -15,7 +15,6 @@ const postSchema = new Schema(
       type: String,
       trim: true,
     },
-
     community: {
       type: Schema.Types.ObjectId,
       ref: "Community",
@@ -32,7 +31,6 @@ const postSchema = new Schema(
         ref: "Comment",
       },
     ],
-
     likes: [
       {
         type: Schema.Types.ObjectId,
@@ -44,6 +42,8 @@ const postSchema = new Schema(
     timestamps: true,
   }
 );
+
+postSchema.index({ body: "text" });
 
 postSchema.pre("remove", async function (next) {
   try {

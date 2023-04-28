@@ -625,6 +625,37 @@ const getPublicPosts = async (req, res) => {
   }
 };
 
+const searchPosts = async (req, res) => {
+  try {
+    // const userId = getUserFromToken(req);
+    // if (!userId) {
+    //   return res.status(401).json({
+    //     message: "Unauthorized",
+    //   });
+    // }
+    const searchQuery = req.query.q;
+    // const communities = await Community.find({ members: userId }).distinct(
+    //   "_id"
+    // );
+    // const posts = await Post.find({
+    //   community: { $in: communities },
+    //   $text: { $search: searchQuery },
+    // })
+
+    const posts = await Post.find({
+      $text: { $search: searchQuery },
+    })
+      .select("_id body community user createdAt")
+      .populate("user", "name avatar")
+      .populate("community", "name")
+      .lean();
+
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred" });
+  }
+};
+
 module.exports = {
   getPost,
   getPosts,
@@ -640,4 +671,5 @@ module.exports = {
   getSavedPosts,
   getPublicPosts,
   getFollowingUsersPosts,
+  searchPosts,
 };
