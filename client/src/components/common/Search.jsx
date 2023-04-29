@@ -12,13 +12,18 @@ const Search = () => {
   const [inputValue, setInputValue] = useState("");
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [community, setCommunity] = useState([]);
+  const [joinedCommunity, setJoinedCommunity] = useState([]);
   const [loading, setLoading] = useState(false);
   const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
   const setInitialValue = () => {
     setUsers([]);
     setPosts([]);
+    setCommunity([]);
+    setJoinedCommunity([]);
     setLoading(false);
   };
+
   const debouncedHandleSearch = useMemo(
     () =>
       debounce((q) => {
@@ -32,9 +37,11 @@ const Search = () => {
             },
           })
           .then((res) => {
-            const { posts, users } = res.data;
+            const { posts, users, community, joinedCommunity } = res.data;
             setPosts(posts);
             setUsers(users);
+            setCommunity(community);
+            setJoinedCommunity(joinedCommunity);
             setLoading(false);
           })
           .catch((err) => {
@@ -66,6 +73,7 @@ const Search = () => {
       setInitialValue();
     };
   }, []);
+
   return (
     <div className="relative">
       <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -160,6 +168,55 @@ const Search = () => {
               ))}
             </ul>
           )}
+
+          {community.length !== 0 &&
+            joinedCommunity.map((community) => (
+              <span key={community._id} className="border-b py-2 px-4">
+                {/*<Link*/}
+                {/*  to={`/community/${community.name}`}*/}
+                {/*  className="block text-sm text-black hover:text-indigo-500"*/}
+                {/*>*/}
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <img
+                      src={community.banner}
+                      alt={community.name}
+                      className="h-8 w-8 rounded-full"
+                    />
+                  </div>
+                  <div className="ml-3">
+                    <p className="font-medium">{community.name}</p>
+                    <p className="text-sm">{community.description}</p>
+                  </div>
+                </div>
+                {/*</Link>*/}
+              </span>
+            ))}
+
+          {joinedCommunity.length > 0 &&
+            joinedCommunity.map((community) => (
+              <Link
+                key={community._id}
+                to={`/community/${joinedCommunity.name}`}
+                className="block text-sm text-gray-700 hover:text-indigo-500 border-b py-2 px-4"
+              >
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <img
+                      src={joinedCommunity.banner}
+                      alt={joinedCommunity.name}
+                      className="h-8 w-8 rounded-full"
+                    />
+                  </div>
+                  <div className="ml-3">
+                    <p className="font-medium">{joinedCommunity.name}</p>
+                    <p className="text-sm text-gray-600">
+                      {joinedCommunity.description}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
         </div>
       )}
     </div>

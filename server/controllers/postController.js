@@ -9,6 +9,7 @@ const Community = require("../models/Community");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
 const Relationship = require("../models/Relationship");
+const mongoose = require("mongoose");
 
 const createPost = async (req, res) => {
   try {
@@ -658,7 +659,17 @@ const search = async (req, res) => {
       post.body = post.body.substring(0, 25);
     });
 
-    res.status(200).json({ posts, users });
+    const joinedCommunity = await Community.find({
+      $text: { $search: searchQuery },
+      members: { $in: userId },
+    }).select("_id name description banner");
+
+    const community = await Community.find({
+      $text: { $search: searchQuery },
+      members: { $nin: userId },
+    }).select("_id name description banner");
+
+    res.status(200).json({ posts, users, community, joinedCommunity });
   } catch (error) {
     res.status(500).json({ message: "An error occurred" });
   }
