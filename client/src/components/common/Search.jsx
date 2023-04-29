@@ -99,7 +99,10 @@ const Search = () => {
       />
 
       {inputValue !== "" && (
-        <div className="absolute z-30 w-full rounded mt-1 border shadow">
+        <div
+          onBlur={clearValues}
+          className="absolute z-30 w-full rounded mt-1 border shadow "
+        >
           {loading && (
             <div className="flex items-center justify-center">
               <MoonLoader size={20} color={"#008cff"} />
