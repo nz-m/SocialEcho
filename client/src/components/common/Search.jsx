@@ -5,6 +5,7 @@ import debounce from "lodash/debounce";
 import { MoonLoader } from "react-spinners";
 import { BsSearch } from "react-icons/bs";
 import { MdClear } from "react-icons/md";
+import JoinModal from "../modals/JoinModal";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -12,15 +13,15 @@ const Search = () => {
   const [inputValue, setInputValue] = useState("");
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
-  const [community, setCommunity] = useState([]);
-  const [joinedCommunity, setJoinedCommunity] = useState([]);
+  const [community, setCommunity] = useState(null);
+  const [joinedCommunity, setJoinedCommunity] = useState(null);
   const [loading, setLoading] = useState(false);
   const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
   const setInitialValue = () => {
     setUsers([]);
     setPosts([]);
-    setCommunity([]);
-    setJoinedCommunity([]);
+    setCommunity(null);
+    setJoinedCommunity(null);
     setLoading(false);
   };
 
@@ -74,6 +75,11 @@ const Search = () => {
     };
   }, []);
 
+  const [joinModalVisibility, setJoinModalVisibility] = useState(false);
+  const toggleModal = () => {
+    setJoinModalVisibility((prev) => !prev);
+  };
+
   return (
     <div className="relative">
       <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -100,8 +106,8 @@ const Search = () => {
 
       {inputValue !== "" && (
         <div
-          onBlur={clearValues}
-          className="absolute z-30 w-full rounded mt-1 border shadow "
+          onBlur={() => !community && clearValues()}
+          className="absolute z-30 w-full rounded mt-1 border shadow"
         >
           {loading && (
             <div className="flex items-center justify-center">
@@ -142,7 +148,7 @@ const Search = () => {
             </ul>
           )}
           {users.length > 0 && (
-            <ul>
+            <ul onClick={() => setUsers([])}>
               {users.map((user) => (
                 <li key={user._id} className="border-b py-2 px-4">
                   <Link
@@ -171,55 +177,61 @@ const Search = () => {
               ))}
             </ul>
           )}
+          {community && (
+            <div className="border-b py-2 px-4">
+              {!community.isMember && (
+                <>
+                  <JoinModal
+                    show={joinModalVisibility}
+                    onClose={() => {
+                      toggleModal(false);
+                      setCommunity(null);
+                    }}
+                    community={community}
+                  />
+                  <button onClick={() => toggleModal(true)}>Join</button>
+                </>
+              )}
 
-          {community.length !== 0 &&
-            joinedCommunity.map((community) => (
-              <span key={community._id} className="border-b py-2 px-4">
-                {/*<Link*/}
-                {/*  to={`/community/${community.name}`}*/}
-                {/*  className="block text-sm text-black hover:text-indigo-500"*/}
-                {/*>*/}
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <img
-                      src={community.banner}
-                      alt={community.name}
-                      className="h-8 w-8 rounded-full"
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <p className="font-medium">{community.name}</p>
-                    <p className="text-sm">{community.description}</p>
-                  </div>
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <img
+                    src={community.banner}
+                    alt={community.name}
+                    className="h-8 w-8 rounded-full"
+                  />
                 </div>
-                {/*</Link>*/}
-              </span>
-            ))}
+                <div className="ml-3">
+                  <p className="font-medium">{community.name}</p>
+                  <p className="text-sm">{community.description}</p>
+                </div>
+              </div>
+            </div>
+          )}
 
-          {joinedCommunity.length > 0 &&
-            joinedCommunity.map((community) => (
-              <Link
-                key={community._id}
-                to={`/community/${joinedCommunity.name}`}
-                className="block text-sm text-gray-700 hover:text-indigo-500 border-b py-2 px-4"
-              >
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <img
-                      src={joinedCommunity.banner}
-                      alt={joinedCommunity.name}
-                      className="h-8 w-8 rounded-full"
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <p className="font-medium">{joinedCommunity.name}</p>
-                    <p className="text-sm text-gray-600">
-                      {joinedCommunity.description}
-                    </p>
-                  </div>
+          {joinedCommunity && (
+            <Link
+              key={joinedCommunity._id}
+              to={`/community/${joinedCommunity.name}`}
+              className="block text-sm text-gray-700 hover:text-indigo-500 border-b py-2 px-4"
+            >
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <img
+                    src={joinedCommunity.banner}
+                    alt={joinedCommunity.name}
+                    className="h-8 w-8 rounded-full"
+                  />
                 </div>
-              </Link>
-            ))}
+                <div className="ml-3">
+                  <p className="font-medium">{joinedCommunity.name}</p>
+                  <p className="text-sm text-gray-600">
+                    {joinedCommunity.description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          )}
         </div>
       )}
     </div>
