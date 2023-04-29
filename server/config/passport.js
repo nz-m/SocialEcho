@@ -1,6 +1,6 @@
 require("dotenv").config();
 const User = require("../models/User");
-const RefreshToken = require("../models/RefreshToken");
+const Token = require("../models/Token");
 const JwtStrategy = require("passport-jwt").Strategy,
   ExtractJwt = require("passport-jwt").ExtractJwt;
 const passport = require("passport");
@@ -15,13 +15,12 @@ passport.use(
       const user = await User.findOne({ email: jwt_payload.email });
 
       if (user) {
-        const refreshTokenFromDB = await RefreshToken.findOne({
+        const refreshTokenFromDB = await Token.findOne({
           user: user._id,
         });
         if (!refreshTokenFromDB) {
           return done(null, false);
         }
-        // Verify the refresh token
         const refreshPayload = jwt.verify(
           refreshTokenFromDB.refreshToken,
           process.env.REFRESH_SECRET

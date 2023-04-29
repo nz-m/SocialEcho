@@ -46,6 +46,16 @@ const App = () => {
       </Helmet>
 
       <Routes>
+        <Route path="/signup" element={<SignupForm />} />
+        <Route
+          path="/signin"
+          element={user ? <Navigate to="/" /> : <SignIn />}
+        />
+        <Route path="/auth/verify" element={<VerifyEmail />} />
+        <Route path="/email-verified" element={<EmailVerifiedMessage />} />
+        <Route path="/block-device" element={<BlockDevice />} />
+        <Route path="/verify-login" element={<LoginVerified />} />
+        <Route path="*" element={<h1>404 Not Found</h1>} />
         <Route element={<PrivateRoute />}>
           <Route
             path="/"
@@ -199,16 +209,6 @@ const App = () => {
             }
           />
         </Route>
-        <Route path="/signup" element={<SignupForm />} />
-        <Route
-          path="/signin"
-          element={user ? <Navigate to="/" /> : <SignIn />}
-        />
-        <Route path="/auth/verify" element={<VerifyEmail />} />
-        <Route path="/email-verified" element={<EmailVerifiedMessage />} />
-        <Route path="/block-device" element={<BlockDevice />} />
-        <Route path="/verify-login" element={<LoginVerified />} />
-        <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
     </>
   );

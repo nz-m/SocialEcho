@@ -81,11 +81,9 @@ const getPost = async (req, res) => {
 
     post.createdAt = dayjs(post.createdAt).fromNow();
 
-    const savedByCount = await User.countDocuments({
+    post.savedByCount = await User.countDocuments({
       savedPosts: id,
     });
-
-    post.savedByCount = savedByCount;
 
     res.status(200).json(post);
   } catch (error) {
@@ -253,6 +251,7 @@ const getFollowingUsersPosts = async (req, res) => {
     const following = await Relationship.find({
       follower: userId,
     });
+
     const followingIds = following.map(
       (relationship) => relationship.following
     );
@@ -300,7 +299,6 @@ const deletePost = async (req, res) => {
   try {
     const id = req.params.id;
     const post = await Post.findById(id);
-    if (!post) throw new Error("Post not found");
     await post.remove();
     res.status(200).json({
       message: "Post deleted successfully",
@@ -627,6 +625,45 @@ const getPublicPosts = async (req, res) => {
   }
 };
 
+const search = async (req, res) => {
+  try {
+    const userId = getUserFromToken(req);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+    const searchQuery = req.query.q;
+    const communities = await Community.find({ members: userId }).distinct(
+      "_id"
+    );
+    const users = await User.find(
+      { $text: { $search: searchQuery } },
+      { score: { $meta: "textScore" } }
+    )
+      .select("_id name email avatar")
+      .sort({ score: { $meta: "textScore" } })
+      .lean();
+
+    const posts = await Post.find({
+      community: { $in: communities },
+      $text: { $search: searchQuery },
+    })
+      .select("_id body community user createdAt")
+      .populate("user", "name avatar")
+      .populate("community", "name")
+      .lean();
+
+    posts.forEach((post) => {
+      post.body = post.body.substring(0, 25);
+    });
+
+    res.status(200).json({ posts, users });
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred" });
+  }
+};
+
 module.exports = {
   getPost,
   getPosts,
@@ -642,4 +679,5 @@ module.exports = {
   getSavedPosts,
   getPublicPosts,
   getFollowingUsersPosts,
+  search,
 };

@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const RefreshToken = require("../models/RefreshToken");
+const Token = require("../models/Token");
 const Post = require("../models/Post");
 const Community = require("../models/Community");
 const UserPreference = require("../models/UserPreference");
@@ -51,7 +51,7 @@ const signin = async (req, res, next) => {
         logger.error("User device is blocked");
         return res.status(401).json({
           message:
-            "Your device has been blocked due to suspicious login activity. Please contact support for assistance.",
+            "You've been blocked due to suspicious login activity. Please contact support for assistance.",
         });
       }
 
@@ -71,7 +71,7 @@ const signin = async (req, res, next) => {
         );
 
         return res.status(401).json({
-          message: `This account has been temporarily blocked due to suspicious login activity. We have already sent a verification email to your registered email address. 
+          message: `You've temporarily been blocked due to suspicious login activity. We have already sent a verification email to your registered email address. 
           Please follow the instructions in the email to verify your identity and gain access to your account.
 
           Please note that repeated attempts to log in without verifying your identity will result in this device being permanently blocked from accessing your account.
@@ -118,7 +118,7 @@ const signin = async (req, res, next) => {
       expiresIn: "7d",
     });
 
-    const newRefreshToken = new RefreshToken({
+    const newRefreshToken = new Token({
       user: existingUser._id,
       refreshToken,
       accessToken,
@@ -269,6 +269,7 @@ const addUser = async (req, res, next) => {
     if (newUser.isNew) {
       throw new Error("Failed to add user");
     }
+
     if (req.body.isConsentGiven === "false") {
       res.status(201).json({
         message: "User added successfully",
@@ -287,7 +288,7 @@ const logout = async (req, res) => {
   try {
     const accessToken = req.headers.authorization?.split(" ")[1] ?? null;
     if (accessToken) {
-      await RefreshToken.deleteOne({ accessToken });
+      await Token.deleteOne({ accessToken });
       logger.info(`User with access token ${accessToken} has logged out`);
     }
     return res.status(200).json({
@@ -304,7 +305,7 @@ const logout = async (req, res) => {
 const refreshToken = async (req, res) => {
   try {
     const { refreshToken } = req.body;
-    const existingToken = await RefreshToken.findOne({
+    const existingToken = await Token.findOne({
       refreshToken,
     });
     if (!existingToken) {

@@ -8,6 +8,7 @@ const requireAuth = passport.authenticate("jwt", { session: false });
 router.use(requireAuth);
 
 router.get("/:publicUserId/userPosts", postController.getPublicPosts);
+router.get("/search", postController.search);
 router.get("/saved", postController.getSavedPosts);
 router.get("/:id/following", postController.getFollowingUsersPosts);
 router.patch("/:id/save", postController.savePost);
