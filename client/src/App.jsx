@@ -3,10 +3,8 @@ import { useSelector } from "react-redux";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { getTitleFromRoute } from "./utils/docTitle";
-import CommonLayout from "./layouts/CommonLayout";
-import SelectiveLayout from "./layouts/SelectiveLayout";
-import FallbackLoading from "./components/loader/FallbackLoading";
 
+import FallbackLoading from "./components/loader/FallbackLoading";
 import SignupForm from "./components/auth/SignupForm";
 import SignIn from "./components/auth/SignIn";
 import PrivateRoute from "./PrivateRoute";
@@ -35,6 +33,19 @@ const CommunityMainSection = lazy(() =>
   import("./components/community/MainSection")
 );
 
+const WithSuspense = ({ component: Component }) => (
+  <Suspense fallback={<FallbackLoading />}>
+    <Component />
+  </Suspense>
+);
+
+const WithRightBarAndSuspense = ({ component: Component }) => (
+  <>
+    <WithSuspense component={Component} />
+    <RightBar />
+  </>
+);
+
 const App = () => {
   const user = useSelector((state) => state.auth?.userData);
   const location = useLocation();
@@ -46,6 +57,82 @@ const App = () => {
       </Helmet>
 
       <Routes>
+        <Route element={<PrivateRoute />}>
+          <Route
+            path="/"
+            element={<WithRightBarAndSuspense component={MainSection} />}
+          />
+          <Route
+            path="/home"
+            element={<WithRightBarAndSuspense component={MainSection} />}
+          />
+          <Route
+            path="/profile"
+            element={<WithRightBarAndSuspense component={UserProfile} />}
+          />
+
+          <Route
+            path="/post/:postId"
+            element={<WithSuspense component={PostPage} />}
+          />
+          <Route
+            path="/my/post/:postId"
+            element={<WithSuspense component={SelfPostPage} />}
+          />
+          <Route
+            path="/community/:communityName"
+            element={
+              <>
+                <WithSuspense component={CommunityMainSection} />
+                <CommunityRightBar />
+              </>
+            }
+          />
+          <Route
+            path="/community/:communityName/report"
+            element={<ReportPost />}
+          />
+          <Route
+            path="/community/:communityName/reported-post"
+            element={
+              <>
+                <WithSuspense component={ReportedPostPage} />
+                <CommunityRightBar />
+              </>
+            }
+          />
+
+          <Route
+            path="/community/:communityName/moderator"
+            element={<WithSuspense component={Moderator} />}
+          />
+          <Route
+            path="/saved"
+            element={<WithRightBarAndSuspense component={Saved} />}
+          />
+          <Route path="/edit-profile" element={<EditProfileForm />} />
+          <Route
+            path="/user/:userId"
+            element={<WithRightBarAndSuspense component={PublicProfile} />}
+          />
+          <Route
+            path="/communities"
+            element={<WithRightBarAndSuspense component={AllCommunities} />}
+          />
+          <Route
+            path="/my-communities"
+            element={<WithRightBarAndSuspense component={MyCommunities} />}
+          />
+          <Route
+            path="/following"
+            element={<WithRightBarAndSuspense component={Following} />}
+          />
+          <Route
+            path="/devices-locations"
+            element={<WithRightBarAndSuspense component={DevicesLocations} />}
+          />
+        </Route>
+
         <Route path="/signup" element={<SignupForm />} />
         <Route
           path="/signin"
@@ -56,159 +143,6 @@ const App = () => {
         <Route path="/block-device" element={<BlockDevice />} />
         <Route path="/verify-login" element={<LoginVerified />} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
-        <Route element={<PrivateRoute />}>
-          <Route
-            path="/"
-            element={
-              <CommonLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <MainSection />
-                </Suspense>
-                <RightBar />
-              </CommonLayout>
-            }
-          />
-          <Route
-            path="/home"
-            element={
-              <CommonLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <MainSection />
-                </Suspense>
-                <RightBar />
-              </CommonLayout>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <SelectiveLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <UserProfile />
-                </Suspense>
-              </SelectiveLayout>
-            }
-          />
-
-          <Route
-            path="/post/:postId"
-            element={
-              <CommonLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <PostPage />
-                </Suspense>
-              </CommonLayout>
-            }
-          />
-          <Route
-            path="/my/post/:postId"
-            element={
-              <CommonLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <SelfPostPage />
-                </Suspense>
-              </CommonLayout>
-            }
-          />
-          <Route
-            path="/community/:communityName"
-            element={
-              <CommonLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <CommunityMainSection />
-                </Suspense>
-                <CommunityRightBar />
-              </CommonLayout>
-            }
-          />
-          <Route
-            path="/community/:communityName/report"
-            element={<ReportPost />}
-          />
-          <Route
-            path="/community/:communityName/reported-post"
-            element={
-              <CommonLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <ReportedPostPage />
-                </Suspense>
-                <CommunityRightBar />
-              </CommonLayout>
-            }
-          />
-
-          <Route
-            path="/community/:communityName/moderator"
-            element={
-              <CommonLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <Moderator />
-                </Suspense>
-              </CommonLayout>
-            }
-          />
-          <Route
-            path="/saved"
-            element={
-              <SelectiveLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <Saved />
-                </Suspense>
-              </SelectiveLayout>
-            }
-          />
-          <Route path="/edit-profile" element={<EditProfileForm />} />
-          <Route
-            path="/user/:userId"
-            element={
-              <SelectiveLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <PublicProfile />
-                </Suspense>
-              </SelectiveLayout>
-            }
-          />
-          <Route
-            path="/communities"
-            element={
-              <SelectiveLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <AllCommunities />
-                </Suspense>
-              </SelectiveLayout>
-            }
-          />
-          <Route
-            path="/my-communities"
-            element={
-              <SelectiveLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <MyCommunities />
-                </Suspense>
-              </SelectiveLayout>
-            }
-          />
-          <Route
-            path="/following"
-            element={
-              <SelectiveLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <Following />
-                </Suspense>
-              </SelectiveLayout>
-            }
-          />
-          <Route
-            path="/devices-locations"
-            element={
-              <SelectiveLayout>
-                <Suspense fallback={<FallbackLoading />}>
-                  <DevicesLocations />
-                </Suspense>
-              </SelectiveLayout>
-            }
-          />
-        </Route>
       </Routes>
     </>
   );

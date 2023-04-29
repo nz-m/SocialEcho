@@ -10,7 +10,6 @@ const Navbar = () => {
         <Link to="/" className="w-36 h-full object-contain">
           <img src={Logo} alt="logo" />
         </Link>
-
         <Search />
       </div>
     </div>

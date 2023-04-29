@@ -7,7 +7,7 @@ import { joinCommunityAndFetchData } from "../../redux/actions/communityActions"
 import { IoIosPeople } from "react-icons/io";
 import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 
-const JoinModal = memo(({ show, onClose, community, setIsJoined }) => {
+const JoinModal = memo(({ show, onClose, community }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
