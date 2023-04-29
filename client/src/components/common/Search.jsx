@@ -104,7 +104,7 @@ const Search = () => {
           className="absolute z-30 w-full rounded mt-1 border shadow "
         >
           {loading && (
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center py-2 px-2">
               <MoonLoader size={20} color={"#008cff"} />
               <span className="ml-2">Searching...</span>
             </div>
