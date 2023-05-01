@@ -1,7 +1,7 @@
 const readline = require("readline");
 const mongoose = require("mongoose");
-const User = require("../models/User");
-const Community = require("../models/Community");
+const User = require("../models/user.model");
+const Community = require("../models/community.model");
 const kleur = require("kleur");
 const LOG = console.log;
 
@@ -11,13 +11,10 @@ const rl = readline.createInterface({
 });
 mongoose.set("strictQuery", false);
 mongoose
-  .connect(
-    "mongodb://127.0.0.1:27017/db_socialecho",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect("mongodb://127.0.0.1:27017/db_socialecho", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     LOG(kleur.green().bold("✅ Connected to MongoDB"));
     start();

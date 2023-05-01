@@ -70,6 +70,4 @@ const communitySchema = new Schema(
 
 communitySchema.index({ name: "text" });
 
-const Community = mongoose.model("Community", communitySchema);
-
-module.exports = Community;
+module.exports = mongoose.model("Community", communitySchema);

@@ -1,16 +1,16 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
+const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
-const Token = require("../models/Token");
-const Post = require("../models/Post");
-const Community = require("../models/Community");
-const UserPreference = require("../models/UserPreference");
+const Token = require("../models/token.model");
+const Post = require("../models/post.model");
+const Community = require("../models/community.model");
+const UserPreference = require("../models/preference.model");
 const formatCreatedAt = require("../utils/timeConverter");
-const { verifyContextData } = require("./authController");
+const { verifyContextData } = require("./auth.controller");
 const getUserFromToken = require("../utils/getUserFromToken");
 const { saveLogInfo } = require("../middlewares/logger/logInfo");
-const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
+const dayjs = require("dayjs");
 dayjs.extend(duration);
 
 const TYPE = {

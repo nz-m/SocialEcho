@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const postController = require("../controllers/postController");
+const postController = require("../controllers/post.controller");
 const fileUpload = require("../middlewares/post/fileUpload");
 const passport = require("passport");
 const requireAuth = passport.authenticate("jwt", { session: false });

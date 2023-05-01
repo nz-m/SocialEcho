@@ -1,4 +1,4 @@
-const Log = require("../../models/Log");
+const Log = require("../../models/log.model");
 const getCurrentContextData = require("../../utils/contextData");
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");

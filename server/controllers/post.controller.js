@@ -4,11 +4,11 @@ dayjs.extend(relativeTime);
 const getUserFromToken = require("../utils/getUserFromToken");
 const formatCreatedAt = require("../utils/timeConverter");
 
-const Post = require("../models/Post");
-const Community = require("../models/Community");
-const Comment = require("../models/Comment");
-const User = require("../models/User");
-const Relationship = require("../models/Relationship");
+const Post = require("../models/post.model");
+const Community = require("../models/community.model");
+const Comment = require("../models/comment.model");
+const User = require("../models/user.model");
+const Relationship = require("../models/relationship.model");
 
 const createPost = async (req, res) => {
   try {
@@ -463,6 +463,8 @@ const getComments = async (req, res) => {
  * @async
  * @function saveOrUnsavePost
  *
+ * @param req - The request object.
+ * @param res - The response object.
  * @param {string} operation - The operation to perform, either "$addToSet" to save the post or "$pull" to unsave it.
  *
  * @throws {Error} - If an error occurs while saving or unsaving the post.

@@ -1,7 +1,7 @@
 const readline = require("readline");
 const mongoose = require("mongoose");
-const User = require("../models/User");
-const Community = require("../models/Community");
+const User = require("../models/user.model");
+const Community = require("../models/community.model");
 const kleur = require("kleur");
 const LOG = console.log;
 

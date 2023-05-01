@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const RuleSchema = new mongoose.Schema({
+const ruleSchema = new mongoose.Schema({
   rule: {
     type: String,
     required: true,
@@ -11,4 +11,4 @@ const RuleSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Rule", RuleSchema);
+module.exports = mongoose.model("Rule", ruleSchema);

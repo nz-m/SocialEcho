@@ -1,4 +1,4 @@
-const Log = require("../models/Log");
+const Log = require("../models/log.model");
 const dayjs = require("dayjs");
 const formatCreatedAt = require("../utils/timeConverter");
 
