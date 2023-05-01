@@ -218,15 +218,17 @@ const getUsers = async (req, res, next) => {
 /**
  * @async
  * @function getUser
- * 
+ *
  * @description Retrieves a user's profile information, including their total number of posts,
  * the number of communities they are in, the number of communities they have posted in,
  * and their duration on the platform.
 
+ * @param req - Express request object
+ * @param res - Express response object
  * @param {Function} next - Express next function
 
  * @throws {Error} If an error occurs while retrieving the user's information
- * 
+ *
  * @returns {Object} Returns the user's profile information.
  */
 const getUser = async (req, res, next) => {
@@ -295,6 +297,8 @@ const getUser = async (req, res, next) => {
  * assigned the role of "moderator" by default, but not necessarily as a moderator of any community.
  * Otherwise, the user will be assigned the role of "general" user.
  *
+ * @param req - Express request object
+ * @param res - Express response object
  * @param {string} req.body.name - The name of the user to be added.
  * @param {string} req.body.email - The email of the user to be added.
  * @param {string} req.body.password - The password of the user to be added.

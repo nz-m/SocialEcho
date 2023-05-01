@@ -21,6 +21,7 @@ module.exports = {
       clash: ["Clash Display", "sans-serif"],
       infinite: ["Outfit", "sans-serif"],
       bebasneo: ["Bebas Neue", "cursive"],
+      IBM: ["IBM Plex Sans Condensed", "sans-serif"],
     },
     extend: {
       boxShadow: {

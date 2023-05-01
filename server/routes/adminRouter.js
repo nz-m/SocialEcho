@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { retrieveLogInfo } = require("../middlewares/logger/logInfo");
+const {
+  retrieveLogInfo,
+  deleteLogInfo,
+} = require("../controllers/admin.controller");
 
-router.get("/logs", retrieveLogInfo);
+router.route("/logs").get(retrieveLogInfo).delete(deleteLogInfo);
 
 module.exports = router;
