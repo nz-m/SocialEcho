@@ -11,16 +11,16 @@ const AdminPanel = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
-      <div className="bg-white p-4 shadow-md rounded-md">
-        <h1 className="text-lg font-medium mb-4">User Activity Logs</h1>
-        <table className="w-full text-left border-collapse border border-gray-300 max-h-screen overflow-y-scroll">
-          <thead className="font-medium">
-            <tr className="text-center border border-gray-300">
-              <th className="p-2 border border-gray-300">Timestamp</th>
-              <th className="p-2 border border-gray-300">Message</th>
-              <th className="p-2 border border-gray-300">Context Data</th>
-              <th className="p-2 border border-gray-300">Email Used</th>
-              <th className="p-2 border border-gray-300">Level</th>
+      <div className="bg-white p-4 shadow-md rounded-lg relative">
+        <h1 className="text-lg font-medium bg-white sticky top-0 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">User Activity Logs</h1>
+        <table className="w-full h-screen overflow-y-auto shadow-2xl shadow-[#F3F8FF] px-6 py-6 relative bg-white ">
+          <thead className="font-medium sticky top-0 left-0 shadow-2xl bg-white shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
+            <tr className="text-center rounded-2xl overflow-hidden">
+              <th className="p-2 border border-slate-200 shadow-sm">Timestamp</th>
+              <th className="p-2 border border-slate-200 shadow-sm">Message</th>
+              <th className="p-2 border border-slate-200 shadow-sm">Context Data</th>
+              <th className="p-2 border border-slate-200 shadow-sm">Email Used</th>
+              <th className="p-2 border border-slate-200 shadow-sm">Level</th>
             </tr>
           </thead>
           <tbody>
