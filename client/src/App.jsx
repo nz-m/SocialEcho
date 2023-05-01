@@ -1,8 +1,8 @@
 import { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { Helmet } from "react-helmet";
 import { getTitleFromRoute } from "./utils/docTitle";
+import { Helmet } from "react-helmet";
 
 import FallbackLoading from "./components/loader/FallbackLoading";
 import SignupForm from "./components/auth/SignupForm";
@@ -32,6 +32,7 @@ const UserProfile = lazy(() => import("./components/profile/UserProfile"));
 const CommunityMainSection = lazy(() =>
   import("./components/community/MainSection")
 );
+const AdminPanel = lazy(() => import("./pages/AdminPanel"));
 
 const WithSuspense = ({ component: Component }) => (
   <Suspense fallback={<FallbackLoading />}>
@@ -142,6 +143,7 @@ const App = () => {
         <Route path="/email-verified" element={<EmailVerifiedMessage />} />
         <Route path="/block-device" element={<BlockDevice />} />
         <Route path="/verify-login" element={<LoginVerified />} />
+        <Route path="/admin" element={<AdminPanel />} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
     </>

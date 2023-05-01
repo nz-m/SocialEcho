@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 
+const AdminRouter = require("./routes/AdminRouter");
 const userRouter = require("./routes/userRouter");
 const postRouter = require("./routes/postRouter");
 const communityRouter = require("./routes/communityRouter");
@@ -60,6 +61,7 @@ app.use("/auth", contextAuthRouter);
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
 app.use("/communities", communityRouter);
+app.use("/admin", AdminRouter);
 
 // 404 error handler
 app.use(notFoundHandler);

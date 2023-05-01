@@ -6,22 +6,22 @@ const Post = require("../models/Post");
 const Community = require("../models/Community");
 const UserPreference = require("../models/UserPreference");
 const formatCreatedAt = require("../utils/timeConverter");
-const { logger } = require("../utils/logger");
 const { verifyContextData } = require("./authController");
 const getUserFromToken = require("../utils/getUserFromToken");
+const { saveLogInfo } = require("../middlewares/logger/logInfo");
 const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
 dayjs.extend(duration);
 
 const signin = async (req, res, next) => {
-  logger.info("User attempting to sign in");
+  await saveLogInfo(req, "User attempting to sign in", "sign in", "info");
   try {
     const { email, password } = req.body;
     const existingUser = await User.findOne({
       email,
     });
     if (!existingUser) {
-      logger.error("User not found");
+      await saveLogInfo(req, "Incorrect email", "sign in", "error");
       return res.status(404).json({
         message: "Invalid credentials",
       });
@@ -33,7 +33,7 @@ const signin = async (req, res, next) => {
     );
 
     if (!isPasswordCorrect) {
-      logger.error("Invalid credentials");
+      await saveLogInfo(req, "Incorrect password", "sign in", "error");
       return res.status(400).json({
         message: "Invalid credentials",
       });
@@ -48,7 +48,12 @@ const signin = async (req, res, next) => {
       const contextDataResult = await verifyContextData(req, existingUser);
 
       if (contextDataResult === "blocked") {
-        logger.error("User device is blocked");
+        await saveLogInfo(
+          req,
+          "Sign in attempt from blocked device",
+          "sign in",
+          "warn"
+        );
         return res.status(401).json({
           message:
             "You've been blocked due to suspicious login activity. Please contact support for assistance.",
@@ -59,15 +64,23 @@ const signin = async (req, res, next) => {
         contextDataResult === "no_context_data" ||
         contextDataResult === "error"
       ) {
-        logger.error("Error occurred while verifying context data");
+        await saveLogInfo(
+          req,
+          "Error occurred while verifying context data",
+          "sign in",
+          "error"
+        );
         return res.status(500).json({
           message: "Error occurred while verifying context data",
         });
       }
 
       if (contextDataResult === "already_exists") {
-        logger.error(
-          "Multiple signin attempts detected without verifying identity."
+        await saveLogInfo(
+          req,
+          "Multiple sign in attempts detected without verifying identity.",
+          "sign in",
+          "warn"
         );
 
         return res.status(401).json({
@@ -138,7 +151,13 @@ const signin = async (req, res, next) => {
       },
     });
   } catch (err) {
-    logger.error(`Error occurred while signing in user: ${err.message}`);
+    await saveLogInfo(
+      req,
+      `Error occurred while signing in user: ${err.message}`,
+      "sign in",
+      "error"
+    );
+
     res.status(500).json({
       message: "Something went wrong",
     });
@@ -244,6 +263,7 @@ const getUser = async (req, res, next) => {
  * @throws {Error} If an error occurs while hashing the user password, or saving the new user to the database.
  */
 const addUser = async (req, res, next) => {
+  await saveLogInfo(req, "New user registration initiated", "info");
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -289,13 +309,13 @@ const logout = async (req, res) => {
     const accessToken = req.headers.authorization?.split(" ")[1] ?? null;
     if (accessToken) {
       await Token.deleteOne({ accessToken });
-      logger.info(`User with access token ${accessToken} has logged out`);
+      await saveLogInfo(null, `User has logged out`, "logout", "info");
     }
     return res.status(200).json({
       message: "Logout successful",
     });
   } catch (err) {
-    logger.error(err);
+    await saveLogInfo(null, err.message, "logout", "error");
     return res.status(500).json({
       message: "Internal server error. Please try again later.",
     });

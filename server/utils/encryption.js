@@ -21,5 +21,6 @@ const decryptData = (encryptedData) => {
 module.exports = {
   encryptField: (value) => encryptData(value),
   decryptField: (value) => decryptData(value),
+  encryptData,
   decryptData,
 };
