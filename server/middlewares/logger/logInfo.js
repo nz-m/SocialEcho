@@ -1,5 +1,5 @@
 const Log = require("../../models/Log");
-const getContextInfo = require("../../utils/contextData");
+const getCurrentContextData = require("../../utils/contextData");
 const formatCreatedAt = require("../../utils/timeConverter");
 
 const saveLogInfo = async (req, message, type, level) => {
@@ -7,7 +7,7 @@ const saveLogInfo = async (req, message, type, level) => {
     if (req) {
       const { email } = req.body;
       const { ip, country, city, browser, platform, os, device, deviceType } =
-        getContextInfo(req);
+        getCurrentContextData(req);
 
       const context = `IP: ${ip},Country: ${country}, City: ${city}, Device Type: ${deviceType}, Browser: ${browser}, Platform: ${platform}, OS: ${os}, Device: ${device}`;
       const log = new Log({
@@ -51,6 +51,7 @@ const retrieveLogInfo = async (req, res) => {
       const formattedTimestamp = formatCreatedAt(log.timestamp);
 
       return {
+        _id: log._id,
         email: log.email,
         contextData: formattedContext,
         message: log.message,
@@ -65,6 +66,7 @@ const retrieveLogInfo = async (req, res) => {
       const formattedTimestamp = formatCreatedAt(log.timestamp);
 
       return {
+        _id: log._id,
         email: log.email,
         message: log.message,
         type: log.type,

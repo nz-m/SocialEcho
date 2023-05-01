@@ -1,5 +1,5 @@
 const geoip = require("geoip-lite");
-const getContextInfo = (req) => {
+const getCurrentContextData = (req) => {
   const ip = req.clientIp || "unknown";
   const location = geoip.lookup(ip) || "unknown";
   const country = location.country ? location.country.toString() : "unknown";
@@ -29,4 +29,4 @@ const getContextInfo = (req) => {
   return { ip, country, city, browser, platform, os, device, deviceType };
 };
 
-module.exports = getContextInfo;
+module.exports = getCurrentContextData;
