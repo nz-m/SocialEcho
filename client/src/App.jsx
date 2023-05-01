@@ -16,6 +16,7 @@ import BlockDevice from "./pages/BlockDevice";
 import LoginVerified from "./pages/LoginVerified";
 import CommunityRightBar from "./components/community/RightBar";
 import RightBar from "./components/common/RightBar";
+import CommonLoading from "./components/loader/CommonLoading";
 
 const Moderator = lazy(() => import("./pages/Moderator"));
 const PostPage = lazy(() => import("./pages/PostPage"));
@@ -139,11 +140,25 @@ const App = () => {
           path="/signin"
           element={user ? <Navigate to="/" /> : <SignIn />}
         />
+        <Route
+          path="/admin"
+          element={
+            <Suspense
+              fallback={
+                <div className="flex justify-center items-center h-screen">
+                  <CommonLoading />
+                </div>
+              }
+            >
+              <AdminPanel />
+            </Suspense>
+          }
+        />
+
         <Route path="/auth/verify" element={<VerifyEmail />} />
         <Route path="/email-verified" element={<EmailVerifiedMessage />} />
         <Route path="/block-device" element={<BlockDevice />} />
         <Route path="/verify-login" element={<LoginVerified />} />
-        <Route path="/admin" element={<AdminPanel />} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
     </>
