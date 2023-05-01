@@ -13,7 +13,7 @@ const AdminPanel = () => {
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
       <div className="bg-white p-4 shadow-md rounded-md">
         <h1 className="text-lg font-medium mb-4">User Activity Logs</h1>
-        <table className="w-full text-left border-collapse border border-gray-300 max-h-96 overflow-y-scroll">
+        <table className="w-full text-left border-collapse border border-gray-300 max-h-screen overflow-y-scroll">
           <thead className="font-medium">
             <tr className="text-center border border-gray-300">
               <th className="p-2 border border-gray-300">Timestamp</th>
@@ -26,9 +26,15 @@ const AdminPanel = () => {
           <tbody>
             {logs.map((log) => (
               <tr key={log._id}>
-                <td className="p-2 border border-gray-300">
-                  {log.formattedTimestamp}
+                <td className="p-2 border border-gray-300 text-center">
+                  <div className="text-sm text-gray-600">
+                    {log.formattedTimestamp}
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    {log.relativeTimestamp}
+                  </div>
                 </td>
+
                 <td
                   className={`p-2 border border-gray-300 font-semibold ${
                     log.level === "info"

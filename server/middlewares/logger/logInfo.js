@@ -1,6 +1,9 @@
 const Log = require("../../models/Log");
 const getCurrentContextData = require("../../utils/contextData");
 const formatCreatedAt = require("../../utils/timeConverter");
+const dayjs = require("dayjs");
+const relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
 
 const saveLogInfo = async (req, message, type, level) => {
   try {
@@ -59,6 +62,7 @@ const retrieveLogInfo = async (req, res) => {
         level: log.level,
         formattedTimestamp: formattedTimestamp,
         timestamp: log.timestamp,
+        relativeTimestamp: dayjs(log.timestamp).fromNow(),
       };
     });
 
@@ -73,6 +77,7 @@ const retrieveLogInfo = async (req, res) => {
         level: log.level,
         formattedTimestamp: formattedTimestamp,
         timestamp: log.timestamp,
+        relativeTimestamp: dayjs(log.timestamp).fromNow(),
       };
     });
 

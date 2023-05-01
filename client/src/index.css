@@ -1,7 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed&display=swap');
 
 * {
   font-family: "Rubik", sans-serif;
+}
+
+
+.admin {
+  font-family: "IBM Plex Sans Condensed", sans-serif;
 }
 
 @tailwind base;

@@ -9,7 +9,6 @@ const Community = require("../models/Community");
 const Comment = require("../models/Comment");
 const User = require("../models/User");
 const Relationship = require("../models/Relationship");
-const mongoose = require("mongoose");
 
 const createPost = async (req, res) => {
   try {
