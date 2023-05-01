@@ -31,7 +31,7 @@ const Search = () => {
         setLoading(true);
         const encodedQuery = encodeURIComponent(q);
         axios
-          .get(`${BASE_URL}/posts/search?q=${encodedQuery}`, {
+          .get(`${BASE_URL}/search?q=${encodedQuery}`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               "Content-Type": "application/json",

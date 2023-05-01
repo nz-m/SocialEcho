@@ -6,6 +6,7 @@ const userRoutes = require("./routes/user.route");
 const postRoutes = require("./routes/post.route");
 const communityRoutes = require("./routes/community.route");
 const contextAuthRoutes = require("./routes/context-auth.route");
+const search = require("./controllers/search.controller");
 
 const app = express();
 
@@ -52,11 +53,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 require("./config/passport.js");
+const postController = require("./controllers/post.controller");
 
 //routes
 app.get("/check-connectivity", (req, res) => {
   res.status(200).json({ message: "Server is up and running!" });
 });
+
+app.get("/search", search);
+
 app.use("/auth", contextAuthRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
