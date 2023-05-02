@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { encryptField, decryptField } = require("../utils/encryption");
 
-const userContextSchema = new mongoose.Schema(
+const contextSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -71,6 +71,4 @@ const userContextSchema = new mongoose.Schema(
   }
 );
 
-const UserContext = mongoose.model("UserContext", userContextSchema);
-
-module.exports = UserContext;
+module.exports = mongoose.model("Context", contextSchema);

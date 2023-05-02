@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const RelationshipSchema = new mongoose.Schema(
+const relationshipSchema = new mongoose.Schema(
   {
     follower: {
       type: mongoose.Schema.Types.ObjectId,
@@ -14,6 +14,4 @@ const RelationshipSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Relationship = mongoose.model("Relationship", RelationshipSchema);
-
-module.exports = Relationship;
+module.exports = mongoose.model("Relationship", relationshipSchema);

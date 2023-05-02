@@ -12,7 +12,7 @@ const {
   deleteContextAuthData,
   blockContextAuthData,
   unblockContextAuthData,
-} = require("../controllers/authController");
+} = require("../controllers/auth.controller");
 
 const {
   verifyEmailValidation,

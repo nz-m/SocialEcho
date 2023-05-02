@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const SuspiciousLoginSchema = new mongoose.Schema(
+const suspiciousLoginSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -57,9 +57,4 @@ const SuspiciousLoginSchema = new mongoose.Schema(
   }
 );
 
-const SuspiciousLogin = mongoose.model(
-  "SuspiciousLogin",
-  SuspiciousLoginSchema
-);
-
-module.exports = SuspiciousLogin;
+module.exports = mongoose.model("SuspiciousLogin", suspiciousLoginSchema);

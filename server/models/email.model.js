@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const emailVerificationSchema = new mongoose.Schema({
+const emailSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -25,4 +25,4 @@ const emailVerificationSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("EmailVerification", emailVerificationSchema);
+module.exports = mongoose.model("email", emailSchema);

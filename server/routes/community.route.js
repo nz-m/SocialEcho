@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-const communityController = require("../controllers/communityController");
+const communityController = require("../controllers/community.controller");
 const requireAuth = passport.authenticate("jwt", { session: false });
 
 router.use(requireAuth);

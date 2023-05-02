@@ -1,27 +1,62 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
+const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
-const Token = require("../models/Token");
-const Post = require("../models/Post");
-const Community = require("../models/Community");
-const UserPreference = require("../models/UserPreference");
+const Token = require("../models/token.model");
+const Post = require("../models/post.model");
+const Community = require("../models/community.model");
+const UserPreference = require("../models/preference.model");
 const formatCreatedAt = require("../utils/timeConverter");
-const { logger } = require("../utils/logger");
-const { verifyContextData } = require("./authController");
+const { verifyContextData } = require("./auth.controller");
 const getUserFromToken = require("../utils/getUserFromToken");
-const dayjs = require("dayjs");
+const { saveLogInfo } = require("../middlewares/logger/logInfo");
 const duration = require("dayjs/plugin/duration");
+const dayjs = require("dayjs");
 dayjs.extend(duration);
 
+const TYPE = {
+  SIGN_IN: "sign in",
+  LOGOUT: "logout",
+};
+
+const LEVEL = {
+  INFO: "info",
+  ERROR: "error",
+  WARN: "warn",
+};
+
+const MESSAGE = {
+  SIGN_IN_ATTEMPT: "User attempting to sign in",
+  SIGN_IN_ERROR: "Error occurred while signing in user: ",
+  INCORRECT_EMAIL: "Incorrect email",
+  INCORRECT_PASSWORD: "Incorrect password",
+  DEVICE_BLOCKED: "Sign in attempt from blocked device",
+  CONTEXT_DATA_VERIFY_ERROR: "Context data verification failed",
+  MULTIPLE_ATTEMPT_WITHOUT_VERIFY:
+    "Multiple sign in attempts detected without verifying identity.",
+  LOGOUT_SUCCESS: "User has logged out successfully",
+};
+
 const signin = async (req, res, next) => {
-  logger.info("User attempting to sign in");
+  await saveLogInfo(
+    req,
+    "User attempting to sign in",
+    TYPE.SIGN_IN,
+    LEVEL.INFO
+  );
+
   try {
     const { email, password } = req.body;
     const existingUser = await User.findOne({
       email,
     });
     if (!existingUser) {
-      logger.error("User not found");
+      await saveLogInfo(
+        req,
+        MESSAGE.INCORRECT_EMAIL,
+        TYPE.SIGN_IN,
+        LEVEL.ERROR
+      );
+
       return res.status(404).json({
         message: "Invalid credentials",
       });
@@ -33,7 +68,13 @@ const signin = async (req, res, next) => {
     );
 
     if (!isPasswordCorrect) {
-      logger.error("Invalid credentials");
+      await saveLogInfo(
+        req,
+        MESSAGE.INCORRECT_PASSWORD,
+        TYPE.SIGN_IN,
+        LEVEL.ERROR
+      );
+
       return res.status(400).json({
         message: "Invalid credentials",
       });
@@ -48,7 +89,13 @@ const signin = async (req, res, next) => {
       const contextDataResult = await verifyContextData(req, existingUser);
 
       if (contextDataResult === "blocked") {
-        logger.error("User device is blocked");
+        await saveLogInfo(
+          req,
+          MESSAGE.DEVICE_BLOCKED,
+          TYPE.SIGN_IN,
+          LEVEL.WARN
+        );
+
         return res.status(401).json({
           message:
             "You've been blocked due to suspicious login activity. Please contact support for assistance.",
@@ -59,15 +106,24 @@ const signin = async (req, res, next) => {
         contextDataResult === "no_context_data" ||
         contextDataResult === "error"
       ) {
-        logger.error("Error occurred while verifying context data");
+        await saveLogInfo(
+          req,
+          MESSAGE.CONTEXT_DATA_VERIFY_ERROR,
+          TYPE.SIGN_IN,
+          LEVEL.ERROR
+        );
+
         return res.status(500).json({
           message: "Error occurred while verifying context data",
         });
       }
 
       if (contextDataResult === "already_exists") {
-        logger.error(
-          "Multiple signin attempts detected without verifying identity."
+        await saveLogInfo(
+          req,
+          MESSAGE.MULTIPLE_ATTEMPT_WITHOUT_VERIFY,
+          TYPE.SIGN_IN,
+          LEVEL.WARN
         );
 
         return res.status(401).json({
@@ -138,7 +194,13 @@ const signin = async (req, res, next) => {
       },
     });
   } catch (err) {
-    logger.error(`Error occurred while signing in user: ${err.message}`);
+    await saveLogInfo(
+      req,
+      MESSAGE.SIGN_IN_ERROR + err.message,
+      TYPE.SIGN_IN,
+      LEVEL.ERROR
+    );
+
     res.status(500).json({
       message: "Something went wrong",
     });
@@ -156,15 +218,17 @@ const getUsers = async (req, res, next) => {
 /**
  * @async
  * @function getUser
- * 
+ *
  * @description Retrieves a user's profile information, including their total number of posts,
  * the number of communities they are in, the number of communities they have posted in,
  * and their duration on the platform.
 
+ * @param req - Express request object
+ * @param res - Express response object
  * @param {Function} next - Express next function
 
  * @throws {Error} If an error occurs while retrieving the user's information
- * 
+ *
  * @returns {Object} Returns the user's profile information.
  */
 const getUser = async (req, res, next) => {
@@ -233,6 +297,8 @@ const getUser = async (req, res, next) => {
  * assigned the role of "moderator" by default, but not necessarily as a moderator of any community.
  * Otherwise, the user will be assigned the role of "general" user.
  *
+ * @param req - Express request object
+ * @param res - Express response object
  * @param {string} req.body.name - The name of the user to be added.
  * @param {string} req.body.email - The email of the user to be added.
  * @param {string} req.body.password - The password of the user to be added.
@@ -289,13 +355,13 @@ const logout = async (req, res) => {
     const accessToken = req.headers.authorization?.split(" ")[1] ?? null;
     if (accessToken) {
       await Token.deleteOne({ accessToken });
-      logger.info(`User with access token ${accessToken} has logged out`);
+      await saveLogInfo(null, MESSAGE.LOGOUT_SUCCESS, TYPE.LOGOUT, LEVEL.INFO);
     }
     return res.status(200).json({
       message: "Logout successful",
     });
   } catch (err) {
-    logger.error(err);
+    await saveLogInfo(null, err.message, TYPE.LOGOUT, LEVEL.ERROR);
     return res.status(500).json({
       message: "Internal server error. Please try again later.",
     });

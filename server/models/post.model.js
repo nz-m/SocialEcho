@@ -89,6 +89,4 @@ postSchema.pre("remove", async function (next) {
   }
 });
 
-const Post = mongoose.model("Post", postSchema);
-
-module.exports = Post;
+module.exports = mongoose.model("Post", postSchema);

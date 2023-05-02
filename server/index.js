@@ -1,10 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 
-const userRouter = require("./routes/userRouter");
-const postRouter = require("./routes/postRouter");
-const communityRouter = require("./routes/communityRouter");
-const contextAuthRouter = require("./routes/contextAuthRouter");
+const adminRoutes = require("./routes/admin.route");
+const userRoutes = require("./routes/user.route");
+const postRoutes = require("./routes/post.route");
+const communityRoutes = require("./routes/community.route");
+const contextAuthRoutes = require("./routes/context-auth.route");
+const search = require("./controllers/search.controller");
 
 const app = express();
 
@@ -51,15 +53,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 require("./config/passport.js");
+const postController = require("./controllers/post.controller");
 
 //routes
-app.use("/check-connectivity", (req, res) => {
+app.get("/check-connectivity", (req, res) => {
   res.status(200).json({ message: "Server is up and running!" });
 });
-app.use("/auth", contextAuthRouter);
-app.use("/users", userRouter);
-app.use("/posts", postRouter);
-app.use("/communities", communityRouter);
+
+app.get("/search", search);
+
+app.use("/auth", contextAuthRoutes);
+app.use("/users", userRoutes);
+app.use("/posts", postRoutes);
+app.use("/communities", communityRoutes);
+app.use("/admin", adminRoutes);
 
 // 404 error handler
 app.use(notFoundHandler);

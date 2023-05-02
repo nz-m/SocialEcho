@@ -4,12 +4,11 @@ dayjs.extend(relativeTime);
 const getUserFromToken = require("../utils/getUserFromToken");
 const formatCreatedAt = require("../utils/timeConverter");
 
-const Post = require("../models/Post");
-const Community = require("../models/Community");
-const Comment = require("../models/Comment");
-const User = require("../models/User");
-const Relationship = require("../models/Relationship");
-const mongoose = require("mongoose");
+const Post = require("../models/post.model");
+const Community = require("../models/community.model");
+const Comment = require("../models/comment.model");
+const User = require("../models/user.model");
+const Relationship = require("../models/relationship.model");
 
 const createPost = async (req, res) => {
   try {
@@ -464,6 +463,8 @@ const getComments = async (req, res) => {
  * @async
  * @function saveOrUnsavePost
  *
+ * @param req - The request object.
+ * @param res - The response object.
  * @param {string} operation - The operation to perform, either "$addToSet" to save the post or "$pull" to unsave it.
  *
  * @throws {Error} - If an error occurs while saving or unsaving the post.
@@ -626,57 +627,6 @@ const getPublicPosts = async (req, res) => {
   }
 };
 
-const search = async (req, res) => {
-  try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-    const searchQuery = req.query.q;
-
-    const communities = await Community.find({ members: userId }).distinct(
-      "_id"
-    );
-
-    const [users, posts, joinedCommunity, community] = await Promise.all([
-      User.find(
-        { $text: { $search: searchQuery } },
-        { score: { $meta: "textScore" } }
-      )
-        .select("_id name email avatar")
-        .sort({ score: { $meta: "textScore" } })
-        .lean(),
-      Post.find({
-        community: { $in: communities },
-        $text: { $search: searchQuery },
-      })
-        .select("_id body")
-        .populate("user", "name avatar")
-        .populate("community", "name")
-        .lean()
-        .exec(),
-      Community.findOne({
-        $text: { $search: searchQuery },
-        members: { $in: userId },
-      }).select("_id name description banner members"),
-      Community.findOne({
-        $text: { $search: searchQuery },
-        members: { $nin: userId },
-      }).select("_id name description banner members"),
-    ]);
-
-    posts.forEach((post) => {
-      post.body = post.body.substring(0, 25);
-    });
-
-    res.status(200).json({ posts, users, community, joinedCommunity });
-  } catch (error) {
-    res.status(500).json({ message: "An error occurred" });
-  }
-};
-
 module.exports = {
   getPost,
   getPosts,
@@ -692,5 +642,4 @@ module.exports = {
   getSavedPosts,
   getPublicPosts,
   getFollowingUsersPosts,
-  search,
 };

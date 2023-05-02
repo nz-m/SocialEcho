@@ -2,10 +2,10 @@ import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import debounce from "lodash/debounce";
+import JoinModal from "../modals/JoinModal";
 import { MoonLoader } from "react-spinners";
 import { BsSearch } from "react-icons/bs";
 import { MdClear } from "react-icons/md";
-import JoinModal from "../modals/JoinModal";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -31,7 +31,7 @@ const Search = () => {
         setLoading(true);
         const encodedQuery = encodeURIComponent(q);
         axios
-          .get(`${BASE_URL}/posts/search?q=${encodedQuery}`, {
+          .get(`${BASE_URL}/search?q=${encodedQuery}`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               "Content-Type": "application/json",
