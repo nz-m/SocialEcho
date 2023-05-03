@@ -25,10 +25,8 @@ const sendLoginVerificationEmail = async (req, res) => {
   const USER = decryptData(process.env.EMAIL);
   const PASS = decryptData(process.env.PASSWORD);
 
-  // const mismatchedProps = req.mismatchedProps;
   const currentContextData = req.currentContextData;
 
-  // const userId = req.user._id;
   const email = req.user.email;
   const name = req.user.name;
   const id = currentContextData.id;

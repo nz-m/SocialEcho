@@ -26,29 +26,28 @@ const SignIn = () => {
   return (
     <section className="bg-[#F6F7FA]">
       <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
-        {signInerror && (
-          <div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-            role="alert"
-          >
-            <strong className="font-bold">Error! </strong>
-            <span className="block sm:inline">{signInerror}</span>
-          </div>
-        )}
-
-        {successMessage && (
-          <div
-            className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-            role="alert"
-          >
-            <strong className="font-bold">Success! </strong>
-            <span className="block sm:inline">{successMessage}</span>
-          </div>
-        )}
         <form className="w-full max-w-md">
           <h1 className="mt-3 text-2xl font-semibold text-gray-800 capitalize sm:text-3xl">
-            sign In
+            Sign In
           </h1>
+          {signInerror && (
+            <div
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-6"
+              role="alert"
+            >
+              <strong className="font-bold">Error! </strong>
+              <span className="block sm:inline">{signInerror}</span>
+            </div>
+          )}
+          {successMessage && (
+            <div
+              className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-6"
+              role="alert"
+            >
+              <strong className="font-bold">Success! </strong>
+              <span className="block sm:inline">{successMessage}</span>
+            </div>
+          )}
           <div className="relative flex items-center mt-8">
             <span className="absolute">
               <svg

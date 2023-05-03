@@ -2,6 +2,7 @@ const UserContext = require("../models/context.model");
 const UserPreference = require("../models/preference.model");
 const SuspiciousLogin = require("../models/suspicious-login.model");
 const geoip = require("geoip-lite");
+const { saveLogInfo } = require("../middlewares/logger/logInfo");
 const getUserFromToken = require("../utils/getUserFromToken");
 const formatCreatedAt = require("../utils/timeConverter");
 
@@ -175,6 +176,35 @@ const verifyContextData = async (req, existingUser) => {
           deviceType: res.deviceType,
         };
       } else {
+        // increase the unverifiedAttempts count by 1
+        await SuspiciousLogin.findByIdAndUpdate(
+          oldSuspiciousContextData._id,
+          {
+            $inc: { unverifiedAttempts: 1 },
+          },
+          { new: true }
+        );
+        //  If the unverifiedAttempts count is greater than or equal to 3, then we block the user
+        if (oldSuspiciousContextData.unverifiedAttempts >= 3) {
+          await SuspiciousLogin.findByIdAndUpdate(
+            oldSuspiciousContextData._id,
+            {
+              isBlocked: true,
+              isTrusted: false,
+            },
+            { new: true }
+          );
+
+          await saveLogInfo(
+            req,
+            "Device blocked due to too many unverified login attempts",
+            "sign in",
+            "warn"
+          );
+
+          return "blocked";
+        }
+
         // Suspicious login data found, and it matches the current context data, so we return "already_exists"
         return "already_exists";
       }

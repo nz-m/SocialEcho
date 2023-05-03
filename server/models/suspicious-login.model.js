@@ -43,6 +43,10 @@ const suspiciousLoginSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    unverifiedAttempts: {
+      type: Number,
+      default: 0,
+    },
     isTrusted: {
       type: Boolean,
       default: false,
