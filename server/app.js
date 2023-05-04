@@ -1,0 +1,79 @@
+require("dotenv").config();
+const express = require("express");
+
+const adminRoutes = require("./routes/admin.route");
+const userRoutes = require("./routes/user.route");
+const postRoutes = require("./routes/post.route");
+const communityRoutes = require("./routes/community.route");
+const contextAuthRoutes = require("./routes/context-auth.route");
+const search = require("./controllers/search.controller");
+const Database = require("./config/database");
+
+const app = express();
+
+const cors = require("cors");
+const morgan = require("morgan");
+const passport = require("passport");
+const bodyParser = require("body-parser");
+
+const {
+  notFoundHandler,
+  errorHandler,
+} = require("./middlewares/common/errorHandler");
+
+const PORT = process.env.PORT || 5000;
+
+const db = new Database(process.env.DB_CONNECT, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+db.connect().catch((err) =>
+  console.error("Error connecting to database:", err)
+);
+
+// use middlewares
+app.use(cors());
+app.use(morgan("dev"));
+app.use("/assets/userFiles", express.static(__dirname + "/assets/userFiles"));
+app.use(
+  "/assets/userAvatars",
+  express.static(__dirname + "/assets/userAvatars")
+);
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
+require("./config/passport.js");
+
+//routes
+app.get("/check-connectivity", (req, res) => {
+  res.status(200).json({ message: "Server is up and running!" });
+});
+
+app.get("/search", search);
+
+app.use("/auth", contextAuthRoutes);
+app.use("/users", userRoutes);
+app.use("/posts", postRoutes);
+app.use("/communities", communityRoutes);
+app.use("/admin", adminRoutes);
+
+// 404 error handler
+app.use(notFoundHandler);
+
+// common error handler
+app.use(errorHandler);
+
+process.on("SIGINT", async () => {
+  try {
+    await db.disconnect();
+    console.log("Disconnected from database.");
+    process.exit(0);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+});
+
+app.listen(PORT, () => console.log(`Server up and running on port ${PORT}!`));

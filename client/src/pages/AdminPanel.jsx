@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CurrentTime from "../components/common/CurrentTime";
 import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
@@ -8,6 +9,7 @@ import { FcRefresh } from "react-icons/fc";
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 const AdminPanel = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [clearing, setClearing] = useState(false);
 
@@ -34,7 +36,10 @@ const AdminPanel = () => {
     setLoading(true);
     fetchLogs();
   };
-
+  const handleLogout = () => {
+    localStorage.removeItem("admin");
+    navigate("/admin-signin");
+  };
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
       <div className="bg-white p-4 shadow-md rounded relative xl:min-w-[1200px] lg:min-w-[1000px] md:min-w-[800px]">
@@ -64,6 +69,12 @@ const AdminPanel = () => {
               ) : (
                 "Clear Logs"
               )}
+            </button>
+            <button
+              className="bg-red-500 text-white text-sm py-2 px-4 rounded hover:bg-red-700"
+              onClick={handleLogout}
+            >
+              Logout
             </button>
           </div>
         </div>

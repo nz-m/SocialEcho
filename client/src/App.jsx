@@ -5,8 +5,8 @@ import { getTitleFromRoute } from "./utils/docTitle";
 import { Helmet } from "react-helmet";
 
 import FallbackLoading from "./components/loader/FallbackLoading";
-import SignupForm from "./components/auth/SignupForm";
-import SignIn from "./components/auth/SignIn";
+import SignupForm from "./pages/SignupForm";
+import SignIn from "./pages/SignIn";
 import PrivateRoute from "./PrivateRoute";
 import ReportPost from "./components/community/ReportPost";
 import EditProfileForm from "./components/form/EditProfileForm";
@@ -34,6 +34,7 @@ const CommunityMainSection = lazy(() =>
   import("./components/community/MainSection")
 );
 const AdminPanel = lazy(() => import("./pages/AdminPanel"));
+const AdminSingIn = lazy(() => import("./pages/AdminSignIn"));
 
 const WithSuspense = ({ component: Component }) => (
   <Suspense fallback={<FallbackLoading />}>
@@ -50,6 +51,9 @@ const WithRightBarAndSuspense = ({ component: Component }) => (
 
 const App = () => {
   const user = useSelector((state) => state.auth?.userData);
+  const adminAccessToken = JSON.parse(
+    localStorage.getItem("admin")
+  )?.accessToken;
   const location = useLocation();
 
   return (
@@ -143,18 +147,23 @@ const App = () => {
         <Route
           path="/admin"
           element={
-            <Suspense
-              fallback={
-                <div className="flex justify-center items-center h-screen">
-                  <CommonLoading />
-                </div>
-              }
-            >
-              <AdminPanel />
-            </Suspense>
+            adminAccessToken ? (
+              <Suspense
+                fallback={
+                  <div className="flex justify-center items-center h-screen">
+                    <CommonLoading />
+                  </div>
+                }
+              >
+                <AdminPanel />
+              </Suspense>
+            ) : (
+              <AdminSingIn />
+            )
           }
         />
 
+        <Route path="/admin-signin" element={<AdminSingIn />} />
         <Route path="/auth/verify" element={<VerifyEmail />} />
         <Route path="/email-verified" element={<EmailVerifiedMessage />} />
         <Route path="/block-device" element={<BlockDevice />} />

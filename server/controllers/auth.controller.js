@@ -2,9 +2,17 @@ const UserContext = require("../models/context.model");
 const UserPreference = require("../models/preference.model");
 const SuspiciousLogin = require("../models/suspicious-login.model");
 const geoip = require("geoip-lite");
+const { saveLogInfo } = require("../middlewares/logger/logInfo");
 const getUserFromToken = require("../utils/getUserFromToken");
 const formatCreatedAt = require("../utils/timeConverter");
 
+const types = {
+  NO_CONTEXT_DATA: "no_context_data",
+  MATCH: "match",
+  BLOCKED: "blocked",
+  SUSPICIOUS: "suspicious",
+  ERROR: "error",
+};
 const getCurrentContextData = (req) => {
   const ip = req.clientIp || "unknown";
   const location = geoip.lookup(ip) || "unknown";
@@ -99,7 +107,7 @@ const verifyContextData = async (req, existingUser) => {
     const userContextDataRes = await UserContext.findOne({ user: _id });
 
     if (!userContextDataRes) {
-      return "no_context_data";
+      return types.NO_CONTEXT_DATA;
     }
 
     const userContextData = {
@@ -116,7 +124,7 @@ const verifyContextData = async (req, existingUser) => {
     const currentContextData = getCurrentContextData(req);
 
     if (isTrustedDevice(currentContextData, userContextData)) {
-      return "match";
+      return types.MATCH;
     }
 
     const oldSuspiciousContextData = await getOldSuspiciousContextData(
@@ -125,8 +133,8 @@ const verifyContextData = async (req, existingUser) => {
     );
 
     if (oldSuspiciousContextData) {
-      if (oldSuspiciousContextData.isBlocked) return "blocked";
-      if (oldSuspiciousContextData.isTrusted) return "match";
+      if (oldSuspiciousContextData.isBlocked) return types.BLOCKED;
+      if (oldSuspiciousContextData.isTrusted) return types.MATCH;
     }
 
     let newSuspiciousData = {};
@@ -156,7 +164,6 @@ const verifyContextData = async (req, existingUser) => {
         suspiciousOs !== currentContextData.os
       ) {
         //  Suspicious login data found, but it doesn't match the current context data, so we add new suspicious login data
-
         const res = await addNewSuspiciousLogin(
           _id,
           existingUser,
@@ -175,14 +182,43 @@ const verifyContextData = async (req, existingUser) => {
           deviceType: res.deviceType,
         };
       } else {
+        // increase the unverifiedAttempts count by 1
+        await SuspiciousLogin.findByIdAndUpdate(
+          oldSuspiciousContextData._id,
+          {
+            $inc: { unverifiedAttempts: 1 },
+          },
+          { new: true }
+        );
+        //  If the unverifiedAttempts count is greater than or equal to 3, then we block the user
+        if (oldSuspiciousContextData.unverifiedAttempts >= 3) {
+          await SuspiciousLogin.findByIdAndUpdate(
+            oldSuspiciousContextData._id,
+            {
+              isBlocked: true,
+              isTrusted: false,
+            },
+            { new: true }
+          );
+
+          await saveLogInfo(
+            req,
+            "Device blocked due to too many unverified login attempts",
+            "sign in",
+            "warn"
+          );
+
+          return types.BLOCKED;
+        }
+
         // Suspicious login data found, and it matches the current context data, so we return "already_exists"
-        return "already_exists";
+        return types.SUSPICIOUS;
       }
     } else if (
       oldSuspiciousContextData &&
       isOldDataMatched(oldSuspiciousContextData, currentContextData)
     ) {
-      return "match";
+      return types.MATCH;
     } else {
       //  No previous suspicious login data found, so we create a new one
       const res = await addNewSuspiciousLogin(
@@ -233,9 +269,9 @@ const verifyContextData = async (req, existingUser) => {
       };
     }
 
-    return "match";
+    return types.MATCH;
   } catch (error) {
-    return "error";
+    return types.ERROR;
   }
 };
 
@@ -502,4 +538,5 @@ module.exports = {
   deleteContextAuthData,
   blockContextAuthData,
   unblockContextAuthData,
+  types,
 };
