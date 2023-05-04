@@ -2,11 +2,11 @@
   "name": "socialecho",
   "version": "1.0.0",
   "description": "A social networking platform",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=development nodemon index.js",
-    "prod": "NODE_ENV=production node index.js"
+    "start": "NODE_ENV=development nodemon app.js",
+    "prod": "NODE_ENV=production node app.js"
   },
   "author": "Neaz",
   "license": "ISC",
@@ -17,6 +17,7 @@
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
+    "enquirer": "^2.3.6",
     "express": "^4.18.2",
     "express-useragent": "^1.0.15",
     "express-validator": "^6.14.3",

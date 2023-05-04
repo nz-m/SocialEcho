@@ -6,14 +6,14 @@ const Post = require("../models/post.model");
 const Community = require("../models/community.model");
 const UserPreference = require("../models/preference.model");
 const formatCreatedAt = require("../utils/timeConverter");
-const { verifyContextData } = require("./auth.controller");
+const { verifyContextData, types } = require("./auth.controller");
 const getUserFromToken = require("../utils/getUserFromToken");
 const { saveLogInfo } = require("../middlewares/logger/logInfo");
 const duration = require("dayjs/plugin/duration");
 const dayjs = require("dayjs");
 dayjs.extend(duration);
 
-const TYPE = {
+const LOG_TYPE = {
   SIGN_IN: "sign in",
   LOGOUT: "logout",
 };
@@ -40,7 +40,7 @@ const signin = async (req, res, next) => {
   await saveLogInfo(
     req,
     "User attempting to sign in",
-    TYPE.SIGN_IN,
+    LOG_TYPE.SIGN_IN,
     LEVEL.INFO
   );
 
@@ -53,7 +53,7 @@ const signin = async (req, res, next) => {
       await saveLogInfo(
         req,
         MESSAGE.INCORRECT_EMAIL,
-        TYPE.SIGN_IN,
+        LOG_TYPE.SIGN_IN,
         LEVEL.ERROR
       );
 
@@ -71,7 +71,7 @@ const signin = async (req, res, next) => {
       await saveLogInfo(
         req,
         MESSAGE.INCORRECT_PASSWORD,
-        TYPE.SIGN_IN,
+        LOG_TYPE.SIGN_IN,
         LEVEL.ERROR
       );
 
@@ -88,11 +88,11 @@ const signin = async (req, res, next) => {
     if (isContextAuthEnabled) {
       const contextDataResult = await verifyContextData(req, existingUser);
 
-      if (contextDataResult === "blocked") {
+      if (contextDataResult === types.BLOCKED) {
         await saveLogInfo(
           req,
           MESSAGE.DEVICE_BLOCKED,
-          TYPE.SIGN_IN,
+          LOG_TYPE.SIGN_IN,
           LEVEL.WARN
         );
 
@@ -103,13 +103,13 @@ const signin = async (req, res, next) => {
       }
 
       if (
-        contextDataResult === "no_context_data" ||
-        contextDataResult === "error"
+        contextDataResult === types.NO_CONTEXT_DATA ||
+        contextDataResult === types.ERROR
       ) {
         await saveLogInfo(
           req,
           MESSAGE.CONTEXT_DATA_VERIFY_ERROR,
-          TYPE.SIGN_IN,
+          LOG_TYPE.SIGN_IN,
           LEVEL.ERROR
         );
 
@@ -118,11 +118,11 @@ const signin = async (req, res, next) => {
         });
       }
 
-      if (contextDataResult === "already_exists") {
+      if (contextDataResult === types.SUSPICIOUS) {
         await saveLogInfo(
           req,
           MESSAGE.MULTIPLE_ATTEMPT_WITHOUT_VERIFY,
-          TYPE.SIGN_IN,
+          LOG_TYPE.SIGN_IN,
           LEVEL.WARN
         );
 
@@ -146,7 +146,7 @@ const signin = async (req, res, next) => {
               "country",
               "city",
               "device",
-              "deviceType",
+              "deviceLOG_TYPE",
               "os",
               "platform",
               "browser",
@@ -197,7 +197,7 @@ const signin = async (req, res, next) => {
     await saveLogInfo(
       req,
       MESSAGE.SIGN_IN_ERROR + err.message,
-      TYPE.SIGN_IN,
+      LOG_TYPE.SIGN_IN,
       LEVEL.ERROR
     );
 
@@ -303,6 +303,7 @@ const getUser = async (req, res, next) => {
  * @param {string} req.body.email - The email of the user to be added.
  * @param {string} req.body.password - The password of the user to be added.
  * @param {Object} req.files - The files attached to the request object (for avatar).
+ * @param {string} req.body.isConsentGiven - Indicates whether the user has given consent to enable context based auth.
  * @param {Function} next - The next middleware function to call if consent is given by the user to enable context based auth.
  *
  * @returns {Object} The response object with a success message if the user is added successfully.
@@ -312,6 +313,10 @@ const getUser = async (req, res, next) => {
 const addUser = async (req, res, next) => {
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
+  /**
+   * @type {boolean} isConsentGiven
+   */
+  const isConsentGiven = JSON.parse(req.body.isConsentGiven);
 
   const fileUrl = req.files?.[0]?.filename
     ? `${req.protocol}://${req.get("host")}/assets/userAvatars/${
@@ -336,7 +341,7 @@ const addUser = async (req, res, next) => {
       throw new Error("Failed to add user");
     }
 
-    if (req.body.isConsentGiven === "false") {
+    if (isConsentGiven === false) {
       res.status(201).json({
         message: "User added successfully",
       });
@@ -355,13 +360,18 @@ const logout = async (req, res) => {
     const accessToken = req.headers.authorization?.split(" ")[1] ?? null;
     if (accessToken) {
       await Token.deleteOne({ accessToken });
-      await saveLogInfo(null, MESSAGE.LOGOUT_SUCCESS, TYPE.LOGOUT, LEVEL.INFO);
+      await saveLogInfo(
+        null,
+        MESSAGE.LOGOUT_SUCCESS,
+        LOG_TYPE.LOGOUT,
+        LEVEL.INFO
+      );
     }
     return res.status(200).json({
       message: "Logout successful",
     });
   } catch (err) {
-    await saveLogInfo(null, err.message, TYPE.LOGOUT, LEVEL.ERROR);
+    await saveLogInfo(null, err.message, LOG_TYPE.LOGOUT, LEVEL.ERROR);
     return res.status(500).json({
       message: "Internal server error. Please try again later.",
     });
@@ -371,6 +381,7 @@ const logout = async (req, res) => {
 const refreshToken = async (req, res) => {
   try {
     const { refreshToken } = req.body;
+
     const existingToken = await Token.findOne({
       refreshToken,
     });
