@@ -1,7 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/SocialEcho.png";
 import axios from "axios";
 import { useState } from "react";
+import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
+import { HiX } from "react-icons/hi";
+import { IoIosArrowRoundBack } from "react-icons/io";
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 const AdminSignIn = () => {
@@ -9,6 +12,7 @@ const AdminSignIn = () => {
   const [error, setError] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [signingIn, setSigningIn] = useState(false);
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -19,6 +23,7 @@ const AdminSignIn = () => {
   };
 
   const handleSubmit = (e) => {
+    setSigningIn(true);
     e.preventDefault();
     const data = {
       username: username,
@@ -27,11 +32,13 @@ const AdminSignIn = () => {
     axios
       .post(`${BASE_URL}/admin/signin`, data)
       .then((res) => {
+        setSigningIn(false);
         localStorage.setItem("admin", JSON.stringify(res.data));
         navigate("/admin");
       })
       .catch((err) => {
         setError(err.response.data.message);
+        setSigningIn(false);
       });
   };
 
@@ -64,23 +71,33 @@ const AdminSignIn = () => {
               />
             </div>
             {error && (
-              <div
-                className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md relative mt-4"
-                role="alert"
-              >
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md relative mt-4 flex items-center justify-between">
                 <span className="block sm:inline">{error}</span>
+                <button
+                  className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                  onClick={() => setError(null)}
+                >
+                  <HiX />
+                </button>
               </div>
             )}
+
             <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-gray-600 hover:text-gray-500">
-                Forget Password?
-              </p>
+              <Link to="/">
+                <IoIosArrowRoundBack className="inline-block w-4 h-4 mr-2" />
+                Back to home
+              </Link>
               <button
+                disabled={signingIn}
                 type="submit"
                 onClick={(e) => handleSubmit(e)}
                 className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
               >
-                Sign In
+                {signingIn ? (
+                  <ButtonLoadingSpinner loadingText={"Signing in..."} />
+                ) : (
+                  "Sign in"
+                )}
               </button>
             </div>
           </form>

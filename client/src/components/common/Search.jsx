@@ -10,13 +10,13 @@ import { MdClear } from "react-icons/md";
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 const Search = () => {
+  const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
   const [inputValue, setInputValue] = useState("");
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [community, setCommunity] = useState(null);
   const [joinedCommunity, setJoinedCommunity] = useState(null);
   const [loading, setLoading] = useState(false);
-  const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
   const setInitialValue = () => {
     setUsers([]);
     setPosts([]);
@@ -46,10 +46,9 @@ const Search = () => {
             setLoading(false);
           })
           .catch((err) => {
-            console.log(err);
             setLoading(false);
           });
-      }, 800),
+      }, 500),
     [accessToken]
   );
 
@@ -116,7 +115,7 @@ const Search = () => {
             </div>
           )}
           {posts.length > 0 && (
-            <ul>
+            <ul onClick={() => setPosts([])}>
               {posts.map((post) => (
                 <li key={post._id} className="border-b py-2 px-4">
                   <Link
