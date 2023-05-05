@@ -6,7 +6,7 @@ import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
 import { BarLoader } from "react-spinners";
 import { FcRefresh } from "react-icons/fc";
 
-const BASE_URL = process.env.REACT_APP_API_URL;
+const LOG_URL = `${process.env.REACT_APP_API_URL}/admin/logs`;
 
 const AdminPanel = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const AdminPanel = () => {
   const [logs, setLogs] = useState([]);
 
   const fetchLogs = () => {
-    axios.get(`${BASE_URL}/admin/logs`).then((res) => {
+    axios.get(LOG_URL).then((res) => {
       setLoading(false);
       setLogs(res.data);
     });
@@ -26,7 +26,7 @@ const AdminPanel = () => {
   }, []);
   const handleCleanup = () => {
     setClearing(true);
-    axios.delete(`${BASE_URL}/admin/logs`).then(() => {
+    axios.delete(LOG_URL).then(() => {
       setLogs([]);
       setClearing(false);
     });

@@ -17,6 +17,7 @@ import LoginVerified from "./pages/LoginVerified";
 import CommunityRightBar from "./components/community/RightBar";
 import RightBar from "./components/common/RightBar";
 import CommonLoading from "./components/loader/CommonLoading";
+import AdminSignIn from "./pages/AdminSignIn";
 
 const Moderator = lazy(() => import("./pages/Moderator"));
 const PostPage = lazy(() => import("./pages/PostPage"));
@@ -34,7 +35,6 @@ const CommunityMainSection = lazy(() =>
   import("./components/community/MainSection")
 );
 const AdminPanel = lazy(() => import("./pages/AdminPanel"));
-const AdminSingIn = lazy(() => import("./pages/AdminSignIn"));
 
 const WithSuspense = ({ component: Component }) => (
   <Suspense fallback={<FallbackLoading />}>
@@ -158,12 +158,12 @@ const App = () => {
                 <AdminPanel />
               </Suspense>
             ) : (
-              <AdminSingIn />
+              <AdminSignIn />
             )
           }
         />
 
-        <Route path="/admin-signin" element={<AdminSingIn />} />
+        <Route path="/admin-signin" element={<AdminSignIn />} />
         <Route path="/auth/verify" element={<VerifyEmail />} />
         <Route path="/email-verified" element={<EmailVerifiedMessage />} />
         <Route path="/block-device" element={<BlockDevice />} />
