@@ -1,13 +1,16 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 import {
   HiOutlineChatBubbleOvalLeft,
   HiOutlineArchiveBox,
 } from "react-icons/hi2";
 import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
-import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { FcNext } from "react-icons/fc";
+import "react-photo-view/dist/react-photo-view.css";
+
 const Post = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,34 +64,37 @@ const Post = ({ post }) => {
             </Link>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <p className="text-sm text-gray-500">{createdAt}</p>
-          <BiDotsHorizontalRounded className="text-lg cursor-pointer" />
-        </div>
+        <p className="text-sm text-gray-500">{createdAt}</p>
       </div>
-      <div
-        className="cursor-pointer"
-        onClick={() => {
-          navigate(`/post/${post._id}`, {
-            state: { from: location.pathname },
-          });
-        }}
-      >
+      <div>
         <p className="text-md text-justify mt-2">{body}</p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
-            <img
-              className=" h-auto rounded-xl mt-3"
-              src={fileUrl}
-              alt={body}
-              loading="lazy"
-            />
+            <PhotoProvider
+              overlayRender={() => (
+                <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-10 text-white px-3 py-2">
+                  <p className="text-xs">{user.name}</p>
+                  <p className="text-xs">{community.name}</p>
+                  <p className="text-xs">{createdAt}</p>
+                </div>
+              )}
+            >
+              <PhotoView src={fileUrl}>
+                <img
+                  src={fileUrl}
+                  alt={body}
+                  loading="lazy"
+                  className="cursor-pointer h-auto rounded-xl mt-3"
+                />
+              </PhotoView>
+            </PhotoProvider>
           ) : (
             fileUrl && (
               <video
-                className=" h-auto rounded-xl mt-3"
+                className="block mx-auto rounded-md shadow-md focus:outline-none"
                 src={fileUrl}
                 controls
+                style={{ maxWidth: "100%", height: "auto" }}
               />
             )
           )}
@@ -106,16 +112,26 @@ const Post = ({ post }) => {
             </button>
           </Link>
         </div>
-        <div className="flex items-center gap-2">
-          {userData?._id === post.user._id && (
-            <button
-              onClick={() => toggleModal(true)}
-              className="flex items-center text-xl gap-1"
-            >
-              {" "}
-              <HiOutlineArchiveBox className="text-red-500" />
-            </button>
-          )}
+        <div className="flex justify-center items-center gap-4 cursor-pointer">
+          <div className="flex items-center gap-2">
+            {userData?._id === post.user._id && (
+              <button
+                onClick={() => toggleModal(true)}
+                className="flex items-center text-xl gap-1"
+              >
+                {" "}
+                <HiOutlineArchiveBox className="text-red-500" />
+              </button>
+            )}
+          </div>
+          <FcNext
+            onClick={() => {
+              navigate(`/post/${post._id}`, {
+                state: { from: location.pathname },
+              });
+            }}
+            className="text-xl"
+          />
         </div>
 
         {showModal && (

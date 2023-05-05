@@ -13,6 +13,8 @@ import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import DeleteModal from "../modals/DeleteModal";
 import { IoIosArrowBack } from "react-icons/io";
 import CommonLoading from "../loader/CommonLoading";
+import "react-photo-view/dist/react-photo-view.css";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 const PostView = ({ post }) => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -122,12 +124,24 @@ const PostView = ({ post }) => {
         <p className="text-lg mt-3">{body}</p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
-            <img
-              className="w-full h-auto rounded-xl mt-3"
-              src={fileUrl}
-              alt={body}
-              loading="lazy"
-            />
+            <PhotoProvider
+              overlayRender={() => (
+                <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-10 text-white px-3 py-2">
+                  <p className="text-xs">{user.name}</p>
+                  <p className="text-xs">{community.name}</p>
+                  <p className="text-xs">{dateTime}</p>
+                </div>
+              )}
+            >
+              <PhotoView src={fileUrl}>
+                <img
+                  className="w-full h-auto rounded-xl mt-3 cursor-pointer"
+                  src={fileUrl}
+                  alt={body}
+                  loading="lazy"
+                />
+              </PhotoView>
+            </PhotoProvider>
           ) : (
             fileUrl && (
               <video

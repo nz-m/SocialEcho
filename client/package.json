@@ -22,6 +22,7 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.8.0",
+    "react-photo-view": "^1.2.3",
     "react-redux": "^8.0.5",
     "react-router": "^6.8.1",
     "react-router-dom": "^6.8.1",
