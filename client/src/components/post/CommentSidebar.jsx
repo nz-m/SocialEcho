@@ -36,7 +36,7 @@ const CommentSidebar = () => {
   return (
     <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg overflow-y-auto">
       {currentComments.length > 0 && (
-        <div className="">
+        <div>
           <h2 className="text-lg font-semibold mb-4">Recent Comments</h2>
           {currentComments.map((comment) => (
             <div
@@ -64,6 +64,7 @@ const CommentSidebar = () => {
               <p className="text-lg">{comment.body}</p>
             </div>
           ))}
+
           {currentComments.length < comments.length && (
             <button
               className="text-primary border border-dashed border-blue-500
@@ -74,6 +75,15 @@ const CommentSidebar = () => {
               Load More
             </button>
           )}
+        </div>
+      )}
+
+      {currentComments.length === 0 && (
+        <div className="flex flex-col items-center justify-center h-full">
+          <p className="text-lg font-semibold mb-4">No Comments Yet</p>
+          <p className="text-gray-500 text-sm">
+            Be the first to comment on this post
+          </p>
         </div>
       )}
     </div>
