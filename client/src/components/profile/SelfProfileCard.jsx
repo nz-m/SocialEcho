@@ -80,7 +80,7 @@ const SelfProfileCard = ({ user }) => {
           className="text-primary text-lg mt-3 cursor-pointer hover:underline"
           to="/devices-locations"
         >
-          Devices and Locations
+          Manage Devices and Locations
         </Link>
       </span>
     </div>

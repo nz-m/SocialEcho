@@ -30,8 +30,8 @@ const sendLoginVerificationEmail = async (req, res) => {
   const email = req.user.email;
   const name = req.user.name;
   const id = currentContextData.id;
-  const verificationLink = `${BASE_URL}/verify-login?id=${id}&email=${email}`;
-  const blockLink = `${BASE_URL}/block-device?id=${id}&email=${email}`;
+  const verificationLink = `${CLIENT_URL}/verify-login?id=${id}&email=${email}`;
+  const blockLink = `${CLIENT_URL}/block-device?id=${id}&email=${email}`;
 
   try {
     let transporter = nodemailer.createTransport({

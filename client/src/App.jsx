@@ -15,7 +15,7 @@ import EmailVerifiedMessage from "./pages/EmailVerifiedMessage";
 import BlockDevice from "./pages/BlockDevice";
 import LoginVerified from "./pages/LoginVerified";
 import CommunityRightBar from "./components/community/RightBar";
-import RightBar from "./components/common/RightBar";
+import RightBar from "./components/common/Rightbar";
 import CommonLoading from "./components/loader/CommonLoading";
 import AdminSignIn from "./pages/AdminSignIn";
 
@@ -35,6 +35,7 @@ const CommunityMainSection = lazy(() =>
   import("./components/community/MainSection")
 );
 const AdminPanel = lazy(() => import("./pages/AdminPanel"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const WithSuspense = ({ component: Component }) => (
   <Suspense fallback={<FallbackLoading />}>
@@ -42,7 +43,7 @@ const WithSuspense = ({ component: Component }) => (
   </Suspense>
 );
 
-const WithRightBarAndSuspense = ({ component: Component }) => (
+const WithRightbarAndSuspense = ({ component: Component }) => (
   <>
     <WithSuspense component={Component} />
     <RightBar />
@@ -66,15 +67,15 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route
             path="/"
-            element={<WithRightBarAndSuspense component={MainSection} />}
+            element={<WithRightbarAndSuspense component={MainSection} />}
           />
           <Route
             path="/home"
-            element={<WithRightBarAndSuspense component={MainSection} />}
+            element={<WithRightbarAndSuspense component={MainSection} />}
           />
           <Route
             path="/profile"
-            element={<WithRightBarAndSuspense component={UserProfile} />}
+            element={<WithRightbarAndSuspense component={UserProfile} />}
           />
 
           <Route
@@ -114,28 +115,28 @@ const App = () => {
           />
           <Route
             path="/saved"
-            element={<WithRightBarAndSuspense component={Saved} />}
+            element={<WithRightbarAndSuspense component={Saved} />}
           />
           <Route path="/edit-profile" element={<EditProfileForm />} />
           <Route
             path="/user/:userId"
-            element={<WithRightBarAndSuspense component={PublicProfile} />}
+            element={<WithRightbarAndSuspense component={PublicProfile} />}
           />
           <Route
             path="/communities"
-            element={<WithRightBarAndSuspense component={AllCommunities} />}
+            element={<WithRightbarAndSuspense component={AllCommunities} />}
           />
           <Route
             path="/my-communities"
-            element={<WithRightBarAndSuspense component={MyCommunities} />}
+            element={<WithRightbarAndSuspense component={MyCommunities} />}
           />
           <Route
             path="/following"
-            element={<WithRightBarAndSuspense component={Following} />}
+            element={<WithRightbarAndSuspense component={Following} />}
           />
           <Route
             path="/devices-locations"
-            element={<WithRightBarAndSuspense component={DevicesLocations} />}
+            element={<WithRightbarAndSuspense component={DevicesLocations} />}
           />
         </Route>
 
@@ -168,7 +169,7 @@ const App = () => {
         <Route path="/email-verified" element={<EmailVerifiedMessage />} />
         <Route path="/block-device" element={<BlockDevice />} />
         <Route path="/verify-login" element={<LoginVerified />} />
-        <Route path="*" element={<h1>404 Not Found</h1>} />
+        <Route path="*" element={<WithSuspense component={NotFound} />} />
       </Routes>
     </>
   );

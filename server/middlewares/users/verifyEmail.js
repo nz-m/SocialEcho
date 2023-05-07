@@ -27,7 +27,7 @@ const sendVerificationEmail = async (req, res) => {
   const { email, name } = req.body;
 
   const verificationCode = Math.floor(10000 + Math.random() * 90000);
-  const verificationLink = `${BASE_URL}/auth/verify?code=${verificationCode}&email=${email}`;
+  const verificationLink = `${CLIENT_URL}/auth/verify?code=${verificationCode}&email=${email}`;
 
   try {
     let transporter = nodemailer.createTransport({
