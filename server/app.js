@@ -23,7 +23,7 @@ const {
 
 const PORT = process.env.PORT || 5000;
 
-const db = new Database(process.env.DB_CONNECT, {
+const db = new Database(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

@@ -1,10 +1,11 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
 const Admin = require("../models/admin.model");
 const { prompt } = require("enquirer");
 
 mongoose
-  .connect("mongodb://127.0.0.1/db_socialecho", {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

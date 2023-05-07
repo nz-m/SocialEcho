@@ -7,7 +7,7 @@ const { query, validationResult } = require("express-validator");
 const { decryptData } = require("../../utils/encryption");
 const { verifyLoginHTML } = require("../../utils/emailTemplates");
 
-const BASE_URL = process.env.BASE_URL;
+const CLIENT_URL = process.env.CLIENT_URL;
 const EMAIL_SERVICE = process.env.EMAIL_SERVICE;
 
 const verifyLoginValidation = [
