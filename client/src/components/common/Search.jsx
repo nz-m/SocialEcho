@@ -17,6 +17,7 @@ const Search = () => {
   const [community, setCommunity] = useState(null);
   const [joinedCommunity, setJoinedCommunity] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const setInitialValue = () => {
     setUsers([]);
     setPosts([]);
@@ -45,7 +46,7 @@ const Search = () => {
             setJoinedCommunity(joinedCommunity);
             setLoading(false);
           })
-          .catch((err) => {
+          .catch(() => {
             setLoading(false);
           });
       }, 500),
@@ -94,6 +95,8 @@ const Search = () => {
         placeholder="Search"
         aria-label="Search"
         autoComplete="off"
+        onFocus={() => setIsInputFocused(true)}
+        onBlur={() => setIsInputFocused(false)}
       />
 
       <MdClear
@@ -103,19 +106,28 @@ const Search = () => {
         onClick={clearValues}
       />
 
-      {inputValue !== "" && (
+      {isInputFocused && (
         <div
           onBlur={() => !community && clearValues()}
           className="absolute z-30 w-full rounded mt-1 border shadow"
         >
-          {loading && (
-            <div className="flex items-center justify-center py-2 px-2">
-              <MoonLoader size={20} color={"#008cff"} />
-              <span className="ml-2">Searching...</span>
-            </div>
-          )}
+          <div className="flex items-center justify-center py-2 px-2">
+            {loading ? (
+              <>
+                <MoonLoader size={20} color={"#008cff"} />
+                <span className="ml-2">Searching...</span>
+              </>
+            ) : (
+              <span className="ml-2">
+                {inputValue !== ""
+                  ? "Search results for " + inputValue
+                  : "Search for people, posts, and communities"}
+              </span>
+            )}
+          </div>
+
           {posts.length > 0 && (
-            <ul onClick={() => setPosts([])}>
+            <ul>
               {posts.map((post) => (
                 <li key={post._id} className="border-b py-2 px-4">
                   <Link
@@ -147,7 +159,7 @@ const Search = () => {
             </ul>
           )}
           {users.length > 0 && (
-            <ul onClick={() => setUsers([])}>
+            <ul>
               {users.map((user) => (
                 <li key={user._id} className="border-b py-2 px-4">
                   <Link

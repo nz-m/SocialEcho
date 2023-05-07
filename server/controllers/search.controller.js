@@ -45,7 +45,9 @@ const search = async (req, res) => {
     ]);
 
     posts.forEach((post) => {
-      post.body = post.body.substring(0, 25);
+      if (post.body.length > 30) {
+        post.body = post.body.substring(0, 30) + "...";
+      }
     });
 
     res.status(200).json({ posts, users, community, joinedCommunity });

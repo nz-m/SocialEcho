@@ -32,7 +32,9 @@ async function createAdmin() {
     await admin.save();
     console.log(`Admin user "${admin.username}" created successfully`);
   } catch (error) {
-    console.log(error.message);
+    if (error.message.includes("duplicate key error")) {
+      console.log(`Username "${admin.username}" already taken.`);
+    } else console.log(error.message);
   } finally {
     mongoose.connection.close();
   }
