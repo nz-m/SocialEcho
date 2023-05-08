@@ -1,25 +1,41 @@
-const express = require("express");
-const router = express.Router();
-const postController = require("../controllers/post.controller");
+const router = require("express").Router();
+const {
+  getPublicPosts,
+  getPosts,
+  getPost,
+  createPost,
+  deletePost,
+  getCommunityPosts,
+  getFollowingUsersPosts,
+  likePost,
+  unlikePost,
+  addComment,
+  getComments,
+  savePost,
+  unsavePost,
+  getSavedPosts,
+} = require("../controllers/post.controller");
 const fileUpload = require("../middlewares/post/fileUpload");
 const passport = require("passport");
+const decodeToken = require("../middlewares/auth/decodeToken");
+
 const requireAuth = passport.authenticate("jwt", { session: false });
 
 router.use(requireAuth);
 
-router.get("/:publicUserId/userPosts", postController.getPublicPosts);
-router.get("/saved", postController.getSavedPosts);
-router.get("/:id/following", postController.getFollowingUsersPosts);
-router.patch("/:id/save", postController.savePost);
-router.patch("/:id/unsave", postController.unsavePost);
-router.patch("/:id/like", postController.likePost);
-router.patch("/:id/unlike", postController.unlikePost);
-router.post("/:id/comment", postController.addComment);
-router.get("/:id/comment", postController.getComments);
-router.get("/:id", postController.getPost);
-router.get("/", postController.getPosts);
-router.post("/", fileUpload, postController.createPost);
-router.delete("/:id", postController.deletePost);
-router.get("/community/:communityId", postController.getCommunityPosts);
+router.get("/:publicUserId/userPosts", decodeToken, getPublicPosts);
+router.get("/saved", decodeToken, getSavedPosts);
+router.get("/:id/following", getFollowingUsersPosts);
+router.patch("/:id/save", decodeToken, savePost);
+router.patch("/:id/unsave", decodeToken, unsavePost);
+router.patch("/:id/like", likePost);
+router.patch("/:id/unlike", unlikePost);
+router.post("/:id/comment", addComment);
+router.get("/:id/comment", getComments);
+router.get("/:id", getPost);
+router.get("/", getPosts);
+router.post("/", fileUpload, createPost);
+router.delete("/:id", deletePost);
+router.get("/community/:communityId", decodeToken, getCommunityPosts);
 
 module.exports = router;

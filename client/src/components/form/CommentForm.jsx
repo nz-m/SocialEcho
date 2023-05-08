@@ -70,7 +70,7 @@ const CommentForm = ({ communityId }) => {
               cursor: isLoading ? "not-allowed" : "pointer",
             }}
           >
-            {isLoading ? "Loading..." : "Comment"}{" "}
+            {isLoading ? "Loading..." : "Comment"}
           </button>
         </div>
       </form>

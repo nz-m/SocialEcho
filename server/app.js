@@ -8,6 +8,7 @@ const communityRoutes = require("./routes/community.route");
 const contextAuthRoutes = require("./routes/context-auth.route");
 const search = require("./controllers/search.controller");
 const Database = require("./config/database");
+const decodeToken = require("./middlewares/auth/decodeToken");
 
 const app = express();
 
@@ -51,7 +52,7 @@ app.get("/check-connectivity", (req, res) => {
   res.status(200).json({ message: "Server is up and running!" });
 });
 
-app.get("/search", search);
+app.get("/search", decodeToken, search);
 
 app.use("/auth", contextAuthRoutes);
 app.use("/users", userRoutes);

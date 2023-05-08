@@ -1,7 +1,6 @@
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
-const getUserFromToken = require("../utils/getUserFromToken");
 const formatCreatedAt = require("../utils/timeConverter");
 
 const Post = require("../models/post.model");
@@ -99,30 +98,20 @@ const getPost = async (req, res) => {
  *
  * @async
  * @function getPosts
- * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve.
+ *
+ * @param {string} req.userId - The ID of the user making the request.
+ * @param {string} [req.query.limit=10] - The maximum number of posts to retrieve.
  * Defaults to 10 if not provided.
- * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them.
+ * @param {string} [req.query.skip=0] - The number of posts to skip before starting to retrieve them.
  * Defaults to 0 if not provided.
- *
- * @throws {Error} - If an error occurs while retrieving the posts.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object containing the retrieved posts.
  */
 const getPosts = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-
     const limit = parseInt(req.query.limit) || 10;
     const skip = parseInt(req.query.skip) || 0;
 
     const communities = await Community.find({
-      members: userId,
+      members: req.userId,
     });
     const communityIds = communities.map((community) => community._id);
 
@@ -166,29 +155,26 @@ const getPosts = async (req, res) => {
  * Retrieves the posts for a given community, including the post information, the number of posts saved by each user,
  * the user who created it, and the community it belongs to.
  *
+ * @route GET /posts/community/:communityId
+ *
  * @async
  * @function getCommunityPosts
  *
  * @param {Object} req.query - The query parameters for the request.
  * @param {string} req.params.id - The ID of the community to retrieve the posts for.
- * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not specified.
- * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them.
+ * @param {string} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not specified.
+ * @param {string} [req.query.skip=0] - The number of posts to skip before starting to retrieve them.
  * Defaults to 0 if not specified.
- *
- * @throws {Error} - If an error occurs while retrieving the posts.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getCommunityPosts = async (req, res) => {
   try {
     const communityId = req.params.communityId;
     const limit = parseInt(req.query.limit) || 10;
     const skip = parseInt(req.query.skip) || 0;
-    const userId = getUserFromToken(req);
 
     const isMember = await Community.findOne({
       _id: communityId,
-      members: userId,
+      members: req.userId,
     });
 
     if (!isMember) {
@@ -232,24 +218,21 @@ const getCommunityPosts = async (req, res) => {
 /**
  * Retrieves the posts of the users that the current user is following in a given community
  *
+ * @route GET /posts//:id/following
+ *
  * @async
  * @function getFollowingUsersPosts
  *
  * @param {string} req.params.id - The ID of the community to retrieve the posts for.
  * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not specified.
  * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them. Defaults to 0 if not specified.
- *
- * @throws {Error} - If an error occurs while retrieving the posts.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getFollowingUsersPosts = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
     const communityId = req.params.id;
 
     const following = await Relationship.find({
-      follower: userId,
+      follower: req.userId,
     });
 
     const followingIds = following.map(
@@ -290,10 +273,6 @@ const getFollowingUsersPosts = async (req, res) => {
  * @function deletePost
  *
  * @param {string} req.params.id - The ID of the post to be deleted.
- *
- * @throws {Error} - If the specified post cannot be found or if there is an error while deleting it.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const deletePost = async (req, res) => {
   try {
@@ -309,11 +288,12 @@ const deletePost = async (req, res) => {
     });
   }
 };
+
+/**
+ * @param {string} req.params.id - The ID of the post to be liked.
+ */
 const likePost = async (req, res) => {
   try {
-    /**
-     * @type {string} id - The ID of the post to be liked.
-     */
     const id = req.params.id;
     const { userId } = req.body;
     const updatedPost = await Post.findOneAndUpdate(
@@ -466,11 +446,6 @@ const getComments = async (req, res) => {
  * @param req - The request object.
  * @param res - The response object.
  * @param {string} operation - The operation to perform, either "$addToSet" to save the post or "$pull" to unsave it.
- *
- * @throws {Error} - If an error occurs while saving or unsaving the post.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON
- * object containing the updated list of saved posts for the user.
  */
 const saveOrUnsavePost = async (req, res, operation) => {
   try {
@@ -478,19 +453,14 @@ const saveOrUnsavePost = async (req, res, operation) => {
      * @type {string} id - The ID of the post to be saved or unsaved.
      */
     const id = req.params.id;
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
+
     const update = {};
     update[operation === "$addToSet" ? "$addToSet" : "$pull"] = {
       savedPosts: id,
     };
     const updatedUserPost = await User.findOneAndUpdate(
       {
-        _id: userId,
+        _id: req.userId,
       },
       update,
       {
@@ -533,16 +503,12 @@ const unsavePost = async (req, res) => {
   await saveOrUnsavePost(req, res, "$pull");
 };
 
+/**
+ * @route GET /posts/saved
+ */
 const getSavedPosts = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-
-    const user = await User.findById(userId);
+    const user = await User.findById(req.userId);
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -550,7 +516,7 @@ const getSavedPosts = async (req, res) => {
     }
 
     // Send saved posts of communities user is a member of only
-    const communityIds = await Community.find({ members: userId }).distinct(
+    const communityIds = await Community.find({ members: req.userId }).distinct(
       "_id"
     );
     const savedPosts = await Post.find({
@@ -577,22 +543,18 @@ const getSavedPosts = async (req, res) => {
  * Retrieves up to 10 posts of the public user that are posted in the communities
  * that both the public user and the current user are members of.
  *
+ * @route GET /posts/:publicUserId/userPosts
+ *
+ * @param req.userId - The id of the current user.
  * @async
  * @function getPublicPosts
  *
  * @param {string} req.params.publicUserId - The id of the public user whose posts to retrieve.
- *
- * @throws {Error} - If an error occurs while retrieving the posts.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getPublicPosts = async (req, res) => {
   try {
     const publicUserId = req.params.publicUserId;
-    const currentUserId = getUserFromToken(req);
-    if (!currentUserId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+    const currentUserId = req.userId;
 
     const isFollowing = await Relationship.exists({
       follower: currentUserId,

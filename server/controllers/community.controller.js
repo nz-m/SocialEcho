@@ -1,7 +1,6 @@
 const Community = require("../models/community.model");
 const Rule = require("../models/rule.model");
 const User = require("../models/user.model");
-const getUserFromToken = require("../utils/getUserFromToken");
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
@@ -86,6 +85,8 @@ const addRulesToCommunity = async (req, res) => {
  * Retrieves all communities that a user is a member of, including the community's ID,
  * name, banner image, member count, and description.
  *
+ * @route GET /communities/member
+ *
  * @async
  * @function getMemberCommunities
  *
@@ -96,15 +97,9 @@ const addRulesToCommunity = async (req, res) => {
  */
 const getMemberCommunities = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
     const communities = await Community.find({
       members: {
-        $in: [userId],
+        $in: [req.userId],
       },
     })
       .select("_id name banner members description")
@@ -123,6 +118,7 @@ const getMemberCommunities = async (req, res) => {
  * and has not been banned from, including their name, banner image, description,
  * and member count, sorted by the number of members.
  *
+ * @route GET /communities/not-member
  * @async
  * @function getNotMemberCommunities
  *
@@ -136,18 +132,12 @@ const getMemberCommunities = async (req, res) => {
  */
 const getNotMemberCommunities = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
     const communities = await Community.find({
       members: {
-        $nin: [userId],
+        $nin: [req.userId],
       },
       bannedUsers: {
-        $nin: [userId],
+        $nin: [req.userId],
       },
     })
       .select("_id name banner description members")
@@ -161,15 +151,12 @@ const getNotMemberCommunities = async (req, res) => {
   }
 };
 
+/**
+ * @route POST /communities/:name/join
+ */
 const joinCommunity = async (req, res) => {
   try {
     const { name } = req.params;
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
 
     const community = await Community.findOneAndUpdate(
       {
@@ -177,7 +164,7 @@ const joinCommunity = async (req, res) => {
       },
       {
         $push: {
-          members: userId,
+          members: req.userId,
         },
       },
       {
@@ -193,22 +180,19 @@ const joinCommunity = async (req, res) => {
   }
 };
 
+/**
+ * @route POST /communities/:name/leave
+ */
 const leaveCommunity = async (req, res) => {
   try {
     const { name } = req.params;
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
     const community = await Community.findOneAndUpdate(
       {
         name,
       },
       {
         $pull: {
-          members: userId,
+          members: req.userId,
         },
       },
       {
@@ -224,15 +208,15 @@ const leaveCommunity = async (req, res) => {
   }
 };
 
+/**
+ * @route POST /communities/:name/ban/:id
+ * @param {string} req.params.id - The ID of the user to ban.
+ * @param {string} req.params.name - The name of the community to ban the user from.
+ */
 const banUser = async (req, res) => {
   try {
     const { id, name } = req.params;
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
+
     const community = await Community.findOneAndUpdate(
       {
         name,
@@ -258,15 +242,15 @@ const banUser = async (req, res) => {
   }
 };
 
+/**
+ * @route POST /communities/:name/unban/:id
+ * @param {string} req.params.id - The ID of the user to unban.
+ * @param {string} req.params.name - The name of the community to unban the user from.
+ */
 const unbanUser = async (req, res) => {
   try {
     const { id, name } = req.params;
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
+
     const community = await Community.findOneAndUpdate(
       {
         name,
@@ -340,15 +324,13 @@ const addModToCommunity = async (req, res) => {
   }
 };
 
+/**
+ * @route PUT /communities/:name/report
+ */
 const reportPost = async (req, res) => {
   try {
     const communityName = req.params.name;
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
+
     const community = await Community.findOneAndUpdate(
       {
         name: communityName,
@@ -356,7 +338,7 @@ const reportPost = async (req, res) => {
           $not: {
             $elemMatch: {
               post: req.body.info.postId,
-              reportedBy: userId,
+              reportedBy: req.body.userId,
             },
           },
         },
@@ -365,7 +347,7 @@ const reportPost = async (req, res) => {
         $addToSet: {
           reportedPosts: {
             post: req.body.info.postId,
-            reportedBy: userId,
+            reportedBy: req.body.userId,
             reportReason: req.body.info.reportReason,
             reportDate: new Date(),
           },
@@ -382,9 +364,9 @@ const reportPost = async (req, res) => {
     }
 
     const latestReportedPost = community.reportedPosts.slice(-1)[0];
+
     res.status(200).json(latestReportedPost);
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       message: "Error reporting post",
     });
@@ -395,11 +377,13 @@ const reportPost = async (req, res) => {
  * Retrieves the reported posts for a given community,
  * including the post information and the user who reported it.
  *
+ * @route GET /communities/:name/reported-posts
+ *
  * @async
  * @function getReportedPosts
  *
  * @param {Object} req.params.name - The name of the community to retrieve the reported posts for.
- *                                   Each community has a unique name.
+ *
  *
  * @throws {Error} - If an error occurs while retrieving the reported posts.
  *
@@ -452,6 +436,9 @@ const getReportedPosts = async (req, res) => {
   }
 };
 
+/**
+ * @route DELETE /communities/:name/reported-posts/:postId
+ */
 const removeReportedPost = async (req, res) => {
   try {
     const communityName = req.params.name;
@@ -498,6 +485,9 @@ const removeReportedPost = async (req, res) => {
   }
 };
 
+/**
+ * @route GET /communities/:name/members
+ */
 const getCommunityMembers = async (req, res) => {
   try {
     const communityName = req.params.name;
@@ -534,6 +524,9 @@ const getCommunityMembers = async (req, res) => {
   }
 };
 
+/**
+ * @route GET /communities/:name/moderators
+ */
 const getCommunityMods = async (req, res) => {
   try {
     const communityName = req.params.name;

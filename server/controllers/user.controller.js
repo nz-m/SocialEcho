@@ -7,7 +7,6 @@ const Community = require("../models/community.model");
 const UserPreference = require("../models/preference.model");
 const formatCreatedAt = require("../utils/timeConverter");
 const { verifyContextData, types } = require("./auth.controller");
-const getUserFromToken = require("../utils/getUserFromToken");
 const { saveLogInfo } = require("../middlewares/logger/logInfo");
 const duration = require("dayjs/plugin/duration");
 const dayjs = require("dayjs");
@@ -427,15 +426,12 @@ const refreshToken = async (req, res) => {
   }
 };
 
+/**
+ * @route GET /users/moderator
+ */
 const getModProfile = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-    const moderator = await User.findById(userId);
+    const moderator = await User.findById(req.userId);
     if (!moderator) {
       return res.status(404).json({
         message: "User not found",
@@ -458,16 +454,12 @@ const getModProfile = async (req, res) => {
   }
 };
 
+/**
+ * @route PUT /users/:id
+ */
 const updateInfo = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-
-    const user = await User.findById(userId);
+    const user = await User.findById(req.userId);
     if (!user) {
       return res.status(404).json({
         message: "User not found",

@@ -3,7 +3,6 @@ const UserPreference = require("../models/preference.model");
 const SuspiciousLogin = require("../models/suspicious-login.model");
 const geoip = require("geoip-lite");
 const { saveLogInfo } = require("../middlewares/logger/logInfo");
-const getUserFromToken = require("../utils/getUserFromToken");
 const formatCreatedAt = require("../utils/timeConverter");
 
 const types = {
@@ -330,14 +329,12 @@ const addContextData = async (req, res) => {
   }
 };
 
+/**
+ * @route GET /auth/context-data/primary
+ */
 const getAuthContextData = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const result = await UserContext.findOne({ user: userId });
+    const result = await UserContext.findOne({ user: req.userId });
 
     if (!result) {
       return res.status(404).json({ message: "Not found" });
@@ -363,16 +360,13 @@ const getAuthContextData = async (req, res) => {
   }
 };
 
+/**
+ * @route GET /auth/context-data/trusted
+ */
 const getTrustedAuthContextData = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
     const result = await SuspiciousLogin.find({
-      user: userId,
+      user: req.userId,
       isTrusted: true,
       isBlocked: false,
     });
@@ -400,15 +394,13 @@ const getTrustedAuthContextData = async (req, res) => {
   }
 };
 
+/**
+ * @route GET /auth/context-data/blocked
+ */
 const getBlockedAuthContextData = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
     const result = await SuspiciousLogin.find({
-      user: userId,
+      user: req.userId,
       isBlocked: true,
       isTrusted: false,
     });
@@ -436,14 +428,12 @@ const getBlockedAuthContextData = async (req, res) => {
   }
 };
 
+/**
+ * @route GET /auth/user-preferences
+ */
 const getUserPreferences = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const userPreferences = await UserPreference.findOne({ user: userId });
+    const userPreferences = await UserPreference.findOne({ user: req.userId });
 
     if (!userPreferences) {
       return res.status(404).json({ message: "Not found" });
@@ -457,13 +447,11 @@ const getUserPreferences = async (req, res) => {
   }
 };
 
+/**
+ * @route DELETE /auth/context-data/:contextId
+ */
 const deleteContextAuthData = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
     const contextId = req.params.contextId;
 
     await SuspiciousLogin.deleteOne({ _id: contextId });
@@ -478,13 +466,11 @@ const deleteContextAuthData = async (req, res) => {
   }
 };
 
+/**
+ * @route PATCH /auth/context-data/block/:contextId
+ */
 const blockContextAuthData = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
     const contextId = req.params.contextId;
 
     await SuspiciousLogin.findOneAndUpdate(
@@ -503,13 +489,11 @@ const blockContextAuthData = async (req, res) => {
   }
 };
 
+/**
+ * @route PATCH /auth/context-data/unblock/:contextId
+ */
 const unblockContextAuthData = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
     const contextId = req.params.contextId;
 
     await SuspiciousLogin.findOneAndUpdate(

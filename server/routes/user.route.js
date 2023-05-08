@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const passport = require("passport");
 const useragent = require("express-useragent");
 const requestIp = require("request-ip");
+const decodeToken = require("../middlewares/auth/decodeToken");
 
 const {
   getUsers,
@@ -37,13 +37,13 @@ const avatarUpload = require("../middlewares/users/avatarUpload");
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 
-router.patch("/:id/follow", requireAuth, followUser);
-router.patch("/:id/unfollow", requireAuth, unfollowUser);
-router.get("/public-users/:id", requireAuth, getPublicUser);
+router.patch("/:id/follow", requireAuth, decodeToken, followUser);
+router.patch("/:id/unfollow", requireAuth, decodeToken, unfollowUser);
+router.get("/public-users/:id", requireAuth, decodeToken, getPublicUser);
 router.get("/public-users", requireAuth, getPublicUsers);
-router.get("/moderator", requireAuth, getModProfile);
-router.get("/following", requireAuth, getFollowingUsers);
-router.put("/:id", requireAuth, updateInfo);
+router.get("/moderator", requireAuth, decodeToken, getModProfile);
+router.get("/following", requireAuth, decodeToken, getFollowingUsers);
+router.put("/:id", requireAuth, decodeToken, updateInfo);
 router.get("/:id", requireAuth, getUser);
 router.get("/", requireAuth, getUsers);
 router.post(

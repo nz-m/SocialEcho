@@ -2,7 +2,6 @@ const User = require("../models/user.model");
 const Relationship = require("../models/relationship.model");
 const Post = require("../models/post.model");
 const Community = require("../models/community.model");
-const getUserFromToken = require("../utils/getUserFromToken");
 const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
 
@@ -12,25 +11,20 @@ dayjs.extend(duration);
  * Retrieves up to 5 public users that the current user is not already following,
  * including their name, avatar, location, and follower count, sorted by the number of followers.
  *
+ * @route GET /users/public-users
+ *
  * @async
  * @function getPublicUsers
- *
- * @throws {Error} - If an error occurs while retrieving the users.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+
+
  */
 const getPublicUsers = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
+    const userId = req.userId;
     const usersToDisplay = await User.find(
       {
         _id: {
           $nin: [
-            userId,
             ...(await Relationship.find({ follower: userId }).distinct(
               "following"
             )),
@@ -72,25 +66,23 @@ const getPublicUsers = async (req, res) => {
 };
 
 /**
+ * @route GET /users/public-users/:id
+ *
  * @async
  * @function getPublicUser
- * 
+ *
+ *
+ * @param {string} req.params.id - The id of the user to retrieve
+ * @param {string} req.userId - The id of the current user
+ *
  * @description Retrieves public user information, including name, avatar, location, bio, role, interests,
  * total number of posts, list of communities the user is in, number of followers and followings,
  * whether the current user is following the user, the date the current user started following the user,
  * the number of posts the user has created in the last 30 days, and common communities between the current user and the user.
-
- * @throws {Error} - If an error occurs while retrieving the user.
-
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getPublicUser = async (req, res) => {
   try {
-    const currentUserId = getUserFromToken(req);
-    if (!currentUserId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
+    const currentUserId = req.userId;
     const id = req.params.id;
 
     const user = await User.findById(id).select(
@@ -164,15 +156,14 @@ const getPublicUser = async (req, res) => {
   }
 };
 
+/**
+ * @route PATCH /users/:id/follow
+ * @param {string} req.userId - The ID of the current user.
+ * @param {string} req.params.id - The ID of the user to follow.
+ */
 const followUser = async (req, res) => {
   try {
-    const followerId = getUserFromToken(req);
-    if (!followerId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-
+    const followerId = req.userId;
     const followingId = req.params.id;
 
     const relationshipExists = await Relationship.exists({
@@ -211,14 +202,14 @@ const followUser = async (req, res) => {
   }
 };
 
+/**
+ * @route PATCH /users/:id/unfollow
+ * @param {string} req.userId - The ID of the current user.
+ * @param {string} req.params.id - The ID of the user to unfollow.
+ */
 const unfollowUser = async (req, res) => {
   try {
-    const followerId = getUserFromToken(req);
-    if (!followerId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
+    const followerId = req.userId;
 
     const followingId = req.params.id;
 
@@ -264,22 +255,17 @@ const unfollowUser = async (req, res) => {
  * Retrieves the users that the current user is following, including their name, avatar, location,
  * and the date when they were followed, sorted by the most recent follow date.
  *
+ * @route GET /users/following
+ *
  * @async
  * @function getFollowingUsers
  *
- * @throws {Error} - If an error occurs while retrieving the users.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
+ * @param {string} req.userId - The ID of the current user.
  */
 const getFollowingUsers = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
     const relationships = await Relationship.find({
-      follower: userId,
+      follower: req.userId,
     })
       .populate("following", "_id name avatar location")
       .lean();

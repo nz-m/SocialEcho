@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 const useragent = require("express-useragent");
+const decodeToken = require("../middlewares/auth/decodeToken");
 
 const {
   addContextData,
@@ -27,24 +28,19 @@ const {
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 
-router.get("/context-data/primary", requireAuth, getAuthContextData);
-router.get("/context-data/trusted", requireAuth, getTrustedAuthContextData);
-router.get("/context-data/blocked", requireAuth, getBlockedAuthContextData);
-router.delete("/context-data/:contextId", requireAuth, deleteContextAuthData);
-router.patch(
-  "/context-data/block/:contextId",
-  requireAuth,
-  blockContextAuthData
-);
-router.patch(
-  "/context-data/unblock/:contextId",
-  requireAuth,
-  unblockContextAuthData
-);
+router.use("/context-data", requireAuth);
 
-router.get("/user-preferences", requireAuth, getUserPreferences);
+router.get("/context-data/primary", decodeToken, getAuthContextData);
+router.get("/context-data/trusted", decodeToken, getTrustedAuthContextData);
+router.get("/context-data/blocked", decodeToken, getBlockedAuthContextData);
+router.patch("/context-data/block/:contextId", blockContextAuthData);
+router.patch("/context-data/unblock/:contextId", unblockContextAuthData);
+router.delete("/context-data/:contextId", deleteContextAuthData);
+
+router.get("/user-preferences", requireAuth, decodeToken, getUserPreferences);
 
 router.use(useragent.express());
+
 router.get("/verify", verifyEmailValidation, verifyEmail, addContextData);
 router.get("/verify-login", verifyLoginValidation, verifyLogin);
 router.get("/block-login", verifyLoginValidation, blockLogin);

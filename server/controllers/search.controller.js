@@ -1,17 +1,11 @@
-const getUserFromToken = require("../utils/getUserFromToken");
 const Community = require("../models/community.model");
 const User = require("../models/user.model");
 const Post = require("../models/post.model");
 
 const search = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
     const searchQuery = req.query.q;
+    const userId = req.userId;
 
     const communities = await Community.find({ members: userId }).distinct(
       "_id"
