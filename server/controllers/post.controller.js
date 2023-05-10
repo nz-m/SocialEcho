@@ -56,7 +56,7 @@ const createPost = async (req, res) => {
 
     res.json(post);
   } catch (error) {
-    return res.status(409).json({
+    res.status(409).json({
       message: "Error creating post",
     });
   }
@@ -86,7 +86,7 @@ const getPost = async (req, res) => {
 
     res.status(200).json(post);
   } catch (error) {
-    return res.status(409).json({
+    res.status(409).json({
       message: "Error getting post",
     });
   }
@@ -266,14 +266,6 @@ const getFollowingUsersPosts = async (req, res) => {
   }
 };
 
-/**
- * Deletes a post with the specified ID and its associated comments.
- *
- * @async
- * @function deletePost
- *
- * @param {string} req.params.id - The ID of the post to be deleted.
- */
 const deletePost = async (req, res) => {
   try {
     const id = req.params.id;
@@ -438,7 +430,7 @@ const getComments = async (req, res) => {
 
 /**
  * Saves or unsaves a post for a given user by updating the user's
- * savedPosts array in the database. Uses $addToSet or $pull operation based on the value of the
+ * savedPosts array in the database. Uses $addToSet or $pull operation based on the value of the operation parameter.
  *
  * @async
  * @function saveOrUnsavePost

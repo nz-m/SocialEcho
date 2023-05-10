@@ -8,7 +8,6 @@ const jwt = require("jsonwebtoken");
  * @param {Object} req - Express request object.
  * @param {Object} res - Express response object.
  * @param {Function} next - Express middleware function.
- * @returns {*} - Sends a response with status 401 if the token is invalid or missing.
  * @throws {Error} Throws an error if the token is invalid or missing.
  */
 const decodeToken = (req, res, next) => {
@@ -19,7 +18,7 @@ const decodeToken = (req, res, next) => {
     req.userId = decoded.id;
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Unauthorized" });
+    res.status(401).json({ message: "Unauthorized" });
   }
 };
 

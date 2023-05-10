@@ -366,12 +366,12 @@ const logout = async (req, res) => {
         LEVEL.INFO
       );
     }
-    return res.status(200).json({
+    res.status(200).json({
       message: "Logout successful",
     });
   } catch (err) {
     await saveLogInfo(null, err.message, LOG_TYPE.LOGOUT, LEVEL.ERROR);
-    return res.status(500).json({
+    res.status(500).json({
       message: "Internal server error. Please try again later.",
     });
   }
@@ -414,13 +414,13 @@ const refreshToken = async (req, res) => {
       expiresIn: "1h",
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       accessToken,
       refreshToken: existingToken.refreshToken,
       accessTokenUpdatedAt: new Date().toLocaleString(),
     });
   } catch (err) {
-    return res.status(500).json({
+    res.status(500).json({
       message: "Internal server error",
     });
   }
@@ -444,11 +444,11 @@ const getModProfile = async (req, res) => {
     delete moderatorInfo.password;
     moderatorInfo.createdAt = moderatorInfo.createdAt.toLocaleString();
 
-    return res.status(200).json({
+    res.status(200).json({
       moderatorInfo,
     });
   } catch (err) {
-    return res.status(500).json({
+    res.status(500).json({
       message: "Internal server error",
     });
   }
@@ -474,11 +474,11 @@ const updateInfo = async (req, res) => {
 
     await user.save();
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "User info updated successfully",
     });
   } catch (err) {
-    return res.status(500).json({
+    res.status(500).json({
       message: "Error updating user info",
     });
   }

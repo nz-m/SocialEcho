@@ -15,7 +15,6 @@ const app = express();
 const cors = require("cors");
 const morgan = require("morgan");
 const passport = require("passport");
-const bodyParser = require("body-parser");
 
 const {
   notFoundHandler,
@@ -41,7 +40,7 @@ app.use(
   "/assets/userAvatars",
   express.static(__dirname + "/assets/userAvatars")
 );
-app.use(bodyParser.json());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());

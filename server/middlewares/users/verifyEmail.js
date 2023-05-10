@@ -24,6 +24,9 @@ const verifyEmailValidation = [
 const sendVerificationEmail = async (req, res) => {
   const USER = decryptData(process.env.EMAIL);
   const PASS = decryptData(process.env.PASSWORD);
+
+  // const USER = process.env.EMAIL;
+  // const PASS = process.env.PASSWORD;
   const { email, name } = req.body;
 
   const verificationCode = Math.floor(10000 + Math.random() * 90000);
@@ -58,6 +61,9 @@ const sendVerificationEmail = async (req, res) => {
       message: `Verification email was successfully sent to ${email}`,
     });
   } catch (err) {
+    console.log(
+      "Could not send verification email. There could be an issue with the provided credentials or the email service."
+    );
     res.status(500).json({ message: "Something went wrong" });
   }
 };
@@ -99,7 +105,7 @@ const verifyEmail = async (req, res, next) => {
     req.email = updatedUser.email;
     next();
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 

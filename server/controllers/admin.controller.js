@@ -96,7 +96,7 @@ const deleteLogInfo = async (req, res) => {
 const signin = async (req, res) => {
   try {
     const { username, password } = req.body;
-    console.log(req.body);
+
     const existingUser = await Admin.findOne({
       username,
     });

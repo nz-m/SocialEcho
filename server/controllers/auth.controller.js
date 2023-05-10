@@ -52,25 +52,23 @@ const getCurrentContextData = (req) => {
   };
 };
 
-const isTrustedDevice = (currentContextData, userContextData) => {
-  return Object.keys(userContextData).every(
+const isTrustedDevice = (currentContextData, userContextData) =>
+  Object.keys(userContextData).every(
     (key) => userContextData[key] === currentContextData[key]
   );
-};
 
 const isSuspiciousContextChanged = (oldContextData, newContextData) =>
   Object.keys(oldContextData).some(
     (key) => oldContextData[key] !== newContextData[key]
   );
 
-const isOldDataMatched = (oldSuspiciousContextData, userContextData) => {
-  return Object.keys(oldSuspiciousContextData).every(
+const isOldDataMatched = (oldSuspiciousContextData, userContextData) =>
+  Object.keys(oldSuspiciousContextData).every(
     (key) => oldSuspiciousContextData[key] === userContextData[key]
   );
-};
 
-const getOldSuspiciousContextData = (_id, currentContextData) => {
-  return SuspiciousLogin.findOne({
+const getOldSuspiciousContextData = (_id, currentContextData) =>
+  SuspiciousLogin.findOne({
     user: _id,
     ip: currentContextData.ip,
     country: currentContextData.country,
@@ -81,7 +79,6 @@ const getOldSuspiciousContextData = (_id, currentContextData) => {
     device: currentContextData.device,
     deviceType: currentContextData.deviceType,
   });
-};
 
 const addNewSuspiciousLogin = async (_id, existingUser, currentContextData) => {
   const newSuspiciousLogin = new SuspiciousLogin({

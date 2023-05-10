@@ -30,7 +30,7 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="px-6 py-6 rounded-xl shadow-xl bg-white shadow-[#F3F8FF] mb-6">
+    <div className="px-6 py-6 rounded-xl shadow-xl bg-white shadow-[#F3F8FF] mb-6 font-sans">
       <div className="flex items-start justify-between">
         <div className="flex  gap-2">
           <img

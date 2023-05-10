@@ -9,11 +9,10 @@ const errorHandler = (err, req, res, next) => {
     process.env.NODE_ENV === "development"
       ? err
       : {
-          message: err.message,
+          message: "Something went wrong",
         };
 
-  res.status(err.status || 500);
-  res.json(res.locals.error);
+  res.status(err.status || 500).json(res.locals.error);
 };
 
 module.exports = {
