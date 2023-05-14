@@ -15,8 +15,10 @@ const AdminToken = require("../models/token.admin.model");
  */
 const retrieveLogInfo = async (req, res) => {
   try {
-    const logoutLogs = await Log.find({ type: "logout" });
-    const signInLogs = await Log.find({ type: "sign in" });
+    const [logoutLogs, signInLogs] = await Promise.all([
+      Log.find({ type: "logout" }),
+      Log.find({ type: "sign in" }),
+    ]);
 
     const formattedSignInLogs = signInLogs.map((log) => {
       const contextData = log.context.split(",");

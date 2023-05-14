@@ -20,7 +20,6 @@ const moderationReducer = (state = initialState, action) => {
     case LOGOUT:
       return {
         ...state,
-
         modProfile: null,
         communityMembers: [],
         communityMods: [],

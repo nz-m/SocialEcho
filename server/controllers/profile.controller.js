@@ -4,6 +4,7 @@ const Post = require("../models/post.model");
 const Community = require("../models/community.model");
 const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
+const mongoose = require("mongoose");
 
 dayjs.extend(duration);
 
@@ -12,56 +13,62 @@ dayjs.extend(duration);
  * including their name, avatar, location, and follower count, sorted by the number of followers.
  *
  * @route GET /users/public-users
- *
- * @async
- * @function getPublicUsers
-
-
  */
 const getPublicUsers = async (req, res) => {
   try {
     const userId = req.userId;
-    const usersToDisplay = await User.find(
+
+    const followingIds = await Relationship.find({ follower: userId }).distinct(
+      "following"
+    );
+
+    const userIdObj = mongoose.Types.ObjectId(userId);
+
+    const excludedIds = [...followingIds, userIdObj];
+
+    const usersToDisplay = await User.aggregate([
       {
-        _id: {
-          $nin: [
-            ...(await Relationship.find({ follower: userId }).distinct(
-              "following"
-            )),
-          ],
+        $match: {
+          _id: { $nin: excludedIds },
+          role: { $ne: "moderator" },
         },
-        role: { $ne: "moderator" },
       },
-      "_id name avatar location"
-    )
-      .populate({
-        path: "followers",
-        select: "_id",
-      })
-      .lean()
-      .exec();
-
-    const userFollowerCounts = {};
-    await Promise.all(
-      usersToDisplay.map(async (user) => {
-        userFollowerCounts[user._id] = user.followers.length;
-      })
-    );
-
-    usersToDisplay.sort(
-      (a, b) => userFollowerCounts[b._id] - userFollowerCounts[a._id]
-    );
-
-    usersToDisplay.forEach((user) => {
-      user.followerCount = userFollowerCounts[user._id];
-      delete user.followers;
-    });
-
-    usersToDisplay.splice(5);
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          avatar: 1,
+          location: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: "relationships",
+          localField: "_id",
+          foreignField: "following",
+          as: "followers",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          avatar: 1,
+          location: 1,
+          followerCount: { $size: "$followers" },
+        },
+      },
+      {
+        $sort: { followerCount: -1 },
+      },
+      {
+        $limit: 5,
+      },
+    ]);
 
     res.status(200).json(usersToDisplay);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "An error occurred" });
   }
 };
 
@@ -70,7 +77,6 @@ const getPublicUsers = async (req, res) => {
  *
  * @async
  * @function getPublicUser
- *
  *
  * @param {string} req.params.id - The id of the user to retrieve
  * @param {string} req.userId - The id of the current user
@@ -197,7 +203,7 @@ const followUser = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Internal server error",
+      message: "Some error occurred while following the user",
     });
   }
 };
@@ -246,7 +252,7 @@ const unfollowUser = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Internal server error",
+      message: "Some error occurred while unfollowing the user",
     });
   }
 };
@@ -256,9 +262,6 @@ const unfollowUser = async (req, res) => {
  * and the date when they were followed, sorted by the most recent follow date.
  *
  * @route GET /users/following
- *
- * @async
- * @function getFollowingUsers
  *
  * @param {string} req.userId - The ID of the current user.
  */
@@ -279,7 +282,9 @@ const getFollowingUsers = async (req, res) => {
 
     res.status(200).json(followingUsers);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Some error occurred while retrieving the following users",
+    });
   }
 };
 

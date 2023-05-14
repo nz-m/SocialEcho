@@ -51,18 +51,18 @@ const deletePost = async (id) => {
   }
 };
 
-const likePost = async (id, userId) => {
+const likePost = async (id) => {
   try {
-    const { data } = await API.patch(`/posts/${id}/like`, { userId });
+    const { data } = await API.patch(`/posts/${id}/like`);
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
   }
 };
 
-const unlikePost = async (id, userId) => {
+const unlikePost = async (id) => {
   try {
-    const { data } = await API.patch(`/posts/${id}/unlike`, { userId });
+    const { data } = await API.patch(`/posts/${id}/unlike`);
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);

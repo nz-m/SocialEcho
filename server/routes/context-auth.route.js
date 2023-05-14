@@ -28,16 +28,38 @@ const {
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 
-router.use("/context-data", requireAuth);
-
-router.get("/context-data/primary", decodeToken, getAuthContextData);
-router.get("/context-data/trusted", decodeToken, getTrustedAuthContextData);
-router.get("/context-data/blocked", decodeToken, getBlockedAuthContextData);
-router.patch("/context-data/block/:contextId", blockContextAuthData);
-router.patch("/context-data/unblock/:contextId", unblockContextAuthData);
-router.delete("/context-data/:contextId", deleteContextAuthData);
-
+router.get(
+  "/context-data/primary",
+  requireAuth,
+  decodeToken,
+  getAuthContextData
+);
+router.get(
+  "/context-data/trusted",
+  requireAuth,
+  decodeToken,
+  getTrustedAuthContextData
+);
+router.get(
+  "/context-data/blocked",
+  requireAuth,
+  decodeToken,
+  getBlockedAuthContextData
+);
 router.get("/user-preferences", requireAuth, decodeToken, getUserPreferences);
+
+router.delete("/context-data/:contextId", requireAuth, deleteContextAuthData);
+
+router.patch(
+  "/context-data/block/:contextId",
+  requireAuth,
+  blockContextAuthData
+);
+router.patch(
+  "/context-data/unblock/:contextId",
+  requireAuth,
+  unblockContextAuthData
+);
 
 router.use(useragent.express());
 

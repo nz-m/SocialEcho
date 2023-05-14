@@ -21,21 +21,24 @@ const decodeToken = require("../middlewares/auth/decodeToken");
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 
-router.use(requireAuth);
+router.use(requireAuth, decodeToken);
 
-router.get("/:publicUserId/userPosts", decodeToken, getPublicPosts);
-router.get("/saved", decodeToken, getSavedPosts);
+router.get("/community/:communityId", getCommunityPosts);
+router.get("/saved", getSavedPosts);
+router.get("/:publicUserId/userPosts", getPublicPosts);
 router.get("/:id/following", getFollowingUsersPosts);
-router.patch("/:id/save", decodeToken, savePost);
-router.patch("/:id/unsave", decodeToken, unsavePost);
-router.patch("/:id/like", likePost);
-router.patch("/:id/unlike", unlikePost);
-router.post("/:id/comment", addComment);
 router.get("/:id/comment", getComments);
 router.get("/:id", getPost);
 router.get("/", getPosts);
+
+router.post("/:id/comment", addComment);
 router.post("/", fileUpload, createPost);
+
 router.delete("/:id", deletePost);
-router.get("/community/:communityId", decodeToken, getCommunityPosts);
+
+router.patch("/:id/save", savePost);
+router.patch("/:id/unsave", unsavePost);
+router.patch("/:id/like", likePost);
+router.patch("/:id/unlike", unlikePost);
 
 module.exports = router;

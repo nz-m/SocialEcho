@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 
 const PostForm = () => {
   const community = useSelector((state) => state.community?.communityData);
-  const user = useSelector((state) => state.auth?.userData);
 
   const [body, setBody] = useState("");
   const [file, setFile] = useState(null);
@@ -13,7 +12,7 @@ const PostForm = () => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  if (!community || !user) return null;
+  if (!community) return null;
 
   const handleBodyChange = (event) => {
     setBody(event.target.value);
@@ -26,15 +25,13 @@ const PostForm = () => {
     if (
       selectedFile &&
       allowedFileTypes.test(selectedFile.type) &&
-      selectedFile.size <= 50 * 1024 * 1024
+      selectedFile.size <= 50 * 1024 * 1024 // 50MB
     ) {
       setFile(selectedFile);
       setError("");
     } else {
       setFile(null);
-      setError(
-        "Invalid file type or size. Please select an image or video file under 50MB."
-      );
+      setError("Please select an image or video file under 50MB.");
     }
   };
   const handleSubmit = async (event) => {
@@ -48,8 +45,7 @@ const PostForm = () => {
 
     const formData = new FormData();
     formData.append("body", body);
-    formData.append("community", community._id);
-    formData.append("user", user._id);
+    formData.append("communityId", community._id);
     formData.append("file", file);
     setLoading(true);
 

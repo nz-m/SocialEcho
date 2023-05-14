@@ -7,14 +7,13 @@ import {
   getComPostsAction,
   getSelfPostAction,
 } from "../../redux/actions/postActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 const CommentForm = ({ communityId }) => {
   const dispatch = useDispatch();
 
   const { postId } = useParams();
-  const userData = useSelector((state) => state.auth?.userData);
 
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -23,23 +22,21 @@ const CommentForm = ({ communityId }) => {
     e.preventDefault();
     const newComment = {
       body,
-      user: userData._id,
       post: postId,
     };
-    if (userData) {
-      try {
-        setIsLoading(true);
-        await dispatch(addCommentAction(postId, newComment));
-        await dispatch(getCommentsAction(postId));
-        await dispatch(getSelfPostAction(postId));
-        setIsLoading(false);
-        setBody("");
 
-        await dispatch(getPostAction(postId));
-        await dispatch(getComPostsAction(communityId));
-      } finally {
-        setIsLoading(false);
-      }
+    try {
+      setIsLoading(true);
+      await dispatch(addCommentAction(postId, newComment));
+      await dispatch(getCommentsAction(postId));
+      await dispatch(getSelfPostAction(postId));
+      setIsLoading(false);
+      setBody("");
+
+      await dispatch(getPostAction(postId));
+      await dispatch(getComPostsAction(communityId));
+    } finally {
+      setIsLoading(false);
     }
   };
 

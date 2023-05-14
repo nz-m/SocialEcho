@@ -39,7 +39,7 @@ const PostView = ({ post }) => {
     return validExtensions.includes(fileExtension);
   }, [fileUrl]);
 
-  const communityData = useSelector((state) => state.community.communityData);
+  const communityData = useSelector((state) => state.community?.communityData);
   const userId = userData._id;
   useEffect(() => {
     dispatch(getCommunityAction(community.name)).then(() => setLoading(false));

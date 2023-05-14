@@ -220,9 +220,9 @@ export const deletePostAction = (id) => async (dispatch) => {
   }
 };
 
-export const likePostAction = (id, userId) => async (dispatch) => {
+export const likePostAction = (id) => async (dispatch) => {
   try {
-    const { error, data } = await api.likePost(id, userId);
+    const { error, data } = await api.likePost(id);
 
     if (error) {
       throw new Error(error);
@@ -246,9 +246,9 @@ export const likePostAction = (id, userId) => async (dispatch) => {
   }
 };
 
-export const unlikePostAction = (id, userId) => async (dispatch) => {
+export const unlikePostAction = (id) => async (dispatch) => {
   try {
-    const { error, data } = await api.unlikePost(id, userId);
+    const { error, data } = await api.unlikePost(id);
     if (error) {
       throw new Error(error);
     }

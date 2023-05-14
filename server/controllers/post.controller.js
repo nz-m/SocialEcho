@@ -11,43 +11,47 @@ const Relationship = require("../models/relationship.model");
 
 const createPost = async (req, res) => {
   try {
-    const userId = req.body.user;
-    const isMember = await Community.findOne({
-      _id: req.body.community,
+    const communityId = req.body.communityId;
+    const userId = req.userId;
+
+    const community = await Community.findOne({
+      _id: communityId,
       members: userId,
     });
 
-    if (!isMember) {
+    if (!community) {
       return res.status(401).json({
         message: "Unauthorized to post in this community",
       });
     }
 
     let newPost;
+    const file = req.files && req.files.length > 0 ? req.files[0] : null;
 
-    if (req.files && req.files.length > 0) {
-      const { filename } = req.files[0];
+    if (file) {
+      const { filename } = file;
       const fileUrl = `${req.protocol}://${req.get(
         "host"
       )}/assets/userFiles/${filename}`;
       newPost = new Post({
-        user: req.body.user,
-        community: req.body.community,
+        user: userId,
+        community: communityId,
         body: req.body.body,
         fileUrl: fileUrl,
       });
     } else {
       newPost = new Post({
-        user: req.body.user,
-        community: req.body.community,
+        user: userId,
+        community: communityId,
         body: req.body.body,
         fileUrl: null,
       });
     }
 
     const savedPost = await newPost.save();
-    const id = savedPost._id;
-    const post = await Post.findById(id)
+    const postId = savedPost._id;
+
+    const post = await Post.findById(postId)
       .populate("user", "name avatar")
       .populate("community", "name")
       .lean();
@@ -56,7 +60,7 @@ const createPost = async (req, res) => {
 
     res.json(post);
   } catch (error) {
-    res.status(409).json({
+    res.status(500).json({
       message: "Error creating post",
     });
   }
@@ -65,6 +69,7 @@ const createPost = async (req, res) => {
 const getPost = async (req, res) => {
   try {
     const id = req.params.id;
+
     const post = await Post.findById(id)
       .populate("user", "name avatar")
       .populate("community", "name")
@@ -86,33 +91,20 @@ const getPost = async (req, res) => {
 
     res.status(200).json(post);
   } catch (error) {
-    res.status(409).json({
+    res.status(500).json({
       message: "Error getting post",
     });
   }
 };
 
-/**
- * Retrieves the posts for current user, including pagination, the number of posts saved by each user,
- * sorted by creation date.
- *
- * @async
- * @function getPosts
- *
- * @param {string} req.userId - The ID of the user making the request.
- * @param {string} [req.query.limit=10] - The maximum number of posts to retrieve.
- * Defaults to 10 if not provided.
- * @param {string} [req.query.skip=0] - The number of posts to skip before starting to retrieve them.
- * Defaults to 0 if not provided.
- */
 const getPosts = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = parseInt(req.query.skip) || 0;
+    const { limit = 10, skip = 0 } = req.query;
 
     const communities = await Community.find({
       members: req.userId,
     });
+
     const communityIds = communities.map((community) => community._id);
 
     const posts = await Post.find({
@@ -125,8 +117,8 @@ const getPosts = async (req, res) => {
       })
       .populate("user", "name avatar")
       .populate("community", "name")
-      .skip(skip)
-      .limit(limit)
+      .skip(parseInt(skip))
+      .limit(parseInt(limit))
       .lean();
 
     const formattedPosts = posts.map((post) => ({
@@ -145,8 +137,8 @@ const getPosts = async (req, res) => {
       totalPosts,
     });
   } catch (error) {
-    res.status(404).json({
-      message: "Posts not found",
+    res.status(500).json({
+      message: "Error retrieving posts",
     });
   }
 };
@@ -156,21 +148,12 @@ const getPosts = async (req, res) => {
  * the user who created it, and the community it belongs to.
  *
  * @route GET /posts/community/:communityId
- *
- * @async
- * @function getCommunityPosts
- *
- * @param {Object} req.query - The query parameters for the request.
- * @param {string} req.params.id - The ID of the community to retrieve the posts for.
- * @param {string} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not specified.
- * @param {string} [req.query.skip=0] - The number of posts to skip before starting to retrieve them.
- * Defaults to 0 if not specified.
  */
 const getCommunityPosts = async (req, res) => {
   try {
     const communityId = req.params.communityId;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = parseInt(req.query.skip) || 0;
+
+    const { limit = 10, skip = 0 } = req.query;
 
     const isMember = await Community.findOne({
       _id: communityId,
@@ -191,8 +174,8 @@ const getCommunityPosts = async (req, res) => {
       })
       .populate("user", "name avatar")
       .populate("community", "name")
-      .skip(skip)
-      .limit(limit)
+      .skip(parseInt(skip))
+      .limit(parseInt(limit))
       .lean();
 
     const formattedPosts = posts.map((post) => ({
@@ -210,7 +193,7 @@ const getCommunityPosts = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Server error",
+      message: "Error retrieving posts",
     });
   }
 };
@@ -218,14 +201,7 @@ const getCommunityPosts = async (req, res) => {
 /**
  * Retrieves the posts of the users that the current user is following in a given community
  *
- * @route GET /posts//:id/following
- *
- * @async
- * @function getFollowingUsersPosts
- *
- * @param {string} req.params.id - The ID of the community to retrieve the posts for.
- * @param {number} [req.query.limit=10] - The maximum number of posts to retrieve. Defaults to 10 if not specified.
- * @param {number} [req.query.skip=0] - The number of posts to skip before starting to retrieve them. Defaults to 0 if not specified.
+ * @route GET /posts/:id/following
  */
 const getFollowingUsersPosts = async (req, res) => {
   try {
@@ -269,25 +245,44 @@ const getFollowingUsersPosts = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const id = req.params.id;
-    const post = await Post.findById(id);
-    await post.remove();
+    const post = await Post.findByIdAndRemove(id);
+
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found. It may have been deleted already",
+      });
+    }
+
     res.status(200).json({
       message: "Post deleted successfully",
     });
   } catch (error) {
-    res.status(404).json({
-      message: "Post not found. It may have been deleted already",
+    res.status(500).json({
+      message: "Error deleting post",
     });
   }
 };
 
+const populatePost = async (post) => {
+  const savedByCount = await User.countDocuments({
+    savedPosts: post._id,
+  });
+
+  return {
+    ...post.toObject(),
+    createdAt: dayjs(post.createdAt).fromNow(),
+    savedByCount,
+  };
+};
+
 /**
  * @param {string} req.params.id - The ID of the post to be liked.
+ * @param {string} req.userId - The ID of the user liking the post.
  */
 const likePost = async (req, res) => {
   try {
     const id = req.params.id;
-    const { userId } = req.body;
+    const userId = req.userId;
     const updatedPost = await Post.findOneAndUpdate(
       {
         _id: id,
@@ -312,19 +307,13 @@ const likePost = async (req, res) => {
         message: "Post not found. It may have been deleted already",
       });
     }
-    const savedByCount = await User.countDocuments({
-      savedPosts: updatedPost._id,
-    });
-    const formattedPost = {
-      ...updatedPost.toObject(),
-      createdAt: dayjs(updatedPost.createdAt).fromNow(),
-      savedByCount,
-    };
+
+    const formattedPost = await populatePost(updatedPost);
 
     res.status(200).json(formattedPost);
   } catch (error) {
     res.status(500).json({
-      message: "Server error",
+      message: "Error liking post",
     });
   }
 };
@@ -332,7 +321,7 @@ const likePost = async (req, res) => {
 const unlikePost = async (req, res) => {
   try {
     const id = req.params.id;
-    const { userId } = req.body;
+    const userId = req.userId;
 
     const updatedPost = await Post.findOneAndUpdate(
       {
@@ -356,30 +345,23 @@ const unlikePost = async (req, res) => {
         message: "Post not found. It may have been deleted already",
       });
     }
-    const savedByCount = await User.countDocuments({
-      savedPosts: updatedPost._id,
-    });
 
-    const formattedPost = {
-      ...updatedPost.toObject(),
-      createdAt: dayjs(updatedPost.createdAt).fromNow(),
-      savedByCount,
-    };
+    const formattedPost = await populatePost(updatedPost);
 
     res.status(200).json(formattedPost);
   } catch (error) {
     res.status(500).json({
-      message: "Server error",
+      message: "Error unliking post",
     });
   }
 };
 
 const addComment = async (req, res) => {
   try {
-    const { body, user, post } = req.body.newComment;
+    const { body, post } = req.body.newComment;
     const newComment = new Comment({
+      user: req.userId,
       body,
-      user,
       post,
     });
     await newComment.save();
@@ -398,7 +380,7 @@ const addComment = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Server error",
+      message: "Error adding comment",
     });
   }
 };
@@ -428,12 +410,17 @@ const getComments = async (req, res) => {
   }
 };
 
+const savePost = async (req, res) => {
+  await saveOrUnsavePost(req, res, "$addToSet");
+};
+
+const unsavePost = async (req, res) => {
+  await saveOrUnsavePost(req, res, "$pull");
+};
+
 /**
  * Saves or unsaves a post for a given user by updating the user's
  * savedPosts array in the database. Uses $addToSet or $pull operation based on the value of the operation parameter.
- *
- * @async
- * @function saveOrUnsavePost
  *
  * @param req - The request object.
  * @param res - The response object.
@@ -487,14 +474,6 @@ const saveOrUnsavePost = async (req, res, operation) => {
   }
 };
 
-const savePost = async (req, res) => {
-  await saveOrUnsavePost(req, res, "$addToSet");
-};
-
-const unsavePost = async (req, res) => {
-  await saveOrUnsavePost(req, res, "$pull");
-};
-
 /**
  * @route GET /posts/saved
  */
@@ -507,7 +486,9 @@ const getSavedPosts = async (req, res) => {
       });
     }
 
-    // Send saved posts of communities user is a member of only
+    /**
+     * send the saved posts of the communities that the user is a member of only
+     */
     const communityIds = await Community.find({ members: req.userId }).distinct(
       "_id"
     );
@@ -577,7 +558,7 @@ const getPublicPosts = async (req, res) => {
 
     res.status(200).json(formattedPosts);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 

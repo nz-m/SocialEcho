@@ -86,14 +86,6 @@ const addRulesToCommunity = async (req, res) => {
  * name, banner image, member count, and description.
  *
  * @route GET /communities/member
- *
- * @async
- * @function getMemberCommunities
- *
- * @throws {Error} - If an error occurs while retrieving the communities.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object,
- *                            containing an array of communities that the user is a member of.
  */
 const getMemberCommunities = async (req, res) => {
   try {
@@ -119,16 +111,6 @@ const getMemberCommunities = async (req, res) => {
  * and member count, sorted by the number of members.
  *
  * @route GET /communities/not-member
- * @async
- * @function getNotMemberCommunities
- *
- * @throws {Error} - If an error occurs while retrieving the communities.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object,
- *                            containing an array of up to 10 public communities
- *                            that the user is not a member of and has not been banned from.
- *                            Each community object includes the community's ID, name,
- *                            banner image URL, description, and member count.
  */
 const getNotMemberCommunities = async (req, res) => {
   try {
@@ -281,12 +263,6 @@ const unbanUser = async (req, res) => {
  *
  * @param {string} req.body.userId - The ID of the user to add as a moderator.
  * @param {string} req.params.name - The name of the community to add the user to.
- *
- * @throws {Error} - If the current user is not a moderator of the community.
- * @throws {Error} - If an error occurs while adding the user to the community.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object,
- *                            indicating that the user was successfully added as a moderator and member.
  */
 const addModToCommunity = async (req, res) => {
   try {
@@ -338,7 +314,7 @@ const reportPost = async (req, res) => {
           $not: {
             $elemMatch: {
               post: req.body.info.postId,
-              reportedBy: req.body.userId,
+              reportedBy: req.userId,
             },
           },
         },
@@ -347,7 +323,7 @@ const reportPost = async (req, res) => {
         $addToSet: {
           reportedPosts: {
             post: req.body.info.postId,
-            reportedBy: req.body.userId,
+            reportedBy: req.userId,
             reportReason: req.body.info.reportReason,
             reportDate: new Date(),
           },

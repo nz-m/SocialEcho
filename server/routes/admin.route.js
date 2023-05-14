@@ -5,8 +5,8 @@ const {
   signin,
 } = require("../controllers/admin.controller");
 
-router.post("/signin", signin);
-
 router.route("/logs").get(retrieveLogInfo).delete(deleteLogInfo);
+
+router.post("/signin", signin);
 
 module.exports = router;
