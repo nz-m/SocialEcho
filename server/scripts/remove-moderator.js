@@ -6,7 +6,6 @@ const Community = require("../models/community.model");
 const kleur = require("kleur");
 const LOG = console.log;
 
-// Set up the readline interface for user input
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -24,7 +23,7 @@ mongoose
     start();
   })
   .catch((err) => {
-    LOG(kleur.red().bold("❌ Error connecting to database" + err.message));
+    LOG(kleur.red().bold("Error connecting to database" + err.message));
     process.exit(1);
   });
 
@@ -44,12 +43,12 @@ async function start() {
     const chosenCommunity = await Community.findOne({ name: communityName });
 
     if (!chosenCommunity) {
-      LOG(kleur.red().bold("❌ Error! Community does not exist."));
+      LOG(kleur.red().bold("Error! Community does not exist."));
       process.exit(1);
     }
 
     if (chosenCommunity.moderators.length === 0) {
-      LOG(kleur.red().bold("❌ Error! Community has no moderators."));
+      LOG(kleur.red().bold("Error! Community has no moderators."));
       process.exit(1);
     }
 
@@ -68,7 +67,7 @@ async function start() {
     const moderatorToRemove = moderators[modChoice - 1];
 
     if (!moderatorToRemove) {
-      LOG(kleur.red().bold("❌ Error! Moderator not found."));
+      LOG(kleur.red().bold("Error! Moderator not found."));
       return;
     }
 
@@ -103,7 +102,7 @@ function promptUserInput(promptText, options) {
       if (options && options.length > 0) {
         const index = parseInt(input) - 1;
         if (isNaN(index) || index < 0 || index >= options.length) {
-          LOG(kleur.red().bold("❌ Error! Invalid choice. Please try again."));
+          LOG(kleur.red().bold("Error! Invalid choice. Please try again."));
           promptUserInput(promptText, options).then(resolve);
         } else {
           resolve(options[index]);
@@ -124,7 +123,7 @@ async function promptUserChoice(prompt, choices) {
         choiceIndex < 0 ||
         choiceIndex >= choices.length
       ) {
-        reject(new Error("❌ Error! Invalid choice"));
+        reject(new Error("Error! Invalid choice"));
       } else {
         resolve(choices[choiceIndex].split("-")[0]);
       }
