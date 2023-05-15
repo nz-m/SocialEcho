@@ -12,7 +12,7 @@ import JoinModal from "../modals/JoinModal";
 import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { IoIosPeople } from "react-icons/io";
-const RightBar = () => {
+const Rightbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [joinModalVisibility, setJoinModalVisibility] = useState({});
@@ -208,4 +208,4 @@ const RightBar = () => {
   );
 };
 
-export default RightBar;
+export default Rightbar;

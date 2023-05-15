@@ -12,7 +12,7 @@ import {
 } from "../../hooks/useCommunityData";
 import { HiUserGroup, HiOutlineCheckBadge } from "react-icons/hi2";
 
-const RightBar = () => {
+const Rightbar = () => {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
 
   const dispatch = useDispatch();
@@ -119,4 +119,4 @@ const RightBar = () => {
   );
 };
 
-export default RightBar;
+export default Rightbar;

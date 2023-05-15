@@ -8,13 +8,13 @@ const communityRoutes = require("./routes/community.route");
 const contextAuthRoutes = require("./routes/context-auth.route");
 const search = require("./controllers/search.controller");
 const Database = require("./config/database");
+const decodeToken = require("./middlewares/auth/decodeToken");
 
 const app = express();
 
 const cors = require("cors");
 const morgan = require("morgan");
 const passport = require("passport");
-const bodyParser = require("body-parser");
 
 const {
   notFoundHandler,
@@ -23,7 +23,7 @@ const {
 
 const PORT = process.env.PORT || 5000;
 
-const db = new Database(process.env.DB_CONNECT, {
+const db = new Database(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -40,7 +40,7 @@ app.use(
   "/assets/userAvatars",
   express.static(__dirname + "/assets/userAvatars")
 );
-app.use(bodyParser.json());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
@@ -51,7 +51,7 @@ app.get("/check-connectivity", (req, res) => {
   res.status(200).json({ message: "Server is up and running!" });
 });
 
-app.get("/search", search);
+app.get("/search", decodeToken, search);
 
 app.use("/auth", contextAuthRoutes);
 app.use("/users", userRoutes);

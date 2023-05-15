@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import ContextAuthModal from "../components/modals/ContextAuthModal";
 import LoadingSpinner from "../components/loader/ButtonLoadingSpinner";
 
-const SignupForm = () => {
+const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,6 +23,12 @@ const SignupForm = () => {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
+
+    if (e.target.value.includes("mod.socialecho.com")) {
+      setIsModerator(true);
+    } else {
+      setIsModerator(false);
+    }
   };
 
   const handlePasswordChange = (e) => {
@@ -46,6 +52,7 @@ const SignupForm = () => {
 
   const [isConsentGiven, setIsConsentGiven] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModerator, setIsModerator] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -201,6 +208,7 @@ const SignupForm = () => {
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 setIsConsentGiven={setIsConsentGiven}
+                isModerator={isModerator}
               />
             </div>
           </div>
@@ -210,4 +218,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default SignUp;

@@ -1,10 +1,11 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
 const Admin = require("../models/admin.model");
 const { prompt } = require("enquirer");
 
 mongoose
-  .connect("mongodb://127.0.0.1/db_socialecho", {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -32,7 +33,9 @@ async function createAdmin() {
     await admin.save();
     console.log(`Admin user "${admin.username}" created successfully`);
   } catch (error) {
-    console.log(error.message);
+    if (error.message.includes("duplicate key error")) {
+      console.log(`Username "${admin.username}" is already taken.`);
+    } else console.log(error.message);
   } finally {
     mongoose.connection.close();
   }

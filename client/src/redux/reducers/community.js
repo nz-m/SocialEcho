@@ -5,7 +5,7 @@ const initialState = {
   communityData: null,
   joinedCommunities: [],
   notJoinedCommunities: [],
-  reportedPosts: [],
+  reportedPosts: null,
   communityError: null,
 };
 
@@ -19,7 +19,7 @@ const communityReducer = (state = initialState, action) => {
         communityData: null,
         joinedCommunities: [],
         notJoinedCommunities: [],
-        reportedPosts: [],
+        reportedPosts: null,
         communityError: null,
       };
 
@@ -93,10 +93,6 @@ const communityReducer = (state = initialState, action) => {
     case types.REPORT_POST_SUCCESS:
       return {
         ...state,
-        communityData: {
-          ...state.communityData,
-          reportedPosts: [...state.communityData.reportedPosts, payload],
-        },
         communityError: null,
       };
     case types.REPORT_POST_FAIL:
@@ -116,15 +112,6 @@ const communityReducer = (state = initialState, action) => {
       return {
         ...state,
         communityError: payload,
-      };
-
-    case types.DELETE_REPORTED_POST_SUCCESS:
-      return {
-        ...state,
-        reportedPosts: state.reportedPosts.filter(
-          (post) => post._id !== payload
-        ),
-        communityError: null,
       };
 
     case types.DELETE_REPORTED_POST_FAIL:

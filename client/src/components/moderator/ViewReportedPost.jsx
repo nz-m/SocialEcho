@@ -2,10 +2,9 @@ import React, { useMemo } from "react";
 import { deletePostAction } from "../../redux/actions/postActions";
 import { removeReportedPostAction } from "../../redux/actions/communityActions";
 import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 
 const ViewReportedPost = ({ post }) => {
-  const { communityName } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { _id, body, fileUrl, user, createdAt } = post;
@@ -17,7 +16,7 @@ const ViewReportedPost = ({ post }) => {
   };
 
   const onNoAction = async () => {
-    await dispatch(removeReportedPostAction(communityName, _id));
+    await dispatch(removeReportedPostAction(_id));
     navigate(-1);
   };
 

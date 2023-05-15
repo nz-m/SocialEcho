@@ -16,12 +16,8 @@ module.exports = {
       },
     },
     fontFamily: {
-      monoton: ["Monoton", "cursive"],
-      satoshi: ["Satoshi", "sans-serif"],
-      clash: ["Clash Display", "sans-serif"],
-      infinite: ["Outfit", "sans-serif"],
-      bebasneo: ["Bebas Neue", "cursive"],
-      IBM: ["IBM Plex Sans Condensed", "sans-serif"],
+      helvetica: ["Helvetica", "sans-serif"],
+      sans: ["Colfax Regular", "sans-serif"],
     },
     extend: {
       boxShadow: {

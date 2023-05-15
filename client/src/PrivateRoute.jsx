@@ -11,7 +11,7 @@ import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setInitialAuthState } from "./redux/actions/authActions";
 import Navbar from "./components/common/Navbar";
-import LeftBar from "./components/common/LeftBar";
+import LeftBar from "./components/common/Leftbar";
 
 function isAuthenticated(user, accessToken) {
   return user && accessToken;

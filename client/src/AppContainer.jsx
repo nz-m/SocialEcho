@@ -17,6 +17,7 @@ import { Provider } from "react-redux";
 import createAppStore from "./redux/store";
 import App from "./App";
 import axios from "axios";
+import CommonLoading from "./components/loader/CommonLoading";
 
 const AppContainer = () => {
   const [store, setStore] = useState(null);
@@ -52,8 +53,8 @@ const AppContainer = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen text-bold text-2xl">
-        Loading store....
+      <div className="flex items-center justify-center h-screen">
+        <CommonLoading />
       </div>
     );
   }

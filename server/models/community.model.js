@@ -42,18 +42,6 @@ const communitySchema = new Schema(
       },
     ],
 
-    reportedPosts: {
-      type: [
-        {
-          post: { type: Schema.Types.ObjectId, ref: "Post" },
-          reportedBy: { type: Schema.Types.ObjectId, ref: "User" },
-          reportReason: { type: String },
-          reportDate: { type: Date, default: Date.now },
-        },
-      ],
-      default: [],
-    },
-
     rules: [
       {
         type: Schema.Types.ObjectId,

@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 const useragent = require("express-useragent");
+const decodeToken = require("../middlewares/auth/decodeToken");
 
 const {
   addContextData,
@@ -27,10 +28,28 @@ const {
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 
-router.get("/context-data/primary", requireAuth, getAuthContextData);
-router.get("/context-data/trusted", requireAuth, getTrustedAuthContextData);
-router.get("/context-data/blocked", requireAuth, getBlockedAuthContextData);
+router.get(
+  "/context-data/primary",
+  requireAuth,
+  decodeToken,
+  getAuthContextData
+);
+router.get(
+  "/context-data/trusted",
+  requireAuth,
+  decodeToken,
+  getTrustedAuthContextData
+);
+router.get(
+  "/context-data/blocked",
+  requireAuth,
+  decodeToken,
+  getBlockedAuthContextData
+);
+router.get("/user-preferences", requireAuth, decodeToken, getUserPreferences);
+
 router.delete("/context-data/:contextId", requireAuth, deleteContextAuthData);
+
 router.patch(
   "/context-data/block/:contextId",
   requireAuth,
@@ -42,9 +61,8 @@ router.patch(
   unblockContextAuthData
 );
 
-router.get("/user-preferences", requireAuth, getUserPreferences);
-
 router.use(useragent.express());
+
 router.get("/verify", verifyEmailValidation, verifyEmail, addContextData);
 router.get("/verify-login", verifyLoginValidation, verifyLogin);
 router.get("/block-login", verifyLoginValidation, blockLogin);

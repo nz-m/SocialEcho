@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-* {
-  font-family: "lato", sans-serif;
+
+*{
+    font-family: "Roboto", sans-serif;
 }
 
 .tooltip {

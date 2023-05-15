@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import debounce from "lodash/debounce";
 import JoinModal from "../modals/JoinModal";
@@ -10,13 +10,15 @@ import { MdClear } from "react-icons/md";
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 const Search = () => {
-  const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
+  const navigate = useNavigate();
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [community, setCommunity] = useState(null);
   const [joinedCommunity, setJoinedCommunity] = useState(null);
   const [loading, setLoading] = useState(false);
+  const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
   const setInitialValue = () => {
     setUsers([]);
     setPosts([]);
@@ -46,9 +48,10 @@ const Search = () => {
             setLoading(false);
           })
           .catch((err) => {
+            console.log(err);
             setLoading(false);
           });
-      }, 500),
+      }, 800),
     [accessToken]
   );
 
@@ -90,8 +93,12 @@ const Search = () => {
         className="w-96 py-2 pl-10 pr-4 text-gray-700 bg-white border border-gray-300 rounded focus:outline-none focus:border-primary"
         value={inputValue}
         onChange={handleInputChange}
+        onFocus={() => setIsInputFocused(true)}
+        onBlur={() => setIsInputFocused(false)}
         type="text"
-        placeholder="Search"
+        placeholder={`${
+          isInputFocused ? "Search for posts, users, communities" : "Search"
+        }`}
         aria-label="Search"
         autoComplete="off"
       />
@@ -115,12 +122,15 @@ const Search = () => {
             </div>
           )}
           {posts.length > 0 && (
-            <ul onClick={() => setPosts([])}>
+            <ul>
               {posts.map((post) => (
                 <li key={post._id} className="border-b py-2 px-4">
-                  <Link
-                    to={`/post/${post._id}`}
-                    className="block text-sm text-gray-700 hover:text-indigo-500"
+                  <div
+                    onClick={() => {
+                      navigate(`/post/${post._id}`);
+                      clearValues();
+                    }}
+                    className="block text-sm text-gray-700 hover:text-indigo-500 cursor-pointer"
                   >
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
@@ -141,18 +151,21 @@ const Search = () => {
                         </div>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 </li>
               ))}
             </ul>
           )}
           {users.length > 0 && (
-            <ul onClick={() => setUsers([])}>
+            <ul>
               {users.map((user) => (
                 <li key={user._id} className="border-b py-2 px-4">
-                  <Link
-                    to={`/user/${user._id}`}
-                    className="block text-sm text-gray-700 hover:text-indigo-500"
+                  <div
+                    onClick={() => {
+                      navigate(`/user/${user._id}`);
+                      clearValues();
+                    }}
+                    className="block text-sm text-gray-700 hover:text-indigo-500 cursor-pointer"
                   >
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
@@ -171,7 +184,7 @@ const Search = () => {
                         </div>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -209,10 +222,13 @@ const Search = () => {
           )}
 
           {joinedCommunity && (
-            <Link
+            <div
               key={joinedCommunity._id}
-              to={`/community/${joinedCommunity.name}`}
-              className="block text-sm text-gray-700 hover:text-indigo-500 border-b py-2 px-4"
+              onClick={() => {
+                navigate(`/community/${joinedCommunity.name}`);
+                clearValues();
+              }}
+              className="block text-sm text-gray-700 hover:text-indigo-500 border-b py-2 px-4 cursor-pointer"
             >
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -229,7 +245,7 @@ const Search = () => {
                   </p>
                 </div>
               </div>
-            </Link>
+            </div>
           )}
         </div>
       )}

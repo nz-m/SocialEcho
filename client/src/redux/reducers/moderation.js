@@ -5,9 +5,7 @@ import {
   GET_MOD_PROFILE_SUCCESS,
   GET_MOD_PROFILE_FAIL,
 } from "../constants/authConstants";
-const SET_MODERATOR = "SET_MODERATOR";
 const initialState = {
-  isModerator: false,
   modProfile: null,
   communityMembers: [],
   communityMods: [],
@@ -22,18 +20,10 @@ const moderationReducer = (state = initialState, action) => {
     case LOGOUT:
       return {
         ...state,
-        isModerator: false,
         modProfile: null,
         communityMembers: [],
         communityMods: [],
         bannedUsers: [],
-        modError: null,
-      };
-
-    case SET_MODERATOR:
-      return {
-        ...state,
-        isModerator: payload,
         modError: null,
       };
 
@@ -47,7 +37,7 @@ const moderationReducer = (state = initialState, action) => {
     case GET_MOD_PROFILE_FAIL:
       return {
         ...state,
-        isModerator: false,
+
         modProfile: null,
         communityMembers: [],
         communityMods: [],
@@ -66,7 +56,7 @@ const moderationReducer = (state = initialState, action) => {
     case types.GET_COMMUNITY_MEMBERS_FAIL:
       return {
         ...state,
-        isModerator: false,
+
         modProfile: null,
         communityMembers: [],
         communityMods: [],
@@ -83,7 +73,7 @@ const moderationReducer = (state = initialState, action) => {
     case types.GET_COMMUNITY_MODS_FAIL:
       return {
         ...state,
-        isModerator: false,
+
         modProfile: null,
         communityMembers: [],
         communityMods: [],

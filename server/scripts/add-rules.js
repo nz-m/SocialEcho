@@ -1,3 +1,4 @@
+require("dotenv").config();
 const readline = require("readline");
 const mongoose = require("mongoose");
 const Community = require("../models/community.model");
@@ -11,7 +12,7 @@ const rl = readline.createInterface({
 });
 
 mongoose.set("strictQuery", false);
-mongoose.connect("mongodb://127.0.0.1:27017/db_socialecho", {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

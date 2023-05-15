@@ -1,13 +1,12 @@
 const nodemailer = require("nodemailer");
 const SuspiciousLogin = require("../../models/suspicious-login.model");
 const UserContext = require("../../models/context.model");
-const User = require("../../models/user.model");
 const EmailVerification = require("../../models/email.model");
 const { query, validationResult } = require("express-validator");
 const { decryptData } = require("../../utils/encryption");
 const { verifyLoginHTML } = require("../../utils/emailTemplates");
 
-const BASE_URL = process.env.BASE_URL;
+const CLIENT_URL = process.env.CLIENT_URL;
 const EMAIL_SERVICE = process.env.EMAIL_SERVICE;
 
 const verifyLoginValidation = [
@@ -25,13 +24,16 @@ const sendLoginVerificationEmail = async (req, res) => {
   const USER = decryptData(process.env.EMAIL);
   const PASS = decryptData(process.env.PASSWORD);
 
+  // const USER = process.env.EMAIL;
+  // const PASS = process.env.PASSWORD;
+
   const currentContextData = req.currentContextData;
 
-  const email = req.user.email;
-  const name = req.user.name;
+  const { email, name } = req.user;
+
   const id = currentContextData.id;
-  const verificationLink = `${BASE_URL}/verify-login?id=${id}&email=${email}`;
-  const blockLink = `${BASE_URL}/block-device?id=${id}&email=${email}`;
+  const verificationLink = `${CLIENT_URL}/verify-login?id=${id}&email=${email}`;
+  const blockLink = `${CLIENT_URL}/block-device?id=${id}&email=${email}`;
 
   try {
     let transporter = nodemailer.createTransport({
@@ -67,14 +69,15 @@ const sendLoginVerificationEmail = async (req, res) => {
       message: `Access blocked due to suspicious activity. Verification email was sent to your email address.`,
     });
   } catch (err) {
-    console.log(err);
+    console.log(
+      "Could not send email. There could be an issue with the provided credentials or the email service."
+    );
     res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const verifyLogin = async (req, res) => {
-  const id = req.query.id;
-  const email = req.query.email;
+  const { id, email } = req.query;
 
   try {
     const suspiciousLogin = await SuspiciousLogin.findById(id);
@@ -110,8 +113,7 @@ const verifyLogin = async (req, res) => {
 };
 
 const blockLogin = async (req, res) => {
-  const id = req.query.id;
-  const email = req.query.email;
+  const { id, email } = req.query;
 
   try {
     const suspiciousLogin = await SuspiciousLogin.findById(id);

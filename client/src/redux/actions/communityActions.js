@@ -125,9 +125,9 @@ export const leaveCommunityAction = (communityName) => async (dispatch) => {
   }
 };
 
-export const reportPostAction = (communityName, info) => async (dispatch) => {
+export const reportPostAction = (info) => async (dispatch) => {
   try {
-    const { error, data } = await api.reportPost(communityName, info);
+    const { error, data } = await api.reportPost(info);
     if (error) {
       throw new Error(error);
     }
@@ -173,30 +173,29 @@ export const getReportedPostsAction = (communityName) => async (dispatch) => {
   }
 };
 
-export const removeReportedPostAction =
-  (communityName, postId) => async (dispatch) => {
-    try {
-      const { error } = await api.removeReportedPost(communityName, postId);
-      if (error) {
-        throw new Error(error);
-      }
-      dispatch({
-        type: types.DELETE_REPORTED_POST_SUCCESS,
-        payload: postId,
-        meta: {
-          requiresAuth: true,
-        },
-      });
-    } catch (error) {
-      dispatch({
-        type: types.DELETE_REPORTED_POST_FAIL,
-        payload: error.message,
-        meta: {
-          requiresAuth: true,
-        },
-      });
+export const removeReportedPostAction = (postId) => async (dispatch) => {
+  try {
+    const { error } = await api.removeReportedPost(postId);
+    if (error) {
+      throw new Error(error);
     }
-  };
+    dispatch({
+      type: types.DELETE_REPORTED_POST_SUCCESS,
+      payload: postId,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: types.DELETE_REPORTED_POST_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  }
+};
 
 export const getComMembersAction = (communityName) => async (dispatch) => {
   try {

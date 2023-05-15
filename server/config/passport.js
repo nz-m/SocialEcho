@@ -18,22 +18,25 @@ passport.use(
         const refreshTokenFromDB = await Token.findOne({
           user: user._id,
         });
+
         if (!refreshTokenFromDB) {
           return done(null, false);
         }
+
         const refreshPayload = jwt.verify(
           refreshTokenFromDB.refreshToken,
           process.env.REFRESH_SECRET
         );
+
         if (refreshPayload.email !== jwt_payload.email) {
           return done(null, false);
         }
-        // Check if the access token has expired
+
         const tokenExpiration = new Date(jwt_payload.exp * 1000);
         const now = new Date();
         const timeDifference = tokenExpiration.getTime() - now.getTime();
+
         if (timeDifference > 0 && timeDifference < 5 * 60 * 1000) {
-          // Token is about to expire, issue a new one
           const payloadNew = {
             _id: user._id,
             email: user.email,
@@ -44,7 +47,6 @@ passport.use(
 
           return done(null, { user, newToken });
         }
-
         return done(null, { user });
       } else {
         return done(null, false);

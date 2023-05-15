@@ -37,9 +37,9 @@ const Like = ({ post }) => {
 
     try {
       if (likeState.liked) {
-        dispatch(unlikePostAction(_id, userData._id));
+        dispatch(unlikePostAction(_id));
       } else {
-        dispatch(likePostAction(_id, userData._id));
+        dispatch(likePostAction(_id));
       }
     } catch (error) {
       setLikeState((prevState) => ({

@@ -7,7 +7,6 @@ const Community = require("../models/community.model");
 const UserPreference = require("../models/preference.model");
 const formatCreatedAt = require("../utils/timeConverter");
 const { verifyContextData, types } = require("./auth.controller");
-const getUserFromToken = require("../utils/getUserFromToken");
 const { saveLogInfo } = require("../middlewares/logger/logInfo");
 const duration = require("dayjs/plugin/duration");
 const dayjs = require("dayjs");
@@ -207,29 +206,14 @@ const signin = async (req, res, next) => {
   }
 };
 
-const getUsers = async (req, res, next) => {
-  User.find()
-    .then((users) => {
-      res.json(users);
-    })
-    .catch((err) => next(err));
-};
-
 /**
- * @async
- * @function getUser
- *
- * @description Retrieves a user's profile information, including their total number of posts,
+ * Retrieves a user's profile information, including their total number of posts,
  * the number of communities they are in, the number of communities they have posted in,
  * and their duration on the platform.
 
  * @param req - Express request object
  * @param res - Express response object
  * @param {Function} next - Express next function
-
- * @throws {Error} If an error occurs while retrieving the user's information
- *
- * @returns {Object} Returns the user's profile information.
  */
 const getUser = async (req, res, next) => {
   try {
@@ -290,25 +274,15 @@ const getUser = async (req, res, next) => {
 /**
  * Adds a new user to the database with the given name, email, password, and avatar.
  *
- * @async
- * @function addUser
- *
  * @description If the email domain of the user's email is "mod.socialecho.com", the user will be
  * assigned the role of "moderator" by default, but not necessarily as a moderator of any community.
  * Otherwise, the user will be assigned the role of "general" user.
  *
  * @param req - Express request object
  * @param res - Express response object
- * @param {string} req.body.name - The name of the user to be added.
- * @param {string} req.body.email - The email of the user to be added.
- * @param {string} req.body.password - The password of the user to be added.
  * @param {Object} req.files - The files attached to the request object (for avatar).
  * @param {string} req.body.isConsentGiven - Indicates whether the user has given consent to enable context based auth.
  * @param {Function} next - The next middleware function to call if consent is given by the user to enable context based auth.
- *
- * @returns {Object} The response object with a success message if the user is added successfully.
- *
- * @throws {Error} If an error occurs while hashing the user password, or saving the new user to the database.
  */
 const addUser = async (req, res, next) => {
   let newUser;
@@ -350,7 +324,7 @@ const addUser = async (req, res, next) => {
     }
   } catch (err) {
     res.status(400).json({
-      message: err.message,
+      message: "Failed to add user",
     });
   }
 };
@@ -367,12 +341,12 @@ const logout = async (req, res) => {
         LEVEL.INFO
       );
     }
-    return res.status(200).json({
+    res.status(200).json({
       message: "Logout successful",
     });
   } catch (err) {
     await saveLogInfo(null, err.message, LOG_TYPE.LOGOUT, LEVEL.ERROR);
-    return res.status(500).json({
+    res.status(500).json({
       message: "Internal server error. Please try again later.",
     });
   }
@@ -415,27 +389,24 @@ const refreshToken = async (req, res) => {
       expiresIn: "1h",
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       accessToken,
       refreshToken: existingToken.refreshToken,
       accessTokenUpdatedAt: new Date().toLocaleString(),
     });
   } catch (err) {
-    return res.status(500).json({
+    res.status(500).json({
       message: "Internal server error",
     });
   }
 };
 
+/**
+ * @route GET /users/moderator
+ */
 const getModProfile = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-    const moderator = await User.findById(userId);
+    const moderator = await User.findById(req.userId);
     if (!moderator) {
       return res.status(404).json({
         message: "User not found",
@@ -448,26 +419,22 @@ const getModProfile = async (req, res) => {
     delete moderatorInfo.password;
     moderatorInfo.createdAt = moderatorInfo.createdAt.toLocaleString();
 
-    return res.status(200).json({
+    res.status(200).json({
       moderatorInfo,
     });
   } catch (err) {
-    return res.status(500).json({
+    res.status(500).json({
       message: "Internal server error",
     });
   }
 };
 
+/**
+ * @route PUT /users/:id
+ */
 const updateInfo = async (req, res) => {
   try {
-    const userId = getUserFromToken(req);
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-
-    const user = await User.findById(userId);
+    const user = await User.findById(req.userId);
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -482,18 +449,17 @@ const updateInfo = async (req, res) => {
 
     await user.save();
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "User info updated successfully",
     });
   } catch (err) {
-    return res.status(500).json({
+    res.status(500).json({
       message: "Error updating user info",
     });
   }
 };
 
 module.exports = {
-  getUsers,
   addUser,
   signin,
   logout,

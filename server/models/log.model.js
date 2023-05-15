@@ -14,7 +14,7 @@ const LogSchema = new mongoose.Schema({
     type: Date,
     required: true,
     default: Date.now,
-    expires: 2592000, // 30 days
+    expires: 604800, // 1 week
   },
 });
 

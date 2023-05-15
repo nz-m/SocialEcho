@@ -51,7 +51,7 @@ const AdminPanel = () => {
         </div>
 
         <div className="flex justify-between items-center mb-2 border border-gray-200 p-2 rounded">
-          <div className="text-sm italic text-gray-600">{`Showing ${logs.length} items from the last 30 days`}</div>
+          <div className="text-sm italic text-gray-600">{`Showing ${logs.length} items from the last 7 days`}</div>
 
           <div className="flex items-center space-x-2">
             <button onClick={handleRefresh}>
@@ -89,12 +89,12 @@ const AdminPanel = () => {
 
         {!loading ? (
           logs.length === 0 ? (
-            <div className="text-center text-gray-500 text-lg">
+            <div className="text-sm text-center text-gray-500 text-lg">
               No logs found
             </div>
           ) : (
             <>
-              <div style={{ height: "500px", overflowY: "scroll" }}>
+              <div className="h-[500px] overflow-auto">
                 <table className="w-full shadow-2xl shadow-[#F3F8FF] px-6 py-6 relative bg-white rounded table-auto">
                   <thead className="font-medium sticky top-0 left-0 shadow-2xl bg-white shadow-[#F3F8FF] px-6 py-6 my-5 rounded bg-gray-100">
                     <tr className="rounded overflow-hidden">
@@ -120,15 +120,15 @@ const AdminPanel = () => {
                       <tr key={log._id} className="hover:bg-gray-50">
                         <td className="p-2 border-b border-gray-300 text-center">
                           <div className="text-sm text-gray-600">
-                            {log.formattedTimestamp}
+                            {log.relativeTimestamp}
                           </div>
                           <div className="text-xs text-gray-400">
-                            {log.relativeTimestamp}
+                            {log.formattedTimestamp}
                           </div>
                         </td>
 
                         <td
-                          className={`p-2 border-b border-gray-300 font-semibold ${
+                          className={`p-2 border-b border-gray-300 ${
                             log.level === "info"
                               ? "text-blue-500"
                               : log.level === "warn"
@@ -181,8 +181,8 @@ const AdminPanel = () => {
               </div>
 
               <div>
-                <div className=" flex justify-center text-sm italic text-gray-600 mt-2">
-                  logs are automatically deleted after 30 days
+                <div className="flex justify-center text-sm italic text-gray-600 mt-2">
+                  logs are automatically deleted after 7 days
                 </div>
               </div>
             </>

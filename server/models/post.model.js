@@ -60,18 +60,10 @@ postSchema.pre("remove", async function (next) {
         $in: commentIds,
       },
     });
-    await this.model("Community").updateMany(
-      {
-        "reportedPosts.post": this._id,
-      },
-      {
-        $pull: {
-          reportedPosts: {
-            post: this._id,
-          },
-        },
-      }
-    );
+
+    await this.model("Report").deleteOne({
+      post: this._id,
+    });
 
     await this.model("User").updateMany(
       {
