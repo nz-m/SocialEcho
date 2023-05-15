@@ -93,11 +93,8 @@ const communityReducer = (state = initialState, action) => {
     case types.REPORT_POST_SUCCESS:
       return {
         ...state,
-        communityData: {
-          ...state.communityData,
-          reportedPosts: [...state.communityData.reportedPosts, payload],
-        },
         communityError: null,
+        reportedPosts: [...state.reportedPosts, payload],
       };
     case types.REPORT_POST_FAIL:
       return {

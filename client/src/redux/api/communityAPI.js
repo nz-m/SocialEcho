@@ -49,14 +49,11 @@ const leaveCommunity = async (communityName) => {
   }
 };
 
-const reportPost = async (communityName, info) => {
+const reportPost = async (info) => {
   try {
-    const { data } = await COMMUNITY_API.put(
-      `/communities/${communityName}/report`,
-      {
-        info,
-      }
-    );
+    const { data } = await COMMUNITY_API.post(`/communities/report`, {
+      info,
+    });
     return { error: null, data };
   } catch (err) {
     return handleApiError(err);
@@ -74,10 +71,10 @@ const getReportedPosts = async (communityName) => {
   }
 };
 
-const removeReportedPost = async (communityName, postId) => {
+const removeReportedPost = async (postId) => {
   try {
     const { data } = await COMMUNITY_API.delete(
-      `/communities/${communityName}/reported-posts/${postId}`
+      `/communities/reported-posts/${postId}`
     );
     return { error: null, data };
   } catch (err) {

@@ -17,7 +17,7 @@ const ViewReportedPost = ({ post }) => {
   };
 
   const onNoAction = async () => {
-    await dispatch(removeReportedPostAction(communityName, _id));
+    await dispatch(removeReportedPostAction(_id));
     navigate(-1);
   };
 

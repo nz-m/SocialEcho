@@ -6,7 +6,11 @@ const reportSchema = new mongoose.Schema({
     ref: "Post",
     required: true,
   },
-
+  community: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Community",
+    required: true,
+  },
   reportedBy: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -14,12 +18,10 @@ const reportSchema = new mongoose.Schema({
       required: true,
     },
   ],
-
   reportReason: {
     type: String,
     required: true,
   },
-
   reportDate: {
     type: Date,
     default: Date.now,

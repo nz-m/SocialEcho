@@ -5,7 +5,7 @@ import { getTitleFromRoute } from "./utils/docTitle";
 import { Helmet } from "react-helmet";
 
 import FallbackLoading from "./components/loader/FallbackLoading";
-import SignupForm from "./pages/SignupForm";
+import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import PrivateRoute from "./PrivateRoute";
 import ReportPost from "./components/community/ReportPost";
@@ -140,7 +140,7 @@ const App = () => {
           />
         </Route>
 
-        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route
           path="/signin"
           element={user ? <Navigate to="/" /> : <SignIn />}

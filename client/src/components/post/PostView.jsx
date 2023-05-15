@@ -17,10 +17,12 @@ import "react-photo-view/dist/react-photo-view.css";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 const PostView = ({ post }) => {
   const [loading, setLoading] = useState(true);
+
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth?.userData);
+
   const {
     body,
     fileUrl,
@@ -30,8 +32,8 @@ const PostView = ({ post }) => {
     dateTime,
     comments,
     savedByCount,
+    isReported,
   } = post;
-  const [isReported, setIsReported] = useState(null);
 
   const isImageFile = useMemo(() => {
     const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
@@ -39,26 +41,9 @@ const PostView = ({ post }) => {
     return validExtensions.includes(fileExtension);
   }, [fileUrl]);
 
-  const communityData = useSelector((state) => state.community?.communityData);
-  const userId = userData._id;
   useEffect(() => {
     dispatch(getCommunityAction(community.name)).then(() => setLoading(false));
   }, [dispatch, community.name, loading]);
-
-  useEffect(() => {
-    if (communityData && userId) {
-      const reportedPosts = communityData.reportedPosts;
-      if (reportedPosts && reportedPosts.length > 0) {
-        const isReportedPost = reportedPosts.some(
-          (reportedPost) =>
-            reportedPost.reportedBy === userId && reportedPost.post === post._id
-        );
-        setIsReported(isReportedPost || false);
-      } else {
-        setIsReported(false);
-      }
-    }
-  }, [communityData, post._id, userId]);
 
   const reportHandler = () => {
     navigate(`/community/${community.name}/report`, {
@@ -168,9 +153,9 @@ const PostView = ({ post }) => {
               Saved by {savedByCount} {savedByCount === 1 ? "person" : "people"}
             </span>
             <span>{dateTime}</span>
-            {isReported === null ? null : isReported ? (
+
+            {isReported ? (
               <button disabled className="flex items-center text-xl gap-1">
-                {" "}
                 <HiOutlineInformationCircle />
                 Reported
               </button>
@@ -179,7 +164,6 @@ const PostView = ({ post }) => {
                 onClick={reportHandler}
                 className="flex items-center text-xl gap-1"
               >
-                {" "}
                 <HiOutlineInformationCircle />
                 Report
               </button>

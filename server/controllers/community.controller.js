@@ -1,6 +1,7 @@
 const Community = require("../models/community.model");
 const Rule = require("../models/rule.model");
 const User = require("../models/user.model");
+const Report = require("../models/report.model");
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
@@ -301,47 +302,49 @@ const addModToCommunity = async (req, res) => {
 };
 
 /**
- * @route PUT /communities/:name/report
+ * If a particular post has not been reported by anyone, create a new report. Otherwise, add the user to the list of users who have reported the post.
+ * A post can be reported by multiple users but only once by each user.
+ *
+ * @route POST /communities/:name/report
  */
 const reportPost = async (req, res) => {
   try {
-    const communityName = req.params.name;
+    const { postId, reportReason, communityId } = req.body.info;
 
-    const community = await Community.findOneAndUpdate(
-      {
-        name: communityName,
-        reportedPosts: {
-          $not: {
-            $elemMatch: {
-              post: req.body.info.postId,
-              reportedBy: req.userId,
-            },
-          },
-        },
-      },
-      {
-        $addToSet: {
-          reportedPosts: {
-            post: req.body.info.postId,
-            reportedBy: req.userId,
-            reportReason: req.body.info.reportReason,
-            reportDate: new Date(),
-          },
-        },
-      },
-      {
-        new: true,
-      }
-    );
-    if (!community) {
+    if (!postId || !reportReason) {
       return res.status(400).json({
-        message: "You have already reported this post.",
+        message: "Invalid data. postId and reportReason are required.",
       });
     }
 
-    const latestReportedPost = community.reportedPosts.slice(-1)[0];
+    const reportedPost = await Report.findOne({
+      post: postId,
+    });
 
-    res.status(200).json(latestReportedPost);
+    if (reportedPost) {
+      if (reportedPost.reportedBy.includes(req.userId)) {
+        return res.status(400).json({
+          message: "You have already reported this post.",
+        });
+      }
+
+      reportedPost.reportedBy.push(req.userId);
+      await reportedPost.save();
+
+      return res.status(200).json(reportedPost);
+    }
+
+    const report = {
+      post: postId,
+      community: communityId,
+      reportedBy: [req.userId],
+      reportReason,
+      reportDate: new Date(),
+    };
+
+    await Report.create(report);
+
+    res.status(200).json({ message: "Post reported successfully." });
   } catch (error) {
     res.status(500).json({
       message: "Error reporting post",
@@ -355,15 +358,7 @@ const reportPost = async (req, res) => {
  *
  * @route GET /communities/:name/reported-posts
  *
- * @async
- * @function getReportedPosts
- *
  * @param {Object} req.params.name - The name of the community to retrieve the reported posts for.
- *
- *
- * @throws {Error} - If an error occurs while retrieving the reported posts.
- *
- * @returns {Promise<void>} - A Promise that resolves to the response JSON object.
  */
 const getReportedPosts = async (req, res) => {
   try {
@@ -371,13 +366,19 @@ const getReportedPosts = async (req, res) => {
     const community = await Community.findOne({
       name: communityName,
     })
+      .select("_id")
+      .lean();
+
+    const communityId = community._id;
+    if (!community) {
+      return res.status(404).json({
+        message: "Community not found",
+      });
+    }
+
+    const reportedPosts = await Report.find({ community: communityId })
       .populate({
-        path: "reportedPosts.reportedBy",
-        model: "User",
-        select: ["name", "avatar"],
-      })
-      .populate({
-        path: "reportedPosts.post",
+        path: "post",
         model: "Post",
         select: ["_id", "body", "fileUrl", "createdAt", "user"],
         populate: {
@@ -386,18 +387,19 @@ const getReportedPosts = async (req, res) => {
           select: ["name", "avatar"],
         },
       })
+      .populate({
+        path: "reportedBy",
+        model: "User",
+        select: ["name", "avatar"],
+      })
+      .sort({ reportDate: -1 })
       .lean();
 
-    if (!community) {
+    if (!reportedPosts) {
       return res.status(404).json({
-        message: "Community not found",
+        message: "Reported post not found",
       });
     }
-
-    const reportedPosts = community.reportedPosts;
-
-    reportedPosts.sort((a, b) => b.reportDate - a.reportDate);
-
     reportedPosts.forEach((post) => {
       post.reportDate = dayjs(post.reportDate).fromNow();
     });
@@ -406,50 +408,22 @@ const getReportedPosts = async (req, res) => {
       reportedPosts,
     });
   } catch (error) {
-    return res.status(500).json({
-      message: "Server Error",
+    res.status(500).json({
+      message: "An error occurred while retrieving the reported posts",
     });
   }
 };
 
 /**
- * @route DELETE /communities/:name/reported-posts/:postId
+ * @route DELETE /communities/reported-posts/:postId
  */
 const removeReportedPost = async (req, res) => {
   try {
-    const communityName = req.params.name;
     const postId = req.params.postId;
-    const community = await Community.findOne({
-      name: communityName,
+
+    await Report.findOneAndDelete({
+      post: postId,
     });
-
-    if (!community) {
-      return res.status(404).json({
-        message: "Community not found",
-      });
-    }
-
-    const updatedCommunity = await Community.findOneAndUpdate(
-      {
-        name: communityName,
-      },
-      {
-        $pull: {
-          reportedPosts: {
-            post: postId,
-          },
-        },
-      },
-      {
-        new: true,
-      }
-    );
-
-    if (!updatedCommunity) {
-      return res.status(500).json({
-        message: "Failed to remove reported post",
-      });
-    }
 
     res.status(200).json({
       message: "Reported post removed successfully",

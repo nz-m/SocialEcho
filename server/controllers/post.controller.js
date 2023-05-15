@@ -8,6 +8,7 @@ const Community = require("../models/community.model");
 const Comment = require("../models/comment.model");
 const User = require("../models/user.model");
 const Relationship = require("../models/relationship.model");
+const Report = require("../models/report.model");
 
 const createPost = async (req, res) => {
   try {
@@ -88,6 +89,13 @@ const getPost = async (req, res) => {
     post.savedByCount = await User.countDocuments({
       savedPosts: id,
     });
+
+    const report = await Report.findOne({
+      post: id,
+      reportedBy: { $in: [req.userId] },
+    });
+
+    post.isReported = !!report;
 
     res.status(200).json(post);
   } catch (error) {
@@ -244,15 +252,13 @@ const getFollowingUsersPosts = async (req, res) => {
 
 const deletePost = async (req, res) => {
   try {
-    const id = req.params.id;
-    const post = await Post.findByIdAndRemove(id);
+    const postId = req.params.id;
 
-    if (!post) {
-      return res.status(404).json({
-        message: "Post not found. It may have been deleted already",
-      });
+    const deletedPost = await Post.findByIdAndRemove(postId);
+
+    if (!deletedPost) {
+      return res.status(404).json({ error: "Post not found" });
     }
-
     res.status(200).json({
       message: "Post deleted successfully",
     });
