@@ -252,19 +252,22 @@ const getFollowingUsersPosts = async (req, res) => {
 
 const deletePost = async (req, res) => {
   try {
-    const postId = req.params.id;
+    const id = req.params.id;
+    const post = await Post.findById(id);
 
-    const deletedPost = await Post.findByIdAndRemove(postId);
-
-    if (!deletedPost) {
-      return res.status(404).json({ error: "Post not found" });
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found. It may have been deleted already",
+      });
     }
+
+    await post.remove();
     res.status(200).json({
       message: "Post deleted successfully",
     });
   } catch (error) {
-    res.status(500).json({
-      message: "Error deleting post",
+    res.status(404).json({
+      message: "An error occurred while deleting the post",
     });
   }
 };
