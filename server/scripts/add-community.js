@@ -78,7 +78,7 @@ const connectDB = async () => {
 
     mongoose.connection.close();
   } catch (error) {
-    LOG(kleur.red().bold(`❌ Error! ${error.message}`));
+    LOG(kleur.red().bold(`Error! ${error.message}`));
     process.exit(1);
   }
 };

@@ -21,7 +21,7 @@ mongoose
     start();
   })
   .catch((err) => {
-    LOG(kleur.red().bold("❌ Error connecting to database" + err.message));
+    LOG(kleur.red().bold("Error connecting to database" + err.message));
     process.exit(1);
   });
 
@@ -39,7 +39,7 @@ async function start() {
 
     const moderatorToAdd = moderators[modChoice - 1];
     if (!moderatorToAdd) {
-      LOG(kleur.red().bold("❌ Error! Moderator not found."));
+      LOG(kleur.red().bold("Error! Moderator not found."));
       return;
     }
 
@@ -113,7 +113,7 @@ async function start() {
     rl.close();
     process.exit(0);
   } catch (err) {
-    LOG(kleur.red().bold("❌ Error: " + err.message));
+    LOG(kleur.red().bold("Error: " + err.message));
     process.exit(1);
   }
 }
@@ -142,7 +142,7 @@ async function promptUserChoice(prompt, choices) {
         choiceIndex < 0 ||
         choiceIndex >= choices.length
       ) {
-        reject(new Error(kleur.red().bold("❌ Invalid choice")));
+        reject(new Error(kleur.red().bold("Invalid choice")));
       } else {
         resolve(choices[choiceIndex].split(". ")[0]);
       }
