@@ -3,7 +3,7 @@ import {
   HiOutlineArchiveBox,
   HiOutlineInformationCircle,
 } from "react-icons/hi2";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import Save from "./Save";
@@ -15,13 +15,12 @@ import { IoIosArrowBack } from "react-icons/io";
 import CommonLoading from "../loader/CommonLoading";
 import "react-photo-view/dist/react-photo-view.css";
 import { PhotoProvider, PhotoView } from "react-photo-view";
-const PostView = ({ post }) => {
+const PostView = ({ post, userData }) => {
   const [loading, setLoading] = useState(true);
 
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.auth?.userData);
 
   const {
     body,
@@ -192,7 +191,7 @@ const PostView = ({ post }) => {
       </div>
 
       <div>
-        <CommentForm communityId={community._id} />
+        <CommentForm communityId={community._id} postId={post._id} />
       </div>
     </div>
   );

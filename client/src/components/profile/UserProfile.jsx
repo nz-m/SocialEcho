@@ -26,23 +26,6 @@ const UserProfile = () => {
 
   let postToShow = null;
 
-  // if (posts) {
-  //   const postsWithUser = posts.map((post) => ({
-  //     ...post,
-  //     createdAt: new Date(post.createdAt).toLocaleString("en-US", {
-  //       month: "long",
-  //       day: "numeric",
-  //       year: "numeric",
-  //       hour: "numeric",
-  //       minute: "numeric",
-  //       hour12: true,
-  //     }),
-  //   }));
-
-  // postToShow = postsWithUser
-  //   .reverse()
-  //   .map((post) => <MemoizedPostOnProfile key={post._id} post={post} />);
-
   postToShow = posts?.map((post) => (
     <MemoizedPostOnProfile key={post._id} post={post} />
   ));

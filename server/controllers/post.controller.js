@@ -69,32 +69,20 @@ const createPost = async (req, res) => {
 
 const getPost = async (req, res) => {
   try {
-    const id = req.params.id;
+    const postId = req.params.id;
 
-    const post = await Post.findById(id)
-      .populate("user", "name avatar")
-      .populate("community", "name")
-      .lean();
-
+    const post = await findPostById(postId);
     if (!post) {
-      return res.status(404).json({
-        message: "Post not found",
-      });
+      return res.status(404).json({ message: "Post not found" });
     }
 
+    const comments = await findCommentsByPostId(postId);
+    post.comments = formatComments(comments);
     post.dateTime = formatCreatedAt(post.createdAt);
-
     post.createdAt = dayjs(post.createdAt).fromNow();
+    post.savedByCount = await countSavedPosts(postId);
 
-    post.savedByCount = await User.countDocuments({
-      savedPosts: id,
-    });
-
-    const report = await Report.findOne({
-      post: id,
-      reportedBy: { $in: [req.userId] },
-    });
-
+    const report = await findReportByPostAndUser(postId, req.userId);
     post.isReported = !!report;
 
     res.status(200).json(post);
@@ -104,6 +92,30 @@ const getPost = async (req, res) => {
     });
   }
 };
+
+const findPostById = async (postId) =>
+  await Post.findById(postId)
+    .populate("user", "name avatar")
+    .populate("community", "name")
+    .lean();
+
+const findCommentsByPostId = async (postId) =>
+  await Comment.find({ post: postId })
+    .sort({ createdAt: -1 })
+    .populate("user", "name avatar")
+    .lean();
+
+const formatComments = (comments) =>
+  comments.map((comment) => ({
+    ...comment,
+    createdAt: dayjs(comment.createdAt).fromNow(),
+  }));
+
+const countSavedPosts = async (postId) =>
+  await User.countDocuments({ savedPosts: postId });
+
+const findReportByPostAndUser = async (postId, userId) =>
+  await Report.findOne({ post: postId, reportedBy: userId });
 
 const getPosts = async (req, res) => {
   try {
@@ -394,31 +406,6 @@ const addComment = async (req, res) => {
   }
 };
 
-const getComments = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const comments = await Comment.find({
-      post: id,
-    })
-      .sort({
-        createdAt: -1,
-      })
-      .populate("user", "name avatar")
-      .lean();
-
-    const formattedComments = comments.map((comment) => ({
-      ...comment,
-      createdAt: dayjs(comment.createdAt).fromNow(),
-    }));
-
-    res.status(200).json(formattedComments);
-  } catch (error) {
-    res.status(500).json({
-      message: "Server error",
-    });
-  }
-};
-
 const savePost = async (req, res) => {
   await saveOrUnsavePost(req, res, "$addToSet");
 };
@@ -580,7 +567,6 @@ module.exports = {
   likePost,
   unlikePost,
   addComment,
-  getComments,
   savePost,
   unsavePost,
   getSavedPosts,

@@ -16,6 +16,7 @@ const MainSection = () => {
 
   const communityData = useSelector((state) => state.community?.communityData);
   const communityPosts = useSelector((state) => state.posts?.communityPosts);
+
   const totalCommunityPosts = useSelector(
     (state) => state.posts?.totalCommunityPosts
   );

@@ -6,8 +6,12 @@ const ReportedPost = ({ reportedPost }) => {
   const { post, reportedBy, reportReason, reportDate } = reportedPost;
   const { communityName } = useParams();
 
+  const postId = post._id;
+
   const handleNavigateToPost = () => {
-    navigate(`/community/${communityName}/reported-post`, { state: { post } });
+    navigate(`/community/${communityName}/reported-post`, {
+      state: { postId },
+    });
   };
 
   return (

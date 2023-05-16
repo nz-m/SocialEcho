@@ -1,11 +1,13 @@
-import PostView from "../components/post/PostView";
-import CommentSidebar from "../components/post/CommentSidebar";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { getSelfPostAction } from "../redux/actions/postActions";
 import { useParams } from "react-router-dom";
+import FallbackLoading from "../components/loader/FallbackLoading";
 
-const SelfPostPage = () => {
+const PostView = lazy(() => import("../components/post/PostView"));
+const CommentSidebar = lazy(() => import("../components/post/CommentSidebar"));
+
+const SelfPost = () => {
   const { postId } = useParams();
   const dispatch = useDispatch();
 
@@ -22,10 +24,14 @@ const SelfPostPage = () => {
 
   return (
     <>
-      <PostView post={post} />
-      <CommentSidebar />
+      <Suspense fallback={<FallbackLoading />}>
+        <PostView post={post} userData={userData} />
+      </Suspense>
+      <Suspense fallback={<FallbackLoading />}>
+        <CommentSidebar comments={post.comments} />
+      </Suspense>
     </>
   );
 };
 
-export default SelfPostPage;
+export default SelfPost;

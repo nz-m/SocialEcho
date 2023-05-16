@@ -288,32 +288,6 @@ export const addCommentAction = (postId, newComment) => async (dispatch) => {
   }
 };
 
-export const getCommentsAction = (id) => async (dispatch) => {
-  try {
-    const { error, data } = await api.getComments(id);
-
-    if (error) {
-      throw new Error(error);
-    }
-
-    dispatch({
-      type: types.GET_COMMENTS_SUCCESS,
-      payload: data,
-      meta: {
-        requiresAuth: true,
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: types.GET_COMMENTS_FAIL,
-      payload: error.message,
-      meta: {
-        requiresAuth: true,
-      },
-    });
-  }
-};
-
 export const savePostAction = (id) => async (dispatch) => {
   try {
     const { error, data } = await api.savePost(id);

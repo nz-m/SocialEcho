@@ -1,20 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getCommentsAction } from "../../redux/actions/postActions";
-import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-const CommentSidebar = () => {
-  const { postId } = useParams();
-  const dispatch = useDispatch();
-
-  const userData = useSelector((state) => state.auth?.userData);
-
+const CommentSidebar = ({ comments }) => {
   const currentPage = 1;
   const [commentsPerPage, setCommentsPerPage] = useState(10);
-
-  const comments = useSelector((state) =>
-    state.posts?.comments.filter((comment) => comment.post === postId)
-  );
 
   const indexOfLastComment = currentPage * commentsPerPage;
   const indexOfFirstComment = indexOfLastComment - commentsPerPage;
@@ -22,12 +11,6 @@ const CommentSidebar = () => {
     indexOfFirstComment,
     indexOfLastComment
   );
-
-  useEffect(() => {
-    if (userData) {
-      dispatch(getCommentsAction(postId));
-    }
-  }, [userData, dispatch, postId]);
 
   const handleLoadMore = () => {
     setCommentsPerPage(commentsPerPage + 10);
@@ -81,9 +64,6 @@ const CommentSidebar = () => {
       {currentComments.length === 0 && (
         <div className="flex flex-col items-center justify-center h-full">
           <p className="text-lg font-semibold mb-4">No Comments Yet</p>
-          <p className="text-gray-500 text-sm">
-            Be the first to comment on this post
-          </p>
         </div>
       )}
     </div>

@@ -1,54 +1,41 @@
 import { lazy, Suspense } from "react";
+import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { getTitleFromRoute } from "./utils/docTitle";
-import { Helmet } from "react-helmet";
 
-import FallbackLoading from "./components/loader/FallbackLoading";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
+import { getTitleFromRoute } from "./utils/docTitle";
+
 import PrivateRoute from "./PrivateRoute";
 import ReportPost from "./components/community/ReportPost";
 import EditProfileForm from "./components/form/EditProfileForm";
+import CommonLoading from "./components/loader/CommonLoading";
+
+/*************** pages **************/
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
 import VerifyEmail from "./pages/VerifyEmail";
 import EmailVerifiedMessage from "./pages/EmailVerifiedMessage";
 import BlockDevice from "./pages/BlockDevice";
 import LoginVerified from "./pages/LoginVerified";
-import CommunityRightBar from "./components/community/RightBar";
-import RightBar from "./components/common/Rightbar";
-import CommonLoading from "./components/loader/CommonLoading";
-import AdminSignIn from "./pages/AdminSignIn";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import CommunityHome from "./pages/CommunityHome";
+import Moderator from "./pages/Moderator";
+import Post from "./pages/Post";
+import SelfPost from "./pages/SelfPost";
+import ReportedPost from "./pages/ReportedPost";
+import Saved from "./pages/Saved";
+import PublicProfile from "./pages/PublicProfile";
+import AllCommunities from "./pages/AllCommunities";
+import MyCommunities from "./pages/MyCommunities";
+import Following from "./pages/Following";
+import DevicesLocations from "./pages/DevicesLocations";
+import AccessDenied from "./pages/AccessDenied";
+import NotFound from "./pages/NotFound";
 
-const Moderator = lazy(() => import("./pages/Moderator"));
-const PostPage = lazy(() => import("./pages/PostPage"));
-const SelfPostPage = lazy(() => import("./pages/SelfPostPage"));
-const ReportedPostPage = lazy(() => import("./pages/ReportedPostPage"));
-const Saved = lazy(() => import("./pages/Saved"));
-const PublicProfile = lazy(() => import("./components/profile/PublicProfile"));
-const AllCommunities = lazy(() => import("./pages/AllCommunities"));
-const MyCommunities = lazy(() => import("./pages/MyCommunities"));
-const Following = lazy(() => import("./pages/Following"));
-const DevicesLocations = lazy(() => import("./pages/DevicesLocations"));
-const MainSection = lazy(() => import("./components/home/MainSection"));
-const UserProfile = lazy(() => import("./components/profile/UserProfile"));
-const CommunityMainSection = lazy(() =>
-  import("./components/community/MainSection")
-);
+const AdminSignIn = lazy(() => import("./pages/AdminSignIn"));
 const AdminPanel = lazy(() => import("./pages/AdminPanel"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-
-const WithSuspense = ({ component: Component }) => (
-  <Suspense fallback={<FallbackLoading />}>
-    <Component />
-  </Suspense>
-);
-
-const WithRightbarAndSuspense = ({ component: Component }) => (
-  <>
-    <WithSuspense component={Component} />
-    <RightBar />
-  </>
-);
+/***************** pages ********************/
 
 const App = () => {
   const user = useSelector((state) => state.auth?.userData);
@@ -65,81 +52,35 @@ const App = () => {
 
       <Routes>
         <Route element={<PrivateRoute />}>
-          <Route
-            path="/"
-            element={<WithRightbarAndSuspense component={MainSection} />}
-          />
-          <Route
-            path="/home"
-            element={<WithRightbarAndSuspense component={MainSection} />}
-          />
-          <Route
-            path="/profile"
-            element={<WithRightbarAndSuspense component={UserProfile} />}
-          />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/post/:postId" element={<Post />} />
+          <Route path="/my/post/:postId" element={<SelfPost />} />
+          <Route path="/community/:communityName" element={<CommunityHome />} />
 
-          <Route
-            path="/post/:postId"
-            element={<WithSuspense component={PostPage} />}
-          />
-          <Route
-            path="/my/post/:postId"
-            element={<WithSuspense component={SelfPostPage} />}
-          />
-          <Route
-            path="/community/:communityName"
-            element={
-              <>
-                <WithSuspense component={CommunityMainSection} />
-                <CommunityRightBar />
-              </>
-            }
-          />
+          {/*todo: make modal*/}
           <Route
             path="/community/:communityName/report"
             element={<ReportPost />}
           />
           <Route
             path="/community/:communityName/reported-post"
-            element={
-              <>
-                <WithSuspense component={ReportedPostPage} />
-                <CommunityRightBar />
-              </>
-            }
+            element={<ReportedPost />}
           />
-
           <Route
             path="/community/:communityName/moderator"
-            element={<WithSuspense component={Moderator} />}
+            element={<Moderator />}
           />
-          <Route
-            path="/saved"
-            element={<WithRightbarAndSuspense component={Saved} />}
-          />
+          <Route path="/saved" element={<Saved />} />
+          {/*todo: make modal*/}
           <Route path="/edit-profile" element={<EditProfileForm />} />
-          <Route
-            path="/user/:userId"
-            element={<WithRightbarAndSuspense component={PublicProfile} />}
-          />
-          <Route
-            path="/communities"
-            element={<WithRightbarAndSuspense component={AllCommunities} />}
-          />
-          <Route
-            path="/my-communities"
-            element={<WithRightbarAndSuspense component={MyCommunities} />}
-          />
-          <Route
-            path="/following"
-            element={<WithRightbarAndSuspense component={Following} />}
-          />
-          <Route
-            path="/devices-locations"
-            element={<WithRightbarAndSuspense component={DevicesLocations} />}
-          />
+          <Route path="/user/:userId" element={<PublicProfile />} />
+          <Route path="/communities" element={<AllCommunities />} />
+          <Route path="/my-communities" element={<MyCommunities />} />
+          <Route path="/following" element={<Following />} />
+          <Route path="/devices-locations" element={<DevicesLocations />} />
         </Route>
-
         <Route path="/signup" element={<SignUp />} />
         <Route
           path="/signin"
@@ -148,28 +89,25 @@ const App = () => {
         <Route
           path="/admin"
           element={
-            adminAccessToken ? (
-              <Suspense
-                fallback={
-                  <div className="flex justify-center items-center h-screen">
-                    <CommonLoading />
-                  </div>
-                }
-              >
-                <AdminPanel />
-              </Suspense>
-            ) : (
-              <AdminSignIn />
-            )
+            <Suspense
+              fallback={
+                <div className="flex justify-center items-center h-screen">
+                  <CommonLoading />
+                </div>
+              }
+            >
+              {adminAccessToken ? <AdminPanel /> : <AdminSignIn />}
+            </Suspense>
           }
         />
-
+        {/*todo: make them lazy*/}
         <Route path="/admin-signin" element={<AdminSignIn />} />
         <Route path="/auth/verify" element={<VerifyEmail />} />
         <Route path="/email-verified" element={<EmailVerifiedMessage />} />
         <Route path="/block-device" element={<BlockDevice />} />
         <Route path="/verify-login" element={<LoginVerified />} />
-        <Route path="*" element={<WithSuspense component={NotFound} />} />
+        <Route path="/denied" element={<AccessDenied />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

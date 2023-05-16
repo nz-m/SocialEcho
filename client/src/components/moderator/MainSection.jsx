@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ReportedPosts from "../moderator/ReportedPosts";
 import MembersList from "../moderator/MembersList";
 import BannerMembersList from "../moderator/BannerMembersList";

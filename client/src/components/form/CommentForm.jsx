@@ -1,19 +1,14 @@
-import React from "react";
 import { useState } from "react";
 import {
   addCommentAction,
-  getCommentsAction,
   getPostAction,
   getComPostsAction,
   getSelfPostAction,
 } from "../../redux/actions/postActions";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
 
-const CommentForm = ({ communityId }) => {
+const CommentForm = ({ communityId, postId }) => {
   const dispatch = useDispatch();
-
-  const { postId } = useParams();
 
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,12 +23,12 @@ const CommentForm = ({ communityId }) => {
     try {
       setIsLoading(true);
       await dispatch(addCommentAction(postId, newComment));
-      await dispatch(getCommentsAction(postId));
+      await dispatch(getPostAction(postId));
       await dispatch(getSelfPostAction(postId));
+
       setIsLoading(false);
       setBody("");
 
-      await dispatch(getPostAction(postId));
       await dispatch(getComPostsAction(communityId));
     } finally {
       setIsLoading(false);

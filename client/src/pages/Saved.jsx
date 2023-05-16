@@ -2,6 +2,7 @@ import { getSavedPostsAction } from "../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import SavedPost from "../components/post/SavedPost";
+import Rightbar from "../components/common/Rightbar";
 const Saved = () => {
   const dispatch = useDispatch();
 
@@ -12,21 +13,24 @@ const Saved = () => {
   const savedPosts = useSelector((state) => state.posts?.savedPosts);
 
   return (
-    <div className="w-6/12 px-10 py-5">
-      <div className="flex flex-col mb-3">
-        {savedPosts && savedPosts.length > 0 ? (
-          <div className="flex flex-col items-center">
-            {savedPosts.reverse().map((post) => (
-              <SavedPost key={post._id} post={post} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center text-gray-500 font-medium">
-            You have not saved any posts yet.
-          </div>
-        )}
+    <>
+      <div className="w-6/12 px-10 py-5">
+        <div className="flex flex-col mb-3">
+          {savedPosts && savedPosts.length > 0 ? (
+            <div className="flex flex-col items-center">
+              {savedPosts.reverse().map((post) => (
+                <SavedPost key={post._id} post={post} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-500 font-medium">
+              You have not saved any posts yet.
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <Rightbar />
+    </>
   );
 };
 
