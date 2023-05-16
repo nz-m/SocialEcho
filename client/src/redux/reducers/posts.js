@@ -8,7 +8,6 @@ const initialState = {
   selfPost: null,
   communityPosts: [],
   followingUsersPosts: [],
-  comments: [],
   savedPosts: [],
   postError: null,
   totalPosts: 0,
@@ -208,36 +207,6 @@ const postReducer = (state = initialState, action) => {
         postError: payload,
       };
 
-    case types.GET_COMMENTS_SUCCESS:
-      return {
-        ...state,
-        comments: payload,
-        postError: null,
-      };
-    case types.GET_COMMENTS_FAIL:
-      return {
-        ...state,
-        postError: payload,
-      };
-
-    case types.DELETE_COMMENT_SUCCESS:
-      const { postsUpdateD, communityPostsUpdateD } = updateComment(
-        state,
-        payload
-      );
-      return {
-        ...state,
-        comments: state.comments.filter((comment) => comment._id !== payload),
-        posts: postsUpdateD,
-        communityPosts: communityPostsUpdateD,
-        postError: null,
-      };
-    case types.DELETE_COMMENT_FAIL:
-      return {
-        ...state,
-        postError: payload,
-      };
-
     case types.SAVE_POST_SUCCESS:
     case types.UNSAVE_POST_SUCCESS:
     case types.GET_SAVED_POSTS_SUCCESS:
@@ -307,17 +276,4 @@ const updatePostLike = (state, updatedPost) => {
   return { posts, communityPosts };
 };
 
-const updateComment = (state, updatedComment) => {
-  const postsUpdate = state.posts.map((post) =>
-    post._id === updatedComment.post
-      ? { ...post, comments: [...post.comments, updatedComment] }
-      : post
-  );
-  const communityPostsUpdate = state.communityPosts.map((post) =>
-    post._id === updatedComment.post
-      ? { ...post, comments: [...post.comments, updatedComment] }
-      : post
-  );
-  return { postsUpdate, communityPostsUpdate };
-};
 export default postReducer;

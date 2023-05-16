@@ -27,7 +27,6 @@ router.get("/community/:communityId", getCommunityPosts);
 router.get("/saved", getSavedPosts);
 router.get("/:publicUserId/userPosts", getPublicPosts);
 router.get("/:id/following", getFollowingUsersPosts);
-router.get("/:id/comment", getComments);
 router.get("/:id", getPost);
 router.get("/", getPosts);
 

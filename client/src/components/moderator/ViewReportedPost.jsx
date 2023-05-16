@@ -1,24 +1,25 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { deletePostAction } from "../../redux/actions/postActions";
 import { removeReportedPostAction } from "../../redux/actions/communityActions";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import CommonLoading from "../loader/CommonLoading";
 
 const ViewReportedPost = ({ post }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { _id, body, fileUrl, user, createdAt } = post;
-  const { name, avatar } = user;
-  const createdAtString = new Date(createdAt).toDateString();
+
   const onRemove = async () => {
-    await dispatch(deletePostAction(_id));
+    await dispatch(deletePostAction(post._id));
     navigate(-1);
   };
 
   const onNoAction = async () => {
-    await dispatch(removeReportedPostAction(_id));
+    await dispatch(removeReportedPostAction(post._id));
     navigate(-1);
   };
+
+  let fileUrl = post?.fileUrl;
 
   const isImageFile = useMemo(() => {
     const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
@@ -26,14 +27,22 @@ const ViewReportedPost = ({ post }) => {
     return validExtensions.includes(fileExtension);
   }, [fileUrl]);
 
+  if (!post) return <CommonLoading />;
+
+  const { body, user, dateTime, comments, savedByCount } = post;
+
   return (
     <div className="shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg bg-white mx-10">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center">
-          <img className="w-8 h-8 rounded-full mr-2" src={avatar} alt="user" />
-          <div className="text-sm font-medium text-gray-700">{name}</div>
+          <img
+            className="w-8 h-8 rounded-full mr-2"
+            src={user.avatar}
+            alt="user"
+          />
+          <div className="text-sm font-medium text-gray-700">{user.name}</div>
         </div>
-        <div className="text-sm text-gray-500">{createdAtString}</div>
+        <div className="text-sm text-gray-500">{dateTime}</div>
       </div>
       <div className="text-lg mb-4">{body}</div>
       {fileUrl && isImageFile ? (
@@ -52,6 +61,17 @@ const ViewReportedPost = ({ post }) => {
           />
         )
       )}
+
+      <div className="flex items-center justify-between mt-3">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <div className="text-sm text-gray-500">
+              {comments.length} Comments
+            </div>
+            <div className="text-sm text-gray-500">{savedByCount} Saves</div>
+          </div>
+        </div>
+      </div>
 
       <div className="flex justify-end mt-3">
         <button

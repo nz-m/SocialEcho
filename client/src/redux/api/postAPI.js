@@ -78,15 +78,6 @@ const addComment = async (id, newComment) => {
   }
 };
 
-const getComments = async (id) => {
-  try {
-    const { data } = await API.get(`/posts/${id}/comment`);
-    return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
-  }
-};
-
 const savePost = async (id) => {
   try {
     const { data } = await API.patch(`/posts/${id}/save`);
@@ -142,7 +133,6 @@ export {
   likePost,
   unlikePost,
   addComment,
-  getComments,
   savePost,
   unsavePost,
   getSavedPosts,

@@ -8,10 +8,8 @@ const AdminToken = require("../models/token.admin.model");
 
 /**
  * Retrieves log info from the database
+ *
  * @route GET /admin/logs
- * @param req - request object
- * @param res - response object
- * @returns {Promise<void>}
  */
 const retrieveLogInfo = async (req, res) => {
   try {
@@ -74,11 +72,7 @@ const retrieveLogInfo = async (req, res) => {
 };
 
 /**
- * Deletes all log info from the database
  * @route DELETE /admin/logs
- * @param req
- * @param res
- * @returns {Promise<void>}
  */
 const deleteLogInfo = async (req, res) => {
   try {
@@ -91,9 +85,6 @@ const deleteLogInfo = async (req, res) => {
 
 /**
  * @route POST /admin/signin
- * @param req
- * @param res
- * @returns {Promise<*>}
  */
 const signin = async (req, res) => {
   try {

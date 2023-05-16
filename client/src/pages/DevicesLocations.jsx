@@ -12,6 +12,7 @@ import {
   getBlockedAuthContextDataAction,
   getContextAuthDataAction,
 } from "../redux/actions/authActions";
+import Rightbar from "../components/common/Rightbar";
 
 const DevicesLocations = () => {
   const dispatch = useDispatch();
@@ -49,7 +50,7 @@ const DevicesLocations = () => {
   if (!userPreferences || !contextAuthData) {
     return (
       <div className="w-6/12 flex justify-center h-screen">
-        Context-based authentication is diabled for your account. By enabling
+        Context-based authentication is disabled for your account. By enabling
         context-based authentication, you will be able to manage your devices
         and their locations, as well as manage your trusted and blocked devices.
       </div>
@@ -57,16 +58,19 @@ const DevicesLocations = () => {
   }
 
   return (
-    <div className="flex-1">
-      <PrimaryDevicesLocations contextAuthData={contextAuthData} />
+    <>
+      <div className="flex-1">
+        <PrimaryDevicesLocations contextAuthData={contextAuthData} />
 
-      <TrustedDevicesLocations
-        trustedAuthContextData={trustedAuthContextData}
-      />
-      <BlockedDevicesLocations
-        blockedContextAuthData={blockedContextAuthData}
-      />
-    </div>
+        <TrustedDevicesLocations
+          trustedAuthContextData={trustedAuthContextData}
+        />
+        <BlockedDevicesLocations
+          blockedContextAuthData={blockedContextAuthData}
+        />
+      </div>
+      <Rightbar />
+    </>
   );
 };
 

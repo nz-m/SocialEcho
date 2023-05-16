@@ -29,6 +29,11 @@ async function start() {
   try {
     const moderators = await User.find({ role: "moderator" });
 
+    if (moderators.length === 0) {
+      LOG(kleur.yellow().bold("No moderators found."));
+      process.exit(1);
+    }
+
     const modChoice = await promptUserChoice(
       kleur
         .cyan()
