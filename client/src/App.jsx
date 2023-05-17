@@ -76,11 +76,15 @@ const App = () => {
           {/*todo: make modal*/}
           <Route path="/edit-profile" element={<EditProfileForm />} />
           <Route path="/user/:userId" element={<PublicProfile />} />
+
+          {/*todo: prevent moderator from accessing this page*/}
           <Route path="/communities" element={<AllCommunities />} />
+
           <Route path="/my-communities" element={<MyCommunities />} />
           <Route path="/following" element={<Following />} />
           <Route path="/devices-locations" element={<DevicesLocations />} />
         </Route>
+
         <Route path="/signup" element={<SignUp />} />
         <Route
           path="/signin"

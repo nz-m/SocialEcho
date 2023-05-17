@@ -7,12 +7,13 @@ import {
 } from "../../redux/actions/userActions";
 import placeholder from "../../assets/placeholder.png";
 import { Link, useNavigate } from "react-router-dom";
-import ModeratorProfile from "../moderator/ModeratorProfile";
 import JoinModal from "../modals/JoinModal";
 import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { IoIosPeople } from "react-icons/io";
 const Rightbar = () => {
+  console.log("Righbar rendered");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [joinModalVisibility, setJoinModalVisibility] = useState({});
@@ -21,7 +22,6 @@ const Rightbar = () => {
   const [publicUsersFetched, setPublicUsersFetched] = useState(false);
 
   const currentUser = useSelector((state) => state.auth?.userData);
-  const currentUserIsModerator = currentUser?.role === "moderator";
 
   const recommendedUsers = useSelector((state) => state.user?.publicUsers);
   const memoizedUsers = useMemo(() => recommendedUsers, [recommendedUsers]);
@@ -69,14 +69,6 @@ const Rightbar = () => {
   );
 
   const MemoizedLink = memo(Link);
-
-  if (currentUserIsModerator) {
-    return (
-      <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded">
-        <ModeratorProfile />
-      </div>
-    );
-  }
 
   const toggleJoinModal = (communityId, visible) => {
     setJoinModalVisibility((prev) => ({

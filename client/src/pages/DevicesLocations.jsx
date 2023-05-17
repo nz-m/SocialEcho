@@ -12,7 +12,6 @@ import {
   getBlockedAuthContextDataAction,
   getContextAuthDataAction,
 } from "../redux/actions/authActions";
-import Rightbar from "../components/common/Rightbar";
 
 const DevicesLocations = () => {
   const dispatch = useDispatch();
@@ -58,19 +57,16 @@ const DevicesLocations = () => {
   }
 
   return (
-    <>
-      <div className="flex-1">
-        <PrimaryDevicesLocations contextAuthData={contextAuthData} />
+    <div className="flex-1">
+      <PrimaryDevicesLocations contextAuthData={contextAuthData} />
 
-        <TrustedDevicesLocations
-          trustedAuthContextData={trustedAuthContextData}
-        />
-        <BlockedDevicesLocations
-          blockedContextAuthData={blockedContextAuthData}
-        />
-      </div>
-      <Rightbar />
-    </>
+      <TrustedDevicesLocations
+        trustedAuthContextData={trustedAuthContextData}
+      />
+      <BlockedDevicesLocations
+        blockedContextAuthData={blockedContextAuthData}
+      />
+    </div>
   );
 };
 

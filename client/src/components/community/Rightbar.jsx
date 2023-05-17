@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import LeaveModal from "../modals/LeaveModal";
@@ -18,9 +18,9 @@ const Rightbar = () => {
   const dispatch = useDispatch();
   const { communityName } = useParams();
 
-  const toggleLeaveModal = () => {
-    setShowLeaveModal(!showLeaveModal);
-  };
+  const toggleLeaveModal = useCallback(() => {
+    setShowLeaveModal((prevState) => !prevState);
+  }, []);
 
   useEffect(() => {
     dispatch(getCommunityAction(communityName));

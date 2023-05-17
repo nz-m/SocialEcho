@@ -14,6 +14,7 @@ import {
 } from "react-icons/hi2";
 
 const Leftbar = () => {
+  console.log("Leftbar rendered");
   const [loggingOut, setLoggingOut] = useState(false);
   const dispatch = useDispatch();
 

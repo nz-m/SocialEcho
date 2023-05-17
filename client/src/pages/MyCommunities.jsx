@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { getJoinedCommunitiesAction } from "../redux/actions/communityActions";
 import JoinedCommunityCard from "../components/community/JoinedCommunityCard";
 import CommonLoading from "../components/loader/CommonLoading";
-import Rightbar from "../components/common/Rightbar";
 const MyCommunities = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
@@ -40,12 +39,9 @@ const MyCommunities = () => {
   }
 
   return (
-    <>
-      <div className="flex flex-wrap justify-center w-6/12 px-10 py-6">
-        {communityCards}
-      </div>
-      <Rightbar />
-    </>
+    <div className="flex flex-wrap justify-center w-6/12 px-10 py-6">
+      {communityCards}
+    </div>
   );
 };
 
