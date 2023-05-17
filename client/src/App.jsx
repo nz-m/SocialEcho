@@ -7,14 +7,9 @@ import { getTitleFromRoute } from "./utils/docTitle";
 import PrivateRoute from "./PrivateRoute";
 import ReportPost from "./components/community/ReportPost";
 import EditProfileForm from "./components/form/EditProfileForm";
-import CommonLoading from "./components/loader/CommonLoading";
 
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
-import VerifyEmail from "./pages/VerifyEmail";
-import EmailVerifiedMessage from "./pages/EmailVerifiedMessage";
-import BlockDevice from "./pages/BlockDevice";
-import LoginVerified from "./pages/LoginVerified";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import CommunityHome from "./pages/CommunityHome";
@@ -28,12 +23,17 @@ import AllCommunities from "./pages/AllCommunities";
 import MyCommunities from "./pages/MyCommunities";
 import Following from "./pages/Following";
 import DevicesLocations from "./pages/DevicesLocations";
-import AccessDenied from "./pages/AccessDenied";
-import NotFound from "./pages/NotFound";
 import { useSelector } from "react-redux";
+import FallbackLoading from "./components/loader/FallbackLoading";
 
 const AdminSignIn = lazy(() => import("./pages/AdminSignIn"));
 const AdminPanel = lazy(() => import("./pages/AdminPanel"));
+const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
+const EmailVerifiedMessage = lazy(() => import("./pages/EmailVerifiedMessage"));
+const BlockDevice = lazy(() => import("./pages/BlockDevice"));
+const LoginVerified = lazy(() => import("./pages/LoginVerified"));
+const AccessDenied = lazy(() => import("./pages/AccessDenied"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const App = ({ adminAccessToken }) => {
   const location = useLocation();
@@ -79,10 +79,7 @@ const App = ({ adminAccessToken }) => {
 
           <Route path="/my-communities" element={<MyCommunities />} />
           <Route path="/following" element={<Following />} />
-          <Route
-            path="/devices-locations"
-            element={<DevicesLocations userData={userData} />}
-          />
+          <Route path="/devices-locations" element={<DevicesLocations />} />
         </Route>
 
         <Route path="/signup" element={<SignUp />} />
@@ -90,28 +87,19 @@ const App = ({ adminAccessToken }) => {
           path="/signin"
           element={userData ? <Navigate to="/" /> : <SignIn />}
         />
-        <Route
-          path="/admin"
-          element={
-            <Suspense
-              fallback={
-                <div className="flex justify-center items-center h-screen">
-                  <CommonLoading />
-                </div>
-              }
-            >
-              {adminAccessToken ? <AdminPanel /> : <AdminSignIn />}
-            </Suspense>
-          }
-        />
-        {/*todo: make them lazy*/}
-        <Route path="/admin-signin" element={<AdminSignIn />} />
-        <Route path="/auth/verify" element={<VerifyEmail />} />
-        <Route path="/email-verified" element={<EmailVerifiedMessage />} />
-        <Route path="/block-device" element={<BlockDevice />} />
-        <Route path="/verify-login" element={<LoginVerified />} />
-        <Route path="/access-denied" element={<AccessDenied />} />
-        <Route path="*" element={<NotFound />} />
+        <Suspense fallback={<FallbackLoading />}>
+          <Route
+            path="/admin"
+            element={adminAccessToken ? <AdminPanel /> : <AdminSignIn />}
+          />
+          <Route path="/admin-signin" element={<AdminSignIn />} />
+          <Route path="/auth/verify" element={<VerifyEmail />} />
+          <Route path="/email-verified" element={<EmailVerifiedMessage />} />
+          <Route path="/block-device" element={<BlockDevice />} />
+          <Route path="/verify-login" element={<LoginVerified />} />
+          <Route path="/access-denied" element={<AccessDenied />} />
+          <Route path="*" element={<NotFound />} />
+        </Suspense>
       </Routes>
     </>
   );
