@@ -1,13 +1,10 @@
-import { lazy, Suspense, useEffect } from "react";
-import FallbackLoading from "../components/loader/FallbackLoading";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CommonLoading from "../components/loader/CommonLoading";
 
-const MainSection = lazy(() => import("../components/moderator/MainSection"));
-const ModeratorsList = lazy(() =>
-  import("../components/moderator/ModeratorsList")
-);
+import MainSection from "../components/moderator/MainSection";
+import ModeratorsList from "../components/moderator/ModeratorsList";
 
 const Moderator = () => {
   const navigate = useNavigate();
@@ -23,16 +20,14 @@ const Moderator = () => {
   if (userRole !== "moderator") return <CommonLoading />;
 
   return (
-    <Suspense fallback={<FallbackLoading />}>
-      <>
-        <div className="w-6/12 px-10 py-5">
-          <MainSection />
-        </div>
-        <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
-          <ModeratorsList />
-        </div>
-      </>
-    </Suspense>
+    <>
+      <div className="w-6/12 px-10 py-5">
+        <MainSection />
+      </div>
+      <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
+        <ModeratorsList />
+      </div>
+    </>
   );
 };
 

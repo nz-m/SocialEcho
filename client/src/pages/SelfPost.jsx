@@ -1,12 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, lazy, Suspense, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { getSelfPostAction } from "../redux/actions/postActions";
 import { useNavigate, useParams } from "react-router-dom";
-import FallbackLoading from "../components/loader/FallbackLoading";
 import CommonLoading from "../components/loader/CommonLoading";
 
-const PostView = lazy(() => import("../components/post/PostView"));
-const CommentSidebar = lazy(() => import("../components/post/CommentSidebar"));
+import PostView from "../components/post/PostView";
+import CommentSidebar from "../components/post/CommentSidebar";
 
 const SelfPost = () => {
   const { postId } = useParams();
@@ -38,10 +37,10 @@ const SelfPost = () => {
   if (!post || !joinedCommunities) return <CommonLoading />;
 
   return (
-    <Suspense fallback={<FallbackLoading />}>
+    <>
       <PostView post={post} userData={userData} />
       <CommentSidebar comments={post.comments} />
-    </Suspense>
+    </>
   );
 };
 

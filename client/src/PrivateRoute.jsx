@@ -1,13 +1,12 @@
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect } from "react";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setInitialAuthState } from "./redux/actions/authActions";
 import Navbar from "./components/common/Navbar";
 import Leftbar from "./components/common/Leftbar";
 import Rightbar from "./components/common/Rightbar";
-import FallbackLoading from "./components/loader/FallbackLoading";
 
-const ModeratorRightbar = lazy(() => import("./components/moderator/Rightbar"));
+import ModeratorRightbar from "./components/moderator/Rightbar";
 
 const noRightbarRoutes = [
   /\/post\/[^/]+$/,
@@ -49,9 +48,7 @@ const PrivateRoute = ({ userData }) => {
         <Outlet />
         {showRightbar ? (
           currentUserIsModerator ? (
-            <Suspense fallback={<FallbackLoading />}>
-              <ModeratorRightbar />
-            </Suspense>
+            <ModeratorRightbar />
           ) : (
             <Rightbar />
           )
