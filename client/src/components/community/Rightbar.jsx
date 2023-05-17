@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import LeaveModal from "../modals/LeaveModal";
@@ -18,16 +18,19 @@ const Rightbar = () => {
   const dispatch = useDispatch();
   const { communityName } = useParams();
 
-  const toggleLeaveModal = () => {
-    setShowLeaveModal(!showLeaveModal);
-  };
+  const toggleLeaveModal = useCallback(() => {
+    setShowLeaveModal((prevState) => !prevState);
+  }, []);
 
   useEffect(() => {
     dispatch(getCommunityAction(communityName));
   }, [dispatch, communityName]);
 
   const communityData = useSelector((state) => state.community?.communityData);
-  const isModerator = useSelector((state) => state.auth?.isModerator);
+
+  const isModeratorOfThisCommunity = useSelector(
+    (state) => state.auth?.isModeratorOfThisCommunity
+  );
 
   const { name, description, members, rules, banner } = useMemo(
     () => communityData || {},
@@ -35,7 +38,7 @@ const Rightbar = () => {
   );
 
   const bannerLoaded = useBannerLoading(banner);
-  const isModeratorUpdated = useIsModeratorUpdated(isModerator);
+  const isModeratorUpdated = useIsModeratorUpdated(isModeratorOfThisCommunity);
 
   if (!communityData) {
     return (
@@ -76,7 +79,7 @@ const Rightbar = () => {
         <h3>{description}</h3>
 
         <div className="my-4">
-          {isModerator && (
+          {isModeratorOfThisCommunity && (
             <Link
               to={`/community/${communityName}/moderator`}
               className="bg-primary px-4 py-2 text-white rounded-2xl "
@@ -85,7 +88,7 @@ const Rightbar = () => {
             </Link>
           )}
 
-          {isModeratorUpdated && !isModerator && (
+          {isModeratorUpdated && !isModeratorOfThisCommunity && (
             <button
               onClick={toggleLeaveModal}
               className="px-4 shadow-lg shadow-red-50 py-1 border border-red-400 hover:text-white hover:bg-red-400 text-red-400 rounded-2xl my-2"

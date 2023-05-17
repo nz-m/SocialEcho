@@ -23,7 +23,7 @@ const SignIn = () => {
     setLoading(false);
   };
 
-  const signInerror = useSelector((state) => state.auth?.signInerror);
+  const signInError = useSelector((state) => state.auth?.signInError);
   const successMessage = useSelector((state) => state.auth?.successMessage);
   return (
     <section className="bg-[#F6F7FA]">
@@ -32,13 +32,13 @@ const SignIn = () => {
           <h1 className="mt-3 text-2xl font-semibold text-gray-800 capitalize sm:text-3xl">
             Sign In
           </h1>
-          {signInerror && (
+          {signInError && (
             <div
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-6"
               role="alert"
             >
               <strong className="font-bold">Error! </strong>
-              <span className="block sm:inline">{signInerror}</span>
+              <span className="block sm:inline">{signInError}</span>
             </div>
           )}
           {successMessage && (

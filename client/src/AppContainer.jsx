@@ -7,12 +7,12 @@
  *
  * @description
  * This component sets up the Redux store using `createAppStore()` and
- * checks server status using an HTTP GET request to `/check-connectivity`.
+ * checks server status using an HTTP GET request to `/server-status`.
  * If the server is down, the component will display an error message.
  * If there is an error setting up the store, it will also display an error message.
  */
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Provider } from "react-redux";
 import createAppStore from "./redux/store";
 import App from "./App";
@@ -24,16 +24,21 @@ const AppContainer = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const adminAccessToken = JSON.parse(
+    localStorage.getItem("admin")
+  )?.accessToken;
+
   useEffect(() => {
     const checkServerStatus = async () => {
       try {
-        await axios.get("/check-connectivity");
+        await axios.get("/server-status");
       } catch (error) {
         setError("Server is down. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
+
     checkServerStatus();
   }, []);
 
@@ -48,6 +53,7 @@ const AppContainer = () => {
         setLoading(false);
       }
     };
+
     loadStore();
   }, []);
 
@@ -69,7 +75,7 @@ const AppContainer = () => {
 
   return (
     <Provider store={store}>
-      <App />
+      <App adminAccessToken={adminAccessToken} />
     </Provider>
   );
 };

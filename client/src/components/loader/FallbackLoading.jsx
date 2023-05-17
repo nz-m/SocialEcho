@@ -1,11 +1,9 @@
-import { HashLoader } from "react-spinners";
+import { PulseLoader } from "react-spinners";
 
 const FallbackLoading = () => {
   return (
-    <div className="flex justify-center items-center h-screen w-auto">
-      <div className="flex flex-col justify-center items-center">
-        <HashLoader color="#008cff" size={90} />
-      </div>
+    <div className="flex justify-center items-center h-screen w-9/12">
+      <PulseLoader color="#008cff" />
     </div>
   );
 };

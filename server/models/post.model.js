@@ -54,12 +54,8 @@ postSchema.pre("remove", async function (next) {
       );
       await deleteFilePromise;
     }
-    const commentIds = this.comments.map((comment) => comment.toString());
-    await this.model("Comment").deleteMany({
-      _id: {
-        $in: commentIds,
-      },
-    });
+
+    await this.model("Comment").deleteMany({ _id: this.comments });
 
     await this.model("Report").deleteOne({
       post: this._id,

@@ -1,16 +1,10 @@
-import { lazy, Suspense } from "react";
-import FallbackLoading from "../components/loader/FallbackLoading";
+import { useSelector } from "react-redux";
 
-const UserProfile = lazy(() => import("../components/profile/UserProfile"));
-const Rightbar = lazy(() => import("../components/common/Rightbar"));
-
+import UserProfile from "../components/profile/UserProfile";
 const Profile = () => {
-  return (
-    <Suspense fallback={<FallbackLoading />}>
-      <UserProfile />
-      <Rightbar />
-    </Suspense>
-  );
+  const userData = useSelector((state) => state.auth?.userData);
+
+  return <UserProfile userData={userData} />;
 };
 
 export default Profile;

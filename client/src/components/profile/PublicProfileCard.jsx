@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import { RiUserShared2Line } from "react-icons/ri";

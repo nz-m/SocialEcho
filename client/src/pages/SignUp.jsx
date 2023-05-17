@@ -15,7 +15,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const signUperror = useSelector((state) => state.auth?.signUperror);
+  const signUpError = useSelector((state) => state.auth?.signUpError);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -77,9 +77,9 @@ const SignUp = () => {
             Sign up for an account
           </h2>
 
-          {signUperror &&
-            Array.isArray(signUperror) &&
-            signUperror.map((err, i) => (
+          {signUpError &&
+            Array.isArray(signUpError) &&
+            signUpError.map((err, i) => (
               <div
                 className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4
                     text - center "

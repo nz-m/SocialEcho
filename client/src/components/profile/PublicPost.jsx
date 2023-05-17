@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Post from "../post/Post";
 import { useSelector, useDispatch } from "react-redux";
 import { getPublicPostsAction } from "../../redux/actions/postActions";

@@ -1,17 +1,17 @@
-import { useState, useEffect, useMemo, useCallback, memo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getNotJoinedCommunitiesAction } from "../../redux/actions/communityActions";
 import {
   getPublicUsersAction,
   followUserAndFetchData,
 } from "../../redux/actions/userActions";
-import placeholder from "../../assets/placeholder.png";
-import { Link, useNavigate } from "react-router-dom";
-import ModeratorProfile from "../moderator/ModeratorProfile";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import JoinModal from "../modals/JoinModal";
 import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { IoIosPeople } from "react-icons/io";
+import placeholder from "../../assets/placeholder.png";
+
 const Rightbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,20 +21,19 @@ const Rightbar = () => {
   const [publicUsersFetched, setPublicUsersFetched] = useState(false);
 
   const currentUser = useSelector((state) => state.auth?.userData);
-  const currentUserIsModerator = currentUser?.role === "moderator";
 
   const recommendedUsers = useSelector((state) => state.user?.publicUsers);
-  const memoizedUsers = useMemo(() => recommendedUsers, [recommendedUsers]);
 
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(getNotJoinedCommunitiesAction());
       setNotJoinedCommunitiesFetched(true);
       await dispatch(getPublicUsersAction());
-      setPublicUsersFetched(true);
     };
 
-    fetchData();
+    fetchData().then(() => {
+      setPublicUsersFetched(true);
+    });
   }, [dispatch]);
 
   const notJoinedCommunities = useSelector(
@@ -42,7 +41,7 @@ const Rightbar = () => {
   );
 
   const [visibleCommunities, remainingCount] = useMemo(() => {
-    const visibleCommunities = notJoinedCommunities?.slice(0, 4);
+    const visibleCommunities = notJoinedCommunities?.slice(0, 4) || [];
     const remainingCount = Math.max((notJoinedCommunities?.length || 0) - 4, 0);
     return [visibleCommunities, remainingCount];
   }, [notJoinedCommunities]);
@@ -68,33 +67,23 @@ const Rightbar = () => {
     [dispatch, currentUser, navigate]
   );
 
-  const MemoizedLink = memo(Link);
-
-  if (currentUserIsModerator) {
-    return (
-      <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded">
-        <ModeratorProfile />
-      </div>
-    );
-  }
-
-  const toggleJoinModal = (communityId, visible) => {
+  const toggleJoinModal = useCallback((communityId, visible) => {
     setJoinModalVisibility((prev) => ({
       ...prev,
       [communityId]: visible,
     }));
-  };
+  }, []);
 
-  const currentLocation = window.location.pathname;
+  const currentLocation = useLocation().pathname;
 
   return (
     <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded z-10">
       {currentLocation !== "/communities" && (
-        <div className="">
+        <div>
           <div className="flex items-end justify-between mb-4">
             <h5 className="font-semibold text-sm">Suggested Communities</h5>
             {remainingCount > 0 && (
-              <MemoizedLink
+              <Link
                 to="/communities"
                 className=" text-blue-500 font-medium flex text-xs"
               >
@@ -102,7 +91,7 @@ const Rightbar = () => {
                 <p className="bg-primary px-2 py-2 w-5 h-5 flex justify-center items-center -mt-3 rounded-full text-white text-[10px]">
                   {remainingCount}
                 </p>
-              </MemoizedLink>
+              </Link>
             )}
           </div>
 
@@ -155,14 +144,14 @@ const Rightbar = () => {
       <hr className="my-3" />
       <h5 className=" mb-4 text-sm font-semibold">Popular Users to Follow</h5>
 
-      {publicUsersFetched && memoizedUsers?.length === 0 && (
+      {publicUsersFetched && recommendedUsers?.length === 0 && (
         <div className="text-center italic text-gray-400">
           No users to follow. Check back later
         </div>
       )}
       <ul className="flex flex-col gap-3">
-        {memoizedUsers?.length > 0 &&
-          memoizedUsers.map((user) => (
+        {recommendedUsers?.length > 0 &&
+          recommendedUsers.map((user) => (
             <li
               key={user._id}
               className="flex justify-between items-center gap-5 bg-white shadow-2xl shadow-[#f2f5fc]  border border-slate-100 px-2 py-1 rounded-lg"
@@ -174,12 +163,12 @@ const Rightbar = () => {
                   alt={user.name}
                 />
                 <div>
-                  <MemoizedLink
+                  <Link
                     to={`/user/${user._id}`}
                     className="font-medium text-base line-clamp-1"
                   >
                     {user.name}
-                  </MemoizedLink>
+                  </Link>
                   <div className="text-xs text-slate-400">
                     Followers: {user.followerCount}
                   </div>

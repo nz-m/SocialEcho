@@ -1,10 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
 import { getJoinedCommunitiesAction } from "../redux/actions/communityActions";
 import JoinedCommunityCard from "../components/community/JoinedCommunityCard";
 import CommonLoading from "../components/loader/CommonLoading";
-import Rightbar from "../components/common/Rightbar";
 const MyCommunities = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
@@ -16,13 +14,12 @@ const MyCommunities = () => {
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(getJoinedCommunitiesAction());
-      setLoading(false);
     };
-    fetchData();
+    fetchData().then(() => setLoading(false));
   }, [dispatch, loading]);
 
   const communityCards = useMemo(() => {
-    return joinedCommunities.map((community) => (
+    return joinedCommunities?.map((community) => (
       <div key={community._id} className="grid grid-cols-2 gap-5">
         <JoinedCommunityCard
           className="grid grid-cols-2 gap-5"
@@ -40,12 +37,9 @@ const MyCommunities = () => {
   }
 
   return (
-    <>
-      <div className="flex flex-wrap justify-center w-6/12 px-10 py-6">
-        {communityCards}
-      </div>
-      <Rightbar />
-    </>
+    <div className="flex flex-wrap justify-center w-6/12 px-10 py-6">
+      {communityCards}
+    </div>
   );
 };
 

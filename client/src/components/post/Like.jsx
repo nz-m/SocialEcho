@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { HiOutlineHandThumbUp, HiHandThumbUp } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import {

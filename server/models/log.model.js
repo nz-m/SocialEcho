@@ -6,10 +6,15 @@ const {
 } = require("../utils/encryption");
 const LogSchema = new mongoose.Schema({
   email: { type: String },
+
   context: { type: String, set: encryptField, get: decryptField },
+
   message: { type: String, required: true },
+
   type: { type: String, required: true },
+
   level: { type: String, required: true },
+
   timestamp: {
     type: Date,
     required: true,

@@ -39,7 +39,6 @@ const adminSchema = new mongoose.Schema(
   }
 );
 
-// Hash password before saving
 adminSchema.pre("save", async function (next) {
   const admin = this;
   if (!admin.isModified("password")) {
@@ -47,8 +46,7 @@ adminSchema.pre("save", async function (next) {
   }
   try {
     const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(admin.password, salt);
-    admin.password = hash;
+    admin.password = await bcrypt.hash(admin.password, salt);
     return next();
   } catch (error) {
     return next(error);

@@ -3,7 +3,7 @@ import { LOGOUT } from "../constants/authConstants";
 
 const initialState = {
   communityData: null,
-  joinedCommunities: [],
+  joinedCommunities: null,
   notJoinedCommunities: [],
   reportedPosts: null,
   communityError: null,
@@ -17,7 +17,7 @@ const communityReducer = (state = initialState, action) => {
       return {
         ...state,
         communityData: null,
-        joinedCommunities: [],
+        joinedCommunities: null,
         notJoinedCommunities: [],
         reportedPosts: null,
         communityError: null,
@@ -38,7 +38,7 @@ const communityReducer = (state = initialState, action) => {
     case types.GET_JOINED_COMMUNITIES_SUCCESS:
       return {
         ...state,
-        joinedCommunities: payload ? payload : [],
+        joinedCommunities: payload ? payload : null,
         communityError: null,
       };
     case types.GET_JOINED_COMMUNITIES_FAIL:

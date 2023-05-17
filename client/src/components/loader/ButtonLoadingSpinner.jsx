@@ -1,5 +1,3 @@
-import React from "react";
-
 const ButtonLoadingSpinner = ({ loadingText }) => {
   return (
     <div className="flex justify-center items-center">
