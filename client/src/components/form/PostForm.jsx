@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createPostAction } from "../../redux/actions/postActions";
 import { useSelector } from "react-redux";

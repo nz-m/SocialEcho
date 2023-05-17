@@ -1,6 +1,6 @@
 import { useEffect, lazy, Suspense } from "react";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setInitialAuthState } from "./redux/actions/authActions";
 import Navbar from "./components/common/Navbar";
 import Leftbar from "./components/common/Leftbar";
@@ -22,11 +22,10 @@ noRightbarRoutes.forEach((regex, index) => {
 });
 const isAuthenticated = (userData, accessToken) => userData && accessToken;
 
-const PrivateRoute = () => {
+const PrivateRoute = ({ userData }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.auth?.userData);
   const token = localStorage.getItem("profile");
   const accessToken = JSON.parse(token)?.accessToken;
 

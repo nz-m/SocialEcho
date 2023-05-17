@@ -1,11 +1,11 @@
-import React, { useEffect, useState, memo } from "react";
+import { useEffect, useState, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { getComMembersAction } from "../../redux/actions/communityActions";
 import UnbanUserModal from "../modals/UnbanUserModal";
-import {IoTimerOutline} from "react-icons/io5";
-import {CiLocationOn} from "react-icons/ci";
+import { IoTimerOutline } from "react-icons/io5";
+import { CiLocationOn } from "react-icons/ci";
 
 const BannerMembersList = () => {
   const dispatch = useDispatch();
@@ -29,7 +29,6 @@ const BannerMembersList = () => {
 
   return (
     <div className="flex flex-col">
-
       <div className="flex flex-col">
         {bannedUsers &&
           bannedUsers.map((bannedMember) => (
@@ -40,34 +39,37 @@ const BannerMembersList = () => {
               <div className="flex justify-between items-center">
                 <div className="flex">
                   <img
-                      src={bannedMember.avatar}
-                      alt="profile"
-                      className="w-16 h-16 rounded-full"
+                    src={bannedMember.avatar}
+                    alt="profile"
+                    className="w-16 h-16 rounded-full"
                   />
 
                   <div className="flex flex-col">
-                    <Link to={`/user/${bannedMember._id}`} className="ml-2 font-bold">
+                    <Link
+                      to={`/user/${bannedMember._id}`}
+                      className="ml-2 font-bold"
+                    >
                       {bannedMember.name}
                     </Link>
                     <p className="ml-2 text-xs flex gap-1 items-center">
-                      <CiLocationOn/>
-                      {bannedMember.location}</p>
+                      <CiLocationOn />
+                      {bannedMember.location}
+                    </p>
                     <p className="ml-2 text-xs flex gap-1 items-center">
                       <IoTimerOutline />
-                       {new Date(bannedMember.createdAt).toDateString()}
+                      {new Date(bannedMember.createdAt).toDateString()}
                     </p>
                   </div>
                 </div>
                 <button
-                    onClick={() => {
-                      toggleUnbanUserModal(bannedMember._id, true);
-                    }}
-                    className="ml-2 bg-primary hover:bg-sky-700 text-white font-bold rounded-lg px-4 py-2 h-9 flex justify-center items-center text-sm"
+                  onClick={() => {
+                    toggleUnbanUserModal(bannedMember._id, true);
+                  }}
+                  className="ml-2 bg-primary hover:bg-sky-700 text-white font-bold rounded-lg px-4 py-2 h-9 flex justify-center items-center text-sm"
                 >
                   Unban user
                 </button>
-                </div>
-
+              </div>
 
               <UnbanUserModal
                 key={bannedMember._id}

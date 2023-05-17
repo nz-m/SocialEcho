@@ -21,13 +21,12 @@ const LoadMoreButton = ({ onClick, isLoading }) => (
   </div>
 );
 
-const MainSection = () => {
+const MainSection = ({ userData }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const postError = useSelector((state) => state.posts?.postError);
   const posts = useSelector((state) => state.posts?.posts);
   const totalPosts = useSelector((state) => state.posts?.totalPosts);
-  const userData = useSelector((state) => state.auth?.userData);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
 
   const LIMIT = 10;

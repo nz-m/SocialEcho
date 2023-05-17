@@ -6,20 +6,18 @@ import SelfProfileCard from "./SelfProfileCard";
 import SelfInfoCard from "./SelfInfoCard";
 import CommonLoading from "../loader/CommonLoading";
 
-const UserProfile = () => {
+const UserProfile = ({ userData }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const userData = useSelector((state) => state.auth?.userData);
   const user = useSelector((state) => state.user?.user);
   const posts = user?.posts;
 
   useEffect(() => {
+    setLoading(true);
     const fetchUser = async () => {
-      setLoading(true);
       await dispatch(getUserAction(userData._id));
-      setLoading(false);
     };
-    fetchUser();
+    fetchUser().then(() => setLoading(false));
   }, [dispatch, userData._id]);
 
   const MemoizedPostOnProfile = memo(PostOnProfile);

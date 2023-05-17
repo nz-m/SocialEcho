@@ -1,5 +1,5 @@
-import React from "react";
 import { useNavigate, useLocation } from "react-router";
+import { useMemo } from "react";
 
 const PostOnProfile = ({ post }) => {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ const PostOnProfile = ({ post }) => {
   const { body, fileUrl, community, createdAt, comments, likes, isMember } =
     post;
 
-  const isImageFile = React.useMemo(() => {
+  const isImageFile = useMemo(() => {
     const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
     const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
     return validExtensions.includes(fileExtension);

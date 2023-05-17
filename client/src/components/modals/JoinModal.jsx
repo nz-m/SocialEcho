@@ -9,8 +9,9 @@ import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 
 const JoinModal = memo(({ show, onClose, community }) => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(false);
 
   const userData = useSelector((state) => state.auth?.userData);
 

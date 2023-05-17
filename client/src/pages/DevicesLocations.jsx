@@ -17,6 +17,16 @@ const DevicesLocations = () => {
   const dispatch = useDispatch();
   const [dateFetched, setDateFetched] = useState(false);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(getUserPreferencesAction());
+      await dispatch(getContextAuthDataAction());
+      await dispatch(getTrustedContextAuthDataAction());
+      await dispatch(getBlockedAuthContextDataAction());
+    };
+    fetchData().then(() => setDateFetched(true));
+  }, [dispatch, dateFetched]);
+
   const userPreferences = useSelector((state) => state.auth?.userPreferences);
   const contextAuthData = useSelector((state) => state.auth?.contextAuthData);
   const trustedAuthContextData = useSelector(
@@ -25,18 +35,6 @@ const DevicesLocations = () => {
   const blockedContextAuthData = useSelector(
     (state) => state.auth?.blockedAuthContextData
   );
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(getUserPreferencesAction());
-      await dispatch(getContextAuthDataAction());
-      await dispatch(getTrustedContextAuthDataAction());
-      await dispatch(getBlockedAuthContextDataAction());
-      setDateFetched(true);
-    };
-
-    fetchData();
-  }, [dispatch, dateFetched]);
 
   if (!dateFetched) {
     return (

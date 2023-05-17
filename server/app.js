@@ -47,7 +47,7 @@ app.use(passport.initialize());
 require("./config/passport.js");
 
 //routes
-app.get("/check-connectivity", (req, res) => {
+app.get("/server-status", (req, res) => {
   res.status(200).json({ message: "Server is up and running!" });
 });
 

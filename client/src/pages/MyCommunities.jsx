@@ -1,6 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
 import { getJoinedCommunitiesAction } from "../redux/actions/communityActions";
 import JoinedCommunityCard from "../components/community/JoinedCommunityCard";
 import CommonLoading from "../components/loader/CommonLoading";
@@ -15,13 +14,12 @@ const MyCommunities = () => {
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(getJoinedCommunitiesAction());
-      setLoading(false);
     };
-    fetchData();
+    fetchData().then(() => setLoading(false));
   }, [dispatch, loading]);
 
   const communityCards = useMemo(() => {
-    return joinedCommunities.map((community) => (
+    return joinedCommunities?.map((community) => (
       <div key={community._id} className="grid grid-cols-2 gap-5">
         <JoinedCommunityCard
           className="grid grid-cols-2 gap-5"

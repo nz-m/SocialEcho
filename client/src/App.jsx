@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
 import { Helmet } from "react-helmet";
-import { useSelector } from "react-redux";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import { getTitleFromRoute } from "./utils/docTitle";
@@ -10,7 +9,6 @@ import ReportPost from "./components/community/ReportPost";
 import EditProfileForm from "./components/form/EditProfileForm";
 import CommonLoading from "./components/loader/CommonLoading";
 
-/*************** pages **************/
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -32,17 +30,14 @@ import Following from "./pages/Following";
 import DevicesLocations from "./pages/DevicesLocations";
 import AccessDenied from "./pages/AccessDenied";
 import NotFound from "./pages/NotFound";
+import { useSelector } from "react-redux";
 
 const AdminSignIn = lazy(() => import("./pages/AdminSignIn"));
 const AdminPanel = lazy(() => import("./pages/AdminPanel"));
-/***************** pages ********************/
 
-const App = () => {
-  const user = useSelector((state) => state.auth?.userData);
-  const adminAccessToken = JSON.parse(
-    localStorage.getItem("admin")
-  )?.accessToken;
+const App = ({ adminAccessToken }) => {
   const location = useLocation();
+  const userData = useSelector((state) => state.auth?.userData);
 
   return (
     <>
@@ -51,7 +46,7 @@ const App = () => {
       </Helmet>
 
       <Routes>
-        <Route element={<PrivateRoute />}>
+        <Route element={<PrivateRoute userData={userData} />}>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
@@ -64,6 +59,7 @@ const App = () => {
             path="/community/:communityName/report"
             element={<ReportPost />}
           />
+
           <Route
             path="/community/:communityName/reported-post"
             element={<ReportedPost />}
@@ -72,6 +68,7 @@ const App = () => {
             path="/community/:communityName/moderator"
             element={<Moderator />}
           />
+
           <Route path="/saved" element={<Saved />} />
           {/*todo: make modal*/}
           <Route path="/edit-profile" element={<EditProfileForm />} />
@@ -82,13 +79,16 @@ const App = () => {
 
           <Route path="/my-communities" element={<MyCommunities />} />
           <Route path="/following" element={<Following />} />
-          <Route path="/devices-locations" element={<DevicesLocations />} />
+          <Route
+            path="/devices-locations"
+            element={<DevicesLocations userData={userData} />}
+          />
         </Route>
 
         <Route path="/signup" element={<SignUp />} />
         <Route
           path="/signin"
-          element={user ? <Navigate to="/" /> : <SignIn />}
+          element={userData ? <Navigate to="/" /> : <SignIn />}
         />
         <Route
           path="/admin"
@@ -110,7 +110,7 @@ const App = () => {
         <Route path="/email-verified" element={<EmailVerifiedMessage />} />
         <Route path="/block-device" element={<BlockDevice />} />
         <Route path="/verify-login" element={<LoginVerified />} />
-        <Route path="/denied" element={<AccessDenied />} />
+        <Route path="/access-denied" element={<AccessDenied />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

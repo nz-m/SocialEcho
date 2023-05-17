@@ -1,5 +1,4 @@
 import { lazy, Suspense } from "react";
-
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { clearPostAction, getPostAction } from "../redux/actions/postActions";
@@ -27,17 +26,12 @@ const ReportedPost = () => {
 
   if (!post) return <CommonLoading />;
   return (
-    <>
-      <Suspense fallback={<FallbackLoading />}>
-        <div className="w-6/12">
-          <ViewReportedPost post={post} />
-        </div>
-      </Suspense>
-
-      <Suspense fallback={<FallbackLoading />}>
-        <CommentSidebar comments={post.comments} />
-      </Suspense>
-    </>
+    <Suspense fallback={<FallbackLoading />}>
+      <div className="w-6/12">
+        <ViewReportedPost post={post} />
+      </div>
+      <CommentSidebar comments={post.comments} />
+    </Suspense>
   );
 };
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { RiEditCircleLine } from "react-icons/ri";
 import { CiLocationOn } from "react-icons/ci";

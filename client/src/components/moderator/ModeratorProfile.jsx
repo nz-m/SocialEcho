@@ -1,8 +1,7 @@
-import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getModProfileAction } from "../../redux/actions/authActions";
-import {MdOutlineMail,MdJoinInner} from "react-icons/md";
+import { MdOutlineMail, MdJoinInner } from "react-icons/md";
 
 const ModeratorProfile = () => {
   const dispatch = useDispatch();
@@ -24,15 +23,17 @@ const ModeratorProfile = () => {
         <span className="font-bold">{moderator.name}</span>
       </p>
 
-      <p className='flex items-center gap-2'>
+      <p className="flex items-center gap-2">
         <span className="font-bold">
-            <MdOutlineMail/>
-        </span> {moderator.email}
+          <MdOutlineMail />
+        </span>{" "}
+        {moderator.email}
       </p>
-      <p className='flex items-center gap-2'>
+      <p className="flex items-center gap-2">
         <span className="font-bold">
-            <MdJoinInner/>
-        </span> {moderator.createdAt}
+          <MdJoinInner />
+        </span>{" "}
+        {moderator.createdAt}
       </p>
       <p>Other infos here, will be added later</p>
     </div>
