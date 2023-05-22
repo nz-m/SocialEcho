@@ -7,7 +7,7 @@ const { promisify } = require("util");
 
 const postSchema = new Schema(
   {
-    body: {
+    content: {
       type: String,
       trim: true,
     },

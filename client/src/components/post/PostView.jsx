@@ -23,7 +23,7 @@ const PostView = ({ post, userData }) => {
   const dispatch = useDispatch();
 
   const {
-    body,
+    content,
     fileUrl,
     user,
     community,
@@ -105,7 +105,7 @@ const PostView = ({ post, userData }) => {
       </div>
 
       <div>
-        <p className="text-lg mt-3">{body}</p>
+        <p className="text-lg mt-3">{content}</p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <PhotoProvider
@@ -121,7 +121,7 @@ const PostView = ({ post, userData }) => {
                 <img
                   className="w-full h-auto rounded-xl mt-3 cursor-pointer"
                   src={fileUrl}
-                  alt={body}
+                  alt={content}
                   loading="lazy"
                 />
               </PhotoView>

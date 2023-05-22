@@ -37,14 +37,14 @@ const createPost = async (req, res) => {
       newPost = new Post({
         user: userId,
         community: communityId,
-        body: req.body.body,
+        content: req.body.content,
         fileUrl: fileUrl,
       });
     } else {
       newPost = new Post({
         user: userId,
         community: communityId,
-        body: req.body.body,
+        content: req.body.content,
         fileUrl: null,
       });
     }
@@ -62,7 +62,7 @@ const createPost = async (req, res) => {
     res.json(post);
   } catch (error) {
     res.status(500).json({
-      message: "Error creating post",
+      message: error.message,
     });
   }
 };

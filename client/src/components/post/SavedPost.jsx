@@ -7,7 +7,7 @@ const SavedPost = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { body, fileUrl, user, community, createdAt, comments } = post;
+  const { content, fileUrl, user, community, createdAt, comments } = post;
 
   const isImageFile = useMemo(() => {
     const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
@@ -51,13 +51,13 @@ const SavedPost = ({ post }) => {
           });
         }}
       >
-        <p className="text-lg mt-3">{body}</p>
+        <p className="text-lg mt-3">{content}</p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <img
               className="w-[800px] h-auto rounded-xl mt-3"
               src={fileUrl}
-              alt={body}
+              alt={content}
               loading="lazy"
             />
           ) : (

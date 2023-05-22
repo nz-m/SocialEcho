@@ -15,8 +15,7 @@ dayjs.extend(relativeTime);
  */
 const saveLogInfo = async (req, message, type, level) => {
   try {
-    let context = "N/A";
-
+    let context = null;
     if (req) {
       const { ip, country, city, browser, platform, os, device, deviceType } =
         getCurrentContextData(req);

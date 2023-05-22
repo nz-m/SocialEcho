@@ -16,7 +16,7 @@ const Post = ({ post }) => {
   const location = useLocation();
   const userData = useSelector((state) => state.auth?.userData);
 
-  const { body, fileUrl, user, community, createdAt, comments } = post;
+  const { content, fileUrl, user, community, createdAt, comments } = post;
 
   const isImageFile = useMemo(() => {
     const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
@@ -67,7 +67,7 @@ const Post = ({ post }) => {
         <p className="text-sm text-gray-500">{createdAt}</p>
       </div>
       <div>
-        <p className="text-md text-justify mt-2">{body}</p>
+        <p className="text-md text-justify mt-2">{content}</p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <PhotoProvider
@@ -82,7 +82,7 @@ const Post = ({ post }) => {
               <PhotoView src={fileUrl}>
                 <img
                   src={fileUrl}
-                  alt={body}
+                  alt={content}
                   loading="lazy"
                   className="cursor-pointer h-auto rounded-xl mt-3"
                 />

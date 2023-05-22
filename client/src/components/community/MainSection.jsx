@@ -26,6 +26,8 @@ const MainSection = () => {
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const LIMIT = 10;
 
+  const postError = useSelector((state) => state.posts?.postError);
+
   useEffect(() => {
     const fetchInitialPosts = async () => {
       if (communityData?._id) {
@@ -101,6 +103,8 @@ const MainSection = () => {
               <div className="mb-4">
                 <PostForm />
               </div>
+              {postError && <div className="text-red-500">{postError}</div>}
+
               <div>{memoizedCommunityPosts}</div>
               {communityPosts.length < totalCommunityPosts && (
                 <div className="flex justify-center">

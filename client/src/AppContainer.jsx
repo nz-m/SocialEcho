@@ -1,23 +1,9 @@
-/**
- * A container component that sets up the Redux store and
- * checks server status before rendering the main application.
- *
- * @component
- * @returns {JSX.Element} The rendered React component
- *
- * @description
- * This component sets up the Redux store using `createAppStore()` and
- * checks server status using an HTTP GET request to `/server-status`.
- * If the server is down, the component will display an error message.
- * If there is an error setting up the store, it will also display an error message.
- */
-
 import { useState, useEffect } from "react";
 import { Provider } from "react-redux";
 import createAppStore from "./redux/store";
-import App from "./App";
 import axios from "axios";
 import CommonLoading from "./components/loader/CommonLoading";
+import App from "./App";
 
 const AppContainer = () => {
   const [store, setStore] = useState(null);

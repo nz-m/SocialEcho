@@ -1,71 +1,70 @@
 [
   {
-    "name": "Programming",
-    "description": "Discussions about programming languages, tools and techniques",
-    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Programming.jpg"
-  },
-  {
-    "name": "Music",
-    "description": "Talk about your favorite songs, artists and genres",
-    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Music.jpg"
-  },
-  {
-    "name": "Gaming",
-    "description": "All things gaming - from retro to the latest releases",
-    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Gaming.jpg"
-  },
-  {
-    "name": "Education",
-    "description": "Discussions about learning, teaching and educational resources",
-    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Education.jpg"
-  },
-  {
-    "name": "Career",
-    "description": "Advice and support for job seekers, career changers and professionals"
-  },
-  {
-    "name": "Technology",
-    "description": "Discussions about gadgets, software, hardware and emerging technologies"
-  },
-
-  {
-    "name": "Sports",
-    "description": "Talk about your favorite sports, teams and players"
+    "name": "Health and Fitness",
+    "description": "A community for fitness fanatics and health gurus to share tips and advice on healthy living, exercise, and nutrition. Whether you're a seasoned athlete or just starting out, this community has something for everyone!"
   },
   {
     "name": "Travel",
-    "description": "A community for sharing travel stories, tips and recommendations."
+    "description": "A community for travel junkies to share their experiences, tips, and recommendations for destinations around the world. From backpacking to luxury travel, this community has all the inspiration you need to plan your next adventure!"
   },
   {
-    "name": "Food",
-    "description": "A community for sharing food stories, tips and recommendations."
+    "name": "Food and Cooking",
+    "description": "A community for foodies and home cooks to share recipes, cooking tips, and food-related news and events. From gourmet cuisine to comfort food, this community has all the ingredients for a delicious conversation!"
   },
   {
-    "name": "Movies",
-    "description": "A community for sharing movie stories, tips and recommendations."
+    "name": "Music",
+    "description": "A community for music lovers to discuss their favorite genres, artists, and concerts. From classical to hip hop, this community has all the beats you need to get your groove on!"
   },
   {
-    "name": "Books",
-    "description": "A community for sharing book stories, tips and recommendations."
-  },
-  {
-    "name": "Fitness",
-    "description": "A community for sharing workout routines, fitness challenges and healthy eating habits."
-  },
-  {
-    "name": "Health",
-    "description": "An informative place for people who are looking to improve their health and well-being."
-  },
-  {
-    "name": "Finance",
-    "description": "A community for sharing finance stories, tips and recommendations."
-  },
-  {
-    "name": "Politics",
-    "description": "A community for sharing political stories, tips and recommendations."
+    "name": "Sports",
+    "description": "A community for sports fans to discuss the latest news, events, and teams. From football to basketball, this community has all the action you need to stay up-to-date on your favorite sports!"
   },
   {
     "name": "Fashion",
-    "description": "A community for sharing fashion stories, tips and recommendations."
+    "description": "A community for fashionistas to share their tips, trends, and styles. From haute couture to streetwear, this community has all the fashion-forward ideas you need to stay on top of your game!"
+  },
+  {
+    "name": "Art and Design",
+    "description": "A community for artists and designers to share their work, tips, and inspiration. From painting to graphic design, this community has all the creativity you need to fuel your passion!"
+  },
+  {
+    "name": "Business and Entrepreneurship",
+    "description": "A community for business-minded individuals to discuss the latest news, strategies, and entrepreneurship. From startups to established companies, this community has all the insights you need to succeed in the business world!"
+  },
+  {
+    "name": "Education",
+    "description": "A community for educators and students to share educational resources, tips, and advice. From K-12 to higher education, this community has all the knowledge you need to excel in your studies!"
+  },
+  {
+    "name": "Photography",
+    "description": "A community for photography enthusiasts to share their tips, techniques, and inspiration. From landscape to portrait photography, this community has all the shutterbug ideas you need to capture the perfect shot!"
+  },
+  {
+    "name": "Science and Technology",
+    "description": "A community for science and tech enthusiasts to discuss scientific discoveries, research, and emerging technologies. From space exploration to quantum computing, this community has all the cutting-edge ideas you need to stay ahead of the curve!"
+  },
+  {
+    "name": "Parenting",
+    "description": "A community for parents to share their tips, advice, and experiences on raising children. From newborns to teenagers, this community has all the parenting wisdom you need to navigate the joys and challenges of parenthood!"
+  },
+  {
+    "name": "Politics",
+    "description": "A community for political junkies to discuss the latest news, events, and opinions. From local to global politics, this community has all the political discourse you need to stay informed and engaged!"
+  },
+  {
+    "name": "Environment and Sustainability",
+    "description": "A community for environmentalists to discuss environmental issues, sustainability, and green living. From climate change to renewable energy, this community has all the eco-friendly ideas you need to make a positive impact on the planet!"
+  },
+  {
+    "name": "Beauty and Skincare",
+    "description": "A community for beauty enthusiasts to share their tips, skincare routines, and product recommendations. From makeup to skincare, this community has all the beauty secrets you need to look and feel your best!"
+  },
+  {
+    "name": "Literature",
+    "description": "A community for bookworms to discuss books, authors, and literary events. From classic literature to contemporary fiction, this community has all the literary inspiration you need to curl up with a good book!"
+  },
+  {
+    "name": "Programming",
+    "description": "A community for programmers to discuss programming languages, frameworks, and software development. From web development to mobile apps, this community has all the code you need to build your next project!"
   }
 ]
