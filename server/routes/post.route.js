@@ -25,6 +25,7 @@ const { processPerspectiveAPIResponse } = require("../services/analyzeContent");
 const {
   processTextRazorResponse,
   processClassifierAPIResponse,
+  processInterfaceAPIResponse,
 } = require("../services/categorizeContent");
 
 const requireAuth = passport.authenticate("jwt", { session: false });
@@ -45,7 +46,8 @@ router.post(
   postValidator,
   postValidatorHandler,
   processPerspectiveAPIResponse,
-  processTextRazorResponse,
+  // processTextRazorResponse,
+  processInterfaceAPIResponse,
   // processClassifierAPIResponse,
   createPost
 );

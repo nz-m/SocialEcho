@@ -101,7 +101,10 @@ const MainSection = () => {
           {activeTab === "All posts" && (
             <>
               <div className="mb-4">
-                <PostForm />
+                <PostForm
+                  communityId={communityData._id}
+                  communityName={communityData.name}
+                />
               </div>
               {postError && <div className="text-red-500">{postError}</div>}
 

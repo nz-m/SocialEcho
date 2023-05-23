@@ -68,9 +68,57 @@ const getCategoriesFromAPI = async (content) => {
   }
 };
 
+async function getCategoriesFromInterfaceAPI(content) {
+  const API_URL = process.env.INTERFACE_API_URL;
+  const API_KEY = process.env.INTERFACE_API_KEY;
+
+  const CANDIDATE_LABELS = [
+    "programming",
+    "health_and_fitness",
+    "travel",
+    "food_and_cooking",
+    "music",
+    "sports",
+    "fashion",
+    "art_and_design",
+    "business_and_entrepreneurship",
+    "education",
+  ];
+
+  const categories = {};
+
+  try {
+    const response = await axios.post(
+      API_URL,
+      {
+        inputs: content,
+        parameters: { candidate_labels: CANDIDATE_LABELS },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const result = response.data;
+    const scores = result.scores;
+    const labels = result.labels;
+
+    labels.forEach((label, index) => {
+      categories[label] = scores[index];
+    });
+
+    return categories;
+  } catch (error) {
+    const { status, statusText } = error.response;
+    throw new Error(`Error ${status}: ${statusText}`);
+  }
+}
+
 const processTextRazorResponse = async (req, res, next) => {
   try {
-    const { content } = req.body;
+    const { content, communityName } = req.body;
     const categories = await getCategoriesFromTextRazor(content);
 
     console.log(categories);
@@ -104,4 +152,26 @@ const processClassifierAPIResponse = async (req, res, next) => {
   }
 };
 
-module.exports = { processTextRazorResponse, processClassifierAPIResponse };
+const processInterfaceAPIResponse = async (req, res, next) => {
+  try {
+    const { content } = req.body;
+    const categories = await getCategoriesFromInterfaceAPI(content);
+
+    console.log(categories);
+
+    if (Object.keys(categories).length > 0) {
+      const prohibitedAttributes = Object.keys(categories).join(", ");
+      const message = `Sorry, your post cannot be published due to inappropriate content. It violates our community guidelines regarding ${prohibitedAttributes}. Please revise your post and try again.`;
+      return res.status(400).json({ message });
+    } else next();
+  } catch (error) {
+    await saveLogInfo(null, error.message, "Interface API", "error");
+    next();
+  }
+};
+
+module.exports = {
+  processTextRazorResponse,
+  processClassifierAPIResponse,
+  processInterfaceAPIResponse,
+};

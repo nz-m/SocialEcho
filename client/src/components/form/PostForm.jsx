@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createPostAction } from "../../redux/actions/postActions";
-import { useSelector } from "react-redux";
 
-const PostForm = () => {
-  const community = useSelector((state) => state.community?.communityData);
-
+const PostForm = ({ communityId, communityName }) => {
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  if (!community) return null;
 
   const handleContentChange = (event) => {
     setContent(event.target.value);
@@ -45,7 +41,8 @@ const PostForm = () => {
 
     const formData = new FormData();
     formData.append("content", content);
-    formData.append("communityId", community._id);
+    formData.append("communityId", communityId);
+    formData.append("communityName", communityName);
     formData.append("file", file);
     setLoading(true);
 
