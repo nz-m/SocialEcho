@@ -1,4 +1,3 @@
-require("dotenv").config({ path: "../.env" });
 const axios = require("axios");
 const fs = require("fs");
 
@@ -10,7 +9,7 @@ class TextRazorClassifierManager {
       "utf8"
     );
     this.classifierId = "community";
-    this.url = "https://api.textrazor.com";
+    this.url = process.env.TEXTRAZOR_API_URL;
   }
 
   create() {

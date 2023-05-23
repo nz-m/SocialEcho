@@ -21,7 +21,11 @@ const {
   postValidator,
   postValidatorHandler,
 } = require("../middlewares/post/postValidator");
-const { processPerspectiveAPIResponse } = require("../services/perspectiveApi");
+const { processPerspectiveAPIResponse } = require("../services/analyzeContent");
+const {
+  processTextRazorResponse,
+  processClassifierAPIResponse,
+} = require("../services/categorizeContent");
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 
@@ -41,6 +45,8 @@ router.post(
   postValidator,
   postValidatorHandler,
   processPerspectiveAPIResponse,
+  processTextRazorResponse,
+  // processClassifierAPIResponse,
   createPost
 );
 
