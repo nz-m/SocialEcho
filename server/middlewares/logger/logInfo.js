@@ -1,17 +1,12 @@
 const Log = require("../../models/log.model");
 const getCurrentContextData = require("../../utils/contextData");
-const dayjs = require("dayjs");
-const relativeTime = require("dayjs/plugin/relativeTime");
-dayjs.extend(relativeTime);
 
 /**
  * Saves log info to the database
  * @param req - request object
  * @param message {string} - log message
- * @param type {string} - log type (sign in, sign out)
+ * @param type {string} - log type (sign in, sign out, api requests)
  * @param level {string} - log level (error, warning, info)
- *
- *
  */
 const saveLogInfo = async (req, message, type, level) => {
   try {

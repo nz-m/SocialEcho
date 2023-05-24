@@ -6,16 +6,16 @@ const SCORE_THRESHOLD = 0.6;
 const API_KEY = process.env.PERSPECTIVE_API_KEY;
 const DISCOVERY_URL = process.env.PERSPECTIVE_API_DISCOVERY_URL;
 
-const analyzeTextWithPerspectiveAPI = async (text) => {
+const analyzeTextWithPerspectiveAPI = async (content) => {
   try {
     const client = await google.discoverAPI(DISCOVERY_URL);
 
     const analyzeRequest = {
       comment: {
-        text: text,
+        text: content,
       },
       requestedAttributes: {
-        SPAM: {},
+        // SPAM: {},
         INSULT: {},
         PROFANITY: {},
         THREAT: {},
@@ -62,6 +62,4 @@ const processPerspectiveAPIResponse = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  processPerspectiveAPIResponse,
-};
+module.exports = processPerspectiveAPIResponse;

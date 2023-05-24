@@ -132,4 +132,25 @@ const signin = async (req, res) => {
   }
 };
 
-module.exports = { retrieveLogInfo, deleteLogInfo, signin };
+const updateServicePreference = async (req, res) => {
+  const jsonfile = require("jsonfile");
+  const PREFERENCES_FILE = "./config/system-preferences.json";
+  try {
+    const { service } = req.params;
+    const preferences = await jsonfile.readFile(PREFERENCES_FILE);
+    if (preferences && preferences.categoryFilteringService !== service) {
+      preferences.categoryFilteringService = service;
+      await jsonfile.writeFile(PREFERENCES_FILE, preferences);
+    }
+    res.status(200).json(preferences);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error updating system preferences" });
+  }
+};
+module.exports = {
+  updateServicePreference,
+  retrieveLogInfo,
+  deleteLogInfo,
+  signin,
+};

@@ -1,11 +1,10 @@
 const axios = require("axios");
 const fs = require("fs");
-
 class TextRazorClassifierManager {
   constructor() {
     this.apiKey = process.env.TEXTRAZOR_API_KEY;
     this.classifierData = fs.readFileSync(
-      "../data/community_classifier.csv",
+      "../data/community-classifier.csv",
       "utf8"
     );
     this.classifierId = "community";

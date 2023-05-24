@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=development nodemon app.js",
-    "prod": "NODE_ENV=production node app.js"
+    "start": "nodemon app.js",
+    "production": "node app.js"
   },
   "author": "Neaz",
   "license": "ISC",
@@ -24,6 +24,7 @@
     "geoip-lite": "^1.4.7",
     "googleapis": "^118.0.0",
     "http-errors": "^2.0.0",
+    "jsonfile": "^6.1.0",
     "jsonwebtoken": "^9.0.0",
     "kleur": "^4.1.5",
     "mongodb": "^5.4.0",
