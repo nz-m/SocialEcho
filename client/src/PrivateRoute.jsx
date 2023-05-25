@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setInitialAuthState } from "./redux/actions/authActions";
@@ -19,9 +19,12 @@ const noRightbarRoutes = [
 noRightbarRoutes.forEach((regex, index) => {
   noRightbarRoutes[index] = new RegExp(regex);
 });
-const isAuthenticated = (userData, accessToken) => userData && accessToken;
 
 const PrivateRoute = ({ userData }) => {
+  const isAuthenticated = useCallback((userData, accessToken) => {
+    return userData && accessToken;
+  }, []);
+
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();

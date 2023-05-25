@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Provider } from "react-redux";
 import createAppStore from "./redux/store";
 import axios from "axios";
@@ -14,34 +14,34 @@ const AppContainer = () => {
     localStorage.getItem("admin")
   )?.accessToken;
 
-  useEffect(() => {
-    const checkServerStatus = async () => {
-      try {
-        await axios.get("/server-status");
-      } catch (error) {
-        setError("Server is down. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const checkServerStatus = useCallback(async () => {
+    try {
+      await axios.get("/server-status");
+    } catch (error) {
+      setError("Server is down. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
+  const loadStore = useCallback(async () => {
+    try {
+      const appStore = await createAppStore();
+      setStore(appStore);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
     checkServerStatus();
-  }, []);
+  }, [checkServerStatus]);
 
   useEffect(() => {
-    const loadStore = async () => {
-      try {
-        const appStore = await createAppStore();
-        setStore(appStore);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadStore();
-  }, []);
+  }, [loadStore]);
 
   if (loading) {
     return (
