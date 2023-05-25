@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setInitialAuthState } from "./redux/actions/authActions";
@@ -14,15 +14,13 @@ const noRightbarRoutes = [
   /\/community\/[^/]+\/report$/,
   /\/community\/[^/]+\/reported-post$/,
   /\/community\/[^/]+\/moderator$/,
-];
-
-noRightbarRoutes.forEach((regex, index) => {
-  noRightbarRoutes[index] = new RegExp(regex);
-});
+].map((regex) => new RegExp(regex));
 
 const PrivateRoute = ({ userData }) => {
-  const isAuthenticated = useCallback((userData, accessToken) => {
-    return userData && accessToken;
+  const isAuthenticated = useMemo(() => {
+    return (userData, accessToken) => {
+      return userData && accessToken;
+    };
   }, []);
 
   const location = useLocation();
@@ -37,7 +35,7 @@ const PrivateRoute = ({ userData }) => {
     if (!isAuthenticated(userData, accessToken)) {
       dispatch(setInitialAuthState(navigate));
     }
-  }, [userData, accessToken, dispatch, navigate]);
+  }, [dispatch, navigate, userData, accessToken, isAuthenticated]);
 
   const showRightbar = !noRightbarRoutes.some((regex) =>
     regex.test(location.pathname)

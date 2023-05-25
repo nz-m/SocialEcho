@@ -17,7 +17,6 @@ const ReportPost = lazy(() => import("./components/community/ReportPost"));
 const Moderator = lazy(() => import("./pages/Moderator"));
 const EditProfileForm = lazy(() => import("./components/form/EditProfileForm"));
 const DevicesLocations = lazy(() => import("./pages/DevicesLocations"));
-const AdminSignIn = lazy(() => import("./pages/AdminSignIn"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const EmailVerifiedMessage = lazy(() => import("./pages/EmailVerifiedMessage"));
 const BlockDevice = lazy(() => import("./pages/BlockDevice"));
@@ -97,10 +96,7 @@ export const publicRoutes = [
     path: "/signup",
     element: <SignUp />,
   },
-  {
-    path: "/admin-signin",
-    element: <AdminSignIn />,
-  },
+
   {
     path: "/auth/verify",
     element: <VerifyEmail />,

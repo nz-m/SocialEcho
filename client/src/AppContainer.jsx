@@ -1,47 +1,47 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Provider } from "react-redux";
 import createAppStore from "./redux/store";
 import axios from "axios";
 import CommonLoading from "./components/loader/CommonLoading";
 import App from "./App";
+import { getTitleFromRoute } from "./utils/docTitle";
+import { Helmet } from "react-helmet";
+import { useLocation } from "react-router-dom";
 
 const AppContainer = () => {
+  const location = useLocation();
   const [store, setStore] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const adminAccessToken = JSON.parse(
-    localStorage.getItem("admin")
-  )?.accessToken;
-
-  const checkServerStatus = useCallback(async () => {
-    try {
-      await axios.get("/server-status");
-    } catch (error) {
-      setError("Server is down. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const loadStore = useCallback(async () => {
-    try {
-      const appStore = await createAppStore();
-      setStore(appStore);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
+    const checkServerStatus = async () => {
+      try {
+        await axios.get("/server-status");
+      } catch (error) {
+        setError("Server is down. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     checkServerStatus();
-  }, [checkServerStatus]);
+  }, []);
 
   useEffect(() => {
+    const loadStore = async () => {
+      try {
+        const appStore = await createAppStore();
+        setStore(appStore);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadStore();
-  }, [loadStore]);
+  }, []);
 
   if (loading) {
     return (
@@ -61,7 +61,10 @@ const AppContainer = () => {
 
   return (
     <Provider store={store}>
-      <App adminAccessToken={adminAccessToken} />
+      <Helmet>
+        <title>{getTitleFromRoute(location.pathname)}</title>
+      </Helmet>
+      <App />
     </Provider>
   );
 };

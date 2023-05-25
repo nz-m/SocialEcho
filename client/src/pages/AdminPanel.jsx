@@ -36,9 +36,13 @@ const AdminPanel = () => {
     setLoading(true);
     fetchLogs();
   };
-  const handleLogout = () => {
+
+  const clearLocalStorage = () => {
     localStorage.removeItem("admin");
-    navigate("/admin-signin");
+  };
+  const handleLogout = async () => {
+    await clearLocalStorage();
+    navigate("/admin/signin");
   };
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">

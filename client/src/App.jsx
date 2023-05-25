@@ -1,11 +1,8 @@
 import { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
-import { Helmet } from "react-helmet";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import FallbackLoading from "./components/loader/FallbackLoading";
 import { publicRoutes, privateRoutes } from "./routes";
-
-import { getTitleFromRoute } from "./utils/docTitle";
 
 import PrivateRoute from "./PrivateRoute";
 import SignIn from "./pages/SignIn";
@@ -13,15 +10,14 @@ import SignIn from "./pages/SignIn";
 const AdminPanel = lazy(() => import("./pages/AdminPanel"));
 const AdminSignIn = lazy(() => import("./pages/AdminSignIn"));
 
-const App = ({ adminAccessToken }) => {
-  const location = useLocation();
+const App = () => {
   const userData = useSelector((state) => state.auth?.userData);
+  const adminAccessToken = JSON.parse(
+    localStorage.getItem("admin")
+  )?.accessToken;
 
   return (
     <>
-      <Helmet>
-        <title>{getTitleFromRoute(location.pathname)}</title>
-      </Helmet>
       <Suspense fallback={<FallbackLoading />}>
         <Routes>
           <Route element={<PrivateRoute userData={userData} />}>
@@ -44,8 +40,21 @@ const App = ({ adminAccessToken }) => {
           />
 
           <Route
+            path="/admin/signin"
+            element={
+              adminAccessToken ? <Navigate to="/admin" /> : <AdminSignIn />
+            }
+          />
+
+          <Route
             path="/admin"
-            element={adminAccessToken ? <AdminPanel /> : <AdminSignIn />}
+            element={
+              adminAccessToken ? (
+                <AdminPanel />
+              ) : (
+                <Navigate to="/admin/signin" />
+              )
+            }
           />
         </Routes>
       </Suspense>
