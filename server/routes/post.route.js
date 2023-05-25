@@ -10,7 +10,6 @@ const {
   likePost,
   unlikePost,
   addComment,
-  getComments,
   savePost,
   unsavePost,
   getSavedPosts,
@@ -18,6 +17,12 @@ const {
 const fileUpload = require("../middlewares/post/fileUpload");
 const passport = require("passport");
 const decodeToken = require("../middlewares/auth/decodeToken");
+const {
+  postValidator,
+  postValidatorHandler,
+} = require("../middlewares/post/postValidator");
+const processPerspectiveAPIResponse = require("../services/analyzeContent");
+const processPost = require("../services/processPost");
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 
@@ -31,7 +36,15 @@ router.get("/:id", getPost);
 router.get("/", getPosts);
 
 router.post("/:id/comment", addComment);
-router.post("/", fileUpload, createPost);
+router.post(
+  "/",
+  fileUpload,
+  postValidator,
+  postValidatorHandler,
+  processPerspectiveAPIResponse,
+  processPost,
+  createPost
+);
 
 router.delete("/:id", deletePost);
 

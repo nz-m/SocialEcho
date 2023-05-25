@@ -16,11 +16,6 @@ const cors = require("cors");
 const morgan = require("morgan");
 const passport = require("passport");
 
-const {
-  notFoundHandler,
-  errorHandler,
-} = require("./middlewares/common/errorHandler");
-
 const PORT = process.env.PORT || 5000;
 
 const db = new Database(process.env.MONGODB_URI, {
@@ -58,12 +53,6 @@ app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/communities", communityRoutes);
 app.use("/admin", adminRoutes);
-
-// 404 error handler
-app.use(notFoundHandler);
-
-// common error handler
-app.use(errorHandler);
 
 process.on("SIGINT", async () => {
   try {

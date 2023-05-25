@@ -5,7 +5,7 @@ const PostOnProfile = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { body, fileUrl, community, createdAt, comments, likes, isMember } =
+  const { content, fileUrl, community, createdAt, comments, likes, isMember } =
     post;
 
   const isImageFile = useMemo(() => {
@@ -35,12 +35,12 @@ const PostOnProfile = ({ post }) => {
         </div>
       </div>
       <div className="my-3">
-        {body && <p className="text-lg mb-4">{body}</p>}
+        {content && <p className="text-lg mb-4">{content}</p>}
         {fileUrl && isImageFile ? (
           <img
             className="w-[800px] h-auto rounded-xl my-3"
             src={fileUrl}
-            alt={body}
+            alt={content}
             loading="lazy"
           />
         ) : (

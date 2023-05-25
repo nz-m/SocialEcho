@@ -7,15 +7,14 @@ const jwt = require("jsonwebtoken");
 const AdminToken = require("../models/token.admin.model");
 
 /**
- * Retrieves log info from the database
- *
  * @route GET /admin/logs
  */
 const retrieveLogInfo = async (req, res) => {
   try {
-    const [logoutLogs, signInLogs] = await Promise.all([
-      Log.find({ type: "logout" }),
+    // Only sign in logs contain encrypted context data & email
+    const [signInLogs, generalLogs] = await Promise.all([
       Log.find({ type: "sign in" }),
+      Log.find({ type: { $ne: "sign in" } }),
     ]);
 
     const formattedSignInLogs = signInLogs.map((log) => {
@@ -29,7 +28,6 @@ const retrieveLogInfo = async (req, res) => {
         "Operating System": contextData[6].split(": ")[1],
         Platform: contextData[7].split(": ")[1],
       };
-      const formattedTimestamp = formatCreatedAt(log.timestamp);
 
       return {
         _id: log._id,
@@ -38,32 +36,26 @@ const retrieveLogInfo = async (req, res) => {
         message: log.message,
         type: log.type,
         level: log.level,
-        formattedTimestamp: formattedTimestamp,
         timestamp: log.timestamp,
-        relativeTimestamp: dayjs(log.timestamp).fromNow(),
       };
     });
 
-    const formattedLogoutLogs = logoutLogs.map((log) => {
-      const formattedTimestamp = formatCreatedAt(log.timestamp);
+    const formattedGeneralLogs = generalLogs.map((log) => ({
+      _id: log._id,
+      email: log.email,
+      message: log.message,
+      type: log.type,
+      level: log.level,
+      timestamp: log.timestamp,
+    }));
 
-      return {
-        _id: log._id,
-        email: log.email,
-        message: log.message,
-        type: log.type,
-        level: log.level,
-        formattedTimestamp: formattedTimestamp,
-        timestamp: log.timestamp,
+    const formattedLogs = [...formattedSignInLogs, ...formattedGeneralLogs]
+      .map((log) => ({
+        ...log,
+        formattedTimestamp: formatCreatedAt(log.timestamp),
         relativeTimestamp: dayjs(log.timestamp).fromNow(),
-      };
-    });
-
-    const formattedLogs = [...formattedSignInLogs, ...formattedLogoutLogs].sort(
-      (a, b) => {
-        return b.timestamp - a.timestamp;
-      }
-    );
+      }))
+      .sort((a, b) => b.timestamp - a.timestamp);
 
     res.status(200).json(formattedLogs);
   } catch (error) {
@@ -140,4 +132,25 @@ const signin = async (req, res) => {
   }
 };
 
-module.exports = { retrieveLogInfo, deleteLogInfo, signin };
+const updateServicePreference = async (req, res) => {
+  const jsonfile = require("jsonfile");
+  const PREFERENCES_FILE = "./config/system-preferences.json";
+  try {
+    const { service } = req.params;
+    const preferences = await jsonfile.readFile(PREFERENCES_FILE);
+    if (preferences && preferences.categoryFilteringService !== service) {
+      preferences.categoryFilteringService = service;
+      await jsonfile.writeFile(PREFERENCES_FILE, preferences);
+    }
+    res.status(200).json(preferences);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error updating system preferences" });
+  }
+};
+module.exports = {
+  updateServicePreference,
+  retrieveLogInfo,
+  deleteLogInfo,
+  signin,
+};

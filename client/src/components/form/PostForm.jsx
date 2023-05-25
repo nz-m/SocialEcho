@@ -1,21 +1,17 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createPostAction } from "../../redux/actions/postActions";
-import { useSelector } from "react-redux";
 
-const PostForm = () => {
-  const community = useSelector((state) => state.community?.communityData);
-
-  const [body, setBody] = useState("");
+const PostForm = ({ communityId, communityName }) => {
+  const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  if (!community) return null;
 
-  const handleBodyChange = (event) => {
-    setBody(event.target.value);
+  const handleContentChange = (event) => {
+    setContent(event.target.value);
   };
 
   const allowedFileTypes = /^image\/|video\//;
@@ -38,20 +34,21 @@ const PostForm = () => {
     event.preventDefault();
     if (error || loading) return;
 
-    if (!body && !file) {
+    if (!content && !file) {
       setError("Please enter a message or select a file.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("body", body);
-    formData.append("communityId", community._id);
+    formData.append("content", content);
+    formData.append("communityId", communityId);
+    formData.append("communityName", communityName);
     formData.append("file", file);
     setLoading(true);
 
     try {
       await dispatch(createPostAction(formData));
-      setBody("");
+      setContent("");
       setFile(null);
       event.target.reset();
       setLoading(false);
@@ -66,14 +63,14 @@ const PostForm = () => {
       className="bg-white rounded-lg p-6 shadow-xl shadow-[#F3F8FF]"
     >
       <div className="mb-4">
-        <label htmlFor="body" className="block text-gray-700 font-bold mb-2">
+        <label htmlFor="content" className="block text-gray-700 font-bold mb-2">
           Share something with your community:
         </label>
         <textarea
-          name="body"
-          id="body"
-          value={body}
-          onChange={handleBodyChange}
+          name="content"
+          id="content"
+          value={content}
+          onChange={handleContentChange}
           className="resize-none border rounded-md p-2 w-full"
         />
       </div>
@@ -96,8 +93,8 @@ const PostForm = () => {
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         type="submit"
-        disabled={loading || (!body && !file)}
-        style={{ display: body || file ? "block" : "none" }}
+        disabled={loading || (!content && !file)}
+        style={{ display: content || file ? "block" : "none" }}
       >
         {loading ? "Loading..." : "Post"}
       </button>

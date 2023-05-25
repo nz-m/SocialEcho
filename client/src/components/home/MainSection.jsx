@@ -24,7 +24,6 @@ const LoadMoreButton = ({ onClick, isLoading }) => (
 const MainSection = ({ userData }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
-  const postError = useSelector((state) => state.posts?.postError);
   const posts = useSelector((state) => state.posts?.posts);
   const totalPosts = useSelector((state) => state.posts?.totalPosts);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
@@ -63,8 +62,6 @@ const MainSection = ({ userData }) => {
   }
   return (
     <div className="w-6/12 px-10 py-5">
-      {postError && <div className="text-red-500">{postError}</div>}
-
       <div>{memoizedPosts}</div>
 
       {posts.length > 0 && posts.length < totalPosts && (
