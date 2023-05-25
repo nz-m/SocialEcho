@@ -71,6 +71,8 @@ const PostForm = ({ communityId, communityName }) => {
           id="content"
           value={content}
           onChange={handleContentChange}
+          required={true}
+          maxLength={3000}
           className="resize-none border rounded-md p-2 w-full"
         />
       </div>
