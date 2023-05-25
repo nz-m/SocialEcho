@@ -3,14 +3,19 @@ const createCategoryFilterService = require("./categoryFilterService");
 const jsonfile = require("jsonfile");
 
 const processPost = async (req, res, next) => {
-  const serviceProvider = jsonfile.readFileSync(
-    "./config/system-preferences.json"
-  ).categoryFilteringService;
+  const { content, communityName } = req.body;
 
   try {
-    const { content, communityName } = req.body;
+    const { categoryFilteringServiceProvider = "disabled" } =
+      jsonfile.readFileSync("./config/system-preferences.json");
 
-    const categoryFilterService = createCategoryFilterService(serviceProvider);
+    if (categoryFilteringServiceProvider === "disabled") {
+      return next();
+    }
+
+    const categoryFilterService = createCategoryFilterService(
+      categoryFilteringServiceProvider
+    );
 
     const categories = await categoryFilterService.getCategories(content);
 
@@ -31,7 +36,15 @@ We appreciate your effort in creating this post, and we hope that these tips wil
 
     next();
   } catch (error) {
-    await saveLogInfo(null, error.message, serviceProvider, "error");
+    const { categoryFilteringServiceProvider = "disabled" } =
+      jsonfile.readFileSync("./config/system-preferences.json");
+    const errorMessage = `Error processing post: ${error.message}`;
+    await saveLogInfo(
+      null,
+      errorMessage,
+      categoryFilteringServiceProvider,
+      "error"
+    );
     next();
   }
 };

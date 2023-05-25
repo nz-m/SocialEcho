@@ -1,12 +1,18 @@
 const { google } = require("googleapis");
 const { saveLogInfo } = require("../middlewares/logger/logInfo");
+const jsonfile = require("jsonfile");
 
-const SCORE_THRESHOLD = 0.6;
+const analyzeTextWithPerspectiveAPI = async (
+  content,
+  API_KEY,
+  DISCOVERY_URL
+) => {
+  const SCORE_THRESHOLD = 0.6;
 
-const API_KEY = process.env.PERSPECTIVE_API_KEY;
-const DISCOVERY_URL = process.env.PERSPECTIVE_API_DISCOVERY_URL;
+  if (!API_KEY || !DISCOVERY_URL) {
+    throw new Error("Perspective API URL or API Key not set");
+  }
 
-const analyzeTextWithPerspectiveAPI = async (content) => {
   try {
     const client = await google.discoverAPI(DISCOVERY_URL);
 
@@ -46,9 +52,23 @@ const analyzeTextWithPerspectiveAPI = async (content) => {
 };
 
 const processPerspectiveAPIResponse = async (req, res, next) => {
+  const API_KEY = process.env.PERSPECTIVE_API_KEY;
+  const DISCOVERY_URL = process.env.PERSPECTIVE_API_DISCOVERY_URL;
+
+  const { usePerspectiveAPI = false } = jsonfile.readFileSync(
+    "./config/system-preferences.json"
+  );
+
+  if (!usePerspectiveAPI || !API_KEY || !DISCOVERY_URL) {
+    return next();
+  }
   try {
     const { content } = req.body;
-    const summaryScores = await analyzeTextWithPerspectiveAPI(content);
+    const summaryScores = await analyzeTextWithPerspectiveAPI(
+      content,
+      API_KEY,
+      DISCOVERY_URL
+    );
 
     if (Object.keys(summaryScores).length > 0) {
       const prohibitedAttributes = Object.keys(summaryScores).join(", ");
@@ -57,7 +77,6 @@ const processPerspectiveAPIResponse = async (req, res, next) => {
     } else next();
   } catch (error) {
     await saveLogInfo(null, error.message, "Perspective API", "error");
-    console.error(error.message);
     next();
   }
 };
