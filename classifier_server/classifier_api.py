@@ -34,7 +34,7 @@ def initialize_classifier():
     try:
         classifier = pipeline(
             "zero-shot-classification",
-            model="./model",
+            model="facebook/bart-large-mnli",
             framework="pt",
             batch_size=4,
         )
