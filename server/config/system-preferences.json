@@ -1,1 +1,4 @@
-{"categoryFilteringService":"TextRazor"}
+{
+  "usePerspectiveAPI":true,
+  "categoryFilteringServiceProvider":"InterfaceAPI"
+}
