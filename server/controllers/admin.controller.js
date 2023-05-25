@@ -13,33 +13,42 @@ const retrieveLogInfo = async (req, res) => {
   try {
     // Only sign in logs contain encrypted context data & email
     const [signInLogs, generalLogs] = await Promise.all([
-      Log.find({ type: "sign in" }),
-      Log.find({ type: { $ne: "sign in" } }),
+      Log.find({ type: "sign in" }).sort({ createdAt: -1 }).limit(50),
+
+      Log.find({ type: { $ne: "sign in" } })
+        .sort({ createdAt: -1 })
+        .limit(50),
     ]);
 
-    const formattedSignInLogs = signInLogs.map((log) => {
-      const contextData = log.context.split(",");
-      const formattedContext = {
-        "IP Address": contextData[0].split(": ")[1],
-        Location: contextData[1].split(": ")[1],
-        Device:
-          contextData[3].split(": ")[1] + ", " + contextData[4].split(": ")[1],
-        Browser: contextData[5].split(": ")[1],
-        "Operating System": contextData[6].split(": ")[1],
-        Platform: contextData[7].split(": ")[1],
-      };
+    const formattedSignInLogs = [];
+    for (let i = 0; i < signInLogs.length; i++) {
+      const { _id, email, context, message, type, level, timestamp } =
+        signInLogs[i];
+      const contextData = context.split(",");
+      const formattedContext = {};
 
-      return {
-        _id: log._id,
-        email: log.email,
+      for (let j = 0; j < contextData.length; j++) {
+        const [key, value] = contextData[j].split(":");
+        if (key === "IP") {
+          formattedContext["IP Address"] = contextData[j]
+            .split(":")
+            .slice(1)
+            .join(":");
+        } else {
+          formattedContext[key.trim()] = value.trim();
+        }
+      }
+
+      formattedSignInLogs.push({
+        _id,
+        email,
         contextData: formattedContext,
-        message: log.message,
-        type: log.type,
-        level: log.level,
-        timestamp: log.timestamp,
-      };
-    });
-
+        message,
+        type,
+        level,
+        timestamp,
+      });
+    }
     const formattedGeneralLogs = generalLogs.map((log) => ({
       _id: log._id,
       email: log.email,
