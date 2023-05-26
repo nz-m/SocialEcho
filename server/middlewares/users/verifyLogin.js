@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const SuspiciousLogin = require("../../models/suspicious-login.model");
+const SuspiciousLogin = require("../../models/suspiciousLogin.model");
 const UserContext = require("../../models/context.model");
 const EmailVerification = require("../../models/email.model");
 const { query, validationResult } = require("express-validator");

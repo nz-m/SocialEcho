@@ -36,13 +36,13 @@ passport.use(
         const now = new Date();
         const timeDifference = tokenExpiration.getTime() - now.getTime();
 
-        if (timeDifference > 0 && timeDifference < 5 * 60 * 1000) {
+        if (timeDifference > 0 && timeDifference < 30 * 60 * 1000) {
           const payloadNew = {
             _id: user._id,
             email: user.email,
           };
           const newToken = jwt.sign(payloadNew, process.env.SECRET, {
-            expiresIn: "1h",
+            expiresIn: "6h",
           });
 
           return done(null, { user, newToken });

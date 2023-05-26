@@ -4,11 +4,16 @@ const {
   deleteLogInfo,
   signin,
   updateServicePreference,
+  retrieveServicePreference,
 } = require("../controllers/admin.controller");
+
+router
+  .route("/preferences")
+  .get(retrieveServicePreference)
+  .put(updateServicePreference);
 
 router.route("/logs").get(retrieveLogInfo).delete(deleteLogInfo);
 
 router.post("/signin", signin);
-router.put("/preferences/:service", updateServicePreference);
 
 module.exports = router;

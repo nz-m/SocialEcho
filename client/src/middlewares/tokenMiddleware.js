@@ -7,7 +7,7 @@ export const tokenMiddleware = (store) => (next) => async (action) => {
     const token = state.auth.accessToken;
     if (token) {
       const expiresIn = jwt_decode(token).exp * 1000 - Date.now();
-      if (expiresIn < 300000) {
+      if (expiresIn < 1800000) {
         const refreshToken = state.auth.refreshToken;
         try {
           await store.dispatch(refreshTokenAction(refreshToken));

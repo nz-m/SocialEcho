@@ -1,6 +1,6 @@
 const UserContext = require("../models/context.model");
 const UserPreference = require("../models/preference.model");
-const SuspiciousLogin = require("../models/suspicious-login.model");
+const SuspiciousLogin = require("../models/suspiciousLogin.model");
 const geoip = require("geoip-lite");
 const { saveLogInfo } = require("../middlewares/logger/logInfo");
 const formatCreatedAt = require("../utils/timeConverter");

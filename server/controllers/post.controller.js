@@ -12,8 +12,8 @@ const Report = require("../models/report.model");
 
 const createPost = async (req, res) => {
   try {
-    const communityId = req.body.communityId;
-    const userId = req.userId;
+    const { communityId, content } = req.body;
+    const { userId, files } = req;
 
     const community = await Community.findOne({
       _id: communityId,
@@ -26,28 +26,18 @@ const createPost = async (req, res) => {
       });
     }
 
-    let newPost;
-    const file = req.files && req.files.length > 0 ? req.files[0] : null;
+    const file = files && files.length > 0 ? files[0] : null;
 
-    if (file) {
-      const { filename } = file;
-      const fileUrl = `${req.protocol}://${req.get(
-        "host"
-      )}/assets/userFiles/${filename}`;
-      newPost = new Post({
-        user: userId,
-        community: communityId,
-        content: req.body.content,
-        fileUrl: fileUrl,
-      });
-    } else {
-      newPost = new Post({
-        user: userId,
-        community: communityId,
-        content: req.body.content,
-        fileUrl: null,
-      });
-    }
+    const fileUrl = file
+      ? `${req.protocol}://${req.get("host")}/assets/userFiles/${file.filename}`
+      : null;
+
+    const newPost = new Post({
+      user: userId,
+      community: communityId,
+      content,
+      fileUrl,
+    });
 
     const savedPost = await newPost.save();
     const postId = savedPost._id;

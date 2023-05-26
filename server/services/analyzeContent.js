@@ -1,6 +1,6 @@
 const { google } = require("googleapis");
 const { saveLogInfo } = require("../middlewares/logger/logInfo");
-const jsonfile = require("jsonfile");
+const Config = require("../models/config.model");
 
 const analyzeTextWithPerspectiveAPI = async (
   content,
@@ -55,13 +55,18 @@ const processPerspectiveAPIResponse = async (req, res, next) => {
   const API_KEY = process.env.PERSPECTIVE_API_KEY;
   const DISCOVERY_URL = process.env.PERSPECTIVE_API_DISCOVERY_URL;
 
-  const { usePerspectiveAPI = false } = jsonfile.readFileSync(
-    "./config/system-preferences.json"
-  );
+  let usePerspectiveAPI;
+  try {
+    const config = await Config.findOne({}, { _id: 0, __v: 0 });
+    usePerspectiveAPI = config.usePerspectiveAPI;
+  } catch (error) {
+    usePerspectiveAPI = false;
+  }
 
   if (!usePerspectiveAPI || !API_KEY || !DISCOVERY_URL) {
     return next();
   }
+
   try {
     const { content } = req.body;
     const summaryScores = await analyzeTextWithPerspectiveAPI(
@@ -74,10 +79,13 @@ const processPerspectiveAPIResponse = async (req, res, next) => {
       const prohibitedAttributes = Object.keys(summaryScores).join(", ");
       const message = `Sorry, your post cannot be published due to inappropriate content. It violates our community guidelines regarding ${prohibitedAttributes}. Please revise your post and try again.`;
       return res.status(400).json({ message });
-    } else next();
+    } else {
+      next();
+    }
   } catch (error) {
-    await saveLogInfo(null, error.message, "Perspective API", "error");
-    next();
+    const errorMessage = `Error processing Perspective API response: ${error.message}`;
+    await saveLogInfo(null, errorMessage, "Perspective API", "error");
+    return res.status(500).json({ message: "Error processing post" });
   }
 };
 

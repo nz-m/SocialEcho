@@ -24,7 +24,6 @@
     "geoip-lite": "^1.4.7",
     "googleapis": "^118.0.0",
     "http-errors": "^2.0.0",
-    "jsonfile": "^6.1.0",
     "jsonwebtoken": "^9.0.0",
     "kleur": "^4.1.5",
     "mongodb": "^5.4.0",

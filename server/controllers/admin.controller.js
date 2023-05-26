@@ -5,6 +5,7 @@ const Admin = require("../models/admin.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const AdminToken = require("../models/token.admin.model");
+const Config = require("../models/config.model");
 
 /**
  * @route GET /admin/logs
@@ -116,7 +117,7 @@ const signin = async (req, res) => {
     };
 
     const accessToken = jwt.sign(payload, process.env.SECRET, {
-      expiresIn: "1h",
+      expiresIn: "6h",
     });
 
     const newAdminToken = new AdminToken({
@@ -141,23 +142,54 @@ const signin = async (req, res) => {
   }
 };
 
-const updateServicePreference = async (req, res) => {
-  const jsonfile = require("jsonfile");
-  const PREFERENCES_FILE = "./config/system-preferences.json";
+/**
+ * @route GET /admin/preferences
+ */
+const retrieveServicePreference = async (req, res) => {
   try {
-    const { service } = req.params;
-    const preferences = await jsonfile.readFile(PREFERENCES_FILE);
-    if (preferences && preferences.categoryFilteringService !== service) {
-      preferences.categoryFilteringService = service;
-      await jsonfile.writeFile(PREFERENCES_FILE, preferences);
+    const config = await Config.findOne({});
+
+    if (!config) {
+      const newConfig = new Config();
+      await newConfig.save();
+      return res.status(200).json(newConfig);
     }
-    res.status(200).json(preferences);
+
+    res.status(200).json(config);
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ message: "Error retrieving system preferences" });
+  }
+};
+
+/**
+ * @route PUT /admin/preferences
+ */
+const updateServicePreference = async (req, res) => {
+  try {
+    const {
+      usePerspectiveAPI,
+      categoryFilteringServiceProvider,
+      categoryFilteringRequestTimeout,
+    } = req.body;
+
+    const config = await Config.findOneAndUpdate(
+      {},
+      {
+        usePerspectiveAPI,
+        categoryFilteringServiceProvider,
+        categoryFilteringRequestTimeout,
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+
+    res.status(200).json(config);
+  } catch (error) {
     res.status(500).json({ message: "Error updating system preferences" });
   }
 };
+
 module.exports = {
+  retrieveServicePreference,
   updateServicePreference,
   retrieveLogInfo,
   deleteLogInfo,

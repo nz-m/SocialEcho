@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const getCategoriesFromTextRazor = async (content) => {
+const getCategoriesFromTextRazor = async (content, timeout) => {
   const API_KEY = process.env.TEXTRAZOR_API_KEY;
   const API_URL = process.env.TEXTRAZOR_API_URL;
 
@@ -9,6 +9,11 @@ const getCategoriesFromTextRazor = async (content) => {
   }
 
   const categories = {};
+
+  const source = axios.CancelToken.source();
+  const timeoutId = setTimeout(() => {
+    source.cancel("TextRazor request timed out");
+  }, timeout);
 
   try {
     const response = await axios.post(
@@ -26,6 +31,7 @@ const getCategoriesFromTextRazor = async (content) => {
           "Content-Type": "application/x-www-form-urlencoded",
           "Accept-Encoding": "gzip",
         },
+        cancelToken: source.token,
       }
     );
 
@@ -37,12 +43,19 @@ const getCategoriesFromTextRazor = async (content) => {
 
     return categories;
   } catch (error) {
-    const { status, statusText } = error.response;
-    throw new Error(`Error ${status}: ${statusText}`);
+    if (axios.isCancel(error)) {
+      console.log("TextRazor request cancelled");
+      return categories;
+    } else {
+      const { status, statusText } = error.response;
+      throw new Error(`Error ${status}: ${statusText}`);
+    }
+  } finally {
+    clearTimeout(timeoutId);
   }
 };
 
-const getCategoriesFromClassifierAPI = async (content) => {
+const getCategoriesFromClassifierAPI = async (content, timeout) => {
   const classifier_api_url = process.env.CLASSIFIER_API_URL;
   if (!classifier_api_url) {
     throw new Error("Classifier API URL not set");
@@ -51,6 +64,11 @@ const getCategoriesFromClassifierAPI = async (content) => {
   const scoreThreshold = 0.1;
 
   const categories = {};
+
+  const source = axios.CancelToken.source();
+  const timeoutId = setTimeout(() => {
+    source.cancel("Classifier API request timed out");
+  }, timeout);
 
   try {
     const response = await axios.post(
@@ -62,6 +80,7 @@ const getCategoriesFromClassifierAPI = async (content) => {
         headers: {
           "Content-Type": "application/json",
         },
+        cancelToken: source.token,
       }
     );
 
@@ -75,12 +94,19 @@ const getCategoriesFromClassifierAPI = async (content) => {
 
     return categories;
   } catch (error) {
-    const { status, statusText } = error.response;
-    throw new Error(`Error ${status}: ${statusText}`);
+    if (axios.isCancel(error)) {
+      console.log("Classifier API request cancelled");
+      return categories;
+    } else {
+      const { status, statusText } = error.response;
+      throw new Error(`Error ${status}: ${statusText}`);
+    }
+  } finally {
+    clearTimeout(timeoutId);
   }
 };
 
-const getCategoriesFromInterfaceAPI = async (content) => {
+const getCategoriesFromInterfaceAPI = async (content, timeout) => {
   const API_URL = process.env.INTERFACE_API_URL;
   const API_KEY = process.env.INTERFACE_API_KEY;
   const scoreThreshold = 0.1;
@@ -104,6 +130,11 @@ const getCategoriesFromInterfaceAPI = async (content) => {
 
   const categories = {};
 
+  const source = axios.CancelToken.source();
+  const timeoutId = setTimeout(() => {
+    source.cancel("Request timed out");
+  }, timeout);
+
   try {
     const response = await axios.post(
       API_URL,
@@ -116,6 +147,7 @@ const getCategoriesFromInterfaceAPI = async (content) => {
           Authorization: `Bearer ${API_KEY}`,
           "Content-Type": "application/json",
         },
+        cancelToken: source.token,
       }
     );
 
@@ -130,8 +162,15 @@ const getCategoriesFromInterfaceAPI = async (content) => {
 
     return categories;
   } catch (error) {
-    const { status, statusText } = error.response;
-    throw new Error(`Error ${status}: ${statusText}`);
+    if (axios.isCancel(error)) {
+      console.log("Interface API request cancelled");
+      return categories;
+    } else {
+      const { status, statusText } = error.response;
+      throw new Error(`Error ${status}: ${statusText}`);
+    }
+  } finally {
+    clearTimeout(timeoutId);
   }
 };
 

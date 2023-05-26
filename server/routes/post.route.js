@@ -23,6 +23,7 @@ const {
 } = require("../middlewares/post/postValidator");
 const processPerspectiveAPIResponse = require("../services/analyzeContent");
 const processPost = require("../services/processPost");
+const confirmPost = require("../middlewares/post/confirmPost");
 
 const requireAuth = passport.authenticate("jwt", { session: false });
 
@@ -43,6 +44,7 @@ router.post(
   postValidatorHandler,
   processPerspectiveAPIResponse,
   processPost,
+  confirmPost,
   createPost
 );
 

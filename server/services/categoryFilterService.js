@@ -5,26 +5,26 @@ const {
 } = require("./apiServices");
 
 class CategoryFilterService {
-  async getCategories(content) {
+  async getCategories(content, timeout) {
     throw new Error("Not implemented");
   }
 }
 
 class TextRazorService extends CategoryFilterService {
-  async getCategories(content) {
-    return await getCategoriesFromTextRazor(content);
+  async getCategories(content, timeout) {
+    return await getCategoriesFromTextRazor(content, timeout);
   }
 }
 
 class InterfaceAPIService extends CategoryFilterService {
-  async getCategories(content) {
-    return await getCategoriesFromInterfaceAPI(content);
+  async getCategories(content, timeout) {
+    return await getCategoriesFromInterfaceAPI(content, timeout);
   }
 }
 
 class ClassifierAPIService extends CategoryFilterService {
-  async getCategories(content) {
-    return await getCategoriesFromClassifierAPI(content);
+  async getCategories(content, timeout) {
+    return await getCategoriesFromClassifierAPI(content, timeout);
   }
 }
 
