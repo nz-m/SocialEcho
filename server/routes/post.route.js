@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const {
   getPublicPosts,
   getPosts,
@@ -20,6 +21,7 @@ const {
 const fileUpload = require("../middlewares/post/fileUpload");
 const passport = require("passport");
 const decodeToken = require("../middlewares/auth/decodeToken");
+
 const {
   postValidator,
   postValidatorHandler,
@@ -27,6 +29,10 @@ const {
 const processPerspectiveAPIResponse = require("../services/analyzeContent");
 const processPost = require("../services/processPost");
 const postConfirmation = require("../middlewares/post/postConfirmation");
+const {
+  createPostLimiter,
+  likeSaveLimiter,
+} = require("../middlewares/limiter/limiter");
 
 const requireAuth = passport.authenticate("jwt", { session: false }, null);
 
@@ -46,6 +52,7 @@ router.post("/:id/comment", addComment);
 
 router.post(
   "/",
+  createPostLimiter,
   fileUpload,
   postValidator,
   postValidatorHandler,
@@ -58,6 +65,7 @@ router.post(
 router.delete("/pending", clearPendingPosts);
 router.delete("/:id", deletePost);
 
+router.use(likeSaveLimiter);
 router.patch("/:id/save", savePost);
 router.patch("/:id/unsave", unsavePost);
 router.patch("/:id/like", likePost);

@@ -80,7 +80,7 @@ const verifyLogin = async (req, res) => {
   const { id, email } = req.query;
 
   try {
-    const suspiciousLogin = await SuspiciousLogin.findById({ $eq: id });
+    const suspiciousLogin = await SuspiciousLogin.findById(id);
 
     if (!suspiciousLogin || suspiciousLogin.email !== email) {
       return res.status(400).json({ message: "Invalid verification link" });
@@ -116,7 +116,7 @@ const blockLogin = async (req, res) => {
   const { id, email } = req.query;
 
   try {
-    const suspiciousLogin = await SuspiciousLogin.findById({ $eq: id });
+    const suspiciousLogin = await SuspiciousLogin.findById(id);
 
     if (!suspiciousLogin || suspiciousLogin.email !== email) {
       return res.status(400).json({ message: "Invalid verification link" });

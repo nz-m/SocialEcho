@@ -33,6 +33,10 @@ const {
 } = require("../middlewares/users/verifyLogin");
 
 const avatarUpload = require("../middlewares/users/avatarUpload");
+const {
+  signUpSignInLimiter,
+  followLimiter,
+} = require("../middlewares/limiter/limiter");
 
 const requireAuth = passport.authenticate("jwt", { session: false }, null);
 
@@ -44,6 +48,7 @@ router.get("/:id", requireAuth, getUser);
 
 router.post(
   "/signup",
+  signUpSignInLimiter,
   avatarUpload,
   addUserValidator,
   addUserValidatorHandler,
@@ -53,6 +58,7 @@ router.post(
 router.post("/refresh-token", refreshToken);
 router.post(
   "/signin",
+  signUpSignInLimiter,
   requestIp.mw(),
   useragent.express(),
   signin,
@@ -62,6 +68,7 @@ router.post("/logout", logout);
 
 router.put("/:id", requireAuth, decodeToken, updateInfo);
 
+router.use(followLimiter);
 router.patch("/:id/follow", requireAuth, decodeToken, followUser);
 router.patch("/:id/unfollow", requireAuth, decodeToken, unfollowUser);
 

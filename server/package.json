@@ -19,6 +19,7 @@
     "dotenv": "^16.0.3",
     "enquirer": "^2.3.6",
     "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
     "express-useragent": "^1.0.15",
     "express-validator": "^6.14.3",
     "geoip-lite": "^1.4.7",

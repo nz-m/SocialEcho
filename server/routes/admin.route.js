@@ -9,16 +9,24 @@ const {
 } = require("../controllers/admin.controller");
 
 const requireAdminAuth = require("../middlewares/auth/adminAuth");
+const {
+  configLimiter,
+  logLimiter,
+  signUpSignInLimiter,
+} = require("../middlewares/limiter/limiter");
 
-router.post("/signin", signin);
+router.post("/signin", signUpSignInLimiter, signin);
 
 router.use(requireAdminAuth);
 
 router
   .route("/preferences")
-  .get(retrieveServicePreference)
-  .put(updateServicePreference);
+  .get(configLimiter, retrieveServicePreference)
+  .put(configLimiter, updateServicePreference);
 
-router.route("/logs").get(retrieveLogInfo).delete(deleteLogInfo);
+router
+  .route("/logs")
+  .get(logLimiter, retrieveLogInfo)
+  .delete(logLimiter, deleteLogInfo);
 
 module.exports = router;
