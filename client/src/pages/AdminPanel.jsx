@@ -16,10 +16,18 @@ const AdminPanel = () => {
   const [logs, setLogs] = useState([]);
 
   const fetchLogs = () => {
-    axios.get(LOG_URL).then((res) => {
-      setLoading(false);
-      setLogs(res.data);
-    });
+    axios
+      .get(LOG_URL, {
+        headers: {
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("admin")).accessToken
+          }`,
+        },
+      })
+      .then((res) => {
+        setLoading(false);
+        setLogs(res.data);
+      });
   };
   useEffect(() => {
     fetchLogs();

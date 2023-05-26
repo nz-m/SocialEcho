@@ -9,6 +9,8 @@ const Comment = require("../models/comment.model");
 const User = require("../models/user.model");
 const Relationship = require("../models/relationship.model");
 const Report = require("../models/report.model");
+const PendingPost = require("../models/pendingPost.model");
+const fs = require("fs");
 
 const createPost = async (req, res) => {
   try {
@@ -21,6 +23,16 @@ const createPost = async (req, res) => {
     });
 
     if (!community) {
+      if (files && files.length > 0) {
+        const file = files[0];
+        const filePath = `./assets/userFiles/${file.filename}`;
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error(err);
+          }
+        });
+      }
+
       return res.status(401).json({
         message: "Unauthorized to post in this community",
       });
@@ -57,6 +69,79 @@ const createPost = async (req, res) => {
   }
 };
 
+const confirmPost = async (req, res) => {
+  try {
+    const { confirmationToken } = req.body;
+    const pendingPost = await PendingPost.findOne({
+      confirmationToken,
+      status: "pending",
+      user: req.userId,
+    });
+    if (!pendingPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const { user, community, content, fileUrl } = pendingPost;
+    const newPost = new Post({
+      user,
+      community,
+      content,
+      fileUrl,
+    });
+
+    await newPost.save();
+    await PendingPost.findOneAndDelete({ confirmationToken });
+
+    res.status(201).json({ message: "Post confirmed" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error publishing post",
+    });
+  }
+};
+
+const rejectPost = async (req, res) => {
+  try {
+    const { confirmationToken } = req.body;
+    const pendingPost = await PendingPost.findOne({
+      confirmationToken,
+      status: "pending",
+      user: req.userId,
+    });
+
+    if (!pendingPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    await pendingPost.remove();
+    res.status(201).json({ message: "Post rejected" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error rejecting post",
+    });
+  }
+};
+
+const clearPendingPosts = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (user.role !== "moderator") {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const date = new Date();
+    date.setHours(date.getHours() - 1);
+
+    // Delete pending posts older than 1 hour
+    await PendingPost.deleteMany({ createdAt: { $lte: date } });
+
+    res.status(200).json({ message: "Pending posts cleared" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error clearing pending posts",
+    });
+  }
+};
 const getPost = async (req, res) => {
   try {
     const postId = req.params.id;
@@ -505,8 +590,6 @@ const getSavedPosts = async (req, res) => {
  * @route GET /posts/:publicUserId/userPosts
  *
  * @param req.userId - The id of the current user.
- * @async
- * @function getPublicPosts
  *
  * @param {string} req.params.publicUserId - The id of the public user whose posts to retrieve.
  */
@@ -554,6 +637,9 @@ module.exports = {
   createPost,
   getCommunityPosts,
   deletePost,
+  rejectPost,
+  clearPendingPosts,
+  confirmPost,
   likePost,
   unlikePost,
   addComment,

@@ -4,6 +4,8 @@ const {
   getPosts,
   getPost,
   createPost,
+  confirmPost,
+  rejectPost,
   deletePost,
   getCommunityPosts,
   getFollowingUsersPosts,
@@ -13,6 +15,7 @@ const {
   savePost,
   unsavePost,
   getSavedPosts,
+  clearPendingPosts,
 } = require("../controllers/post.controller");
 const fileUpload = require("../middlewares/post/fileUpload");
 const passport = require("passport");
@@ -23,9 +26,9 @@ const {
 } = require("../middlewares/post/postValidator");
 const processPerspectiveAPIResponse = require("../services/analyzeContent");
 const processPost = require("../services/processPost");
-const confirmPost = require("../middlewares/post/confirmPost");
+const postConfirmation = require("../middlewares/post/postConfirmation");
 
-const requireAuth = passport.authenticate("jwt", { session: false });
+const requireAuth = passport.authenticate("jwt", { session: false }, null);
 
 router.use(requireAuth, decodeToken);
 
@@ -36,7 +39,11 @@ router.get("/:id/following", getFollowingUsersPosts);
 router.get("/:id", getPost);
 router.get("/", getPosts);
 
+router.post("/confirm", confirmPost);
+router.post("/reject", rejectPost);
+
 router.post("/:id/comment", addComment);
+
 router.post(
   "/",
   fileUpload,
@@ -44,10 +51,11 @@ router.post(
   postValidatorHandler,
   processPerspectiveAPIResponse,
   processPost,
-  confirmPost,
+  postConfirmation,
   createPost
 );
 
+router.delete("/pending", clearPendingPosts);
 router.delete("/:id", deletePost);
 
 router.patch("/:id/save", savePost);

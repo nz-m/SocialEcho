@@ -22,7 +22,7 @@ const {
   addModToCommunity,
 } = require("../controllers/community.controller");
 
-router.use(passport.authenticate("jwt", { session: false }), decodeToken);
+router.use(passport.authenticate("jwt", { session: false }, null), decodeToken);
 
 router.get("/notmember", getNotMemberCommunities);
 router.get("/member", getMemberCommunities);

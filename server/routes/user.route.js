@@ -34,7 +34,7 @@ const {
 
 const avatarUpload = require("../middlewares/users/avatarUpload");
 
-const requireAuth = passport.authenticate("jwt", { session: false });
+const requireAuth = passport.authenticate("jwt", { session: false }, null);
 
 router.get("/public-users/:id", requireAuth, decodeToken, getPublicUser);
 router.get("/public-users", requireAuth, decodeToken, getPublicUsers);

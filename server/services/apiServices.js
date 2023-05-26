@@ -61,7 +61,7 @@ const getCategoriesFromClassifierAPI = async (content, timeout) => {
     throw new Error("Classifier API URL not set");
   }
 
-  const scoreThreshold = 0.1;
+  const scoreThreshold = 0.2;
 
   const categories = {};
 
@@ -109,7 +109,8 @@ const getCategoriesFromClassifierAPI = async (content, timeout) => {
 const getCategoriesFromInterfaceAPI = async (content, timeout) => {
   const API_URL = process.env.INTERFACE_API_URL;
   const API_KEY = process.env.INTERFACE_API_KEY;
-  const scoreThreshold = 0.1;
+
+  const scoreThreshold = 0.2;
 
   if (!API_KEY || !API_URL) {
     throw new Error("Interface API key or URL not set");

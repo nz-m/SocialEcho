@@ -67,13 +67,14 @@ const PostForm = ({ communityId, communityName }) => {
           Share something with your community:
         </label>
         <textarea
+          className="resize-none border rounded-md p-2 w-full"
           name="content"
           id="content"
           value={content}
           onChange={handleContentChange}
-          required={true}
+          minLength={10}
           maxLength={3000}
-          className="resize-none border rounded-md p-2 w-full"
+          required
         />
       </div>
 

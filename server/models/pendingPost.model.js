@@ -27,7 +27,7 @@ const pendingPostSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "rejected", "unconfirmed"],
+      enum: ["pending"],
       default: "pending",
     },
     confirmationToken: {
@@ -48,6 +48,24 @@ pendingPostSchema.pre("remove", async function (next) {
         path.join(__dirname, "../assets/userFiles", filename)
       );
       await deleteFilePromise;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+pendingPostSchema.pre("deleteMany", async function (next) {
+  try {
+    const pendingPosts = await this.model.find(this.getFilter());
+    for (const post of pendingPosts) {
+      if (post.fileUrl) {
+        const filename = path.basename(post.fileUrl);
+        const deleteFilePromise = promisify(fs.unlink)(
+          path.join(__dirname, "../assets/userFiles", filename)
+        );
+        await deleteFilePromise;
+      }
     }
     next();
   } catch (error) {

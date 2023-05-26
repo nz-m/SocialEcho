@@ -1,11 +1,12 @@
 const generateConfirmationToken = require("../../utils/confirmationToken");
 const Community = require("../../models/community.model");
 const PendingPost = require("../../models/pendingPost.model");
+const fs = require("fs");
 /**
  * @route POST /posts/
  * @param next - createPost (/controllers/post.controller.js)
  */
-const confirmPost = async (req, res, next) => {
+const postConfirmation = async (req, res, next) => {
   if (req.failedDetection) {
     const confirmationToken = generateConfirmationToken(req.userId);
 
@@ -22,6 +23,16 @@ const confirmPost = async (req, res, next) => {
       });
 
       if (!community) {
+        if (files && files.length > 0) {
+          const file = files[0];
+          const filePath = `./assets/userFiles/${file.filename}`;
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              console.error(err);
+            }
+          });
+        }
+
         return res.status(401).json({
           message: "Unauthorized to post in this community",
         });
@@ -54,4 +65,5 @@ const confirmPost = async (req, res, next) => {
     next();
   }
 };
-module.exports = confirmPost;
+
+module.exports = postConfirmation;

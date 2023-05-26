@@ -26,7 +26,7 @@ const {
   blockLogin,
 } = require("../middlewares/users/verifyLogin");
 
-const requireAuth = passport.authenticate("jwt", { session: false });
+const requireAuth = passport.authenticate("jwt", { session: false }, null);
 
 router.get(
   "/context-data/primary",
