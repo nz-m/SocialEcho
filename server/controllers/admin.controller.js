@@ -93,7 +93,7 @@ const signin = async (req, res) => {
     const { username, password } = req.body;
 
     const existingUser = await Admin.findOne({
-      username,
+      username
     });
     if (!existingUser) {
       return res.status(404).json({

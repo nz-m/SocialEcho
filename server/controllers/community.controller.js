@@ -271,6 +271,7 @@ const addModToCommunity = async (req, res) => {
     const communityName = req.params.name;
     const currentUser = await User.findById(userId);
 
+
     if (currentUser.role !== "moderator") {
       return res.status(401).json({
         message: "Only moderators can be added.",
@@ -318,7 +319,7 @@ const reportPost = async (req, res) => {
     }
 
     const reportedPost = await Report.findOne({
-      post: postId,
+      post: {$eq: postId},
     });
 
     if (reportedPost) {

@@ -46,7 +46,7 @@ const signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const existingUser = await User.findOne({
-      email,
+      email: {$eq: email},
     });
     if (!existingUser) {
       await saveLogInfo(
@@ -357,7 +357,7 @@ const refreshToken = async (req, res) => {
     const { refreshToken } = req.body;
 
     const existingToken = await Token.findOne({
-      refreshToken,
+      refreshToken : { $eq: refreshToken },
     });
     if (!existingToken) {
       return res.status(401).json({

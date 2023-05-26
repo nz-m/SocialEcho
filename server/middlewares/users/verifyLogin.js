@@ -80,7 +80,7 @@ const verifyLogin = async (req, res) => {
   const { id, email } = req.query;
 
   try {
-    const suspiciousLogin = await SuspiciousLogin.findById(id);
+    const suspiciousLogin = await SuspiciousLogin.findById({ $eq: id });
 
     if (!suspiciousLogin || suspiciousLogin.email !== email) {
       return res.status(400).json({ message: "Invalid verification link" });
@@ -101,7 +101,7 @@ const verifyLogin = async (req, res) => {
 
     await newContextData.save();
     await SuspiciousLogin.findOneAndUpdate(
-      { _id: id },
+        { _id: { $eq: id } },
       { $set: { isTrusted: true, isBlocked: false } },
       { new: true }
     );
@@ -116,16 +116,16 @@ const blockLogin = async (req, res) => {
   const { id, email } = req.query;
 
   try {
-    const suspiciousLogin = await SuspiciousLogin.findById(id);
+    const suspiciousLogin = await SuspiciousLogin.findById({ $eq: id });
 
     if (!suspiciousLogin || suspiciousLogin.email !== email) {
       return res.status(400).json({ message: "Invalid verification link" });
     }
 
     await SuspiciousLogin.findOneAndUpdate(
-      { _id: id },
-      { $set: { isBlocked: true, isTrusted: false } },
-      { new: true }
+        { _id: { $eq: id } },
+        { $set: { isBlocked: true, isTrusted: false } },
+        { new: true }
     );
 
     res.status(200).json({ message: "Login blocked" });

@@ -18,8 +18,8 @@ const postConfirmation = async (req, res, next) => {
       const { userId, files } = req;
 
       const community = await Community.findOne({
-        _id: communityId,
-        members: userId,
+        _id: { $eq: communityId },
+        members: { $eq: userId },
       });
 
       if (!community) {

@@ -18,8 +18,8 @@ const createPost = async (req, res) => {
     const { userId, files } = req;
 
     const community = await Community.findOne({
-      _id: communityId,
-      members: userId,
+        _id: { $eq: communityId },
+        members: { $eq: userId },
     });
 
     if (!community) {
@@ -73,7 +73,7 @@ const confirmPost = async (req, res) => {
   try {
     const { confirmationToken } = req.body;
     const pendingPost = await PendingPost.findOne({
-      confirmationToken,
+      confirmationToken : { $eq: confirmationToken},
       status: "pending",
       user: req.userId,
     });
@@ -90,7 +90,7 @@ const confirmPost = async (req, res) => {
     });
 
     await newPost.save();
-    await PendingPost.findOneAndDelete({ confirmationToken });
+    await PendingPost.findOneAndDelete({ confirmationToken: {$eq: confirmationToken} });
 
     res.status(201).json({ message: "Post confirmed" });
   } catch (error) {
@@ -104,7 +104,7 @@ const rejectPost = async (req, res) => {
   try {
     const { confirmationToken } = req.body;
     const pendingPost = await PendingPost.findOne({
-      confirmationToken,
+      confirmationToken : { $eq: confirmationToken},
       status: "pending",
       user: req.userId,
     });
@@ -463,7 +463,7 @@ const addComment = async (req, res) => {
     await newComment.save();
     await Post.findOneAndUpdate(
       {
-        _id: post,
+        _id: {$eq: post}
       },
       {
         $addToSet: {

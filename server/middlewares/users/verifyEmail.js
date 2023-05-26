@@ -73,8 +73,8 @@ const verifyEmail = async (req, res, next) => {
 
   try {
     const [isVerified, verification] = await Promise.all([
-      User.findOne({ email, isEmailVerified: true }),
-      EmailVerification.findOne({ email, verificationCode: code }),
+      User.findOne({ email:{ $eq: email }, isEmailVerified: true }),
+        EmailVerification.findOne( { email: { $eq: email } , verificationCode: { $eq: code } }),
     ]);
 
     if (isVerified) {
@@ -88,13 +88,13 @@ const verifyEmail = async (req, res, next) => {
     }
 
     const updatedUser = await User.findOneAndUpdate(
-      { email },
-      { isEmailVerified: true },
-      { new: true }
+        { email: { $eq: email } },
+        { isEmailVerified: true },
+        { new: true }
     ).exec();
 
     await Promise.all([
-      EmailVerification.deleteMany({ email }).exec(),
+        EmailVerification.deleteMany({ email: { $eq: email } }).exec(),
       new UserPreference({
         user: updatedUser,
         enableContextBasedAuth: true,
