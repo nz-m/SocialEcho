@@ -17,15 +17,6 @@ body:
       required: false
 
   - type: textarea
-    id: summary
-    attributes:
-      label: Bug Summary
-      description: Please provide a brief summary of the bug.
-      placeholder: Concise summary of the issue
-    validations:
-      required: true
-
-  - type: textarea
     id: description
     attributes:
       label: Bug Description
@@ -71,20 +62,26 @@ body:
     validations:
       required: false
 
+  - type: input
+    id: image
+    attributes:
+      label: Upload Screenshot
+      description: If applicable, please upload a screenshot of the issue.
+      placeholder: Upload Screenshot
+    validations:
+      required: false
+      allowed_file_extensions:
+        - .jpg
+        - .jpeg
+        - .png
+        - .gif
+      max_file_size: 10mb
+
   - type: textarea
     id: logs
     attributes:
       label: Relevant Log Output
       description: If applicable, please copy and paste any relevant log output here.
       render: shell
-    validations:
-      required: false
-
-  - type: textarea
-    id: screenshots
-    attributes:
-      label: Screenshots
-      description: If you have any relevant screenshots, please upload them here.
-      render: image
     validations:
       required: false
