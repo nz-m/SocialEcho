@@ -1,52 +1,90 @@
-name: Bug Report
+name: 🐞Bug Report🐞
 description: File a bug report
 title: "[Bug]: "
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
-      value: |
-        Thanks for taking the time to fill out this bug report! Please provide as much detail as possible to help us diagnose the issue.
+      value: Thank you for taking the time to fill out this bug report! Your feedback is valuable in helping us improve the app. Please provide as much detail as possible to help us diagnose and address the issue.
+
   - type: input
     id: contact
     attributes:
       label: Contact Details
-      description: How can we get in touch with you if we need more info?
+      description: How can we get in touch with you if we need more information?
       placeholder: ex. email@example.com
     validations:
       required: false
+
   - type: textarea
-    id: what-happened
+    id: summary
     attributes:
-      label: What happened?
-      description: Please describe what happened and what you expected to happen.
-      placeholder: Tell us what you see!
-      value: "A bug happened!"
+      label: Bug Summary
+      description: Please provide a brief summary of the bug.
+      placeholder: Concise summary of the issue
     validations:
       required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Please describe what happened and what you expected to happen.
+      placeholder: Detailed description of the issue
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      multiple: false
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Android
+        - iOS
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Reproduction Steps
+      description: Please provide step-by-step instructions to reproduce the bug.
+      placeholder: Detailed steps to reproduce the issue
+    validations:
+      required: false
+
   - type: dropdown
     id: browsers
     attributes:
-      label: What browsers are you seeing the problem on?
+      label: Browsers
       multiple: true
       options:
         - Firefox
         - Chrome
         - Safari
         - Microsoft Edge
+    validations:
+      required: false
+
   - type: textarea
     id: logs
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output here. This can help us diagnose the issue.
+      label: Relevant Log Output
+      description: If applicable, please copy and paste any relevant log output here.
       render: shell
     validations:
       required: false
+
   - type: textarea
     id: screenshots
     attributes:
       label: Screenshots
-      description: If you have any relevant screenshots, please upload them here. This can help us diagnose the issue.
+      description: If you have any relevant screenshots, please upload them here.
       render: image
     validations:
       required: false
