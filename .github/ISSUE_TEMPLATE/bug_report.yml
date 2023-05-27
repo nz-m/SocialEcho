@@ -20,8 +20,8 @@ body:
     id: description
     attributes:
       label: Bug Description
-      description: Please describe what happened and what you expected to happen.
-      placeholder: Detailed description of the issue
+      description: Please describe what happened and what you expected to happen. If applicable, please upload screenshots.
+      placeholder: Detailed description of the issue and expected behavior.
     validations:
       required: true
 
@@ -61,21 +61,6 @@ body:
         - Microsoft Edge
     validations:
       required: false
-
-  - type: input
-    id: image
-    attributes:
-      label: Upload Screenshot
-      description: If applicable, please upload a screenshot of the issue.
-      placeholder: Upload Screenshot
-    validations:
-      required: false
-      allowed_file_extensions:
-        - .jpg
-        - .jpeg
-        - .png
-        - .gif
-      max_file_size: 10mb
 
   - type: textarea
     id: logs
