@@ -1,13 +1,13 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useMemo } from "react";
-import { getSelfPostAction } from "../redux/actions/postActions";
+import { getOwnPostAction } from "../redux/actions/postActions";
 import { useNavigate, useParams } from "react-router-dom";
 import CommonLoading from "../components/loader/CommonLoading";
 
 import PostView from "../components/post/PostView";
 import CommentSidebar from "../components/post/CommentSidebar";
 
-const SelfPost = () => {
+const OwnPost = () => {
   const { postId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -15,14 +15,14 @@ const SelfPost = () => {
   const userData = useSelector((state) => state.auth?.userData);
 
   const joinedCommunities = useSelector((state) =>
-    state.community.joinedCommunities?.map(({ name }) => name)
+    state.community?.joinedCommunities?.map(({ _id }) => _id)
   );
 
   useEffect(() => {
-    dispatch(getSelfPostAction(postId));
+    dispatch(getOwnPostAction(postId));
   }, [dispatch, postId]);
 
-  const { selfPost: post } = useSelector((state) => state.posts);
+  const { ownPost: post } = useSelector((state) => state.posts);
 
   const isAuthorized = useMemo(() => {
     return post && joinedCommunities?.includes(post.community._id);
@@ -44,4 +44,4 @@ const SelfPost = () => {
   );
 };
 
-export default SelfPost;
+export default OwnPost;

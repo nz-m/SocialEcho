@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { RiEditCircleLine } from "react-icons/ri";
 import { CiLocationOn } from "react-icons/ci";
 import { GrContactInfo } from "react-icons/gr";
-const SelfProfileCard = ({ user }) => {
+const OwnProfileCard = ({ user }) => {
   return (
     <div className="bg-white rounded-lg  p-6 shadow-2xl shadow-[#F3F8FF]">
       <div className="flex flex-col justify-between items-center ">
@@ -86,4 +86,4 @@ const SelfProfileCard = ({ user }) => {
   );
 };
 
-export default SelfProfileCard;
+export default OwnProfileCard;

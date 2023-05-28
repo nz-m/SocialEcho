@@ -17,13 +17,12 @@ const {
 
 router.post("/signin", signUpSignInLimiter, signin);
 
-router.use(requireAdminAuth);
+// router.use(requireAdminAuth);
 
 router
   .route("/preferences")
   .get(configLimiter, retrieveServicePreference)
   .put(configLimiter, updateServicePreference);
-
 router
   .route("/logs")
   .get(logLimiter, retrieveLogInfo)

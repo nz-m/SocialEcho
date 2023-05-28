@@ -5,13 +5,17 @@ const initialState = {
   post: null,
   posts: [],
   publicPosts: [],
-  selfPost: null,
+  ownPost: null,
+  savedPosts: [],
+  totalPosts: 0,
   communityPosts: [],
   followingUsersPosts: [],
-  savedPosts: [],
-  postError: null,
-  totalPosts: 0,
   totalCommunityPosts: 0,
+  postError: null,
+  postCategory: null,
+  confirmationToken: null,
+  isPostInappropriate: false,
+  isCommentInappropriate: false,
 };
 
 const postReducer = (state = initialState, action) => {
@@ -23,27 +27,65 @@ const postReducer = (state = initialState, action) => {
         ...state,
         post: null,
         posts: [],
-        selfPost: null,
         publicPosts: [],
+        ownPost: null,
+        savedPosts: [],
+        totalPosts: 0,
         communityPosts: [],
         followingUsersPosts: [],
-        comments: [],
-        savedPosts: [],
+        totalCommunityPosts: 0,
         postError: null,
+        commentError: null,
+        postCategory: null,
+        confirmationToken: null,
+        isPostInappropriate: false,
+        isCommentInappropriate: false,
       };
 
     case types.CREATE_POST_SUCCESS:
+    case types.CONFIRM_POST_SUCCESS:
       return {
         ...state,
         posts: [payload, ...state.posts],
         communityPosts: [payload, ...state.communityPosts],
         postError: null,
+        postCategory: null,
+        confirmationToken: null,
+        isPostInappropriate: false,
       };
 
     case types.CREATE_POST_FAIL:
+    case types.CONFIRM_POST_FAIL:
       return {
         ...state,
         postError: payload,
+      };
+
+    case types.CREATE_POST_FAIL_INAPPROPRIATE:
+      return {
+        ...state,
+        isPostInappropriate: true,
+      };
+
+    case types.CREATE_POST_FAIL_DETECT_CATEGORY:
+      return {
+        ...state,
+        confirmationToken: payload,
+      };
+
+    case types.CREATE_POST_FAIL_CATEGORY_MISMATCH:
+      return {
+        ...state,
+        postCategory: payload,
+      };
+
+    case types.CLEAR_CREATE_POST_FAIL:
+      return {
+        ...state,
+        postError: null,
+        postCategory: null,
+        confirmationToken: null,
+        isPostInappropriate: false,
       };
 
     case types.GET_POST_SUCCESS:
@@ -58,13 +100,13 @@ const postReducer = (state = initialState, action) => {
         postError: payload,
       };
 
-    case types.GET_SELF_POST_SUCCESS:
+    case types.GET_OWN_POST_SUCCESS:
       return {
         ...state,
-        selfPost: payload,
+        ownPost: payload,
         postError: null,
       };
-    case types.GET_SELF_POST_FAIL:
+    case types.GET_OWN_POST_FAIL:
       return {
         ...state,
         postError: payload,
@@ -189,6 +231,25 @@ const postReducer = (state = initialState, action) => {
       return {
         ...state,
         postError: payload,
+      };
+
+    case types.ADD_COMMENT_FAIL:
+      return {
+        ...state,
+        commentError: payload,
+      };
+
+    case types.ADD_COMMENT_FAIL_INAPPROPRIATE:
+      return {
+        ...state,
+        isCommentInappropriate: true,
+      };
+
+    case types.CLEAR_COMMENT_FAIL:
+      return {
+        ...state,
+        commentError: null,
+        isCommentInappropriate: false,
       };
 
     case types.LIKE_POST_SUCCESS:

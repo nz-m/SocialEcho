@@ -44,7 +44,7 @@ const CommentSidebar = ({ comments }) => {
                 </div>
               </div>
 
-              <p className="text-lg">{comment.body}</p>
+              <p className="text-lg">{comment.content}</p>
             </div>
           ))}
 

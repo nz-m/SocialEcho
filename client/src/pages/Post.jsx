@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, lazy, Suspense, useMemo } from "react";
+import { useEffect, lazy, useMemo, Suspense } from "react";
 import { getPostAction, clearPostAction } from "../redux/actions/postActions";
 import { useParams, useNavigate } from "react-router-dom";
 import CommonLoading from "../components/loader/CommonLoading";
@@ -42,7 +42,6 @@ const Post = () => {
   if (!post || !joinedCommunities) {
     return <CommonLoading />;
   }
-
   return (
     <>
       <Suspense fallback={<FallbackLoading />}>

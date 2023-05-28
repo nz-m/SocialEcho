@@ -2,7 +2,6 @@ const router = require("express").Router();
 const passport = require("passport");
 const useragent = require("express-useragent");
 const requestIp = require("request-ip");
-const decodeToken = require("../middlewares/auth/decodeToken");
 
 const {
   addUser,
@@ -38,6 +37,7 @@ const {
   followLimiter,
 } = require("../middlewares/limiter/limiter");
 
+const decodeToken = require("../middlewares/auth/decodeToken");
 const requireAuth = passport.authenticate("jwt", { session: false }, null);
 
 router.get("/public-users/:id", requireAuth, decodeToken, getPublicUser);

@@ -10,9 +10,6 @@ const postConfirmation = async (req, res, next) => {
   if (req.failedDetection) {
     const confirmationToken = generateConfirmationToken(req.userId);
 
-    const message =
-      "We apologize for the inconvenience, but our system couldn't determine the eligibility of your post for this community. While it may not meet the specific criteria, we acknowledge that it could still be relevant. You are welcome to proceed with posting it if you believe it is relevant to this community. However, please be aware that community moderators reserve the right to remove posts that do not align well with the community guidelines. Continuous violations may result in a ban from this community. Thank you for your understanding.";
-
     try {
       const { content, communityId } = req.body;
       const { userId, files } = req;
@@ -60,7 +57,9 @@ const postConfirmation = async (req, res, next) => {
       return res.status(500).json({ message: "Internal server error" });
     }
 
-    return res.status(400).json({ message, confirmationToken });
+    const type = "failedDetection";
+
+    return res.status(403).json({ type, confirmationToken });
   } else {
     next();
   }

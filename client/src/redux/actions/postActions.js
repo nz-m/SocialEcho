@@ -3,14 +3,83 @@ import * as types from "../constants/postConstants";
 
 export const createPostAction = (formData) => async (dispatch) => {
   try {
-    const { error, data } = await api.createPost(formData);
+    const {
+      error = null,
+      data = null,
+      info = null,
+      isInappropriate = false,
+      confirmationToken = null,
+    } = await api.createPost(formData);
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    if (isInappropriate) {
+      dispatchCreatePostFail(
+        dispatch,
+        types.CREATE_POST_FAIL_INAPPROPRIATE,
+        null
+      );
+    } else if (confirmationToken) {
+      dispatchCreatePostFail(
+        dispatch,
+        types.CREATE_POST_FAIL_DETECT_CATEGORY,
+        confirmationToken
+      );
+    } else if (info) {
+      dispatchCreatePostFail(
+        dispatch,
+        types.CREATE_POST_FAIL_CATEGORY_MISMATCH,
+        info
+      );
+    } else {
+      dispatchCreatePostSuccess(dispatch, types.CREATE_POST_SUCCESS, data);
+    }
+  } catch (error) {
+    dispatchCreatePostFail(dispatch, types.CREATE_POST_FAIL, error.message);
+  }
+};
+
+const dispatchCreatePostSuccess = (dispatch, type, payload) => {
+  dispatch({
+    type,
+    payload,
+    meta: {
+      requiresAuth: true,
+    },
+  });
+};
+
+const dispatchCreatePostFail = (dispatch, type, payload) => {
+  dispatch({
+    type,
+    payload,
+    meta: {
+      requiresAuth: true,
+    },
+  });
+};
+
+export const clearCreatePostFail = () => async (dispatch) => {
+  dispatch({
+    type: types.CLEAR_CREATE_POST_FAIL,
+    meta: {
+      requiresAuth: true,
+    },
+  });
+};
+
+export const confirmPostAction = (confirmationToken) => async (dispatch) => {
+  try {
+    const { error, data } = await api.confirmPost(confirmationToken);
 
     if (error) {
       throw new Error(error);
     }
 
     dispatch({
-      type: types.CREATE_POST_SUCCESS,
+      type: types.CONFIRM_POST_SUCCESS,
       payload: data,
       meta: {
         requiresAuth: true,
@@ -18,7 +87,33 @@ export const createPostAction = (formData) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: types.CREATE_POST_FAIL,
+      type: types.CONFIRM_POST_FAIL,
+      payload: error.message,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  }
+};
+
+export const rejectPostAction = (confirmationToken) => async (dispatch) => {
+  try {
+    const { error, data } = await api.rejectPost(confirmationToken);
+
+    if (error) {
+      throw new Error(error);
+    }
+
+    dispatch({
+      type: types.REJECT_POST_SUCCESS,
+      payload: data,
+      meta: {
+        requiresAuth: true,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: types.REJECT_POST_FAIL,
       payload: error.message,
       meta: {
         requiresAuth: true,
@@ -101,7 +196,7 @@ export const getPostsAction = (limit, skip) => async (dispatch) => {
   }
 };
 
-export const getSelfPostAction = (id) => async (dispatch) => {
+export const getOwnPostAction = (id) => async (dispatch) => {
   try {
     const { error, data } = await api.getPost(id);
 
@@ -110,7 +205,7 @@ export const getSelfPostAction = (id) => async (dispatch) => {
     }
 
     dispatch({
-      type: types.GET_SELF_POST_SUCCESS,
+      type: types.GET_OWN_POST_SUCCESS,
       payload: data,
       meta: {
         requiresAuth: true,
@@ -118,7 +213,7 @@ export const getSelfPostAction = (id) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: types.GET_SELF_POST_FAIL,
+      type: types.GET_OWN_POST_FAIL,
       payload: error.message,
       meta: {
         requiresAuth: true,
@@ -274,9 +369,17 @@ export const addCommentAction = (postId, newComment) => async (dispatch) => {
   try {
     const { error } = await api.addComment(postId, newComment);
 
-    if (error) {
-      throw new Error(error);
+    if (error === "inappropriateContent") {
+      dispatch({
+        type: types.ADD_COMMENT_FAIL_INAPPROPRIATE,
+        meta: {
+          requiresAuth: true,
+        },
+      });
+      return;
     }
+
+    throw new Error(error);
   } catch (error) {
     dispatch({
       type: types.ADD_COMMENT_FAIL,
@@ -286,6 +389,15 @@ export const addCommentAction = (postId, newComment) => async (dispatch) => {
       },
     });
   }
+};
+
+export const clearCommentFailAction = () => async (dispatch) => {
+  dispatch({
+    type: types.CLEAR_COMMENT_FAIL,
+    meta: {
+      requiresAuth: true,
+    },
+  });
 };
 
 export const savePostAction = (id) => async (dispatch) => {

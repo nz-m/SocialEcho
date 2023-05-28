@@ -18,8 +18,8 @@ const createPost = async (req, res) => {
     const { userId, files } = req;
 
     const community = await Community.findOne({
-        _id: { $eq: communityId },
-        members: { $eq: userId },
+      _id: { $eq: communityId },
+      members: { $eq: userId },
     });
 
     if (!community) {
@@ -64,18 +64,19 @@ const createPost = async (req, res) => {
     res.json(post);
   } catch (error) {
     res.status(500).json({
-      message: error.message,
+      message: "Error creating post",
     });
   }
 };
 
 const confirmPost = async (req, res) => {
   try {
-    const { confirmationToken } = req.body;
+    const { confirmationToken } = req.params;
+    const userId = req.userId;
     const pendingPost = await PendingPost.findOne({
-      confirmationToken : { $eq: confirmationToken},
+      confirmationToken: { $eq: confirmationToken },
       status: "pending",
-      user: req.userId,
+      user: userId,
     });
     if (!pendingPost) {
       return res.status(404).json({ message: "Post not found" });
@@ -89,10 +90,20 @@ const confirmPost = async (req, res) => {
       fileUrl,
     });
 
-    await newPost.save();
-    await PendingPost.findOneAndDelete({ confirmationToken: {$eq: confirmationToken} });
+    await PendingPost.findOneAndDelete({
+      confirmationToken: { $eq: confirmationToken },
+    });
+    const savedPost = await newPost.save();
+    const postId = savedPost._id;
 
-    res.status(201).json({ message: "Post confirmed" });
+    const post = await Post.findById(postId)
+      .populate("user", "name avatar")
+      .populate("community", "name")
+      .lean();
+
+    post.createdAt = dayjs(post.createdAt).fromNow();
+
+    res.json(post);
   } catch (error) {
     res.status(500).json({
       message: "Error publishing post",
@@ -103,10 +114,11 @@ const confirmPost = async (req, res) => {
 const rejectPost = async (req, res) => {
   try {
     const { confirmationToken } = req.body;
+    const userId = req.userId;
     const pendingPost = await PendingPost.findOne({
-      confirmationToken : { $eq: confirmationToken},
+      confirmationToken: { $eq: confirmationToken },
       status: "pending",
-      user: req.userId,
+      user: userId,
     });
 
     if (!pendingPost) {
@@ -145,6 +157,7 @@ const clearPendingPosts = async (req, res) => {
 const getPost = async (req, res) => {
   try {
     const postId = req.params.id;
+    const userId = req.userId;
 
     const post = await findPostById(postId);
     if (!post) {
@@ -152,12 +165,13 @@ const getPost = async (req, res) => {
     }
 
     const comments = await findCommentsByPostId(postId);
+
     post.comments = formatComments(comments);
     post.dateTime = formatCreatedAt(post.createdAt);
     post.createdAt = dayjs(post.createdAt).fromNow();
     post.savedByCount = await countSavedPosts(postId);
 
-    const report = await findReportByPostAndUser(postId, req.userId);
+    const report = await findReportByPostAndUser(postId, userId);
     post.isReported = !!report;
 
     res.status(200).json(post);
@@ -194,10 +208,11 @@ const findReportByPostAndUser = async (postId, userId) =>
 
 const getPosts = async (req, res) => {
   try {
+    const userId = req.userId;
     const { limit = 10, skip = 0 } = req.query;
 
     const communities = await Community.find({
-      members: req.userId,
+      members: userId,
     });
 
     const communityIds = communities.map((community) => community._id);
@@ -247,12 +262,13 @@ const getPosts = async (req, res) => {
 const getCommunityPosts = async (req, res) => {
   try {
     const communityId = req.params.communityId;
+    const userId = req.userId;
 
     const { limit = 10, skip = 0 } = req.query;
 
     const isMember = await Community.findOne({
       _id: communityId,
-      members: req.userId,
+      members: userId,
     });
 
     if (!isMember) {
@@ -301,9 +317,10 @@ const getCommunityPosts = async (req, res) => {
 const getFollowingUsersPosts = async (req, res) => {
   try {
     const communityId = req.params.id;
+    const userId = req.userId;
 
     const following = await Relationship.find({
-      follower: req.userId,
+      follower: userId,
     });
 
     const followingIds = following.map(
@@ -454,16 +471,17 @@ const unlikePost = async (req, res) => {
 
 const addComment = async (req, res) => {
   try {
-    const { body, post } = req.body.newComment;
+    const { content, postId } = req.body;
+    const userId = req.userId;
     const newComment = new Comment({
-      user: req.userId,
-      body,
-      post,
+      user: userId,
+      post: postId,
+      content,
     });
     await newComment.save();
     await Post.findOneAndUpdate(
       {
-        _id: {$eq: post}
+        _id: { $eq: postId },
       },
       {
         $addToSet: {
@@ -503,6 +521,7 @@ const saveOrUnsavePost = async (req, res, operation) => {
      * @type {string} id - The ID of the post to be saved or unsaved.
      */
     const id = req.params.id;
+    const userId = req.userId;
 
     const update = {};
     update[operation === "$addToSet" ? "$addToSet" : "$pull"] = {
@@ -510,7 +529,7 @@ const saveOrUnsavePost = async (req, res, operation) => {
     };
     const updatedUserPost = await User.findOneAndUpdate(
       {
-        _id: req.userId,
+        _id: userId,
       },
       update,
       {
@@ -550,7 +569,8 @@ const saveOrUnsavePost = async (req, res, operation) => {
  */
 const getSavedPosts = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+    const userId = req.userId;
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -560,7 +580,7 @@ const getSavedPosts = async (req, res) => {
     /**
      * send the saved posts of the communities that the user is a member of only
      */
-    const communityIds = await Community.find({ members: req.userId }).distinct(
+    const communityIds = await Community.find({ members: userId }).distinct(
       "_id"
     );
     const savedPosts = await Post.find({
