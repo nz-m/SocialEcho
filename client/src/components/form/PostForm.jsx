@@ -64,19 +64,15 @@ const PostForm = ({ communityId, communityName }) => {
     if (isPostInappropriate) {
       setShowInappropriateContentModal(true);
     }
-  }, [isPostInappropriate]);
 
-  useEffect(() => {
     if (postCategory) {
       setShowTopicConflictModal(true);
     }
-  }, [postCategory]);
 
-  useEffect(() => {
     if (confirmationToken) {
       setShowEligibilityDetectionFailModal(true);
     }
-  }, [confirmationToken]);
+  }, [isPostInappropriate, postCategory, confirmationToken]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

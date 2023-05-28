@@ -113,7 +113,7 @@ const confirmPost = async (req, res) => {
 
 const rejectPost = async (req, res) => {
   try {
-    const { confirmationToken } = req.body;
+    const { confirmationToken } = req.params;
     const userId = req.userId;
     const pendingPost = await PendingPost.findOne({
       confirmationToken: { $eq: confirmationToken },
