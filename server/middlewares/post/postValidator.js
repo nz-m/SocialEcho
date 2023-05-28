@@ -8,8 +8,6 @@ const postValidator = [
     .withMessage("Your post is too short. Share more of your thoughts!")
     .isLength({ max: MAX_LENGTH })
     .withMessage("Content cannot exceed 3000 characters.")
-    .matches(/^[a-zA-Z0-9\s!@#$%^&*()_+=\-[\]{};':"\\|,.<>?]+$/)
-    .withMessage("Please use English only")
     .trim()
     .escape(),
 ];

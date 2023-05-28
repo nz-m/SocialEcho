@@ -10,7 +10,7 @@ const configLimiter = rateLimit({
 
 const logLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 300, // allow 300 requests per hour
+  max: 300,
   message: {
     message: "Too many requests, please try again later.",
   },
@@ -18,7 +18,7 @@ const logLimiter = rateLimit({
 
 const createPostLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minutes
-  max: 10, // allow 10 requests per 5 minutes
+  max: 10,
   message: { message: "Too many requests, please try again later." },
 });
 
@@ -30,14 +30,20 @@ const likeSaveLimiter = rateLimit({
 
 const followLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 100, // allow 100 requests per 10 minutes
+  max: 100,
   message: { message: "Too many requests, please try again later." },
 });
 
 const signUpSignInLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 20, // allow 20 requests per 10 minutes
+  max: 20,
   message: { message: "Too many requests, please try again later." },
+});
+
+const commentLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 25,
+  message: { message: "Too many comments, please try again later." },
 });
 
 module.exports = {
@@ -47,4 +53,5 @@ module.exports = {
   likeSaveLimiter,
   followLimiter,
   signUpSignInLimiter,
+  commentLimiter,
 };

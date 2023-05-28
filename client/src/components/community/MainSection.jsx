@@ -72,6 +72,7 @@ const MainSection = () => {
       </div>
     );
   }
+
   return (
     <div className="w-6/12 px-10 py-5">
       <div className="flex flex-col mt-4">

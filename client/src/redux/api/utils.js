@@ -35,7 +35,7 @@ COMMUNITY_API.interceptors.request.use((req) => {
 });
 
 export const handleApiError = (error) => {
-  if (error.response && error.response.data && error.response.data.message) {
+  if (error.response?.data?.message) {
     return { error: error.response.data.message, data: null };
   } else {
     return { error: "An unexpected error occurred.", data: null };

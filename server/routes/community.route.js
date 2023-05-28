@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const passport = require("passport");
-const decodeToken = require("../middlewares/auth/decodeToken");
 
 const {
   getNotMemberCommunities,
@@ -21,6 +20,8 @@ const {
   addRules,
   addModToCommunity,
 } = require("../controllers/community.controller");
+
+const decodeToken = require("../middlewares/auth/decodeToken");
 
 router.use(passport.authenticate("jwt", { session: false }, null), decodeToken);
 

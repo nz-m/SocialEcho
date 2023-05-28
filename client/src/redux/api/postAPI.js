@@ -1,6 +1,6 @@
 import { API, handleApiError } from "./utils";
 
-const createPost = async (formData) => {
+export const createPost = async (formData) => {
   try {
     const { data } = await API.post("/posts", formData, {
       headers: {
@@ -8,134 +8,153 @@ const createPost = async (formData) => {
       },
     });
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    const { response } = error;
+    if (response?.status === 403) {
+      const { type, confirmationToken, info } = response.data || {};
+      if (type === "inappropriateContent") {
+        return { isInappropriate: true, data: null };
+      } else if (type === "failedDetection") {
+        return { confirmationToken, data: null };
+      } else if (type === "categoryMismatch") {
+        return { info, data: null };
+      }
+    }
+    return handleApiError(error);
   }
 };
 
-const getPost = async (id) => {
+export const confirmPost = async (confirmationToken) => {
+  try {
+    const { data } = await API.post(`/posts/confirm/${confirmationToken}`);
+    return { error: null, data };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+export const rejectPost = async (confirmationToken) => {
+  try {
+    const { data } = await API.post(`/posts/reject/${confirmationToken}`);
+    return { error: null, data };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+export const getPost = async (id) => {
   try {
     const { data } = await API.get(`/posts/${id}`);
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getPosts = async (limit = 10, skip = 0) => {
+export const getPosts = async (limit = 10, skip = 0) => {
   try {
     const { data } = await API.get(`/posts?limit=${limit}&skip=${skip}`);
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getComPosts = async (communityId, limit = 10, skip = 0) => {
+export const getComPosts = async (communityId, limit = 10, skip = 0) => {
   try {
     const { data } = await API.get(
       `/posts/community/${communityId}?limit=${limit}&skip=${skip}`
     );
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const deletePost = async (id) => {
+export const deletePost = async (id) => {
   try {
     const { data } = await API.delete(`/posts/${id}`);
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const likePost = async (id) => {
+export const likePost = async (id) => {
   try {
     const { data } = await API.patch(`/posts/${id}/like`);
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const unlikePost = async (id) => {
+export const unlikePost = async (id) => {
   try {
     const { data } = await API.patch(`/posts/${id}/unlike`);
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const addComment = async (id, newComment) => {
+export const addComment = async (id, newComment) => {
   try {
-    const { data } = await API.post(`/posts/${id}/comment`, { newComment });
-    return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+    await API.post(`/posts/${id}/comment`, newComment);
+    return { error: null };
+  } catch (error) {
+    if (error.response?.status === 403) {
+      const { type } = error.response.data || {};
+      if (type === "inappropriateContent") {
+        return { error: "inappropriateContent" };
+      }
+    }
+    return handleApiError(error);
   }
 };
 
-const savePost = async (id) => {
+export const savePost = async (id) => {
   try {
     const { data } = await API.patch(`/posts/${id}/save`);
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const unsavePost = async (id) => {
+export const unsavePost = async (id) => {
   try {
     const { data } = await API.patch(`/posts/${id}/unsave`);
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getSavedPosts = async () => {
+export const getSavedPosts = async () => {
   try {
     const { data } = await API.get(`/posts/saved`);
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getPublicPosts = async (publicUserId) => {
+export const getPublicPosts = async (publicUserId) => {
   try {
     const { data } = await API.get(`/posts/${publicUserId}/userPosts`);
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getFollowingUsersPosts = async (communityId) => {
+export const getFollowingUsersPosts = async (communityId) => {
   try {
     const { data } = await API.get(`/posts/${communityId}/following`);
 
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
-};
-
-export {
-  createPost,
-  getPost,
-  getPosts,
-  getComPosts,
-  deletePost,
-  likePost,
-  unlikePost,
-  addComment,
-  savePost,
-  unsavePost,
-  getSavedPosts,
-  getPublicPosts,
-  getFollowingUsersPosts,
 };

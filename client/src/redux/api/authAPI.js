@@ -1,6 +1,6 @@
 import { API, handleApiError } from "./utils";
 
-const signIn = async (formData) => {
+export const signIn = async (formData) => {
   try {
     const res = await API.post("/users/signin", formData, {
       headers: {
@@ -8,12 +8,12 @@ const signIn = async (formData) => {
       },
     });
     return { error: null, data: res.data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const signUp = async (formData) => {
+export const signUp = async (formData) => {
   try {
     const res = await API.post("/users/signup", formData, {
       headers: {
@@ -21,15 +21,15 @@ const signUp = async (formData) => {
       },
     });
     return { error: null, data: res.data };
-  } catch (err) {
+  } catch (error) {
     return {
-      error: err.response.data.errors,
+      error: error.response.data.errors,
       data: null,
     };
   }
 };
 
-const logout = async () => {
+export const logout = async () => {
   try {
     const res = await API.post("/users/logout", {
       headers: {
@@ -37,93 +37,79 @@ const logout = async () => {
       },
     });
     return { error: null, data: res.data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getModProfile = async () => {
+export const getModProfile = async () => {
   try {
     const res = await API.get("/users/moderator");
     return { error: null, data: res.data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getContextAuthData = async () => {
+export const getContextAuthData = async () => {
   try {
     const res = await API.get("/auth/context-data/primary");
     return { error: null, data: res.data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getTrustedContextAuthData = async () => {
+export const getTrustedContextAuthData = async () => {
   try {
     const res = await API.get("/auth/context-data/trusted");
     return { error: null, data: res.data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getBlockedAuthContextData = async () => {
+export const getBlockedAuthContextData = async () => {
   try {
     const res = await API.get("/auth/context-data/blocked");
     return { error: null, data: res.data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getUserPreferences = async () => {
+export const getUserPreferences = async () => {
   try {
     const res = await API.get("/auth/user-preferences");
     return { error: null, data: res.data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const deleteContextAuthData = async (contextId) => {
+export const deleteContextAuthData = async (contextId) => {
   try {
     const res = await API.delete(`/auth/context-data/${contextId}`);
     return { error: null, data: res.data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const blockContextAuthData = async (contextId) => {
+export const blockContextAuthData = async (contextId) => {
   try {
     const res = await API.patch(`/auth/context-data/block/${contextId}`);
     return { error: null, data: res.data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const unblockContextAuthData = async (contextId) => {
+export const unblockContextAuthData = async (contextId) => {
   try {
     const res = await API.patch(`/auth/context-data/unblock/${contextId}`);
     return { error: null, data: res.data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
-};
-
-export {
-  signIn,
-  signUp,
-  logout,
-  getModProfile,
-  getContextAuthData,
-  getUserPreferences,
-  getTrustedContextAuthData,
-  getBlockedAuthContextData,
-  deleteContextAuthData,
-  blockContextAuthData,
-  unblockContextAuthData,
 };

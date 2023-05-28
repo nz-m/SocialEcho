@@ -2,8 +2,8 @@ import { useEffect, useState, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserAction } from "../../redux/actions/userActions";
 import PostOnProfile from "../post/PostOnProfile";
-import SelfProfileCard from "./SelfProfileCard";
-import SelfInfoCard from "./SelfInfoCard";
+import OwnProfileCard from "./OwnProfileCard";
+import SelfInfoCard from "./OwnInfoCard";
 import CommonLoading from "../loader/CommonLoading";
 
 const UserProfile = ({ userData }) => {
@@ -36,7 +36,7 @@ const UserProfile = ({ userData }) => {
         </div>
       ) : (
         <div className="w-6/12 px-10 py-6">
-          <SelfProfileCard user={user} />
+          <OwnProfileCard user={user} />
           <SelfInfoCard user={user} />
 
           <h3 className="text-lg font-bold mb-4">Your most recent posts</h3>

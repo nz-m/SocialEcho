@@ -3,7 +3,7 @@ import { lazy } from "react";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Post from "./pages/Post";
-import SelfPost from "./pages/SelfPost";
+import OwnPost from "./pages/OwnPost";
 import CommunityHome from "./pages/CommunityHome";
 import Saved from "./pages/Saved";
 import PublicProfile from "./pages/PublicProfile";
@@ -43,7 +43,7 @@ export const privateRoutes = [
   },
   {
     path: "/my/post/:postId",
-    element: <SelfPost />,
+    element: <OwnPost />,
   },
   {
     path: "/community/:communityName",

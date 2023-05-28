@@ -1,142 +1,127 @@
 import { COMMUNITY_API, handleApiError } from "./utils";
 
-const getCommunity = async (communityName) => {
+export const getCommunity = async (communityName) => {
   try {
     const { data } = await COMMUNITY_API.get(`/communities/${communityName}`);
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getJoinedCommunities = async () => {
+export const getJoinedCommunities = async () => {
   try {
     const { data } = await COMMUNITY_API.get("/communities/member");
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getNotJoinedCommunities = async () => {
+export const getNotJoinedCommunities = async () => {
   try {
     const { data } = await COMMUNITY_API.get("/communities/notmember");
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const joinCommunity = async (communityName) => {
+export const joinCommunity = async (communityName) => {
   try {
     const { data } = await COMMUNITY_API.post(
       `/communities/${communityName}/join`
     );
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const leaveCommunity = async (communityName) => {
+export const leaveCommunity = async (communityName) => {
   try {
     const { data } = await COMMUNITY_API.post(
       `/communities/${communityName}/leave`
     );
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const reportPost = async (info) => {
+export const reportPost = async (info) => {
   try {
     const { data } = await COMMUNITY_API.post(`/communities/report`, {
       info,
     });
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getReportedPosts = async (communityName) => {
+export const getReportedPosts = async (communityName) => {
   try {
     const { data } = await COMMUNITY_API.get(
       `/communities/${communityName}/reported-posts`
     );
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const removeReportedPost = async (postId) => {
+export const removeReportedPost = async (postId) => {
   try {
     const { data } = await COMMUNITY_API.delete(
       `/communities/reported-posts/${postId}`
     );
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getCommunityMembers = async (communityName) => {
+export const getCommunityMembers = async (communityName) => {
   try {
     const { data } = await COMMUNITY_API.get(
       `/communities/${communityName}/members`
     );
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const getCommunityMods = async (communityName) => {
+export const getCommunityMods = async (communityName) => {
   try {
     const { data } = await COMMUNITY_API.get(
       `/communities/${communityName}/moderators`
     );
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const banUser = async (communityName, userId) => {
+export const banUser = async (communityName, userId) => {
   try {
     const { data } = await COMMUNITY_API.post(
       `/communities/${communityName}/ban/${userId}`
     );
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
 };
 
-const unbanUser = async (communityName, userId) => {
+export const unbanUser = async (communityName, userId) => {
   try {
     const { data } = await COMMUNITY_API.post(
       `/communities/${communityName}/unban/${userId}`
     );
     return { error: null, data };
-  } catch (err) {
-    return handleApiError(err);
+  } catch (error) {
+    return handleApiError(error);
   }
-};
-
-export {
-  getCommunity,
-  getJoinedCommunities,
-  getNotJoinedCommunities,
-  joinCommunity,
-  leaveCommunity,
-  reportPost,
-  getReportedPosts,
-  removeReportedPost,
-  getCommunityMembers,
-  getCommunityMods,
-  banUser,
-  unbanUser,
 };

@@ -1,4 +1,4 @@
-const SelfInfoCard = ({ user }) => {
+const OwnInfoCard = ({ user }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6 space-y-2 my-5 shadow-[#F3F8FF]">
       <div className="flex flex-wrap items-center justify-between">
@@ -50,4 +50,4 @@ const SelfInfoCard = ({ user }) => {
   );
 };
 
-export default SelfInfoCard;
+export default OwnInfoCard;

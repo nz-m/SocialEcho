@@ -1,8 +1,6 @@
-const express = require("express");
+const router = require("express").Router();
 const passport = require("passport");
-const router = express.Router();
 const useragent = require("express-useragent");
-const decodeToken = require("../middlewares/auth/decodeToken");
 
 const {
   addContextData,
@@ -25,6 +23,8 @@ const {
   verifyLogin,
   blockLogin,
 } = require("../middlewares/users/verifyLogin");
+
+const decodeToken = require("../middlewares/auth/decodeToken");
 
 const requireAuth = passport.authenticate("jwt", { session: false }, null);
 
