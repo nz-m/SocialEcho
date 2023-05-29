@@ -17,7 +17,7 @@ const {
 
 router.post("/signin", signUpSignInLimiter, signin);
 
-// router.use(requireAdminAuth);
+router.use(requireAdminAuth);
 
 router
   .route("/preferences")
