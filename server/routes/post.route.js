@@ -21,8 +21,9 @@ const {
 } = require("../controllers/post.controller");
 const {
   postValidator,
-  postValidatorHandler,
-} = require("../middlewares/post/postValidator");
+  commentValidator,
+  validatorHandler,
+} = require("../middlewares/post/userInputValidator");
 const {
   createPostLimiter,
   likeSaveLimiter,
@@ -49,14 +50,21 @@ router.get("/", getPosts);
 router.post("/confirm/:confirmationToken", confirmPost);
 router.post("/reject/:confirmationToken", rejectPost);
 
-router.post("/:id/comment", commentLimiter, analyzeContent, addComment);
+router.post(
+  "/:id/comment",
+  commentLimiter,
+  commentValidator,
+  validatorHandler,
+  analyzeContent,
+  addComment
+);
 
 router.post(
   "/",
   createPostLimiter,
   fileUpload,
   postValidator,
-  postValidatorHandler,
+  validatorHandler,
   analyzeContent,
   processPost,
   postConfirmation,

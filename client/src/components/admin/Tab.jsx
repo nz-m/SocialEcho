@@ -63,6 +63,33 @@ const Tab = ({ activeTab, handleTabClick }) => {
         <li className="mr-2">
           <span
             className={`cursor-pointer inline-flex p-4 border-b-2 rounded-t-lg ${
+              activeTab === "Community Management"
+                ? "text-blue-600 border-blue-600"
+                : "border-transparent hover:text-gray-600 hover:border-gray-300"
+            }
+                `}
+            onClick={() => handleTabClick("Community Management")}
+          >
+            <svg
+              aria-hidden="true"
+              className="w-5 h-5 mr-2 text-gray-400 group-hover:text-gray-500"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1.707-4.293a1 1 0 011.414-1.414L10 12.586l1.293-1.293a1 1 0 011.414 1.414L11.414 14l1.293 1.293a1 1 0 01-1.414 1.414L10 15.414l-1.293 1.293a1 1 0 01-1.414-1.414L8.586 14l-1.293-1.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Community Management
+          </span>
+        </li>
+
+        <li className="mr-2">
+          <span
+            className={`cursor-pointer inline-flex p-4 border-b-2 rounded-t-lg ${
               activeTab === "logout"
                 ? "text-blue-600 border-blue-600"
                 : "border-transparent hover:text-red-600 hover:border-red-600"

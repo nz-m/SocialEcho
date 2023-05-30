@@ -12,4 +12,4 @@ const adminTokenSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("adminToken", adminTokenSchema);
+module.exports = mongoose.model("AdminToken", adminTokenSchema);

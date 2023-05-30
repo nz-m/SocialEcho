@@ -2,9 +2,9 @@ import { useMemo, useEffect } from "react";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setInitialAuthState } from "./redux/actions/authActions";
-import Navbar from "./components/common/Navbar";
-import Leftbar from "./components/common/Leftbar";
-import Rightbar from "./components/common/Rightbar";
+import Navbar from "./components/shared/Navbar";
+import Leftbar from "./components/shared/Leftbar";
+import Rightbar from "./components/shared/Rightbar";
 
 import ModeratorRightbar from "./components/moderator/Rightbar";
 

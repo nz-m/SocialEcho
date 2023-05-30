@@ -1,15 +1,19 @@
 import { combineReducers } from "redux";
-import posts from "./posts";
-import auth from "./auth";
-import community from "./community";
-import moderation from "./moderation";
-import user from "./user";
+
+import postsReducer from "./posts";
+import authReducer from "./auth";
+import communityReducer from "./community";
+import moderationReducer from "./moderation";
+import userReducer from "./user";
+import adminReducer from "./admin";
+
 const rootReducer = combineReducers({
-  posts,
-  auth,
-  community,
-  moderation,
-  user,
+  posts: postsReducer,
+  auth: authReducer,
+  community: communityReducer,
+  moderation: moderationReducer,
+  user: userReducer,
+  admin: adminReducer,
 });
 
 export default rootReducer;
