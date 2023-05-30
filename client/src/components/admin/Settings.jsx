@@ -143,7 +143,7 @@ const Settings = () => {
             required
             onChange={(e) => {
               const value = parseInt(e.target.value);
-              if (!isNaN(value) && value >= 0 && value <= 500000) {
+              if (!isNaN(value) && value >= 5000 && value <= 500000) {
                 setCategoryFilteringRequestTimeout(value);
               }
             }}
