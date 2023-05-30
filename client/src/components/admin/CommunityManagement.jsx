@@ -7,7 +7,6 @@ import {
   removeModeratorAction,
   getCommunityAction,
 } from "../../redux/actions/adminActions";
-import ButtonLoadingSpinner from "../loader/ButtonLoadingSpinner";
 
 const CommunityManagement = () => {
   const dispatch = useDispatch();
