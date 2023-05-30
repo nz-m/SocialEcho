@@ -18,7 +18,7 @@ const initialState = {
   isCommentInappropriate: false,
 };
 
-const postReducer = (state = initialState, action) => {
+const postsReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -337,4 +337,4 @@ const updatePostLike = (state, updatedPost) => {
   return { posts, communityPosts };
 };
 
-export default postReducer;
+export default postsReducer;

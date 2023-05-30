@@ -10,7 +10,7 @@ const initialState = {
   userError: null,
 };
 
-const user = (state = initialState, action) => {
+const userReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -73,4 +73,4 @@ const user = (state = initialState, action) => {
   }
 };
 
-export default user;
+export default userReducer;
