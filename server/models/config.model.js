@@ -15,9 +15,9 @@ const configSchema = new mongoose.Schema(
     },
     categoryFilteringRequestTimeout: {
       type: Number,
-      min: 5000, // 5 seconds
-      max: 500000, // 5 minutes
-      default: 30000, // 30 seconds
+      min: 5000,
+      max: 500000,
+      default: 30000,
       required: true,
     },
   },

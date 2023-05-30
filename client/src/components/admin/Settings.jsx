@@ -1,9 +1,18 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  getServicePreferencesAction,
+  updateServicePreferencesAction,
+} from "../../redux/actions/adminActions";
 
 const Settings = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const servicePreferences = useSelector(
+    (state) => state.admin?.servicePreferences
+  );
   const [usePerspectiveAPI, setUsePerspectiveAPI] = useState(false);
   const [
     categoryFilteringServiceProvider,
@@ -11,89 +20,48 @@ const Settings = () => {
   ] = useState("");
   const [categoryFilteringRequestTimeout, setCategoryFilteringRequestTimeout] =
     useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [error, setError] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("/admin/preferences", {
-        headers: {
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("admin")).accessToken
-          }`,
-        },
-      })
+    dispatch(getServicePreferencesAction());
+  }, [dispatch]);
 
-      .then((response) => {
-        const {
-          usePerspectiveAPI,
-          categoryFilteringServiceProvider,
-          categoryFilteringRequestTimeout,
-        } = response.data;
-        setUsePerspectiveAPI(usePerspectiveAPI);
-        setCategoryFilteringServiceProvider(categoryFilteringServiceProvider);
-        setCategoryFilteringRequestTimeout(categoryFilteringRequestTimeout);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          handleLogout();
-        } else {
-          setError(error.message);
-          setIsLoading(false);
-        }
-      });
-  });
-  const clearLocalStorage = () => {
-    localStorage.removeItem("admin");
-  };
-  const handleLogout = async () => {
-    await clearLocalStorage();
-    navigate("/admin/signin");
-  };
-  const handleUpdate = () => {
+  useEffect(() => {
+    if (servicePreferences) {
+      setUsePerspectiveAPI(servicePreferences.usePerspectiveAPI);
+      setCategoryFilteringServiceProvider(
+        servicePreferences.categoryFilteringServiceProvider
+      );
+      setCategoryFilteringRequestTimeout(
+        servicePreferences.categoryFilteringRequestTimeout
+      );
+      setIsLoading(false);
+    }
+  }, [servicePreferences]);
+
+  const handleUpdate = async () => {
     setIsUpdating(true);
-    axios
-      .put(
-        "/admin/preferences",
-        {
+    setIsSuccess(false);
+    try {
+      await dispatch(
+        updateServicePreferencesAction({
           usePerspectiveAPI,
           categoryFilteringServiceProvider,
           categoryFilteringRequestTimeout,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("admin")).accessToken
-            }`,
-          },
-        }
-      )
-      .then(() => {
-        setIsUpdating(false);
-        setIsSuccess(true);
-        setTimeout(() => {
-          setIsSuccess(false);
-        }, 3000);
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          handleLogout();
-        } else {
-          setError(error.message);
-          setIsUpdating(false);
-        }
-      });
+        })
+      );
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 3000);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
-  if (isLoading) {
+  if (isLoading || !servicePreferences) {
     return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
   }
 
   return (
@@ -126,6 +94,7 @@ const Settings = () => {
               setCategoryFilteringServiceProvider(e.target.value)
             }
           >
+            <option value="">Select a provider</option>
             <option value="TextRazor">TextRazor</option>
             <option value="InterfaceAPI">InterfaceAPI</option>
             <option value="ClassifierAPI">ClassifierAPI</option>
@@ -140,12 +109,11 @@ const Settings = () => {
           <input
             type="number"
             value={categoryFilteringRequestTimeout}
+            min={0}
+            max={500000}
             required
             onChange={(e) => {
-              const value = parseInt(e.target.value);
-              if (!isNaN(value) && value >= 5000 && value <= 500000) {
-                setCategoryFilteringRequestTimeout(value);
-              }
+              setCategoryFilteringRequestTimeout(e.target.value);
             }}
           />
         </div>

@@ -1,14 +1,22 @@
+import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { logoutAction } from "../../redux/actions/adminActions";
+import ButtonLoadingSpinner from "../loader/ButtonLoadingSpinner";
 
 const Tab = ({ activeTab, handleTabClick }) => {
   const navigate = useNavigate();
-  const clearLocalStorage = () => {
-    localStorage.removeItem("admin");
-  };
+  const dispatch = useDispatch();
+  const [loggingOut, setLoggingOut] = useState(false);
+
   const handleLogout = async () => {
-    await clearLocalStorage();
-    navigate("/admin/signin");
+    setLoggingOut(true);
+    await dispatch(logoutAction()).then(() => {
+      navigate("/admin/signin");
+    });
+    setLoggingOut(false);
   };
+
   return (
     <div className="border-b border-gray-200">
       <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
@@ -120,7 +128,11 @@ const Tab = ({ activeTab, handleTabClick }) => {
                   : "group-hover:text-red-600"
               }`}
             >
-              Log out
+              {loggingOut ? (
+                <ButtonLoadingSpinner loadingText={"Logging out..."} />
+              ) : (
+                "Logout"
+              )}
             </span>
           </span>
         </li>
