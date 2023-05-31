@@ -12,7 +12,7 @@ const Search = () => {
   };
 
   return (
-    <div className="relative z-30">
+    <div className="relative">
       <input
         type="text"
         placeholder="Search"

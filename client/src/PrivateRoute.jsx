@@ -42,11 +42,14 @@ const PrivateRoute = ({ userData }) => {
   );
 
   return isAuthenticated(userData, accessToken) ? (
-    <div >
+    <div className="flex-col">
       <Navbar userData={userData} />
-      <div className="flex lg:px-40 w-full mx-auto bg-bg">
+
+      <div className="flex mt-4">
         <Leftbar />
+
         <Outlet />
+
         {showRightbar ? (
           currentUserIsModerator ? (
             <ModeratorRightbar />

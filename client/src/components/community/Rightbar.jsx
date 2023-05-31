@@ -42,14 +42,14 @@ const Rightbar = () => {
 
   if (!communityData) {
     return (
-      <div className="w-3/12 flex justify-center h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded">
+      <div>
         <CommonLoading />
       </div>
     );
   }
 
   return (
-    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded overflow-y-auto">
+    <div className="sticky top-0 h-screen w-1/4 bg-gray-200 right-0">
       <div className="bg-white rounded-md">
         <div className="flex justify-between">
           <h2 className="text-lg font-bold mb-4">{name}</h2>

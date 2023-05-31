@@ -74,7 +74,7 @@ const MainSection = () => {
   }
 
   return (
-    <div className="w-6/12 px-10 py-5">
+    <div className="w-6/12 bg-gray-100 px-4 py-2">
       <div className="flex flex-col mt-4">
         <ul className="flex border-b">
           <li

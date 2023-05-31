@@ -55,13 +55,13 @@ const MainSection = ({ userData }) => {
 
   if (isLoading) {
     return (
-      <div className="w-6/12 flex items-center justify-center">
+      <div>
         <CommonLoading />
       </div>
     );
   }
   return (
-    <div className="w-6/12 px-10 py-5">
+    <div>
       <div>{memoizedPosts}</div>
 
       {posts.length > 0 && posts.length < totalPosts && (
@@ -72,7 +72,7 @@ const MainSection = ({ userData }) => {
       )}
 
       {posts.length === 0 && (
-        <div className="text-gray-500 text-center py-10">
+        <div className="">
           No posts to show. Join a community and post something.
         </div>
       )}

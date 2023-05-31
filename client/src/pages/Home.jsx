@@ -4,7 +4,11 @@ import MainSection from "../components/home/MainSection";
 const Home = () => {
   const userData = useSelector((state) => state.auth?.userData);
 
-  return <MainSection userData={userData} />;
+  return (
+    <div className="flex-grow">
+      <MainSection userData={userData} />
+    </div>
+  );
 };
 
 export default Home;

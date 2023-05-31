@@ -2,7 +2,7 @@ import ModeratorProfile from "./ModeratorProfile";
 
 const Rightbar = () => {
   return (
-    <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded">
+    <div className="sticky top-0 h-screen w-1/4 bg-gray-200 right-0">
       <ModeratorProfile />
     </div>
   );
