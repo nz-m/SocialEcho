@@ -1,18 +1,19 @@
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/SocialEcho.png";
-import axios from "axios";
 import { useState } from "react";
 import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
-import { HiX } from "react-icons/hi";
 import { IoIosArrowRoundBack } from "react-icons/io";
-const BASE_URL = process.env.REACT_APP_API_URL;
+import { signInAction } from "../redux/actions/adminActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminSignIn = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [signingIn, setSigningIn] = useState(false);
+
+  const signInError = useSelector((state) => state.admin?.signInError);
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -29,17 +30,11 @@ const AdminSignIn = () => {
       username: username,
       password: password,
     };
-    axios
-      .post(`${BASE_URL}/admin/signin`, data)
-      .then((res) => {
-        setSigningIn(false);
-        localStorage.setItem("admin", JSON.stringify(res.data));
-        navigate("/admin");
-      })
-      .catch((err) => {
-        setError(err.response.data.message);
-        setSigningIn(false);
-      });
+
+    dispatch(signInAction(data)).then(() => {
+      setSigningIn(false);
+      navigate("/admin");
+    });
   };
 
   return (
@@ -70,15 +65,9 @@ const AdminSignIn = () => {
                 aria-label="Password"
               />
             </div>
-            {error && (
+            {signInError && (
               <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md relative mt-4 flex items-center justify-between">
-                <span className="block sm:inline">{error}</span>
-                <button
-                  className="absolute top-0 bottom-0 right-0 px-4 py-3"
-                  onClick={() => setError(null)}
-                >
-                  <HiX />
-                </button>
+                <span className="block sm:inline">{signInError}</span>
               </div>
             )}
 
