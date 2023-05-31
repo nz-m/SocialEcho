@@ -20,14 +20,14 @@ const Navbar = ({ userData }) => {
     setLoggingOut(false);
   };
   return (
-    <nav className="flex items-center justify-between p-2 bg-white border-b border-gray-200">
+    <nav className="flex items-center justify-between p-2 bg-white border-b border-gray-200 sticky top-0 mx-40">
       <div className="flex items-center">
         <Link to="/" className="w-36 h-full object-contain">
           <img src={Logo} alt="" />
         </Link>
       </div>
       <Search />
-      <div className="relative">
+      <div className="relative z-30 ">
         <img
           src={userData.avatar}
           alt="profile"

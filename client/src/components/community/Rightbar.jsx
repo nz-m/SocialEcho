@@ -49,7 +49,7 @@ const Rightbar = () => {
   }
 
   return (
-    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded">
+    <div className="w-3/12 h-[84vh] bg-white sticky top-24 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded overflow-y-auto">
       <div className="bg-white rounded-md">
         <div className="flex justify-between">
           <h2 className="text-lg font-bold mb-4">{name}</h2>
@@ -105,9 +105,9 @@ const Rightbar = () => {
           }
         </div>
         {rules && rules.length > 0 && (
-          <div className="text-slate-900 mb-4">
+          <div className="text-slate-900 mb-4 ">
             <span className="font-bold">Community Guidelines:</span>
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-2 ">
               {rules.map((rule) => (
                 <li key={rule._id} className="flex items-start gap-2 ">
                   <HiOutlineCheckBadge className="text-lg flex-shrink-0 mt-1" />
