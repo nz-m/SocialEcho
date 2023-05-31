@@ -248,6 +248,7 @@ const addModerator = async (req, res) => {
       return res.status(400).json({ message: "Already a moderator" });
     }
     community.moderators.push(moderatorId);
+    community.members.push(moderatorId);
     await community.save();
     res.status(200).json({ message: "Moderator added" });
   } catch (error) {
@@ -259,7 +260,6 @@ const addModerator = async (req, res) => {
 const removeModerator = async (req, res) => {
   try {
     const { communityId, moderatorId } = req.query;
-    console.log(communityId, moderatorId);
 
     const community = await Community.findById(communityId);
     if (!community) {
@@ -274,6 +274,10 @@ const removeModerator = async (req, res) => {
     community.moderators = community.moderators.filter(
       (mod) => mod.toString() !== moderatorId
     );
+    community.members = community.members.filter(
+      (mod) => mod.toString() !== moderatorId
+    );
+
     await community.save();
     res.status(200).json({ message: "Moderator removed" });
   } catch (error) {
