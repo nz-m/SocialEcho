@@ -50,7 +50,7 @@ const Logs = () => {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
+    <div className="bg-gray-100 flex flex-col items-center justify-center">
       <div className="bg-white p-4 shadow-md rounded relative xl:min-w-[1200px] lg:min-w-[1000px] md:min-w-[800px]">
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-medium bg-white sticky top-0 left-0 shadow-2xl shadow-[#F3F8FF] p-2 my-2 rounded">

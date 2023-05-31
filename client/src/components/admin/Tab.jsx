@@ -18,7 +18,7 @@ const Tab = ({ activeTab, handleTabClick }) => {
   };
 
   return (
-    <div className="border-b border-gray-200">
+    <div className="border-b border-gray-200 ">
       <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
         <li className="mr-2">
           <span
