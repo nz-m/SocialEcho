@@ -43,7 +43,7 @@ const postSchema = new Schema(
   }
 );
 
-postSchema.index({ body: "text" });
+postSchema.index({ content: "text" });
 
 postSchema.pre("remove", async function (next) {
   try {

@@ -6,7 +6,6 @@ const search = async (req, res) => {
   try {
     const searchQuery = req.query.q;
     const userId = req.userId;
-
     const communities = await Community.find({ members: userId }).distinct(
       "_id"
     );
@@ -23,7 +22,7 @@ const search = async (req, res) => {
         community: { $in: communities },
         $text: { $search: searchQuery },
       })
-        .select("_id body")
+        .select("_id content")
         .populate("user", "name avatar")
         .populate("community", "name")
         .lean()
@@ -39,8 +38,8 @@ const search = async (req, res) => {
     ]);
 
     posts.forEach((post) => {
-      if (post.body.length > 30) {
-        post.body = post.body.substring(0, 30) + "...";
+      if (post.content.length > 30) {
+        post.content = post.content.substring(0, 30) + "...";
       }
     });
 
