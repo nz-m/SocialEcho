@@ -37,7 +37,7 @@ const MyCommunities = () => {
   }
 
   return (
-    <div className="flex flex-wrap justify-center w-6/12 px-10 py-6">
+    <div className="col-span-2 bg-white mt-6 border rounded-md">
       {communityCards}
     </div>
   );

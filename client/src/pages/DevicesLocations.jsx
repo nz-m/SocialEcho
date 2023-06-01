@@ -55,7 +55,7 @@ const DevicesLocations = () => {
   }
 
   return (
-    <div className="flex-1">
+    <div className="col-span-2 bg-white mt-6 border rounded-md">
       <PrimaryDevicesLocations contextAuthData={contextAuthData} />
 
       <TrustedDevicesLocations

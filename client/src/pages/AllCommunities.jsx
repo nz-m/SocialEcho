@@ -18,7 +18,7 @@ const AllCommunities = () => {
     return <CommonLoading />;
   }
   return (
-    <div className="grid grid-cols-2 gap-4 w-6/12 px-10 py-6">
+    <div className="col-span-2 bg-white mt-6 border rounded-md">
       {notJoinedCommunities?.map((community) => (
         <CommunityCard key={community._id} community={community} />
       ))}

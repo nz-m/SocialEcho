@@ -74,59 +74,57 @@ const MainSection = () => {
   }
 
   return (
-    <div className="w-6/12 bg-gray-100 px-4 py-2">
-      <div className="flex flex-col mt-4">
-        <ul className="flex border-b">
-          <li
-            className={`${
-              activeTab === "All posts"
-                ? "border-blue-500  text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            } flex-1 cursor-pointer text-center py-4 px-1 border-b-2 font-medium`}
-            onClick={() => setActiveTab("All posts")}
-          >
-            All posts
-          </li>
-          <li
-            className={`${
-              activeTab === "You're following"
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            } flex-1 cursor-pointer text-center py-4 px-1 border-b-2 font-medium`}
-            onClick={() => setActiveTab("You're following")}
-          >
-            You're following
-          </li>
-        </ul>
-        <div className="mt-4 flex flex-col gap-4">
-          {activeTab === "All posts" && (
-            <>
-              <div className="mb-4">
-                <PostForm
-                  communityId={communityData._id}
-                  communityName={communityData.name}
-                />
-              </div>
-              {postError && <div className="text-red-500">{postError}</div>}
+    <div className="flex flex-col mt-4">
+      <ul className="flex border-b">
+        <li
+          className={`${
+            activeTab === "All posts"
+              ? "border-blue-500  text-blue-600"
+              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+          } flex-1 cursor-pointer text-center py-4 px-1 border-b-2 font-medium`}
+          onClick={() => setActiveTab("All posts")}
+        >
+          All posts
+        </li>
+        <li
+          className={`${
+            activeTab === "You're following"
+              ? "border-blue-500 text-blue-600"
+              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+          } flex-1 cursor-pointer text-center py-4 px-1 border-b-2 font-medium`}
+          onClick={() => setActiveTab("You're following")}
+        >
+          You're following
+        </li>
+      </ul>
+      <div className="mt-4 flex flex-col gap-4">
+        {activeTab === "All posts" && (
+          <>
+            <div className="mb-4">
+              <PostForm
+                communityId={communityData._id}
+                communityName={communityData.name}
+              />
+            </div>
+            {postError && <div className="text-red-500">{postError}</div>}
 
-              <div>{memoizedCommunityPosts}</div>
-              {communityPosts.length < totalCommunityPosts && (
-                <div className="flex justify-center">
-                  <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={handleLoadMore}
-                    disabled={isLoadMoreLoading}
-                  >
-                    {isLoadMoreLoading ? "Loading..." : "Load More"}
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-          {activeTab === "You're following" && (
-            <FollowingUsersPosts communityData={communityData} />
-          )}
-        </div>
+            <div>{memoizedCommunityPosts}</div>
+            {communityPosts.length < totalCommunityPosts && (
+              <div className="flex justify-center">
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={handleLoadMore}
+                  disabled={isLoadMoreLoading}
+                >
+                  {isLoadMoreLoading ? "Loading..." : "Load More"}
+                </button>
+              </div>
+            )}
+          </>
+        )}
+        {activeTab === "You're following" && (
+          <FollowingUsersPosts communityData={communityData} />
+        )}
       </div>
     </div>
   );

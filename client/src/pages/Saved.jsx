@@ -13,7 +13,7 @@ const Saved = () => {
   const savedPosts = useSelector((state) => state.posts?.savedPosts);
 
   return (
-    <div className="w-6/12 px-10 py-5">
+    <div className="col-span-2 bg-white mt-6 border rounded-md">
       <div className="flex flex-col mb-3">
         {savedPosts && savedPosts.length > 0 ? (
           <div className="flex flex-col items-center">

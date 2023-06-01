@@ -26,8 +26,12 @@ const CommunityHome = () => {
 
   return (
     <>
-      <CommunityMainSection />
-      <CommunityRightbar />
+      <div className="col-span-2 bg-white mt-6 border rounded-md">
+        <CommunityMainSection />
+      </div>
+      <div className="col-span-1 bg-white sticky top-20 border h-screen-20 p-5 rounded-md">
+        <CommunityRightbar />
+      </div>
     </>
   );
 };

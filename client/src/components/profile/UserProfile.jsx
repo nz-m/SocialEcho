@@ -31,11 +31,9 @@ const UserProfile = ({ userData }) => {
   return (
     <>
       {loading ? (
-        <div className="w-6/12 flex items-center justify-center h-screen">
-          <CommonLoading />
-        </div>
+        <CommonLoading />
       ) : (
-        <div className="w-6/12 px-10 py-6">
+        <>
           <OwnProfileCard user={user} />
           <SelfInfoCard user={user} />
 
@@ -46,7 +44,7 @@ const UserProfile = ({ userData }) => {
           ) : (
             postToShow
           )}
-        </div>
+        </>
       )}
     </>
   );

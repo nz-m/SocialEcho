@@ -33,8 +33,8 @@ const Leftbar = () => {
   }, [visibleCommunities]);
 
   return (
-    <div className="sticky top-20 h-screen w-1/4 bg-gray-200">
-      <div className="flex flex-col h-full justify-between">
+    <div className="col-span-1 bg-white sticky top-20 border h-screen-20 p-5 rounded-md">
+      <div className="flex flex-col justify-between">
         <div className="flex flex-col items-start gap-4">
           <Link
             className="flex items-center gap-2 text-lg font-medium"
