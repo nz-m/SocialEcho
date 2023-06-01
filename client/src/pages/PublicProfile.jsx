@@ -84,7 +84,7 @@ const PublicProfile = () => {
   } = userProfile;
 
   return (
-    <div className="w-6/12 px-10 py-5">
+    <div className="w-full py-7 col-span-2">
       <div className="bg-white px-6 py-6 rounded-xl shadow-2xl shadow-[#F3F8FF]">
         <div className=" flex flex-col items-center justify-center bg-white py-6">
           <div className="relative">

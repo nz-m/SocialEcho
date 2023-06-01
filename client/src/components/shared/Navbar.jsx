@@ -20,18 +20,19 @@ const Navbar = ({ userData }) => {
     setLoggingOut(false);
   };
   return (
-    <nav className="flex items-center p-2 bg-white border-b border sticky w-9/12 mx-auto sticky top-0 z-10">
-      <div className="w-1/3">
-        <Link to="/" className="w-24 h-24 object-contain">
-          <img src={Logo} alt="" />
+
+ <nav className="flex items-center justify-between bg-white px-48 p-2 border-b border sticky top-0 z-10">
+    
+        <Link to="/">
+          <img className="w-36" src={Logo} alt="" />
         </Link>
-      </div>
+    
 
-      <div className="w-2/3">
+  
         <Search />
-      </div>
+    
 
-      <div className="w-1/3">
+      <div className="">
         <img
           src={userData.avatar}
           alt="profile"
@@ -67,6 +68,8 @@ const Navbar = ({ userData }) => {
         )}
       </div>
     </nav>
+ 
+   
   );
 };
 

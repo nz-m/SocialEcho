@@ -20,7 +20,7 @@ const Following = () => {
   }, [dispatch]);
 
   return (
-    <div className="col-span-2 bg-white mt-6 border rounded-md">
+    <div className="md:h-screen mt-6 col-span-2 bg-white  px-4 rounded-md">
       {loading ? (
         <div className="flex items-center justify-center h-screen">
           <CommonLoading />

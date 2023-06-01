@@ -49,10 +49,10 @@ const EditProfileForm = () => {
   };
 
   return (
-    <div className="flex bg-slate-50 justify-center items-center md:h-screen shadow-2xl shadow-[#F3F8FF] rounded-lg">
+    <div className="flex bg-white justify-center pt-10 md:h-screen shadow-2xl shadow-[#F3F8FF] rounded-lg col-span-2 w-full mt-6 mx-auto ">
       <form
         onSubmit={handleSubmit}
-        className="mx-auto bg-white  rounded-lg px-8 py-7 shadow-2xl shadow-[#F3F8FF]"
+        className=""
       >
         <div className="mb-2 py-2">
           <button onClick={() => navigate(-1)} className="text-blue-500">

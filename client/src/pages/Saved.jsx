@@ -13,7 +13,7 @@ const Saved = () => {
   const savedPosts = useSelector((state) => state.posts?.savedPosts);
 
   return (
-    <div className="col-span-2 bg-white mt-6 border rounded-md">
+    <div className=" bg-white mt-6 col-span-2 border rounded-md md:h-screen">
       <div className="flex flex-col mb-3">
         {savedPosts && savedPosts.length > 0 ? (
           <div className="flex flex-col items-center">
@@ -22,7 +22,7 @@ const Saved = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center text-gray-500 font-medium">
+          <div className="text-center text-gray-500 font-medium mt-6">
             You have not saved any posts yet.
           </div>
         )}

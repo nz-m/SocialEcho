@@ -12,7 +12,7 @@ const PublicProfileCard = ({ user }) => {
   return (
     <Link
       to={`/user/${user._id}`}
-      className="bg-white rounded-lg shadow-2xl shadow-[#F3F8FF] px-4 py-4 cursor-pointer"
+      className="bg-white border border-dashed border-slate-500 rounded-lg shadow-2xl w-full shadow-[#F3F8FF] px-4 py-4 cursor-pointer"
     >
       <div className="flex gap-3">
         <img
@@ -35,7 +35,7 @@ const PublicProfileCard = ({ user }) => {
           <p className="font-semibold text-gray-500">Following Since</p>
           <p>{followingSince}</p>
         </div>
-        <RiUserShared2Line className="text-lg text-white group-hover:text-primary" />
+        <RiUserShared2Line className=" text-white rounded-lg bg-primary w-9 h-9 px-1 py-1 hover:text-primary hover:bg-white hover:border hover:border-dashed hover:border-slate-500" />
       </div>
     </Link>
   );
