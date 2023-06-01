@@ -22,7 +22,7 @@ const Navbar = ({ userData }) => {
   return (
     <nav className="flex items-center p-2 bg-white border-b border sticky w-9/12 mx-auto sticky top-0 z-10">
       <div className="w-1/3">
-        <Link to="/" className="w-36 h-full object-contain">
+        <Link to="/" className="w-24 h-24 object-contain">
           <img src={Logo} alt="" />
         </Link>
       </div>
