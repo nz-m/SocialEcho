@@ -22,14 +22,19 @@ const CommunityHome = () => {
     }
   }, [isAuthorized, navigate, communityName]);
 
-  if (!joinedCommunities) return <CommonLoading />;
+  if (!joinedCommunities)
+    return (
+      <div className="col-span-3 flex justify-center items-center h-screen">
+        <CommonLoading />
+      </div>
+    );
 
   return (
     <>
-      <div className="col-span-2 bg-white mt-6 border rounded-md">
+      <div className="main-section">
         <CommunityMainSection />
       </div>
-      <div className="col-span-1 bg-white sticky top-20 border h-screen-20 p-5 rounded-md">
+      <div className="rightbar overflow-y-auto">
         <CommunityRightbar />
       </div>
     </>

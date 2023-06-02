@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getModProfileAction } from "../../redux/actions/authActions";
-import { MdOutlineMail, MdJoinInner } from "react-icons/md";
+import CommonLoading from "../loader/CommonLoading";
 
 const ModeratorProfile = () => {
   const dispatch = useDispatch();
@@ -10,7 +10,12 @@ const ModeratorProfile = () => {
   }, [dispatch]);
 
   const moderator = useSelector((state) => state.moderation?.modProfile);
-  if (!moderator) return null; // later add a loading spinner
+  if (!moderator)
+    return (
+      <div className="flex justify-center items-center">
+        <CommonLoading />
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-2 items-center ">
@@ -23,19 +28,8 @@ const ModeratorProfile = () => {
         <span className="font-bold">{moderator.name}</span>
       </p>
 
-      <p className="flex items-center gap-2">
-        <span className="font-bold">
-          <MdOutlineMail />
-        </span>{" "}
-        {moderator.email}
-      </p>
-      <p className="flex items-center gap-2">
-        <span className="font-bold">
-          <MdJoinInner />
-        </span>{" "}
-        {moderator.createdAt}
-      </p>
-      <p>Other infos here, will be added later</p>
+      <p>{moderator.email}</p>
+      <p>Joined: {moderator.createdAt}</p>
     </div>
   );
 };

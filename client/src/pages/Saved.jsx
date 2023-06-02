@@ -13,8 +13,12 @@ const Saved = () => {
   const savedPosts = useSelector((state) => state.posts?.savedPosts);
 
   return (
-    <div className=" bg-white mt-6 col-span-2 border rounded-md md:h-screen">
+    <div className="main-section">
       <div className="flex flex-col mb-3">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center border-b py-3">
+          Your saved posts
+        </h2>
+
         {savedPosts && savedPosts.length > 0 ? (
           <div className="flex flex-col items-center">
             {savedPosts.reverse().map((post) => (

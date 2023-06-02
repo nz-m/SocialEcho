@@ -67,8 +67,8 @@ const CommunityManagement = () => {
   return (
     <div className="flex gap-5 h-screen w-full mt-3 ">
       {/* Left column */}
-      <div className="flex flex-col w-1/4 bg-slate-50 shadow-inner rounded ">
-        <h1 className="text-2xl font-bold p-4">Communities</h1>
+      <div className="flex flex-col w-1/4 bg-slate-50 shadow-inner rounded-md">
+        <h1 className="text-lg font-bold p-4">Communities</h1>
         <div className="flex flex-col overflow-y-auto">
           {communities.map((community) => (
             <div
@@ -95,9 +95,7 @@ const CommunityManagement = () => {
           <span>Loading...</span>
         ) : selectedCommunityData ? (
           <>
-            <h1 className="text-2xl font-bold">
-              {selectedCommunityData.name}
-            </h1>
+            <h1 className="font-bold">{selectedCommunityData.name}</h1>
 
             {isUpdating && (
               <div className="bg-green-100 text-green-800 p-2 mb-4 rounded">
@@ -112,21 +110,17 @@ const CommunityManagement = () => {
             <div className="flex flex-row p-4">
               {/* Moderators list */}
               <div className="flex flex-col w-1/2">
-                <h2 className="text-lg font-medium mb-2">Moderators</h2>
+                <h2 className="font-medium mb-2">Moderators</h2>
                 <div className="flex flex-col">
                   {selectedCommunityData.moderators?.map((moderator) => (
                     <div
                       key={moderator._id}
                       className={`p-2 cursor-pointer  ${
-                        selectedModerator?._id === moderator._id
-                          ? ""
-                          : ""
+                        selectedModerator?._id === moderator._id ? "" : ""
                       }`}
                       onClick={() => handleModeratorSelect(moderator)}
                     >
-                      <span className="text-lg font-medium">
-                        {moderator.name}
-                      </span>
+                      <span className="font-medium">{moderator.name}</span>
                       <button
                         disabled={isUpdating}
                         className={`ml-2 bg-red-500 px-4 py-2 text-white hover:bg-white rounded-md hover:border-red-500 hover:border hover:text-red-700 ${
@@ -143,10 +137,10 @@ const CommunityManagement = () => {
 
               {/* Add moderator form */}
               <div className="flex flex-col w-1/2">
-                <h2 className="text-lg font-medium mb-2">Add Moderator</h2>
+                <h2 className="font-medium mb-2">Add Moderator</h2>
                 <div className="flex flex-row">
                   <select
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                     value={newModerator}
                     onChange={(e) => setNewModerator(e.target.value)}
                   >
@@ -165,7 +159,7 @@ const CommunityManagement = () => {
                         (moderator) => moderator._id === newModerator
                       )
                     }
-                    className={`p-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-700 ${
+                    className={`p-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 ${
                       !newModerator ||
                       isUpdating ||
                       selectedCommunityData.moderators?.find(
@@ -184,7 +178,7 @@ const CommunityManagement = () => {
           </>
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
-            <span className="text-lg font-medium text-gray-400">
+            <span className="font-medium text-gray-400">
               Select a community to view details
             </span>
           </div>

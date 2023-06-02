@@ -12,7 +12,7 @@ const CommunityCard = ({ community }) => {
     }));
   };
   return (
-    <div className="shadow-2xl shadow-[#F3F8FF] bg-white px-4 py-2 w-full rounded-lg flex justify-between items-center">
+    <div className="px-6 py-6 rounded-md border bg-white mb-6 flex justify-between">
       <div className="w-full flex items-center ">
         <img
           className="object-cover rounded-full w-10 h-10 mr-4"

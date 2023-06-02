@@ -20,13 +20,20 @@ const ReportedPost = () => {
 
   const post = useSelector((state) => state.posts?.post);
 
-  if (!post) return <CommonLoading />;
+  if (!post)
+    return (
+      <div className="col-span-3 flex justify-center items-center h-screen">
+        <CommonLoading />
+      </div>
+    );
   return (
     <>
-      <div className="w-6/12">
+      <div className="main-section">
         <ViewReportedPost post={post} />
       </div>
-      <CommentSidebar comments={post.comments} />
+      <div className="rightbar">
+        <CommentSidebar comments={post.comments} />
+      </div>
     </>
   );
 };

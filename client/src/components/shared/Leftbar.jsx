@@ -8,6 +8,7 @@ import {
   HiOutlineRectangleStack,
   HiOutlineTag,
 } from "react-icons/hi2";
+import { IoIosPeople } from "react-icons/io";
 
 const Leftbar = () => {
   const dispatch = useDispatch();
@@ -33,25 +34,25 @@ const Leftbar = () => {
   }, [visibleCommunities]);
 
   return (
-    <div className="col-span-1 bg-white sticky top-20  h-[86vh] p-5 rounded-md">
-      <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-col items-start gap-4">
+    <div className="leftbar">
+      <div className="flex flex-col justify-start items-center">
+        <div className="flex flex-col items-start gap-4 w-full p-5">
           <Link
-            className="flex items-center gap-2 text-lg font-medium"
+            className="flex items-center gap-2 text-lg font-medium hover:text-primary"
             to="/home"
           >
             <HiOutlineHome className="text-xl" />
             <p>Home</p>
           </Link>
           <Link
-            className="flex items-center gap-2 text-lg font-medium"
+            className="flex items-center gap-2 text-lg font-medium hover:text-primary"
             to="/profile"
           >
             <HiOutlineUserCircle className="text-xl" />
             <p>Profile</p>
           </Link>
           <Link
-            className="flex items-center gap-2 text-lg font-medium"
+            className="flex items-center gap-2 text-lg font-medium hover:text-primary"
             to="/saved"
           >
             <HiOutlineTag className="text-xl" />
@@ -60,7 +61,7 @@ const Leftbar = () => {
 
           {user && user.role === "general" && (
             <Link
-              className="flex items-center gap-2 text-lg font-medium"
+              className="flex items-center gap-2 text-lg font-medium hover:text-primary"
               to="/following"
             >
               <HiOutlineRectangleStack className="text-xl" />
@@ -68,23 +69,39 @@ const Leftbar = () => {
             </Link>
           )}
 
+          <hr className="w-full my-4 border-gray-300" />
+
           {communityLinks && communityLinks.length > 0 ? (
             <div>
-              <div className="w-full flex gap-12">
-                <h3 className="mb-2 text-base font-semibold">Communities </h3>
-                <Link className="flex gap-2" to="/my-communities">
-                  <p className="text-primary text-sm"> See all</p>
-                  <p className="bg-primary px-2 py-2 w-5 h-5 flex justify-center items-center -mt-3 rounded-full text-white text-[10px]">
-                    {joinedCommunities.length}
-                  </p>
-                </Link>
-              </div>
-              <ul>
+              <h3
+                className="mb-4 text-gray-700 font-semibold
+                flex items-center justify-start w-full"
+              >
+                Communities
+                <span className="ml-3">
+                  <IoIosPeople />
+                </span>
+              </h3>
+              <ul className="w-full text-gray-500">
                 {communityLinks.map((communityLink) => (
                   <li key={communityLink.href}>
-                    <Link to={communityLink.href}>{communityLink.label}</Link>
+                    <Link
+                      className="flex items-center hover:bg-gray-100 hover:rounded-md px-2 py-1"
+                      to={communityLink.href}
+                    >
+                      {communityLink.label}
+                    </Link>
                   </li>
                 ))}
+
+                <li>
+                  <Link
+                    className="flex items-center text-sm font-semibold hover:bg-gray-100 hover:rounded px-2 py-1"
+                    to="/my-communities"
+                  >
+                    See all ({joinedCommunities.length})
+                  </Link>
+                </li>
               </ul>
             </div>
           ) : (

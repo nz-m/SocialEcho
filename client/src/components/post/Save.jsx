@@ -54,7 +54,7 @@ const Save = ({ postId }) => {
   return (
     <button
       onClick={saved ? handleUnsave : handleSave}
-      className="flex items-center text-xl gap-1"
+      className="flex items-center gap-1"
       disabled={isSaving}
     >
       <HiOutlineFolderOpen />

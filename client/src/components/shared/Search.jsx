@@ -4,7 +4,6 @@ import axios from "axios";
 import debounce from "lodash/debounce";
 import JoinModal from "../modals/JoinModal";
 import { MoonLoader } from "react-spinners";
-import { BsSearch } from "react-icons/bs";
 import { MdClear } from "react-icons/md";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
@@ -46,7 +45,7 @@ const Search = () => {
             setJoinedCommunity(joinedCommunity);
             setLoading(false);
           })
-          .catch((err) => {
+          .catch(() => {
             setLoading(false);
           });
       }, 800),
@@ -69,6 +68,7 @@ const Search = () => {
     setInitialValue();
     setInputValue("");
   };
+
   useEffect(() => {
     return () => {
       setInitialValue();
@@ -82,16 +82,26 @@ const Search = () => {
 
   return (
     <div>
-      <input
-        type="text"
-        id="search"
-        value={inputValue}
-        onChange={handleInputChange}
-        placeholder="Try searching for people, communities, and posts."
-        className="h-10 py-1 bg-white border w-[660px] rounded-full text-sm shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-500 transition duration-300 pl-3"
-        aria-label="Search"
-        autoComplete="off"
-      />
+      <div className="relative">
+        <input
+          type="text"
+          id="search"
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder="Try searching for people, communities, and posts."
+          className="h-10 py-1 bg-white border w-[660px] rounded-full text-sm shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-500 transition duration-300 pl-3 pr-10"
+          aria-label="Search"
+          autoComplete="off"
+        />
+        {inputValue !== "" && (
+          <button
+            className="absolute top-0 right-0 h-full w-10 flex items-center justify-center text-gray-400 hover:text-gray-600"
+            onClick={clearValues}
+          >
+            <MdClear />
+          </button>
+        )}
+      </div>
 
       {inputValue !== "" && (
         <div

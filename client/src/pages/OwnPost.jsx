@@ -34,7 +34,12 @@ const OwnPost = () => {
     }
   }, [isAuthorized, navigate]);
 
-  if (!post || !joinedCommunities) return <CommonLoading />;
+  if (!post || !joinedCommunities)
+    return (
+      <div className="col-span-3 flex justify-center items-center h-screen">
+        <CommonLoading />
+      </div>
+    );
 
   return (
     <>

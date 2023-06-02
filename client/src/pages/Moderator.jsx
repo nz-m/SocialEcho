@@ -17,7 +17,12 @@ const Moderator = () => {
     }
   }, [userRole, navigate]);
 
-  if (userRole !== "moderator") return <CommonLoading />;
+  if (userRole !== "moderator")
+    return (
+      <div className="col-span-3 flex items-center justify-center h-screen">
+        <CommonLoading />
+      </div>
+    );
 
   return (
     <>

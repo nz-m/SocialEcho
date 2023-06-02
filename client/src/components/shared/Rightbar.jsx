@@ -9,7 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import JoinModal from "../modals/JoinModal";
 import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { BsPersonPlusFill } from "react-icons/bs";
-import { IoIosPeople } from "react-icons/io";
+import { IoIosPeople, IoMdPeople } from "react-icons/io";
 import placeholder from "../../assets/placeholder.png";
 
 const Rightbar = () => {
@@ -77,7 +77,7 @@ const Rightbar = () => {
   const currentLocation = useLocation().pathname;
 
   return (
-    <div className="col-span-1 bg-white sticky top-20  h-[86vh] p-5 rounded-md">
+    <div className="rightbar">
       {currentLocation !== "/communities" && (
         <div>
           <div className="flex items-end justify-between mb-4">
@@ -85,12 +85,9 @@ const Rightbar = () => {
             {remainingCount > 0 && (
               <Link
                 to="/communities"
-                className=" text-blue-500 font-medium flex text-xs"
+                className="text-gray-700 font-medium flex text-xs"
               >
-                See More
-                <p className="bg-primary px-2 py-2 w-5 h-5 flex justify-center items-center -mt-3 rounded-full text-white text-[10px]">
-                  {remainingCount}
-                </p>
+                See More ({remainingCount})
               </Link>
             )}
           </div>
@@ -115,7 +112,10 @@ const Rightbar = () => {
                   <div className="text-base font-medium flex flex-col">
                     <p> {community.name}</p>
 
-                    <p className="text-xs text-gray-400">3.2k</p>
+                    <p className="text-xs text-gray-500 flex items-center gap-1">
+                      <IoMdPeople />
+                      {community.members.length}
+                    </p>
                   </div>
                 </div>
 
@@ -125,9 +125,9 @@ const Rightbar = () => {
                         hover:bg-primary 
                          rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
                 >
-                  <p className="group-hover:text-white flex items-center  gap-2">
-                    Join
+                  <p className="group-hover:text-white flex items-center gap-2">
                     <IoIosPeople className="inline-block text-lg" />
+                    Join
                   </p>
                 </button>
                 <JoinModal
@@ -178,15 +178,15 @@ const Rightbar = () => {
                 disabled={followLoading[user._id]}
                 onClick={() => followUserHandler(user._id)}
                 className="text-primary border border-dashed border-blue-500
-                        hover:bg-primary 
+                        hover:bg-primary
                          rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
               >
                 {followLoading[user._id] ? (
                   <LoadingSpinner />
                 ) : (
                   <p className="group-hover:text-white flex items-center gap-2">
+                    <BsPersonPlusFill className="inline-block" />
                     Follow
-                    <BsPersonPlusFill className="inline-block text-lg" />
                   </p>
                 )}
               </button>

@@ -20,7 +20,7 @@ const SavedPost = ({ post }) => {
   };
 
   return (
-    <div className="px-6 py-6 rounded-xl shadow-xl bg-white border border-gray-100">
+    <div className="px-6 py-6 rounded-md border bg-white mb-6">
       <p className="border border-dashed border-primary cursor-pointer px-2 py-2 w-7 h-7 flex justify-center items-center mb-3 rounded-full">
         <IoIosArrowBack
           className="text-primary text-xl font-semibold"

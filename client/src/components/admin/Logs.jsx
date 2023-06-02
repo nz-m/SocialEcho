@@ -6,7 +6,7 @@ import {
 } from "../../redux/actions/adminActions";
 import CurrentTime from "../shared/CurrentTime";
 import ButtonLoadingSpinner from "../loader/ButtonLoadingSpinner";
-import { BarLoader } from "react-spinners";
+import CommonLoading from "../loader/CommonLoading";
 import { FcRefresh } from "react-icons/fc";
 
 const Logs = () => {
@@ -46,7 +46,11 @@ const Logs = () => {
   }, [logs?.length]);
 
   if (loading || !logs) {
-    return <BarLoader />;
+    return (
+      <div className="flex items-center justify-center mt-5">
+        <CommonLoading />
+      </div>
+    );
   }
 
   return (

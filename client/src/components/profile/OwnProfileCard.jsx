@@ -4,7 +4,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { GrContactInfo } from "react-icons/gr";
 const OwnProfileCard = ({ user }) => {
   return (
-    <div className="bg-white rounded-lg  p-6 shadow-2xl shadow-[#F3F8FF]">
+    <div className="bg-white rounded-md p-6 border">
       <div className="flex flex-col justify-between items-center ">
         <div className="  flex flex-col justify-center items-center">
           <div className="relative">
@@ -23,7 +23,7 @@ const OwnProfileCard = ({ user }) => {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold text-center mt-5">{user.name}</h2>
+            <h2 className="text-lg font-bold text-center mt-5">{user.name}</h2>
             {user.bio ? (
               <p className="text-gray-600 flex items-center justify-center gap-2">
                 <GrContactInfo className="text-gray-500" />

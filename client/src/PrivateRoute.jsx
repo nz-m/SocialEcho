@@ -42,7 +42,7 @@ const PrivateRoute = ({ userData }) => {
   );
 
   return isAuthenticated(userData, accessToken) ? (
-    <div className="bg-background">
+    <div>
       <Navbar userData={userData} />
 
       <div className="grid grid-cols-4 gap-6 w-9/12 mx-auto">

@@ -17,10 +17,10 @@ const TopicConflictModal = ({
       }`}
     >
       <div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-0"></div>
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm mx-auto relative z-10">
+      <div className="bg-white rounded-md shadow-md p-8 w-2/4 mx-auto relative z-10">
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Message</h2>
-          <p className="text-gray-600 mb-8">
+          <p className="text-gray-600 mb-6 leading-6">
             Hi there! We noticed that your post in the{" "}
             <strong>{communityName}</strong> community may not be the best fit
             for that community. However, we think that your post could be a
@@ -28,7 +28,7 @@ const TopicConflictModal = ({
             Here are a few tips to help you improve your post and make it more
             successful:
           </p>
-          <ul className="text-left mb-6">
+          <ul className="text-left mb-6 leading-6">
             <li className="mb-2">
               Consider adding more detail or context to your post to help
               readers understand your perspective.
@@ -42,16 +42,16 @@ const TopicConflictModal = ({
               find your post more easily.
             </li>
           </ul>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 mb-6 leading-6">
             We appreciate your effort in creating this post, and we hope that
             these tips will help you improve it and make it more successful in
             the future. Thanks for being a part of our community!
           </p>
           <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             onClick={handleClose}
           >
-            I understand
+            Got it, thanks!
           </button>
         </div>
       </div>

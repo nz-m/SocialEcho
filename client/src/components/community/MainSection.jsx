@@ -67,7 +67,7 @@ const MainSection = () => {
 
   if (isLoading || !communityData || !communityPosts) {
     return (
-      <div className="w-6/12 flex items-center justify-center">
+      <div className="main-section flex items-center justify-center h-screen">
         <CommonLoading />
       </div>
     );
@@ -110,15 +110,13 @@ const MainSection = () => {
 
             <div>{memoizedCommunityPosts}</div>
             {communityPosts.length < totalCommunityPosts && (
-              <div className="flex justify-center">
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={handleLoadMore}
-                  disabled={isLoadMoreLoading}
-                >
-                  {isLoadMoreLoading ? "Loading..." : "Load More"}
-                </button>
-              </div>
+              <button
+                className="bg-primary hover:bg-blue-700 text-sm text-white font-semibold rounded-md w-full p-2 my-3"
+                onClick={handleLoadMore}
+                disabled={isLoadMoreLoading}
+              >
+                {isLoadMoreLoading ? "Loading..." : "Load More Posts"}
+              </button>
             )}
           </>
         )}

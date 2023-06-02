@@ -30,11 +30,11 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="px-6 py-6 rounded-xl shadow-xl bg-white shadow-[#F3F8FF] mb-6 font-sans">
+    <div className="px-6 py-6 rounded-md border bg-white mb-6 hover:shadow duration-300">
       <div className="flex items-start justify-between">
-        <div className="flex  gap-2">
+        <div className="flex gap-2">
           <img
-            className="rounded-full overflow-hidden"
+            className="rounded-md overflow-hidden"
             src={user.avatar}
             alt="user avatar"
             style={{ width: "50px" }}
@@ -42,16 +42,13 @@ const Post = ({ post }) => {
           />
           <div className="flex flex-col">
             {userData._id === user._id ? (
-              <Link
-                to="/profile"
-                className="text-base font-semibold capitalize"
-              >
+              <Link to="/profile" className="font-semibold capitalize">
                 {user.name}
               </Link>
             ) : (
               <Link
                 to={`/user/${user._id}`}
-                className="text-base font-semibold capitalize"
+                className="font-semibold capitalize"
               >
                 {user.name}
               </Link>
@@ -67,7 +64,9 @@ const Post = ({ post }) => {
         <p className="text-sm text-gray-500">{createdAt}</p>
       </div>
       <div>
-        <p className="text-md text-justify mt-2">{content}</p>
+        <p className="text-md text-justify mt-2 whitespace-normal break-words">
+          {content}
+        </p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <PhotoProvider
@@ -91,10 +90,9 @@ const Post = ({ post }) => {
           ) : (
             fileUrl && (
               <video
-                className="block mx-auto rounded-md shadow-md focus:outline-none"
+                className="block mx-auto rounded-md focus:outline-none max-w-full h-auto"
                 src={fileUrl}
                 controls
-                style={{ maxWidth: "100%", height: "auto" }}
               />
             )
           )}

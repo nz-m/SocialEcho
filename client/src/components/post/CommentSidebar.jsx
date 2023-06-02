@@ -17,14 +17,16 @@ const CommentSidebar = ({ comments }) => {
   };
 
   return (
-    <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg overflow-y-auto">
+    <div className="col-span-1 bg-white sticky top-20 h-[85vh] p-3 rounded-md border overflow-y-auto">
       {currentComments.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold mb-4">Recent Comments</h2>
+          <h2 className="font-semibold mb-4 text-center border-b py-3">
+            Recent Comments
+          </h2>
           {currentComments.map((comment) => (
             <div
               key={comment._id}
-              className="flex flex-col my-4 bg-white border border-dashed border-slate-200 px-3 py-3 rounded-lg"
+              className="flex flex-col bg-white p-3 border-b"
             >
               <div className="flex">
                 <img
@@ -33,26 +35,27 @@ const CommentSidebar = ({ comments }) => {
                   className="w-9 h-9 rounded-full mr-2"
                 />
 
-                <div className="-mt-1">
-                  <Link
-                    to={`/user/${comment.user._id}`}
-                    className="text-primary font-semibold"
-                  >
-                    {comment.user.name}
-                  </Link>
-                  <p className="text-gray-500 text-xs">{comment.createdAt}</p>
+                <div className="flex items-center">
+                  <span className="text-sm font-semibold hover:underline">
+                    <Link to={`/user/${comment.user._id}`}>
+                      {comment.user.name}
+                    </Link>
+                  </span>
+                  <p className="text-gray-500 text-xs ml-1">
+                    {comment.createdAt}
+                  </p>
                 </div>
               </div>
 
-              <p className="text-lg">{comment.content}</p>
+              <p className="text-sm mt-2 whitespace-normal break-words">
+                {comment.content}
+              </p>
             </div>
           ))}
 
           {currentComments.length < comments.length && (
             <button
-              className="text-primary border border-dashed border-blue-500
-            hover:bg-primary 
-             rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
+              className="text-primary text-sm font-semibold mt-3 w-full"
               onClick={handleLoadMore}
             >
               Load More

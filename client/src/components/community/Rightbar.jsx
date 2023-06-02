@@ -42,7 +42,7 @@ const Rightbar = () => {
 
   if (!communityData) {
     return (
-      <div>
+      <div className="flex justify-center">
         <CommonLoading />
       </div>
     );

@@ -1,3 +1,5 @@
+import React from "react";
+
 const InappropriatePost = ({
   showInappropriateContentModal,
   closeInappropriateContentModal,
@@ -29,14 +31,17 @@ const InappropriatePost = ({
 
         <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h2 className="text-lg font-bold mb-4">Inappropriate Content</h2>
+            <h2 className="text-lg font-bold mb-4 text-red-600">
+              Warning: Inappropriate Content
+            </h2>
             <p className="text-gray-700 mb-6">
-              Your {contentType} contains content that goes against our
-              community guidelines. Please review and adhere to our guidelines
-              to maintain a positive and respectful environment for all users.
+              Your {contentType} contains content that violates our community
+              guidelines. To maintain a positive and respectful environment for
+              all users, please remove the inappropriate content and ensure
+              compliance with our guidelines.
             </p>
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
               onClick={handleClose}
             >
               Close

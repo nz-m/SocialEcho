@@ -31,16 +31,20 @@ const UserProfile = ({ userData }) => {
   return (
     <>
       {loading ? (
-        <CommonLoading />
+        <div className="flex justify-center items-center h-screen">
+          <CommonLoading />
+        </div>
       ) : (
         <>
           <OwnProfileCard user={user} />
           <SelfInfoCard user={user} />
 
-          <h3 className="text-lg font-bold mb-4">Your most recent posts</h3>
+          <h3 className="text-lg font-semibold mb-4 text-gray-700 p-3 border-b">
+            Your most recent posts
+          </h3>
 
           {postToShow?.length === 0 ? (
-            <p className="text-gray-600">No posts available.</p>
+            <p className="text-gray-600 text-center">No posts available.</p>
           ) : (
             postToShow
           )}

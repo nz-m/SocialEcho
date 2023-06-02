@@ -5,7 +5,7 @@ const Profile = () => {
   const userData = useSelector((state) => state.auth?.userData);
 
   return (
-    <div className="col-span-2 bg-white mt-6 border rounded-md">
+    <div className="main-section">
       <UserProfile userData={userData} />
     </div>
   );

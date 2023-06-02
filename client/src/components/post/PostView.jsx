@@ -27,7 +27,6 @@ const PostView = ({ post, userData }) => {
     fileUrl,
     user,
     community,
-    createdAt,
     dateTime,
     comments,
     savedByCount,
@@ -59,17 +58,17 @@ const PostView = ({ post, userData }) => {
 
   if (loading) {
     return (
-      <div className="w-6/12 flex items-center justify-center h-screen">
+      <div className="main-section flex justify-center items-center">
         <CommonLoading />
       </div>
     );
   }
 
   return (
-    <div className="w-6/12 px-5 py-5 bg-white shadow-2xl shadow-[#F3F8FF] my-5 rounded-lg">
+    <div className="main-section border p-5 bg-white">
       <p className="border border-dashed border-primary cursor-pointer px-2 py-2 w-7 h-7 flex justify-center items-center mb-3 rounded-full">
         <IoIosArrowBack
-          className="text-primary text-xl font-semibold"
+          className="text-primary text-sm font-semibold"
           onClick={handleBack}
         />
       </p>
@@ -77,10 +76,9 @@ const PostView = ({ post, userData }) => {
       <div className="flex justify-between">
         <div className="flex gap-2">
           <img
-            className="rounded-full overflow-hidden"
+            className="rounded-md overflow-hidden w-10"
             src={user.avatar}
             alt="user avatar"
-            style={{ width: "50px" }}
             loading="lazy"
           />
           <div className="flex flex-col">
@@ -101,11 +99,12 @@ const PostView = ({ post, userData }) => {
             </Link>
           </div>
         </div>
-        <p>{createdAt}</p>
+
+        <span className="text-gray-500 text-sm self-center">{dateTime}</span>
       </div>
 
       <div>
-        <p className="text-lg mt-3">{content}</p>
+        <p className="mt-3">{content}</p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <PhotoProvider
@@ -119,7 +118,7 @@ const PostView = ({ post, userData }) => {
             >
               <PhotoView src={fileUrl}>
                 <img
-                  className="w-full h-auto rounded-xl mt-3 cursor-pointer"
+                  className="max-w-sm h-auto rounded-md mt-3 cursor-pointer"
                   src={fileUrl}
                   alt={content}
                   loading="lazy"
@@ -129,53 +128,47 @@ const PostView = ({ post, userData }) => {
           ) : (
             fileUrl && (
               <video
-                className="w-full h-auto rounded-xl mt-3"
+                className="max-w-sm h-auto rounded-md mt-3"
                 src={fileUrl}
                 controls
               />
             )
           )}
         </div>
-
         <div className="flex items-center justify-between mt-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center space-x-2">
             <Like post={post} />
-            <button className="flex items-center text-xl gap-1">
-              {" "}
+            <button className="flex items-center space-x-1">
               <HiOutlineChatBubbleOvalLeft />
-              {comments.length}
+              <span>{comments.length}</span>
             </button>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center space-x-2">
             <Save postId={post._id} />
             <span>
               Saved by {savedByCount} {savedByCount === 1 ? "person" : "people"}
             </span>
-            <span>{dateTime}</span>
-
             {isReported ? (
-              <button disabled className="flex items-center text-xl gap-1">
+              <button disabled className="flex items-center space-x-1">
                 <HiOutlineInformationCircle />
-                Reported
+                <span>Reported</span>
               </button>
             ) : (
               <button
                 onClick={reportHandler}
-                className="flex items-center text-xl gap-1"
+                className="flex items-center space-x-1"
               >
                 <HiOutlineInformationCircle />
-                Report
+                <span>Report</span>
               </button>
             )}
-
             {userData?._id === post.user._id && (
               <button
                 onClick={() => toggleModal(true)}
-                className="flex items-center text-xl gap-1"
+                className="flex items-center space-x-1"
               >
-                {" "}
                 <HiOutlineArchiveBox />
-                Delete
+                <span>Delete</span>
               </button>
             )}
             {showModal && (

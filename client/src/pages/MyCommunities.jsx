@@ -20,27 +20,20 @@ const MyCommunities = () => {
 
   const communityCards = useMemo(() => {
     return joinedCommunities?.map((community) => (
-      <div key={community._id} className="grid grid-cols-2 gap-5">
-        <JoinedCommunityCard
-          className="grid grid-cols-2 gap-5"
-          community={community}
-        />
+      <div key={community._id} className="mb-5 border bg-white rounded-md p-3">
+        <JoinedCommunityCard className="mb-5" community={community} />
       </div>
     ));
   }, [joinedCommunities]);
   if (loading) {
     return (
-      <div className="flex justify-center w-full h-full">
+      <div className="col-span-2 flex justify-center items-center h-screen">
         <CommonLoading />
       </div>
     );
   }
 
-  return (
-    <div className="col-span-2 bg-white mt-6 border rounded-md">
-      {communityCards}
-    </div>
-  );
+  return <div className="main-section">{communityCards}</div>;
 };
 
 export default MyCommunities;

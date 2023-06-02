@@ -184,7 +184,9 @@ const PostForm = ({ communityId, communityName }) => {
         </div>
 
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className={`bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
+            formData.loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           type="submit"
           disabled={formData.loading || (!formData.content && !formData.file)}
           style={{

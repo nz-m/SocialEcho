@@ -33,7 +33,7 @@ const FollowingUsersPosts = ({ communityData }) => {
   }, [followingUsersPosts]);
 
   return (
-    <div className="flex-grow h-full bg-gray-100">
+    <div className="main-section">
       {isLoading || !communityData ? (
         <div className="flex items-center justify-center">
           <CommonLoading />
@@ -41,9 +41,9 @@ const FollowingUsersPosts = ({ communityData }) => {
       ) : (
         <>
           {followingUsersPosts.length > 0 ? (
-            <div className="text-xl">{memoizedFollowingUsersPost}</div>
+            <div>{memoizedFollowingUsersPost}</div>
           ) : (
-            <div>
+            <div className="text-center text-gray-700">
               None of your following users have posted anything yet. Check back
               later!
             </div>
