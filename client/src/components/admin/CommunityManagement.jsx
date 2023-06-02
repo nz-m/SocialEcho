@@ -94,7 +94,10 @@ const CommunityManagement = () => {
       {/* Right column */}
       <div className="flex flex-col w-full bg-white rounded-md px-5 py-5 border-l">
         {isChangingCommunity ? (
-          <span>Loading...</span>
+            <div className='flex justify-center items-center h-screen'>
+              <span className="admin-loader"></span>
+            </div>
+
         ) : selectedCommunityData ? (
           <>
             <h1 className="font-bold text-lg border-b border-black pb-1 mb-2">
