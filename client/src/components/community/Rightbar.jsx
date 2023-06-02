@@ -90,7 +90,7 @@ const Rightbar = () => {
         {isModeratorUpdated && !isModeratorOfThisCommunity && (
           <button
             onClick={toggleLeaveModal}
-            className="px-4 shadow-lg shadow-red-50 py-1 border border-red-400 hover:text-white hover:bg-red-400 text-red-400 rounded-2xl my-2"
+            className="px-4 shadow-md shadow-red-50 text-sm py-1 border border-red-400 hover:text-white hover:bg-red-400 text-red-400 rounded-md flex justify-center items-center w-full my-2"
           >
             Leave Community
           </button>

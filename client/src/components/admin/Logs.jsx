@@ -104,8 +104,10 @@ const Logs = () => {
               </div>
               {logs.map((log) => (
                      <div key={log._id} className="grid grid-cols-5 gap-5 items-center border-b py-2 ">
-                     <p>{log.relativeTimestamp}
-                     {log.formattedTimestamp}
+                     <p className="flex flex-col text-center">
+                      <p>   {log.relativeTimestamp}</p>
+                   <p>  {log.formattedTimestamp}</p>
+                   
                      </p>
                      <td
                           className={` ${

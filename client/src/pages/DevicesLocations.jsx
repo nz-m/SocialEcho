@@ -55,7 +55,7 @@ const DevicesLocations = () => {
   }
 
   return (
-    <div className="main-section border bg-white p-5">
+    <div className="main-section border bg-white ">
       <PrimaryDevicesLocations contextAuthData={contextAuthData} />
 
       <TrustedDevicesLocations

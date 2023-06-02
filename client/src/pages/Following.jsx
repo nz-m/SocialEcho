@@ -31,15 +31,19 @@ const Following = () => {
             People you're following
           </h2>
           <div className="grid grid-cols-2 gap-5 items-center px-3 py-3">
-            {followingUsers?.length > 0 ? (
+            {followingUsers?.length > 0 && (
               followingUsers.map((user) => (
-                <PublicProfileCard key={user._id} user={user} />
+                <div className="grid grid-cols-2 gap-5 items-center px-3 py-3">
+   <PublicProfileCard key={user._id} user={user} />
+                </div>
+             
               ))
-            ) : (
-              <div className="text-gray-500 text-center py-5">
-                You're not following anyone yet.
+            ) } 
+              <div className="text-gray-500 py-5">
+                <p>   You're not following anyone yet.</p>
+             
               </div>
-            )}
+            
           </div>
         </div>
       )}

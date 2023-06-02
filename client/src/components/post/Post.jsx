@@ -34,10 +34,10 @@ const Post = ({ post }) => {
       <div className="flex items-start justify-between">
         <div className="flex gap-2">
           <img
-            className="rounded-md overflow-hidden"
+            className="rounded-full overflow-hidden w-[50px] h-[50px] object-cover"
             src={user.avatar}
             alt="user avatar"
-            style={{ width: "50px" }}
+      
             loading="lazy"
           />
           <div className="flex flex-col">

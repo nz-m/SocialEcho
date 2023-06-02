@@ -22,7 +22,7 @@ const Tab = ({ activeTab, handleTabClick }) => {
       <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
         <li className="mr-2">
           <span
-            className={`cursor-pointer inline-flex p-4 border-b-2 rounded-t-lg ${
+            className={`cursor-pointer inline-flex px-2 py-2 border-b-2 rounded-t-lg ${
               activeTab === "logs"
                 ? "border-blue-500 bg-primary rounded-md text-white"
                 : "border-transparent hover:text-gray-600 hover:border-gray-300"
@@ -48,7 +48,7 @@ const Tab = ({ activeTab, handleTabClick }) => {
         </li>
         <li className="mr-2">
           <span
-            className={`cursor-pointer inline-flex p-4 border-b-2 rounded-t-lg ${
+            className={`cursor-pointer inline-flex px-2 py-2 border-b-2 rounded-t-lg ${
               activeTab === "settings"
                 ? "border-blue-500 bg-primary rounded-md text-white"
                 : "border-transparent hover:text-gray-600 hover:border-gray-300"
@@ -70,7 +70,7 @@ const Tab = ({ activeTab, handleTabClick }) => {
 
         <li className="mr-2">
           <span
-            className={`cursor-pointer inline-flex p-4 border-b-2 rounded-t-lg ${
+            className={`cursor-pointer inline-flex px-2 py-2 border-b-2 rounded-t-lg ${
               activeTab === "Community Management"
                 ? "border-blue-500 bg-primary rounded-md text-white"
                 : "border-transparent hover:text-gray-600 hover:border-gray-300"
@@ -97,7 +97,7 @@ const Tab = ({ activeTab, handleTabClick }) => {
 
         <li className="mr-2">
           <span
-            className={`cursor-pointer inline-flex p-4 border-b-2 rounded-t-lg ${
+            className={`cursor-pointer inline-flex px-2 py-2 border-b-2 rounded-t-md ${
               activeTab === "logout"
                 ? "border-blue-500 bg-primary rounded-md text-white"
                 : "border-transparent hover:text-red-600 hover:border-red-600"
