@@ -5,6 +5,7 @@ import { signUpAction } from "../redux/actions/authActions";
 import { Link } from "react-router-dom";
 import ContextAuthModal from "../components/modals/ContextAuthModal";
 import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
+import Logo from "../assets/SocialEcho.png";
 
 const SignUpNew = () => {
   const [loading, setLoading] = useState(false);
@@ -83,11 +84,7 @@ const SignUpNew = () => {
       <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
         <form className="w-full max-w-md" onSubmit={handleSubmit}>
           <div className="flex justify-center mx-auto">
-            <img
-              className="w-auto h-7 sm:h-8"
-              src="https://merakiui.com/images/logo.svg"
-              alt=""
-            />
+            <img className="w-auto h-7 sm:h-8" src={Logo} alt="" />
           </div>
           {signUpError &&
             Array.isArray(signUpError) &&
@@ -136,7 +133,6 @@ const SignUpNew = () => {
               id="name"
               name="name"
               type="text"
-              autoComplete="name"
               value={name}
               onChange={handleNameChange}
               className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
@@ -233,7 +229,6 @@ const SignUpNew = () => {
               id="password"
               name="password"
               type="password"
-              autoComplete="current-password"
               value={password}
               onChange={handlePasswordChange}
               className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"

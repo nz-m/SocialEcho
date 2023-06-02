@@ -81,7 +81,7 @@ const Rightbar = () => {
         {isModeratorOfThisCommunity && (
           <Link
             to={`/community/${communityName}/moderator`}
-            className="bg-primary px-4 py-2 text-white rounded-2xl "
+            className="px-4 bg-primary text-white shadow-md shadow-gray-50 text-sm py-1 rounded-md flex justify-center items-center w-full my-2 hover:bg-primary-600"
           >
             Moderation Panel
           </Link>

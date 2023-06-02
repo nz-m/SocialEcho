@@ -49,7 +49,7 @@ const ReportPost = () => {
 
   return (
     <>
-      <div className="px-40 py-20 mx-auto  flex flex-col justify-center md:h-screen items-center bg-slate-50 ">
+      <div className="col-span-2">
         <div className="flex flex-col w-full bg-white px-10 rounded-2xl shadow-2xl shadow-[#F3F8FF] py-10">
           <span className="text-blue-500 text-4xl ">
             <button onClick={handleBack}>
@@ -57,9 +57,7 @@ const ReportPost = () => {
             </button>
           </span>
           <h1 className="text-2xl font-semibold">Report Post</h1>
-          <p className="text-amber-300 font-semibold text-lg py-3">
-            ! Please provide a reason for reporting this post.
-          </p>
+          <p className="text-gray-500 my-2">{post?.content}</p>
           <textarea
             id="reason"
             name="reason"
@@ -68,7 +66,7 @@ const ReportPost = () => {
             value={reason}
             onChange={handleReasonChange}
             required={true}
-            placeholder="tell us the reason..."
+            placeholder="Reason for reporting"
           ></textarea>
           <div className="flex justify-end mt-3">
             <button

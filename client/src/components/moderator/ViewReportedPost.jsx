@@ -29,7 +29,7 @@ const ViewReportedPost = ({ post }) => {
 
   if (!post) return <CommonLoading />;
 
-  const { body, user, dateTime, comments, savedByCount } = post;
+  const { content, user, dateTime, comments, savedByCount } = post;
 
   return (
     <div className="shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg bg-white mx-10">
@@ -44,12 +44,12 @@ const ViewReportedPost = ({ post }) => {
         </div>
         <div className="text-sm text-gray-500">{dateTime}</div>
       </div>
-      <div className="text-lg mb-4">{body}</div>
+      <div className="text-lg mb-4">{content}</div>
       {fileUrl && isImageFile ? (
         <img
           className="w-[800px] h-auto rounded-xl mt-3"
           src={fileUrl}
-          alt={body}
+          alt={content}
           loading="lazy"
         />
       ) : (

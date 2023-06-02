@@ -31,9 +31,8 @@ const ReportedPost = () => {
       <div className="main-section">
         <ViewReportedPost post={post} />
       </div>
-      <div className="rightbar">
-        <CommentSidebar comments={post.comments} />
-      </div>
+
+      <CommentSidebar comments={post.comments} />
     </>
   );
 };
