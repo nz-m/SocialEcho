@@ -9,7 +9,6 @@ import {
   HiOutlineTag,
 } from "react-icons/hi2";
 import { HiOutlineUserGroup } from "react-icons/hi2";
-import { CgCommunity } from "react-icons/cg";
 
 const Leftbar = () => {
   const dispatch = useDispatch();
@@ -74,38 +73,34 @@ const Leftbar = () => {
 
           {communityLinks && communityLinks.length > 0 ? (
             <div className="w-full">
-              <div
-                className="flex items-center justify-between "
-              >
-                <div className="flex gap-1 text-lg font-medium items-center ">
-                <HiOutlineUserGroup  className=" text-xl"/>
-                Communities 
+              <div className="flex items-center justify-between ">
+                <div className="flex gap-1 font-medium items-center ">
+                  <HiOutlineUserGroup className="text-xl" />
+                  Communities
                 </div>
-               
+
                 <Link
-                    className="flex relative items-center text-sm font-medium text-primary mr-4"
-                    to="/my-communities"
-                  >
-                    See all 
-                    <p className="absolute -top-3 -right-5 text-white text-xs bg-primary w-5 h-5 rounded-full flex justify-center items-center"> {joinedCommunities.length}</p>
-                   
-                  </Link>
+                  className="flex relative items-center text-sm font-medium text-primary mr-4"
+                  to="/my-communities"
+                >
+                  See all
+                  <p className="absolute -top-2 -right-4 text-white text-xs bg-primary w-4 h-4 rounded-full flex justify-center items-center">
+                    {" "}
+                    {joinedCommunities.length}
+                  </p>
+                </Link>
               </div>
               <ul className="w-full mt-3">
                 {communityLinks.map((communityLink) => (
                   <li key={communityLink.href}>
                     <Link
-                      className="flex items-center hover:text-primary text-gray-600 text-lg font-medium gap-2 py-2 hover:rounded-md"
+                      className="flex items-center hover:text-primary text-gray-600 font-medium gap-2 py-1"
                       to={communityLink.href}
                     >
-                     
                       {communityLink.label}
-                     
                     </Link>
                   </li>
                 ))}
-
-               
               </ul>
             </div>
           ) : (

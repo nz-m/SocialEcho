@@ -88,76 +88,74 @@ const Logs = () => {
 
         {!loading ? (
           logs.length === 0 ? (
-            <div className="  text-gray-500 text-lg">
-              No logs found
-            </div>
+            <div className="  text-gray-500 text-lg">No logs found</div>
           ) : (
             <>
-            <div className="h-[430px] relative overflow-auto">
-            <div className="w-full shadow-2xl sticky top-0 left-0 shadow-[#F3F8FF]  bg-white rounded">
-              <div className="grid grid-cols-5 gap-5 items-center border-b py-2 text-lg font-semibold">
-              <p>Timestamp</p>
-              <p>Message</p>
-              <p> Email Used</p>
-              <p>Level</p>
-              <p>Context Data</p>
-              </div>
-              {logs.map((log) => (
-                     <div key={log._id} className="grid grid-cols-5 gap-5 items-center border-b py-2 ">
-                     <p className="flex flex-col text-center">
-                      <p>   {log.relativeTimestamp}</p>
-                   <p>  {log.formattedTimestamp}</p>
-                   
-                     </p>
-                     <td
-                          className={` ${
-                            log.level === "info"
-                              ? "text-blue-500"
+              <div className="h-[430px] relative overflow-auto">
+                <div className="w-full shadow-2xl sticky top-0 left-0 shadow-[#F3F8FF]  bg-white rounded">
+                  <div className="grid grid-cols-5 gap-5 items-center border-b py-2 text-lg font-semibold">
+                    <p>Timestamp</p>
+                    <p>Message</p>
+                    <p> Email Used</p>
+                    <p>Level</p>
+                    <p>Context Data</p>
+                  </div>
+                  {logs.map((log) => (
+                    <div
+                      key={log._id}
+                      className="grid grid-cols-5 gap-5 items-center border-b py-2 "
+                    >
+                      <p className="flex flex-col text-center">
+                        <p> {log.relativeTimestamp}</p>
+                        <p> {log.formattedTimestamp}</p>
+                      </p>
+                      <td
+                        className={` ${
+                          log.level === "info"
+                            ? "text-blue-500"
+                            : log.level === "warn"
+                            ? "text-orange-500"
+                            : log.level === "error"
+                            ? "text-red-600"
+                            : ""
+                        }`}
+                      >
+                        <span className="capitalize">{log.type}: </span>
+                        <span>{log.message}</span>
+                      </td>
+                      <p> {log.email}</p>
+                      <td className="">
+                        <span
+                          className={`rounded-full px-2 py-1 text-sm font-semibold ${
+                            log.level === "error"
+                              ? "bg-red-500 text-white"
                               : log.level === "warn"
-                              ? "text-orange-500"
-                              : log.level === "error"
-                              ? "text-red-600"
-                              : ""
+                              ? "bg-orange-500 text-white"
+                              : "bg-blue-500 text-white"
                           }`}
                         >
-                          <span className="capitalize">{log.type}: </span>
-                          <span>{log.message}</span>
-                        </td>
-                     <p>  {log.email}</p>
-                     <td className="">
-                          <span
-                            className={`rounded-full px-2 py-1 text-sm font-semibold ${
-                              log.level === "error"
-                                ? "bg-red-500 text-white"
-                                : log.level === "warn"
-                                ? "bg-orange-500 text-white"
-                                : "bg-blue-500 text-white"
-                            }`}
-                          >
-                            {log.level}
-                          </span>
-                        </td>
-                        <td className="">
-                          <ul className="list-disc list-inside">
-                            {log.contextData &&
-                              Object.entries(log.contextData).map(
-                                ([key, value]) => (
-                                  <li key={key}>
-                                    <span className="font-medium text-blue-500">
-                                      {key}:{" "}
-                                    </span>
-                                    {value}
-                                  </li>
-                                )
-                              )}
-                          </ul>
-                        </td>
-                     </div>
-                    ))}
-            
-            </div>
-            </div>
-             
+                          {log.level}
+                        </span>
+                      </td>
+                      <td className="">
+                        <ul className="list-disc list-inside">
+                          {log.contextData &&
+                            Object.entries(log.contextData).map(
+                              ([key, value]) => (
+                                <li key={key}>
+                                  <span className="font-medium text-blue-500">
+                                    {key}:{" "}
+                                  </span>
+                                  {value}
+                                </li>
+                              )
+                            )}
+                        </ul>
+                      </td>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               <div>
                 <div className="flex justify-center text-sm italic text-gray-600 mt-2">

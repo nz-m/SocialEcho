@@ -30,21 +30,17 @@ const Following = () => {
           <h2 className="font-semibold text-gray-700 mb-4 text-center border-b py-3">
             People you're following
           </h2>
-          <div className="grid grid-cols-2 gap-5 items-center px-3 py-3">
-            {followingUsers?.length > 0 && (
-              followingUsers.map((user) => (
-                <div className="grid grid-cols-2 gap-5 items-center px-3 py-3">
-   <PublicProfileCard key={user._id} user={user} />
-                </div>
-             
-              ))
-            ) } 
-              <div className="text-gray-500 py-5">
-                <p>   You're not following anyone yet.</p>
-             
-              </div>
-            
-          </div>
+          {followingUsers?.length > 0 ? (
+            <div className="grid grid-cols-2 gap-5 items-center px-3 py-3">
+              {followingUsers.map((user) => (
+                <PublicProfileCard key={user._id} user={user} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-gray-500 py-5 text-center">
+              <p>You're not following anyone yet.</p>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -7,7 +7,6 @@ import {
 } from "../../redux/actions/userActions";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import JoinModal from "../modals/JoinModal";
-import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { IoIosPeople, IoMdPeople } from "react-icons/io";
 import placeholder from "../../assets/placeholder.png";
@@ -83,15 +82,16 @@ const Rightbar = () => {
           <div className="flex items-end justify-between mb-4">
             <h5 className="font-semibold text-sm">Suggested Communities</h5>
             {remainingCount > 0 && (
-               <Link
-               className="flex relative items-center text-sm font-medium text-primary mr-4"
-               to="/communities"
-             >
-               See all 
-               <p className="absolute -top-3 -right-5 text-white text-xs bg-primary w-5 h-5 rounded-full flex justify-center items-center"> {remainingCount}</p>
-              
-             </Link>
-            
+              <Link
+                className="flex relative items-center text-sm font-medium text-primary mr-4"
+                to="/communities"
+              >
+                See all
+                <p className="absolute -top-2 -right-4 text-white text-xs bg-primary w-4 h-4 rounded-full flex justify-center items-center">
+                  {" "}
+                  {remainingCount}
+                </p>
+              </Link>
             )}
           </div>
 
@@ -104,7 +104,7 @@ const Rightbar = () => {
             {visibleCommunities?.map((community) => (
               <li
                 key={community._id}
-                className="flex items-center justify-between bg-white shadow-2xl shadow-[#f2f5fc]  border border-slate-100 px-2 py-1 rounded-lg"
+                className="flex items-center justify-between bg-white px-2 py-1 rounded-md"
               >
                 <div className="flex items-center">
                   <img
@@ -124,7 +124,7 @@ const Rightbar = () => {
 
                 <button
                   onClick={() => toggleJoinModal(community._id, true)}
-                  className=" text-primary border border-dashed border-blue-500
+                  className="text-primary border border-dashed border-blue-500
                         hover:bg-primary 
                          rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
                 >
@@ -185,7 +185,28 @@ const Rightbar = () => {
                          rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
               >
                 {followLoading[user._id] ? (
-                  <LoadingSpinner />
+                  <div className="group-hover:text-white flex items-center gap-2 justify-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8H4z"
+                      ></path>
+                    </svg>
+                  </div>
                 ) : (
                   <p className="group-hover:text-white flex items-center gap-2">
                     <BsPersonPlusFill className="inline-block" />

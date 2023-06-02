@@ -3,7 +3,6 @@ import Logo from "../../assets/SocialEcho.png";
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import { memo } from "react";
-import ButtonLoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { logoutAction } from "../../redux/actions/authActions";
 import { useDispatch } from "react-redux";
 import { Transition } from "@headlessui/react";

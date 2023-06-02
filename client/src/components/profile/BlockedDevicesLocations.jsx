@@ -39,7 +39,7 @@ const BlockedDevicesLocations = ({ blockedContextAuthData }) => {
   }));
 
   return (
-    <div className="max-w-3xl mx-auto mt-12">
+    <div className="max-w-3xl mx-auto mt-12 p-5">
       <h2 className="text-lg font-medium text-gray-900">
         Blocked Devices and Locations
       </h2>

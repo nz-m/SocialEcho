@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
-import { RiUserShared2Line } from "react-icons/ri";
 const PublicProfileCard = ({ user }) => {
   const followingSince = new Date(user.followingSince).toLocaleString("en-US", {
     year: "numeric",

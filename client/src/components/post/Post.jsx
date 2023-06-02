@@ -8,7 +8,6 @@ import {
 } from "react-icons/hi2";
 import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
-import { FcNext } from "react-icons/fc";
 import "react-photo-view/dist/react-photo-view.css";
 
 const Post = ({ post }) => {
@@ -37,7 +36,6 @@ const Post = ({ post }) => {
             className="rounded-full overflow-hidden w-[50px] h-[50px] object-cover"
             src={user.avatar}
             alt="user avatar"
-      
             loading="lazy"
           />
           <div className="flex flex-col">
@@ -64,11 +62,14 @@ const Post = ({ post }) => {
         <p className="text-sm text-gray-500">{createdAt}</p>
       </div>
       <div>
-        <p onClick={() => {
-              navigate(`/post/${post._id}`, {
-                state: { from: location.pathname },
-              });
-            }} className="text-md text-justify mt-2 whitespace-normal cursor-pointer break-words">
+        <p
+          onClick={() => {
+            navigate(`/post/${post._id}`, {
+              state: { from: location.pathname },
+            });
+          }}
+          className="text-md text-justify mt-2 whitespace-normal cursor-pointer break-words"
+        >
           {content}
         </p>
         <div className="flex justify-center">
@@ -107,7 +108,7 @@ const Post = ({ post }) => {
         <div className="flex items-center gap-2">
           <Like post={post} />
           <Link to={`/post/${post._id}`}>
-            <button className="flex items-center text-xl gap-1">
+            <button className="flex items-center gap-1">
               {" "}
               <HiOutlineChatBubbleOvalLeft />
               {comments.length}
@@ -126,7 +127,6 @@ const Post = ({ post }) => {
               </button>
             )}
           </div>
-         
         </div>
 
         {showModal && (

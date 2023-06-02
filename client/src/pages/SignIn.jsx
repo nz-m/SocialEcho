@@ -147,14 +147,14 @@ const SignIn = () => {
           href="https://github.com/nz-m/SocialEcho"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center hover:text-blue-500 text-xl"
+          className="flex items-center hover:text-blue-500"
         >
           <AiFillGithub className="w-5 h-5 mr-2" />
           <span>GitHub</span>
         </a>
         <Link
           to="/admin"
-          className="flex items-center ml-8 hover:text-blue-500 text-xl"
+          className="flex items-center ml-8 hover:text-blue-500"
         >
           <MdOutlineAdminPanelSettings className="w-5 h-5 mr-2" />
           <span>Admin</span>
