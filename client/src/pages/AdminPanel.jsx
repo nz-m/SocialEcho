@@ -25,7 +25,7 @@ const AdminPanel = () => {
   }, [adminPanelError, dispatch, navigate]);
 
   return (
-    <div className="pt-20 max-w-6xl mx-auto flex flex-col justify-center items-center ">
+    <div className="pt-5 max-w-6xl mx-auto flex flex-col justify-center items-center ">
       <Tab activeTab={activeTab} handleTabClick={handleTabClick} />
 
       {activeTab === "logs" && <Logs />}

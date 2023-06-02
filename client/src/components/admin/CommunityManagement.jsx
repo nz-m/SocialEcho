@@ -65,9 +65,9 @@ const CommunityManagement = () => {
   }
 
   return (
-    <div className="flex gap-5 h-screen w-full mt-3 ">
+    <div className="flex gap-5 h-screen  w-full mt-3 ">
       {/* Left column */}
-      <div className="flex flex-col w-1/4 bg-slate-50 shadow-inner rounded-md">
+      <div className="flex flex-col w-1/4 bg-white shadow-inner rounded-md">
         <h1 className="text-lg font-bold p-4">Communities</h1>
         <div className="flex flex-col overflow-y-auto">
           {communities.map((community) => (
@@ -90,7 +90,7 @@ const CommunityManagement = () => {
       </div>
 
       {/* Right column */}
-      <div className="flex flex-col w-2/3 bg-white">
+      <div className="flex flex-col w-2/3 bg-white rounded-md px-5 py-5">
         {isChangingCommunity ? (
           <span>Loading...</span>
         ) : selectedCommunityData ? (

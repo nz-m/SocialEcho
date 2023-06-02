@@ -63,7 +63,7 @@ const Settings = () => {
   }
 
   return (
-    <div className="p-5 w-full border rounded-md bg-white">
+    <div className="p-5 w-full border rounded-md bg-white mt-3">
       <h2 className="font-semibold mb-4 border-b pb-2 text-center text-gray-700">
         Service Preferences
       </h2>

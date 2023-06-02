@@ -27,7 +27,7 @@ const SignIn = () => {
   const successMessage = useSelector((state) => state.auth?.successMessage);
   return (
     <section className="bg-white">
-      <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
+      <div className="container flex items-center justify-center md:h-[91vh] px-6 mx-auto">
         <form className="w-full max-w-md">
           <div className="flex justify-center mx-auto">
             <img
@@ -147,14 +147,14 @@ const SignIn = () => {
           href="https://github.com/nz-m/SocialEcho"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center hover:text-blue-500"
+          className="flex items-center hover:text-blue-500 text-xl"
         >
           <AiFillGithub className="w-5 h-5 mr-2" />
           <span>GitHub</span>
         </a>
         <Link
           to="/admin"
-          className="flex items-center ml-8 hover:text-blue-500"
+          className="flex items-center ml-8 hover:text-blue-500 text-xl"
         >
           <MdOutlineAdminPanelSettings className="w-5 h-5 mr-2" />
           <span>Admin</span>
