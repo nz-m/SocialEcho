@@ -20,7 +20,7 @@ const MyCommunities = () => {
 
   const communityCards = useMemo(() => {
     return joinedCommunities?.map((community) => (
-      <div key={community._id} className="mb-5 border bg-white rounded-md p-3">
+      <div key={community._id} className="main-section flex items-center ">
         <JoinedCommunityCard className="mb-5" community={community} />
       </div>
     ));

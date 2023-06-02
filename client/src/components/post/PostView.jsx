@@ -65,7 +65,7 @@ const PostView = ({ post, userData }) => {
   }
 
   return (
-    <div className="main-section border p-5 bg-white">
+    <div className="main-section border p-5 bg-white shadow-2xl shadow-[#f2f5fc]">
       <p className="border border-dashed border-primary cursor-pointer px-2 py-2 w-7 h-7 flex justify-center items-center mb-3 rounded-full">
         <IoIosArrowBack
           className="text-primary text-sm font-semibold"
@@ -118,7 +118,7 @@ const PostView = ({ post, userData }) => {
             >
               <PhotoView src={fileUrl}>
                 <img
-                  className="max-w-sm h-auto rounded-md mt-3 cursor-pointer"
+                  className="w-full h-auto rounded-md mt-3 cursor-pointer"
                   src={fileUrl}
                   alt={content}
                   loading="lazy"

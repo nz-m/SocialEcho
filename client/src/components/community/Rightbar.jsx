@@ -50,8 +50,8 @@ const Rightbar = () => {
 
   return (
     <div className="bg-white rounded-md">
-      <div className="flex justify-between">
-        <h2 className="text-lg font-bold mb-4">{name}</h2>
+      <div className="flex flex-col ">
+        <h2 className="text-lg font-bold">{name}</h2>
         <div className="flex items-center gap-2 text-primary mb-4">
           <HiUserGroup />
           <span className="mr-2">{members?.length || 0} members</span>

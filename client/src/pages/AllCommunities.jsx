@@ -22,7 +22,7 @@ const AllCommunities = () => {
     );
   }
   return (
-    <div className="main-section">
+    <div className="main-section grid grid-cols-2 gap-5 items-center bg-white px-4 py-4">
       {notJoinedCommunities?.map((community) => (
         <CommunityCard key={community._id} community={community} />
       ))}

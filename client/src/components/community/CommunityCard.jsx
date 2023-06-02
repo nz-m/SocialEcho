@@ -12,8 +12,8 @@ const CommunityCard = ({ community }) => {
     }));
   };
   return (
-    <div className="px-6 py-6 rounded-md border bg-white mb-6 flex justify-between">
-      <div className="w-full flex items-center ">
+    <div className="px-3 py-3 rounded-md border bg-white shadow-2xl shadow-[#f2f5fc] flex justify-between">
+      <div className="w-full flex items-start ">
         <img
           className="object-cover rounded-full w-10 h-10 mr-4"
           src={community.banner || placeholder}
@@ -21,8 +21,8 @@ const CommunityCard = ({ community }) => {
           loading="lazy"
         />
         <div className="">
-          <h4 className="text-base font-semibold ">{community.name}</h4>
-          <p className="text-gray-700 mb-2">
+          <h4 className="text-base font-semibold line-clamp-1">{community.name}</h4>
+          <p className="text-gray-700 ">
             {community.members.length} members
           </p>
         </div>

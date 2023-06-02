@@ -26,17 +26,17 @@ const CommentSidebar = ({ comments }) => {
           {currentComments.map((comment) => (
             <div
               key={comment._id}
-              className="flex flex-col bg-white p-3 border-b"
+              className="flex flex-col bg-white p-3 shadow-md border rounded-md my-4 shadow-[#f2f5fc]"
             >
-              <div className="flex">
+              <div className="flex gap-2">
                 <img
                   src={comment.user.avatar}
                   alt="User Avatar"
-                  className="w-9 h-9 rounded-full mr-2"
+                  className="w-9 h-9 rounded-full"
                 />
 
-                <div className="flex items-center">
-                  <span className="text-sm font-semibold hover:underline">
+                <div className="flex flex-col ">
+                  <span className="text-md font-semibold hover:underline">
                     <Link to={`/user/${comment.user._id}`}>
                       {comment.user.name}
                     </Link>

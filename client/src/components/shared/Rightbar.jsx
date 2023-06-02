@@ -83,12 +83,15 @@ const Rightbar = () => {
           <div className="flex items-end justify-between mb-4">
             <h5 className="font-semibold text-sm">Suggested Communities</h5>
             {remainingCount > 0 && (
-              <Link
-                to="/communities"
-                className="text-gray-700 font-medium flex text-xs"
-              >
-                See More ({remainingCount})
-              </Link>
+               <Link
+               className="flex relative items-center text-sm font-medium text-primary mr-4"
+               to="/communities"
+             >
+               See all 
+               <p className="absolute -top-3 -right-5 text-white text-xs bg-primary w-5 h-5 rounded-full flex justify-center items-center"> {remainingCount}</p>
+              
+             </Link>
+            
             )}
           </div>
 
@@ -110,7 +113,7 @@ const Rightbar = () => {
                     alt="community"
                   />
                   <div className="text-base font-medium flex flex-col">
-                    <p> {community.name}</p>
+                    <p className="line-clamp-1"> {community.name}</p>
 
                     <p className="text-xs text-gray-500 flex items-center gap-1">
                       <IoMdPeople />
@@ -156,9 +159,9 @@ const Rightbar = () => {
               key={user._id}
               className="flex justify-between items-center gap-5 bg-white shadow-2xl shadow-[#f2f5fc]  border border-slate-100 px-2 py-1 rounded-lg"
             >
-              <div className="flex justify-content-between items-center">
+              <div className="flex justify-content-between items-center gap-1">
                 <img
-                  className="h-8 w-8 rounded-full mr-4"
+                  className="h-7 w-7 rounded-full flex-shrink-0"
                   src={user.avatar}
                   alt={user.name}
                 />

@@ -12,7 +12,7 @@ const PublicProfileCard = ({ user }) => {
   return (
     <Link
       to={`/user/${user._id}`}
-      className="bg-white border rounded-md w-full px-4 py-4 cursor-pointer"
+      className="bg-white border rounded-md w-full px-4 py-4 cursor-pointer shadow-2xl shadow-[#f2f5fc]"
     >
       <div className="flex gap-3">
         <img

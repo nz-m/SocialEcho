@@ -30,7 +30,7 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="px-6 py-6 rounded-md border bg-white mb-6 hover:shadow duration-300">
+    <div className="px-6 py-6 rounded-md border bg-white mb-6 hover:shadow duration-300 shadow-2xl shadow-[#f2f5fc]">
       <div className="flex items-start justify-between">
         <div className="flex gap-2">
           <img
@@ -64,7 +64,11 @@ const Post = ({ post }) => {
         <p className="text-sm text-gray-500">{createdAt}</p>
       </div>
       <div>
-        <p className="text-md text-justify mt-2 whitespace-normal break-words">
+        <p onClick={() => {
+              navigate(`/post/${post._id}`, {
+                state: { from: location.pathname },
+              });
+            }} className="text-md text-justify mt-2 whitespace-normal cursor-pointer break-words">
           {content}
         </p>
         <div className="flex justify-center">
@@ -122,14 +126,7 @@ const Post = ({ post }) => {
               </button>
             )}
           </div>
-          <FcNext
-            onClick={() => {
-              navigate(`/post/${post._id}`, {
-                state: { from: location.pathname },
-              });
-            }}
-            className="text-xl"
-          />
+         
         </div>
 
         {showModal && (

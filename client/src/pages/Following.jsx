@@ -20,7 +20,7 @@ const Following = () => {
   }, [dispatch]);
 
   return (
-    <div className="main-section">
+    <div className="main-section bg-white border">
       {loading ? (
         <div className="flex items-center justify-center h-screen">
           <CommonLoading />
@@ -30,7 +30,7 @@ const Following = () => {
           <h2 className="font-semibold text-gray-700 mb-4 text-center border-b py-3">
             People you're following
           </h2>
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="grid grid-cols-2 gap-5 items-center px-3 py-3">
             {followingUsers?.length > 0 ? (
               followingUsers.map((user) => (
                 <PublicProfileCard key={user._id} user={user} />

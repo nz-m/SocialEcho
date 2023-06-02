@@ -27,7 +27,7 @@ const Navbar = ({ userData }) => {
   };
 
   return (
-    <nav className="flex items-center justify-between bg-white px-48 p-2 sticky top-0 z-10 mb-5 border">
+    <nav className="flex items-center justify-between bg-white px-36 p-2 sticky top-0 z-10 mb-5 border">
       <div className="w-36">
         <Link to="/">
           <img src={Logo} alt="" />
@@ -36,7 +36,7 @@ const Navbar = ({ userData }) => {
 
       <Search />
 
-      <div className="w-36 flex justify-start relative">
+      <div className="w-36 flex justify-end relative">
         <button
           type="button"
           className="inline-flex items-center justify-center h-8 w-8 rounded-full cursor-pointer"
@@ -81,7 +81,7 @@ const Navbar = ({ userData }) => {
                 <div className="flex justify-center">
                   <button
                     type="button"
-                    className="block px-4 py-2 text-sm text-gray-700 w-full text-left hover:cursor-pointer hover:text-red-500"
+                    className="block px-4 py-2 text-sm  w-full text-left hover:cursor-pointer hover:text-red-600 text-red-400"
                     role="menuitem"
                     onClick={logout}
                     disabled={loggingOut}

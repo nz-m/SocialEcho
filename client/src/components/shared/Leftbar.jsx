@@ -8,7 +8,8 @@ import {
   HiOutlineRectangleStack,
   HiOutlineTag,
 } from "react-icons/hi2";
-import { IoIosPeople } from "react-icons/io";
+import { HiOutlineUserGroup } from "react-icons/hi2";
+import { CgCommunity } from "react-icons/cg";
 
 const Leftbar = () => {
   const dispatch = useDispatch();
@@ -72,36 +73,39 @@ const Leftbar = () => {
           <hr className="w-full my-4 border-gray-300" />
 
           {communityLinks && communityLinks.length > 0 ? (
-            <div>
-              <h3
-                className="mb-4 text-gray-700 font-semibold
-                flex items-center justify-start w-full"
+            <div className="w-full">
+              <div
+                className="flex items-center justify-between "
               >
-                Communities
-                <span className="ml-3">
-                  <IoIosPeople />
-                </span>
-              </h3>
-              <ul className="w-full text-gray-500">
+                <div className="flex gap-1 text-lg font-medium items-center ">
+                <HiOutlineUserGroup  className=" text-xl"/>
+                Communities 
+                </div>
+               
+                <Link
+                    className="flex relative items-center text-sm font-medium text-primary mr-4"
+                    to="/my-communities"
+                  >
+                    See all 
+                    <p className="absolute -top-3 -right-5 text-white text-xs bg-primary w-5 h-5 rounded-full flex justify-center items-center"> {joinedCommunities.length}</p>
+                   
+                  </Link>
+              </div>
+              <ul className="w-full mt-3">
                 {communityLinks.map((communityLink) => (
                   <li key={communityLink.href}>
                     <Link
-                      className="flex items-center hover:bg-gray-100 hover:rounded-md px-2 py-1"
+                      className="flex items-center hover:text-primary text-lg font-medium gap-2 py-2 hover:rounded-md"
                       to={communityLink.href}
                     >
+                       <CgCommunity className="text-lg"/>
                       {communityLink.label}
+                     
                     </Link>
                   </li>
                 ))}
 
-                <li>
-                  <Link
-                    className="flex items-center text-sm font-semibold hover:bg-gray-100 hover:rounded px-2 py-1"
-                    to="/my-communities"
-                  >
-                    See all ({joinedCommunities.length})
-                  </Link>
-                </li>
+               
               </ul>
             </div>
           ) : (

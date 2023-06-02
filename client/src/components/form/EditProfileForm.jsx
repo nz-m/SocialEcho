@@ -49,7 +49,7 @@ const EditProfileForm = () => {
   };
 
   return (
-    <div className="flex bg-white justify-center pt-10 md:h-screen shadow-2xl shadow-[#F3F8FF] rounded-lg col-span-2 w-full mt-6 mx-auto ">
+    <div className="flex bg-white justify-center pt-10 md:h-screen shadow-2xl shadow-[#F3F8FF] rounded-lg col-span-2 w-full mt-6 mx-auto">
       <form
         onSubmit={handleSubmit}
         className=""
