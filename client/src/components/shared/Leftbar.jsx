@@ -95,10 +95,10 @@ const Leftbar = () => {
                 {communityLinks.map((communityLink) => (
                   <li key={communityLink.href}>
                     <Link
-                      className="flex items-center hover:text-primary text-lg font-medium gap-2 py-2 hover:rounded-md"
+                      className="flex items-center hover:text-primary text-gray-600 text-lg font-medium gap-2 py-2 hover:rounded-md"
                       to={communityLink.href}
                     >
-                       <CgCommunity className="text-lg"/>
+                     
                       {communityLink.label}
                      
                     </Link>

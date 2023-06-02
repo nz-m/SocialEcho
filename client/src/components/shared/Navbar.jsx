@@ -60,7 +60,7 @@ const Navbar = ({ userData }) => {
           {() => (
             <div
               ref={dropdownRef}
-              className="origin-top-right absolute top-10 right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+              className="origin-top-right absolute top-10 right-0 mt-2 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="user-menu"

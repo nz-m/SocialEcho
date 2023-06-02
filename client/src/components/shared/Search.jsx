@@ -186,19 +186,7 @@ const Search = () => {
           )}
           {community && (
             <div className="border-b py-2 px-4">
-              {!community.isMember && (
-                <>
-                  <JoinModal
-                    show={joinModalVisibility}
-                    onClose={() => {
-                      toggleModal(false);
-                      setCommunity(null);
-                    }}
-                    community={community}
-                  />
-                  <button onClick={() => toggleModal(true)}>Join</button>
-                </>
-              )}
+             
 
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -208,9 +196,26 @@ const Search = () => {
                     className="h-8 w-8 rounded-full"
                   />
                 </div>
-                <div className="ml-3">
+                <div className=" px-2 flex justify-between items-center gap-2">
+                  <div className="">
                   <p className="font-medium">{community.name}</p>
-                  <p className="text-sm">{community.description}</p>
+                 
+                  <p className="text-sm line-clamp-2">{community.description}</p>
+                  </div>
+               
+                  {!community.isMember && (
+                <>
+                  <JoinModal
+                    show={joinModalVisibility}
+                    onClose={() => {
+                      toggleModal(false);
+                      setCommunity(null);
+                    }}
+                    community={community}
+                  />
+                  <button className="bg-primary px-2 py-1 text-white text-sm rounded-md" onClick={() => toggleModal(true)}>Join</button>
+                </>
+              )}
                 </div>
               </div>
             </div>
@@ -234,8 +239,8 @@ const Search = () => {
                   />
                 </div>
                 <div className="ml-3">
-                  <p className="font-medium">{joinedCommunity.name}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-semibold text-md text-primary">{joinedCommunity.name}</p>
+                  <p className="text-sm text-gray-600 line-clamp-2">
                     {joinedCommunity.description}
                   </p>
                 </div>
