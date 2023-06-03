@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { clearPostAction, getPostAction } from "../redux/actions/postActions";
 import { useSelector, useDispatch } from "react-redux";
 import CommonLoading from "../components/loader/CommonLoading";
-
 import ViewReportedPost from "../components/moderator/ViewReportedPost";
 import CommentSidebar from "../components/post/CommentSidebar";
 const ReportedPost = () => {
@@ -20,12 +19,18 @@ const ReportedPost = () => {
 
   const post = useSelector((state) => state.posts?.post);
 
-  if (!post) return <CommonLoading />;
+  if (!post)
+    return (
+      <div className="col-span-3 flex justify-center items-center h-screen">
+        <CommonLoading />
+      </div>
+    );
   return (
     <>
-      <div className="w-6/12">
+      <div className="main-section">
         <ViewReportedPost post={post} />
       </div>
+
       <CommentSidebar comments={post.comments} />
     </>
   );

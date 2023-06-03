@@ -63,22 +63,18 @@ const CommentForm = ({ communityId, postId }) => {
       <form onSubmit={handleSubmit}>
         <div className="my-4">
           <textarea
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 resize-none"
             name="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             maxLength={500}
             required
-            placeholder="write a comment"
+            placeholder="Write a comment..."
           />
         </div>
         <div className="flex justify-end">
           <button
-            className={`${
-              isLoading
-                ? "bg-gray-500"
-                : "rounded-md py-1 px-2 text-sm font-semibold group transition duration-300 text-primary border border-dashed border-blue-500"
-            } hover:bg-primary  py-2 px-4 rounded hover:text-white`}
+            className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
             type="submit"
             disabled={isLoading}
             style={{

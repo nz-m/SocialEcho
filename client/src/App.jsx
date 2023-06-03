@@ -17,48 +17,38 @@ const App = () => {
   )?.accessToken;
 
   return (
-    <>
-      <Suspense fallback={<FallbackLoading />}>
-        <Routes>
-          <Route element={<PrivateRoute userData={userData} />}>
-            {privateRoutes.map((route) => (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={route.element}
-              />
-            ))}
-          </Route>
-
-          {publicRoutes.map((route) => (
+    <Suspense fallback={<FallbackLoading />}>
+      <Routes>
+        <Route element={<PrivateRoute userData={userData} />}>
+          {privateRoutes.map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
+        </Route>
 
-          <Route
-            path="/signin"
-            element={userData ? <Navigate to="/" /> : <SignIn />}
-          />
+        {publicRoutes.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
 
-          <Route
-            path="/admin/signin"
-            element={
-              adminAccessToken ? <Navigate to="/admin" /> : <AdminSignIn />
-            }
-          />
+        <Route
+          path="/signin"
+          element={userData ? <Navigate to="/" /> : <SignIn />}
+        />
 
-          <Route
-            path="/admin"
-            element={
-              adminAccessToken ? (
-                <AdminPanel />
-              ) : (
-                <Navigate to="/admin/signin" />
-              )
-            }
-          />
-        </Routes>
-      </Suspense>
-    </>
+        <Route
+          path="/admin/signin"
+          element={
+            adminAccessToken ? <Navigate to="/admin" /> : <AdminSignIn />
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            adminAccessToken ? <AdminPanel /> : <Navigate to="/admin/signin" />
+          }
+        />
+      </Routes>
+    </Suspense>
   );
 };
 

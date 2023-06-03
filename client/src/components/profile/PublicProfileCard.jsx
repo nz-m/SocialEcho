@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
-import { RiUserShared2Line } from "react-icons/ri";
 const PublicProfileCard = ({ user }) => {
   const followingSince = new Date(user.followingSince).toLocaleString("en-US", {
     year: "numeric",
@@ -12,7 +11,7 @@ const PublicProfileCard = ({ user }) => {
   return (
     <Link
       to={`/user/${user._id}`}
-      className="bg-white rounded-lg shadow-2xl shadow-[#F3F8FF] px-4 py-4 cursor-pointer"
+      className="bg-white border rounded-md w-full px-4 py-4 cursor-pointer shadow-2xl shadow-[#f2f5fc]"
     >
       <div className="flex gap-3">
         <img
@@ -31,11 +30,8 @@ const PublicProfileCard = ({ user }) => {
       </div>
 
       <div className="mt-3 flex justify-between items-center">
-        <div>
-          <p className="font-semibold text-gray-500">Following Since</p>
-          <p>{followingSince}</p>
-        </div>
-        <RiUserShared2Line className="text-lg text-white group-hover:text-primary" />
+        <p className="font-semibold text-gray-500">Following Since</p>
+        <p>{followingSince}</p>
       </div>
     </Link>
   );

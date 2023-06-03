@@ -56,7 +56,7 @@ const TrustedDevicesLocations = ({ trustedAuthContextData }) => {
   }));
 
   return (
-    <div className="max-w-3xl mx-auto mt-12">
+    <div className="max-w-3xl mx-auto mt-12 p-5">
       <h2 className="text-lg font-medium text-gray-900">
         Trusted Devices and Locations
       </h2>
@@ -97,7 +97,7 @@ const TrustedDevicesLocations = ({ trustedAuthContextData }) => {
                       disabled={deleteLoading[device._id]}
                       onClick={() => handleDelete(device._id)}
                       type="button"
-                      className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                      className="mx-3 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
                       {deleteLoading[device._id] ? (
                         <LoadingSpinner loadingText={"Removing..."} />

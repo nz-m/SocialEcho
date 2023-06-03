@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import PublicProfileCard from "../components/profile/PublicProfileCard";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getFollowingUsersAction } from "../redux/actions/userActions";
+import PublicProfileCard from "../components/profile/PublicProfileCard";
 import CommonLoading from "../components/loader/CommonLoading";
 
 const Following = () => {
@@ -20,30 +20,31 @@ const Following = () => {
   }, [dispatch]);
 
   return (
-    <div className="w-6/12 px-10 py-6">
+    <div className="main-section bg-white border">
       {loading ? (
         <div className="flex items-center justify-center h-screen">
           <CommonLoading />
         </div>
       ) : (
-        <>
-          <h2 className="text-xl font-bold mb-4 text-center">
+        <div>
+          <h2 className="font-semibold text-gray-700 mb-4 text-center border-b py-3">
             People you're following
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
-            {followingUsers?.length > 0 ? (
-              followingUsers.map((user) => (
+          {followingUsers?.length > 0 ? (
+            <div className="grid grid-cols-2 gap-5 items-center px-3 py-3">
+              {followingUsers.map((user) => (
                 <PublicProfileCard key={user._id} user={user} />
-              ))
-            ) : (
-              <div className="text-gray-500 text-center py-10">
-                You're not following anyone yet.
-              </div>
-            )}
-          </div>
-        </>
+              ))}
+            </div>
+          ) : (
+            <div className="text-gray-500 py-5 text-center">
+              <p>You're not following anyone yet.</p>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
 };
+
 export default Following;

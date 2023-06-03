@@ -42,11 +42,14 @@ const PrivateRoute = ({ userData }) => {
   );
 
   return isAuthenticated(userData, accessToken) ? (
-    <>
-      <Navbar />
-      <div className="flex lg:px-40 mx-auto bg-[#F6F7FA] my-20">
+    <div className="scroll-smooth">
+      <Navbar userData={userData} />
+
+      <div className="grid grid-cols-4 gap-6 w-10/12 mx-auto">
         <Leftbar />
+
         <Outlet />
+
         {showRightbar ? (
           currentUserIsModerator ? (
             <ModeratorRightbar />
@@ -55,7 +58,7 @@ const PrivateRoute = ({ userData }) => {
           )
         ) : null}
       </div>
-    </>
+    </div>
   ) : (
     <Navigate to="/signin" />
   );

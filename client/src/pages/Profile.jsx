@@ -4,7 +4,11 @@ import UserProfile from "../components/profile/UserProfile";
 const Profile = () => {
   const userData = useSelector((state) => state.auth?.userData);
 
-  return <UserProfile userData={userData} />;
+  return (
+    <div className="main-section">
+      <UserProfile userData={userData} />
+    </div>
+  );
 };
 
 export default Profile;

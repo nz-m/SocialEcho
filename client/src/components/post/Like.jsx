@@ -51,15 +51,13 @@ const Like = ({ post }) => {
   };
 
   return (
-    <>
-      <button
-        onClick={toggleLike}
-        className="flex items-center text-xl cursor-pointer gap-1"
-      >
-        {likeState.liked ? <HiHandThumbUp /> : <HiOutlineHandThumbUp />}{" "}
-        {likeState.localLikes}
-      </button>
-    </>
+    <button
+      onClick={toggleLike}
+      className="flex items-center cursor-pointer gap-1"
+    >
+      {likeState.liked ? <HiHandThumbUp /> : <HiOutlineHandThumbUp />}{" "}
+      {likeState.localLikes}
+    </button>
   );
 };
 

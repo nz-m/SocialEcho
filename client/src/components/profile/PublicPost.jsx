@@ -28,9 +28,11 @@ const PublicPost = ({ publicUserId }) => {
 
   return (
     <div className="my-4">
-      <h1 className="text-2xl font-bold my-3">Posts</h1>
+      <h2 className="text-lg font-bold my-3 border-b pb-2">Posts</h2>
       {publicPosts?.length === 0 ? (
-        <p>No posts yet</p>
+        <p className="text-center">
+          User has not posted anything yet. Check back later!
+        </p>
       ) : (
         <div className="flex gap-4 flex-wrap">
           {publicPosts?.map((post) => (

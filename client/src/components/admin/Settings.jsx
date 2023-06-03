@@ -53,8 +53,6 @@ const Settings = () => {
       setTimeout(() => {
         setIsSuccess(false);
       }, 3000);
-    } catch (error) {
-      console.error(error);
     } finally {
       setIsUpdating(false);
     }
@@ -65,8 +63,10 @@ const Settings = () => {
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-medium mb-4">Service Preferences</h2>
+    <div className="p-5 w-full border rounded-md bg-white mt-3">
+      <h2 className="font-semibold mb-4 border-b pb-2 text-center text-gray-700">
+        Service Preferences
+      </h2>
 
       {isSuccess && (
         <div className="bg-green-100 text-green-800 p-2 mb-4 rounded">
@@ -78,6 +78,7 @@ const Settings = () => {
         <div>Use Perspective API for content moderation</div>
         <div className="ml-auto">
           <input
+            className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             type="checkbox"
             checked={usePerspectiveAPI}
             onChange={(e) => setUsePerspectiveAPI(e.target.checked)}
@@ -89,6 +90,7 @@ const Settings = () => {
         <div>Category filtering service provider</div>
         <div className="ml-auto">
           <select
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
             value={categoryFilteringServiceProvider}
             onChange={(e) =>
               setCategoryFilteringServiceProvider(e.target.value)
@@ -107,6 +109,7 @@ const Settings = () => {
         <div>Category filtering request timeout (ms)</div>
         <div className="ml-auto">
           <input
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
             type="number"
             value={categoryFilteringRequestTimeout}
             min={0}

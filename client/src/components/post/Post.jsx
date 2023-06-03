@@ -8,7 +8,6 @@ import {
 } from "react-icons/hi2";
 import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
-import { FcNext } from "react-icons/fc";
 import "react-photo-view/dist/react-photo-view.css";
 
 const Post = ({ post }) => {
@@ -30,28 +29,24 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="px-6 py-6 rounded-xl shadow-xl bg-white shadow-[#F3F8FF] mb-6 font-sans">
+    <div className="px-6 py-6 rounded-md border bg-white mb-6 hover:shadow duration-300 shadow-2xl shadow-[#f2f5fc]">
       <div className="flex items-start justify-between">
-        <div className="flex  gap-2">
+        <div className="flex gap-2">
           <img
-            className="rounded-full overflow-hidden"
+            className="rounded-full overflow-hidden w-[50px] h-[50px] object-cover"
             src={user.avatar}
             alt="user avatar"
-            style={{ width: "50px" }}
             loading="lazy"
           />
           <div className="flex flex-col">
             {userData._id === user._id ? (
-              <Link
-                to="/profile"
-                className="text-base font-semibold capitalize"
-              >
+              <Link to="/profile" className="font-semibold capitalize">
                 {user.name}
               </Link>
             ) : (
               <Link
                 to={`/user/${user._id}`}
-                className="text-base font-semibold capitalize"
+                className="font-semibold capitalize"
               >
                 {user.name}
               </Link>
@@ -67,7 +62,16 @@ const Post = ({ post }) => {
         <p className="text-sm text-gray-500">{createdAt}</p>
       </div>
       <div>
-        <p className="text-md text-justify mt-2">{content}</p>
+        <p
+          onClick={() => {
+            navigate(`/post/${post._id}`, {
+              state: { from: location.pathname },
+            });
+          }}
+          className="text-md mt-2 whitespace-normal cursor-pointer break-words"
+        >
+          {content}
+        </p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <PhotoProvider
@@ -84,17 +88,16 @@ const Post = ({ post }) => {
                   src={fileUrl}
                   alt={content}
                   loading="lazy"
-                  className="cursor-pointer h-auto rounded-xl mt-3"
+                  className="cursor-pointer h-auto rounded-md mt-3"
                 />
               </PhotoView>
             </PhotoProvider>
           ) : (
             fileUrl && (
               <video
-                className="block mx-auto rounded-md shadow-md focus:outline-none"
+                className="block mx-auto rounded-md focus:outline-none max-w-full h-auto"
                 src={fileUrl}
                 controls
-                style={{ maxWidth: "100%", height: "auto" }}
               />
             )
           )}
@@ -105,7 +108,7 @@ const Post = ({ post }) => {
         <div className="flex items-center gap-2">
           <Like post={post} />
           <Link to={`/post/${post._id}`}>
-            <button className="flex items-center text-xl gap-1">
+            <button className="flex items-center gap-1">
               {" "}
               <HiOutlineChatBubbleOvalLeft />
               {comments.length}
@@ -124,14 +127,6 @@ const Post = ({ post }) => {
               </button>
             )}
           </div>
-          <FcNext
-            onClick={() => {
-              navigate(`/post/${post._id}`, {
-                state: { from: location.pathname },
-              });
-            }}
-            className="text-xl"
-          />
         </div>
 
         {showModal && (

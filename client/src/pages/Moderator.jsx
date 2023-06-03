@@ -17,14 +17,19 @@ const Moderator = () => {
     }
   }, [userRole, navigate]);
 
-  if (userRole !== "moderator") return <CommonLoading />;
+  if (userRole !== "moderator")
+    return (
+      <div className="col-span-3 flex items-center justify-center h-screen">
+        <CommonLoading />
+      </div>
+    );
 
   return (
     <>
-      <div className="w-6/12 px-10 py-5">
+      <div className="col-span-2 bg-white mt-6 border rounded-md">
         <MainSection />
       </div>
-      <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
+      <div className="col-span-1 bg-white sticky top-20 border h-screen-20 p-5 rounded-md">
         <ModeratorsList />
       </div>
     </>

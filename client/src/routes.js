@@ -13,9 +13,7 @@ import Following from "./pages/Following";
 import SignUp from "./pages/SignUp";
 
 const ReportedPost = lazy(() => import("./pages/ReportedPost"));
-const ReportPost = lazy(() => import("./components/community/ReportPost"));
 const Moderator = lazy(() => import("./pages/Moderator"));
-const EditProfileForm = lazy(() => import("./components/form/EditProfileForm"));
 const DevicesLocations = lazy(() => import("./pages/DevicesLocations"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const EmailVerifiedMessage = lazy(() => import("./pages/EmailVerifiedMessage"));
@@ -50,10 +48,6 @@ export const privateRoutes = [
     element: <CommunityHome />,
   },
   {
-    path: "/community/:communityName/report",
-    element: <ReportPost />,
-  },
-  {
     path: "/community/:communityName/reported-post",
     element: <ReportedPost />,
   },
@@ -64,10 +58,6 @@ export const privateRoutes = [
   {
     path: "/saved",
     element: <Saved />,
-  },
-  {
-    path: "/edit-profile",
-    element: <EditProfileForm />,
   },
   {
     path: "/user/:userId",

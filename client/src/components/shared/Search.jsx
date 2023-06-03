@@ -4,14 +4,12 @@ import axios from "axios";
 import debounce from "lodash/debounce";
 import JoinModal from "../modals/JoinModal";
 import { MoonLoader } from "react-spinners";
-import { BsSearch } from "react-icons/bs";
 import { MdClear } from "react-icons/md";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 const Search = () => {
   const navigate = useNavigate();
-  const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
@@ -47,7 +45,7 @@ const Search = () => {
             setJoinedCommunity(joinedCommunity);
             setLoading(false);
           })
-          .catch((err) => {
+          .catch(() => {
             setLoading(false);
           });
       }, 800),
@@ -70,6 +68,7 @@ const Search = () => {
     setInitialValue();
     setInputValue("");
   };
+
   useEffect(() => {
     return () => {
       setInitialValue();
@@ -82,37 +81,32 @@ const Search = () => {
   };
 
   return (
-    <div className="relative">
-      <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
-        <BsSearch className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-      </span>
-
-      <input
-        id="search"
-        className="w-96 py-2 pl-10 pr-4 text-gray-700 bg-white border border-gray-300 rounded focus:outline-none focus:border-primary"
-        value={inputValue}
-        onChange={handleInputChange}
-        onFocus={() => setIsInputFocused(true)}
-        onBlur={() => setIsInputFocused(false)}
-        type="text"
-        placeholder={`${
-          isInputFocused ? "Search for posts, users, communities" : "Search"
-        }`}
-        aria-label="Search"
-        autoComplete="off"
-      />
-
-      <MdClear
-        className={`absolute top-0 right-0 h-full mr-3 text-gray-400 cursor-pointer ${
-          inputValue === "" ? "hidden" : "block"
-        }`}
-        onClick={clearValues}
-      />
+    <div>
+      <div className="relative">
+        <input
+          type="text"
+          id="search"
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder="Search for people, communities, and posts."
+          className="h-10 py-1 bg-white border w-[660px] rounded-full text-sm shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-500 transition duration-300 pl-3 pr-10"
+          aria-label="Search"
+          autoComplete="off"
+        />
+        {inputValue !== "" && (
+          <button
+            className="absolute top-0 right-0 h-full w-10 flex items-center justify-center text-gray-400 hover:text-gray-600"
+            onClick={clearValues}
+          >
+            <MdClear />
+          </button>
+        )}
+      </div>
 
       {inputValue !== "" && (
         <div
           onBlur={() => !community && clearValues()}
-          className="absolute z-30 w-full rounded mt-1 border shadow"
+          className="absolute w-[660px] z-30 rounded-md mt-1 border bg-white"
         >
           {loading && (
             <div className="flex items-center justify-center py-2 px-2">
@@ -144,7 +138,9 @@ const Search = () => {
                         <div className="font-medium text-gray-900">
                           {post.title}
                         </div>
-                        <div className="text-sm text-gray-500">{post.body}</div>
+                        <div className="text-sm text-gray-500">
+                          {post.content}
+                        </div>
                         <div className="text-sm text-gray-500">
                           Posted by {post.user.name} in {post.community.name}
                         </div>
@@ -190,20 +186,6 @@ const Search = () => {
           )}
           {community && (
             <div className="border-b py-2 px-4">
-              {!community.isMember && (
-                <>
-                  <JoinModal
-                    show={joinModalVisibility}
-                    onClose={() => {
-                      toggleModal(false);
-                      setCommunity(null);
-                    }}
-                    community={community}
-                  />
-                  <button onClick={() => toggleModal(true)}>Join</button>
-                </>
-              )}
-
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <img
@@ -212,9 +194,33 @@ const Search = () => {
                     className="h-8 w-8 rounded-full"
                   />
                 </div>
-                <div className="ml-3">
-                  <p className="font-medium">{community.name}</p>
-                  <p className="text-sm">{community.description}</p>
+                <div className=" px-2 flex justify-between items-center gap-2">
+                  <div className="">
+                    <p className="font-medium">{community.name}</p>
+
+                    <p className="text-sm line-clamp-2">
+                      {community.description}
+                    </p>
+                  </div>
+
+                  {!community.isMember && (
+                    <>
+                      <JoinModal
+                        show={joinModalVisibility}
+                        onClose={() => {
+                          toggleModal(false);
+                          setCommunity(null);
+                        }}
+                        community={community}
+                      />
+                      <button
+                        className="bg-primary px-2 py-1 text-white text-sm rounded-md"
+                        onClick={() => toggleModal(true)}
+                      >
+                        Join
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -238,8 +244,10 @@ const Search = () => {
                   />
                 </div>
                 <div className="ml-3">
-                  <p className="font-medium">{joinedCommunity.name}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-semibold text-md text-primary">
+                    {joinedCommunity.name}
+                  </p>
+                  <p className="text-sm text-gray-600 line-clamp-2">
                     {joinedCommunity.description}
                   </p>
                 </div>

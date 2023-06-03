@@ -15,10 +15,14 @@ const AllCommunities = () => {
   }, [dispatch]);
 
   if (!notJoinedCommunities) {
-    return <CommonLoading />;
+    return (
+      <div className="main-section flex items-center justify-center">
+        <CommonLoading />
+      </div>
+    );
   }
   return (
-    <div className="grid grid-cols-2 gap-4 w-6/12 px-10 py-6">
+    <div className="main-section grid grid-cols-2 gap-5 items-center bg-white px-4 py-4">
       {notJoinedCommunities?.map((community) => (
         <CommunityCard key={community._id} community={community} />
       ))}

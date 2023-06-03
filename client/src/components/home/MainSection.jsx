@@ -10,15 +10,13 @@ import CommonLoading from "../loader/CommonLoading";
 const MemoizedPost = memo(Post);
 
 const LoadMoreButton = ({ onClick, isLoading }) => (
-  <div className="flex justify-center">
-    <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      onClick={onClick}
-      disabled={isLoading}
-    >
-      {isLoading ? "Loading..." : "Load More"}
-    </button>
-  </div>
+  <button
+    className="bg-primary hover:bg-blue-700 text-sm text-white font-semibold rounded-md w-full p-2 my-3"
+    onClick={onClick}
+    disabled={isLoading}
+  >
+    {isLoading ? "Loading..." : "Load More Posts"}
+  </button>
 );
 
 const MainSection = ({ userData }) => {
@@ -55,13 +53,13 @@ const MainSection = ({ userData }) => {
 
   if (isLoading) {
     return (
-      <div className="w-6/12 flex items-center justify-center">
+      <div className="flex justify-center items-center h-screen">
         <CommonLoading />
       </div>
     );
   }
   return (
-    <div className="w-6/12 px-10 py-5">
+    <>
       <div>{memoizedPosts}</div>
 
       {posts.length > 0 && posts.length < totalPosts && (
@@ -72,11 +70,11 @@ const MainSection = ({ userData }) => {
       )}
 
       {posts.length === 0 && (
-        <div className="text-gray-500 text-center py-10">
+        <div className="text-center text-gray-700">
           No posts to show. Join a community and post something.
         </div>
       )}
-    </div>
+    </>
   );
 };
 

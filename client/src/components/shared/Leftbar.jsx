@@ -1,27 +1,18 @@
-import { useMemo, memo, useState } from "react";
+import { useMemo, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logoutAction } from "../../redux/actions/authActions";
-import { useEffect } from "react";
 import { getJoinedCommunitiesAction } from "../../redux/actions/communityActions";
-import { BsThreeDots } from "react-icons/bs";
-import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import {
   HiOutlineHome,
   HiOutlineUserCircle,
   HiOutlineRectangleStack,
   HiOutlineTag,
 } from "react-icons/hi2";
+import { HiOutlineUserGroup } from "react-icons/hi2";
 
 const Leftbar = () => {
-  const [loggingOut, setLoggingOut] = useState(false);
   const dispatch = useDispatch();
 
-  const logout = async () => {
-    setLoggingOut(true);
-    await dispatch(logoutAction());
-    setLoggingOut(false);
-  };
   const user = useSelector((state) => state.auth?.userData);
   const joinedCommunities = useSelector(
     (state) => state.community?.joinedCommunities
@@ -43,34 +34,25 @@ const Leftbar = () => {
   }, [visibleCommunities]);
 
   return (
-    <div className="w-3/12 h-[86vh] bg-white sticky top-20 left-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg">
-      <div className="flex flex-col h-full justify-between">
-        <div className="flex gap-2 justify-between">
-          <img className="rounded-full w-10" src={user.avatar} alt="user" />
-          {user && (
-            <p className="font-bold text-primary capitalize text-sm">
-              {user.name}
-            </p>
-          )}
-          <BsThreeDots className="cursor-pointer" />
-        </div>
-        <div className="flex flex-col items-start gap-4">
+    <div className="leftbar">
+      <div className="flex flex-col justify-start items-center">
+        <div className="flex flex-col items-start gap-4 w-full p-5">
           <Link
-            className="flex items-center gap-2 text-lg font-medium"
+            className="flex items-center gap-2 text-lg font-medium hover:text-primary"
             to="/home"
           >
             <HiOutlineHome className="text-xl" />
             <p>Home</p>
           </Link>
           <Link
-            className="flex items-center gap-2 text-lg font-medium"
+            className="flex items-center gap-2 text-lg font-medium hover:text-primary"
             to="/profile"
           >
             <HiOutlineUserCircle className="text-xl" />
             <p>Profile</p>
           </Link>
           <Link
-            className="flex items-center gap-2 text-lg font-medium"
+            className="flex items-center gap-2 text-lg font-medium hover:text-primary"
             to="/saved"
           >
             <HiOutlineTag className="text-xl" />
@@ -79,7 +61,7 @@ const Leftbar = () => {
 
           {user && user.role === "general" && (
             <Link
-              className="flex items-center gap-2 text-lg font-medium"
+              className="flex items-center gap-2 text-lg font-medium hover:text-primary"
               to="/following"
             >
               <HiOutlineRectangleStack className="text-xl" />
@@ -87,42 +69,42 @@ const Leftbar = () => {
             </Link>
           )}
 
+          <hr className="w-full my-4 border-gray-300" />
+
           {communityLinks && communityLinks.length > 0 ? (
-            <div>
-              <div className="w-full flex gap-12">
-                <h3 className="mb-2 text-lg">Communities </h3>
-                <Link className="flex gap-2" to="/my-communities">
-                  <p className="text-primary "> See all</p>
-                  <p className="bg-primary px-2 py-2 w-5 h-5 flex justify-center items-center -mt-3 rounded-full text-white text-[10px]">
+            <div className="w-full">
+              <div className="flex items-center justify-between ">
+                <div className="flex gap-1 font-medium items-center ">
+                  <HiOutlineUserGroup className="text-xl" />
+                  Communities
+                </div>
+
+                <Link
+                  className="flex relative items-center text-sm font-medium text-primary mr-4"
+                  to="/my-communities"
+                >
+                  See all
+                  <p className="absolute -top-2 -right-4 text-white text-xs bg-primary w-4 h-4 rounded-full flex justify-center items-center">
+                    {" "}
                     {joinedCommunities.length}
                   </p>
                 </Link>
               </div>
-              <ul>
+              <ul className="w-full mt-3">
                 {communityLinks.map((communityLink) => (
                   <li key={communityLink.href}>
-                    <Link to={communityLink.href}>{communityLink.label}</Link>
+                    <Link
+                      className="flex items-center hover:text-primary text-gray-600 font-medium gap-2 py-1"
+                      to={communityLink.href}
+                    >
+                      {communityLink.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
           ) : (
             <div>No communities found.</div>
-          )}
-        </div>
-        <div className="flex flex-col items-center justify-center">
-          {user && (
-            <button
-              disabled={loggingOut}
-              className="px-4 py-1 border border-dashed border-red-500 hover:bg-red-400 transition duration-500 hover:text-white text-red-500 rounded-lg"
-              onClick={logout}
-            >
-              {loggingOut ? (
-                <LoadingSpinner loadingText={"Logging out..."} />
-              ) : (
-                "Logout"
-              )}
-            </button>
           )}
         </div>
       </div>

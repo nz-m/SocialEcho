@@ -84,14 +84,15 @@ const PublicProfile = () => {
   } = userProfile;
 
   return (
-    <div className="w-6/12 px-10 py-5">
-      <div className="bg-white px-6 py-6 rounded-xl shadow-2xl shadow-[#F3F8FF]">
-        <div className=" flex flex-col items-center justify-center bg-white py-6">
+    <div className="main-section">
+      <div className="bg-white px-6 py-6 border">
+        <div className="flex flex-col items-center justify-center bg-white py-6">
           <div className="relative">
             <img
               className="h-20 w-20 rounded-full object-cover mr-4"
               src={avatar}
               alt="Profile"
+              loading="lazy"
             />
             <button
               onClick={() => handleUnfollow(publicUserId)}
@@ -241,8 +242,8 @@ const PublicProfile = () => {
         </div>
 
         <div className="flex flex-col bg-white">
-          <p className="text-xl font-semibold mt-2">Interest In </p>
-          {interests && (
+          <p className="mt-2 font-semibold">Interests </p>
+          {interests ? (
             <ul className="flex items-center gap-3">
               {interests.split(",").map((interest, i) => (
                 <li
@@ -253,6 +254,8 @@ const PublicProfile = () => {
                 </li>
               ))}
             </ul>
+          ) : (
+            <p className="text-gray-500">No interests added</p>
           )}
         </div>
       </div>

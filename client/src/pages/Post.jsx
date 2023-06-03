@@ -40,15 +40,17 @@ const Post = () => {
   }, [isAuthorized, navigate]);
 
   if (!post || !joinedCommunities) {
-    return <CommonLoading />;
+    return (
+      <div className="col-span-3 flex justify-center items-center h-screen">
+        <CommonLoading />
+      </div>
+    );
   }
   return (
-    <>
-      <Suspense fallback={<FallbackLoading />}>
-        <PostView post={post} userData={userData} />
-        <CommentSidebar comments={post.comments} />
-      </Suspense>
-    </>
+    <Suspense fallback={<FallbackLoading />}>
+      <PostView post={post} userData={userData} />
+      <CommentSidebar comments={post.comments} />
+    </Suspense>
   );
 };
 

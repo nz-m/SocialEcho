@@ -7,9 +7,8 @@ import {
 } from "../../redux/actions/userActions";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import JoinModal from "../modals/JoinModal";
-import LoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { BsPersonPlusFill } from "react-icons/bs";
-import { IoIosPeople } from "react-icons/io";
+import { IoIosPeople, IoMdPeople } from "react-icons/io";
 import placeholder from "../../assets/placeholder.png";
 
 const Rightbar = () => {
@@ -77,18 +76,19 @@ const Rightbar = () => {
   const currentLocation = useLocation().pathname;
 
   return (
-    <div className="w-3/12 h-[86vh] bg-white sticky top-20 right-0 shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded z-10">
+    <div className="rightbar">
       {currentLocation !== "/communities" && (
         <div>
           <div className="flex items-end justify-between mb-4">
             <h5 className="font-semibold text-sm">Suggested Communities</h5>
             {remainingCount > 0 && (
               <Link
+                className="flex relative items-center text-sm font-medium text-primary mr-4"
                 to="/communities"
-                className=" text-blue-500 font-medium flex text-xs"
               >
-                See More
-                <p className="bg-primary px-2 py-2 w-5 h-5 flex justify-center items-center -mt-3 rounded-full text-white text-[10px]">
+                See all
+                <p className="absolute -top-2 -right-4 text-white text-xs bg-primary w-4 h-4 rounded-full flex justify-center items-center">
+                  {" "}
                   {remainingCount}
                 </p>
               </Link>
@@ -104,7 +104,7 @@ const Rightbar = () => {
             {visibleCommunities?.map((community) => (
               <li
                 key={community._id}
-                className="flex items-center justify-between bg-white shadow-2xl shadow-[#f2f5fc]  border border-slate-100 px-2 py-1 rounded-lg"
+                className="flex items-center justify-between bg-white px-2 py-1 rounded-md"
               >
                 <div className="flex items-center">
                   <img
@@ -113,21 +113,24 @@ const Rightbar = () => {
                     alt="community"
                   />
                   <div className="text-base font-medium flex flex-col">
-                    <p> {community.name}</p>
+                    <p className="line-clamp-1"> {community.name}</p>
 
-                    <p className="text-xs text-gray-400">3.2k</p>
+                    <p className="text-xs text-gray-500 flex items-center gap-1">
+                      <IoMdPeople />
+                      {community.members.length}
+                    </p>
                   </div>
                 </div>
 
                 <button
                   onClick={() => toggleJoinModal(community._id, true)}
-                  className=" text-primary border border-dashed border-blue-500
+                  className="text-primary border border-dashed border-blue-500
                         hover:bg-primary 
                          rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
                 >
-                  <p className="group-hover:text-white flex items-center  gap-2">
-                    Join
+                  <p className="group-hover:text-white flex items-center gap-2">
                     <IoIosPeople className="inline-block text-lg" />
+                    Join
                   </p>
                 </button>
                 <JoinModal
@@ -156,9 +159,9 @@ const Rightbar = () => {
               key={user._id}
               className="flex justify-between items-center gap-5 bg-white shadow-2xl shadow-[#f2f5fc]  border border-slate-100 px-2 py-1 rounded-lg"
             >
-              <div className="flex justify-content-between items-center">
+              <div className="flex justify-content-between items-center gap-1">
                 <img
-                  className="h-8 w-8 rounded-full mr-4"
+                  className="h-7 w-7 rounded-full flex-shrink-0"
                   src={user.avatar}
                   alt={user.name}
                 />
@@ -178,15 +181,17 @@ const Rightbar = () => {
                 disabled={followLoading[user._id]}
                 onClick={() => followUserHandler(user._id)}
                 className="text-primary border border-dashed border-blue-500
-                        hover:bg-primary 
+                        hover:bg-primary
                          rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
               >
                 {followLoading[user._id] ? (
-                  <LoadingSpinner />
+                  <div className="group-hover:text-white flex items-center gap-2 justify-center">
+                    <span className="loader"></span>
+                  </div>
                 ) : (
                   <p className="group-hover:text-white flex items-center gap-2">
+                    <BsPersonPlusFill className="inline-block" />
                     Follow
-                    <BsPersonPlusFill className="inline-block text-lg" />
                   </p>
                 )}
               </button>

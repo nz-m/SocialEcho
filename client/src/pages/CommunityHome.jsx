@@ -22,12 +22,21 @@ const CommunityHome = () => {
     }
   }, [isAuthorized, navigate, communityName]);
 
-  if (!joinedCommunities) return <CommonLoading />;
+  if (!joinedCommunities)
+    return (
+      <div className="col-span-3 flex justify-center items-center h-screen">
+        <CommonLoading />
+      </div>
+    );
 
   return (
     <>
-      <CommunityMainSection />
-      <CommunityRightbar />
+      <div className="main-section">
+        <CommunityMainSection />
+      </div>
+      <div className="rightbar overflow-y-auto">
+        <CommunityRightbar />
+      </div>
     </>
   );
 };

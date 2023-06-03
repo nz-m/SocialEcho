@@ -31,7 +31,7 @@ module.exports = {
       },
 
       colors: {
-        bg: {
+        background: {
           DEFAULT: "#F6F7FA",
           200: "#272727",
           300: "#2e2e2e",
@@ -53,7 +53,5 @@ module.exports = {
     },
   },
 
-  plugins: [
-    require("tw-elements/dist/plugin"),
-  ],
+  plugins: [],
 };

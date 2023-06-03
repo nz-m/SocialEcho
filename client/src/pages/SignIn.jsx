@@ -5,6 +5,7 @@ import { signInAction } from "../redux/actions/authActions";
 import { AiFillGithub } from "react-icons/ai";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
+import Logo from "../assets/SocialEcho.png";
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
@@ -27,14 +28,10 @@ const SignIn = () => {
   const successMessage = useSelector((state) => state.auth?.successMessage);
   return (
     <section className="bg-white">
-      <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
+      <div className="container flex flex-col items-center justify-center md:h-screen px-6 mx-auto">
         <form className="w-full max-w-md">
           <div className="flex justify-center mx-auto">
-            <img
-              className="w-auto h-7 sm:h-8"
-              src="https://merakiui.com/images/logo.svg"
-              alt=""
-            />
+            <img className="w-auto h-7 sm:h-8" src={Logo} alt="" />
           </div>
           {signInError && (
             <div
@@ -141,25 +138,25 @@ const SignIn = () => {
             </button>
           </div>
         </form>
+        <span className="flex items-center justify-center py-4 text-gray-600 text-sm ">
+          <a
+            href="https://github.com/nz-m/SocialEcho"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center hover:text-blue-500"
+          >
+            <AiFillGithub className="w-5 h-5 mr-2" />
+            <span>GitHub</span>
+          </a>
+          <Link
+            to="/admin"
+            className="flex items-center ml-8 hover:text-blue-500"
+          >
+            <MdOutlineAdminPanelSettings className="w-5 h-5 mr-2" />
+            <span>Admin</span>
+          </Link>
+        </span>
       </div>
-      <span className="flex items-center justify-center py-4 text-gray-600 text-sm">
-        <a
-          href="https://github.com/nz-m/SocialEcho"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center hover:text-blue-500"
-        >
-          <AiFillGithub className="w-5 h-5 mr-2" />
-          <span>GitHub</span>
-        </a>
-        <Link
-          to="/admin"
-          className="flex items-center ml-8 hover:text-blue-500"
-        >
-          <MdOutlineAdminPanelSettings className="w-5 h-5 mr-2" />
-          <span>Admin</span>
-        </Link>
-      </span>
     </section>
   );
 };

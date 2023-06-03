@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { getUserAction } from "../../redux/actions/userActions";
 import PostOnProfile from "../post/PostOnProfile";
 import OwnProfileCard from "./OwnProfileCard";
-import SelfInfoCard from "./OwnInfoCard";
 import CommonLoading from "../loader/CommonLoading";
+import OwnInfoCard from "./OwnInfoCard";
 
 const UserProfile = ({ userData }) => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const UserProfile = ({ userData }) => {
 
   const MemoizedPostOnProfile = memo(PostOnProfile);
 
-  let postToShow = null;
+  let postToShow;
 
   postToShow = posts?.map((post) => (
     <MemoizedPostOnProfile key={post._id} post={post} />
@@ -30,23 +30,25 @@ const UserProfile = ({ userData }) => {
 
   return (
     <>
-      {loading ? (
-        <div className="w-6/12 flex items-center justify-center h-screen">
+      {loading || !user || !posts ? (
+        <div className="flex justify-center items-center h-screen">
           <CommonLoading />
         </div>
       ) : (
-        <div className="w-6/12 px-10 py-6">
+        <>
           <OwnProfileCard user={user} />
-          <SelfInfoCard user={user} />
+          <OwnInfoCard user={user} />
 
-          <h3 className="text-lg font-bold mb-4">Your most recent posts</h3>
+          <h3 className="font-semibold text-center mb-4 text-gray-700 p-3 border-b">
+            Your most recent posts
+          </h3>
 
           {postToShow?.length === 0 ? (
-            <p className="text-gray-600">No posts available.</p>
+            <p className="text-gray-600 text-center">No posts available.</p>
           ) : (
             postToShow
           )}
-        </div>
+        </>
       )}
     </>
   );
