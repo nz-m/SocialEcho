@@ -15,11 +15,12 @@
   border-radius: 5px;
 }
 
-*::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(180deg,#0AC9FF 0%, #9500FF 99%);
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(to bottom, #0070ff, #00d2ff, #0070ff);
   border-radius: 10px;
   border: 2px solid #ffff;
 }
+
 body {
   background-color: #f7fafc;
 }
@@ -67,7 +68,6 @@ body {
   width: 20px;
   height: 20px;
   border: 3px dotted #0AC9FF;
-  border-style: solid solid dotted dotted;
   border-radius: 50%;
   display: inline-block;
   position: relative;
@@ -84,7 +84,6 @@ body {
   bottom: 0;
   margin: auto;
   border: 3px dotted #197fc7;
-  border-style: solid solid dotted;
   width: 12px;
   height: 12px;
   border-radius: 50%;

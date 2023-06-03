@@ -15,6 +15,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import CommonLoading from "../loader/CommonLoading";
 import "react-photo-view/dist/react-photo-view.css";
 import { PhotoProvider, PhotoView } from "react-photo-view";
+import ReportPostModal from "../modals/ReportPostModal";
 const PostView = ({ post, userData }) => {
   const [loading, setLoading] = useState(true);
 
@@ -43,17 +44,23 @@ const PostView = ({ post, userData }) => {
     dispatch(getCommunityAction(community.name)).then(() => setLoading(false));
   }, [dispatch, community.name, loading]);
 
-  const reportHandler = () => {
-    navigate(`/community/${community.name}/report`, {
-      state: { post, communityName: community.name },
-    });
-  };
   const [showModal, setShowModal] = useState(false);
   const toggleModal = (value) => {
     setShowModal(value);
   };
   const handleBack = () => {
     navigate(-1);
+  };
+
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [isReportedPost, setIsReportedPost] = useState(isReported);
+
+  const handleReportClick = () => {
+    setIsReportModalOpen(true);
+  };
+
+  const handleReportClose = () => {
+    setIsReportModalOpen(false);
   };
 
   if (loading) {
@@ -148,14 +155,14 @@ const PostView = ({ post, userData }) => {
             <span>
               Saved by {savedByCount} {savedByCount === 1 ? "person" : "people"}
             </span>
-            {isReported ? (
+            {isReportedPost ? (
               <button disabled className="flex items-center space-x-1">
                 <HiOutlineInformationCircle />
                 <span>Reported</span>
               </button>
             ) : (
               <button
-                onClick={reportHandler}
+                onClick={handleReportClick}
                 className="flex items-center space-x-1"
               >
                 <HiOutlineInformationCircle />
@@ -182,6 +189,14 @@ const PostView = ({ post, userData }) => {
           </div>
         </div>
       </div>
+
+      <ReportPostModal
+        isOpen={isReportModalOpen}
+        onClose={handleReportClose}
+        postId={post._id}
+        communityId={community._id}
+        setReportedPost={setIsReportedPost}
+      />
 
       <div>
         <CommentForm communityId={community._id} postId={post._id} />

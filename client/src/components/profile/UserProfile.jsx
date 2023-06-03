@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { getUserAction } from "../../redux/actions/userActions";
 import PostOnProfile from "../post/PostOnProfile";
 import OwnProfileCard from "./OwnProfileCard";
-import SelfInfoCard from "./OwnInfoCard";
 import CommonLoading from "../loader/CommonLoading";
+import OwnInfoCard from "./OwnInfoCard";
 
 const UserProfile = ({ userData }) => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const UserProfile = ({ userData }) => {
 
   const MemoizedPostOnProfile = memo(PostOnProfile);
 
-  let postToShow = null;
+  let postToShow;
 
   postToShow = posts?.map((post) => (
     <MemoizedPostOnProfile key={post._id} post={post} />
@@ -30,16 +30,16 @@ const UserProfile = ({ userData }) => {
 
   return (
     <>
-      {loading ? (
+      {loading || !user || !posts ? (
         <div className="flex justify-center items-center h-screen">
           <CommonLoading />
         </div>
       ) : (
         <>
           <OwnProfileCard user={user} />
-          <SelfInfoCard user={user} />
+          <OwnInfoCard user={user} />
 
-          <h3 className="text-lg font-semibold mb-4 text-gray-700 p-3 border-b">
+          <h3 className="font-semibold text-center mb-4 text-gray-700 p-3 border-b">
             Your most recent posts
           </h3>
 

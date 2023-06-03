@@ -16,7 +16,7 @@ const PostOnProfile = ({ post }) => {
 
   return (
     <div
-      className={`bg-white rounded-md p-4 shadow-md my-2 cursor-pointer ${
+      className={`bg-white rounded-md p-4 border my-2 cursor-pointer ${
         isMember ? "" : "opacity-50 pointer-events-none"
       }`}
       onClick={() => {
@@ -35,10 +35,10 @@ const PostOnProfile = ({ post }) => {
         </div>
       </div>
       <div className="my-3">
-        {content && <p className="text-lg mb-4">{content}</p>}
+        {content && <p className="mb-4">{content}</p>}
         {fileUrl && isImageFile ? (
           <img
-            className="w-[800px] h-auto rounded-xl my-3"
+            className="w-[800px] h-auto rounded-md my-3"
             src={fileUrl}
             alt={content}
             loading="lazy"
@@ -46,7 +46,7 @@ const PostOnProfile = ({ post }) => {
         ) : (
           fileUrl && (
             <video
-              className="w-[800px] h-auto rounded-xl my-3"
+              className="w-[800px] h-auto rounded-md my-3"
               src={fileUrl}
               controls
             />

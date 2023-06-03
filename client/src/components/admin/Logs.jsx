@@ -43,6 +43,7 @@ const Logs = () => {
 
   useEffect(() => {
     fetchLogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logs?.length]);
 
   if (loading || !logs) {
@@ -55,15 +56,15 @@ const Logs = () => {
 
   return (
     <div className="bg-white flex flex-col items-center justify-center mt-3 rounded-md">
-      <div className=" p-4 shadow-md rounded relative xl:min-w-[1200px] lg:min-w-[1000px] md:min-w-[800px]">
-        <div className="flex items-center justify-between">
-          <h1 className="text-lg font-medium bg-white  shadow-2xl shadow-[#F3F8FF] p-2 my-2 rounded-md">
+      <div className="p-4 shadow-md rounded relative xl:min-w-[1200px] lg:min-w-[1000px] md:min-w-[800px]">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-2xl font-bold text-gray-800">
             User Activity Logs
           </h1>
           <CurrentTime />
         </div>
 
-        <div className="flex justify-between items-center mb-2 border border-gray-200 p-2 rounded">
+        <div className="flex justify-between items-center mb-4 border-b border-gray-200 pb-2">
           <div className="text-sm italic text-gray-600">{`Showing ${logs.length} items from the last 7 days`}</div>
 
           <div className="flex items-center space-x-2">
@@ -88,29 +89,29 @@ const Logs = () => {
 
         {!loading ? (
           logs.length === 0 ? (
-            <div className="  text-gray-500 text-lg">No logs found</div>
+            <div className="text-gray-500 text-lg">No logs found</div>
           ) : (
             <>
               <div className="h-[430px] relative overflow-auto">
-                <div className="w-full shadow-2xl sticky top-0 left-0 shadow-[#F3F8FF]  bg-white rounded">
-                  <div className="grid grid-cols-5 gap-5 items-center border-b py-2 text-lg font-semibold">
-                    <p>Timestamp</p>
+                <div className="w-full rounded">
+                  <div className="grid grid-cols-5 gap-5 items-center border-b py-2 font-semibold text-gray-800">
+                    <p className="text-center">Timestamp</p>
                     <p>Message</p>
-                    <p> Email Used</p>
+                    <p>Email Used</p>
                     <p>Level</p>
                     <p>Context Data</p>
                   </div>
                   {logs.map((log) => (
                     <div
                       key={log._id}
-                      className="grid grid-cols-5 gap-5 items-center border-b py-2 "
+                      className="grid grid-cols-5 gap-5 items-center border-b py-2 text-sm text-gray-700"
                     >
-                      <p className="flex flex-col text-center">
-                        <p> {log.relativeTimestamp}</p>
-                        <p> {log.formattedTimestamp}</p>
-                      </p>
+                      <span className="flex-col justify-center items-center text-center font-mono">
+                        <p>{log.relativeTimestamp}</p>
+                        <p className="text-xs">{log.formattedTimestamp}</p>
+                      </span>
                       <td
-                        className={` ${
+                        className={`${
                           log.level === "info"
                             ? "text-blue-500"
                             : log.level === "warn"
@@ -123,7 +124,7 @@ const Logs = () => {
                         <span className="capitalize">{log.type}: </span>
                         <span>{log.message}</span>
                       </td>
-                      <p> {log.email}</p>
+                      <p>{log.email}</p>
                       <td className="">
                         <span
                           className={`rounded-full px-2 py-1 text-sm font-semibold ${
@@ -157,10 +158,8 @@ const Logs = () => {
                 </div>
               </div>
 
-              <div>
-                <div className="flex justify-center text-sm italic text-gray-600 mt-2">
-                  logs are automatically deleted after 7 days
-                </div>
+              <div className="flex justify-center text-sm italic text-gray-600 mt-2">
+                logs are automatically deleted after 7 days
               </div>
             </>
           )

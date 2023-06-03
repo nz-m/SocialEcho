@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { clearPostAction, getPostAction } from "../redux/actions/postActions";
 import { useSelector, useDispatch } from "react-redux";
 import CommonLoading from "../components/loader/CommonLoading";
-
 import ViewReportedPost from "../components/moderator/ViewReportedPost";
 import CommentSidebar from "../components/post/CommentSidebar";
 const ReportedPost = () => {

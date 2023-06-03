@@ -32,7 +32,7 @@ const ViewReportedPost = ({ post }) => {
   const { content, user, dateTime, comments, savedByCount } = post;
 
   return (
-    <div className="shadow-2xl shadow-[#F3F8FF] px-6 py-6 my-5 rounded-lg bg-white mx-10">
+    <div className="border px-6 py-6 my-5 rounded-md bg-white mx-10">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center">
           <img
@@ -47,7 +47,7 @@ const ViewReportedPost = ({ post }) => {
       <div className="text-lg mb-4">{content}</div>
       {fileUrl && isImageFile ? (
         <img
-          className="w-[800px] h-auto rounded-xl mt-3"
+          className="w-[800px] h-auto rounded-md mt-3"
           src={fileUrl}
           alt={content}
           loading="lazy"
@@ -55,7 +55,7 @@ const ViewReportedPost = ({ post }) => {
       ) : (
         fileUrl && (
           <video
-            className="w-[800px] h-auto rounded-xl mt-3"
+            className="w-[800px] h-auto rounded-md mt-3"
             src={fileUrl}
             controls
           />
@@ -73,15 +73,15 @@ const ViewReportedPost = ({ post }) => {
         </div>
       </div>
 
-      <div className="flex justify-end mt-3">
+      <div className="flex justify-end mt-3 text-sm">
         <button
-          className="px-4 py-2 bg-red-500 text-white rounded-lg mr-2"
+          className="px-2 py- bg-red-500 text-white rounded-md mr-2"
           onClick={onRemove}
         >
           Remove
         </button>
         <button
-          className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+          className="px-3 py-1 bg-gray-500 text-white rounded-md"
           onClick={onNoAction}
         >
           No Action

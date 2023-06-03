@@ -5,8 +5,8 @@ import Search from "./Search";
 import { memo } from "react";
 import { logoutAction } from "../../redux/actions/authActions";
 import { useDispatch } from "react-redux";
-import { Transition } from "@headlessui/react";
 import { IoLogOutOutline } from "react-icons/io5";
+import { Transition } from "@headlessui/react";
 
 const Navbar = ({ userData }) => {
   const dispatch = useDispatch();

@@ -2,7 +2,20 @@ import { Link } from "react-router-dom";
 import { RiEditCircleLine } from "react-icons/ri";
 import { CiLocationOn } from "react-icons/ci";
 import { GrContactInfo } from "react-icons/gr";
+import { useState } from "react";
+import ProfileUpdateModal from "../modals/ProfileUpdateModal";
+
 const OwnProfileCard = ({ user }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="bg-white rounded-md p-6 border">
       <div className="flex flex-col justify-between items-center ">
@@ -13,13 +26,17 @@ const OwnProfileCard = ({ user }) => {
               src={user.avatar}
               alt="Profile"
             ></img>
-            <Link
-              to="/edit-profile"
-              state={{ userInfo: user }}
+            <span
+              onClick={handleOpenModal}
               className="bg-primary py-3  px-3 rounded-full absolute -bottom-2 shadow-lg hover:bg-blue-700 right-3"
             >
               <RiEditCircleLine className="text-lg text-white" />
-            </Link>
+            </span>
+            <ProfileUpdateModal
+              user={user}
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+            />
           </div>
 
           <div>
@@ -40,10 +57,10 @@ const OwnProfileCard = ({ user }) => {
         </div>
       </div>
       <div className="flex flex-col justify-start my-3">
-        <p className="font-semibold text-lg ">Location</p>
+        <p className="font-semibold">Location</p>
         {user.location ? (
           <p className="text-gray-700 flex gap-2 items-center">
-            <CiLocationOn className="text-lg font-semibold" />
+            <CiLocationOn className="font-semibold" />
             {user.location}
           </p>
         ) : (
@@ -55,13 +72,13 @@ const OwnProfileCard = ({ user }) => {
       </div>
 
       <div className="">
-        <h3 className="text-lg font-bold ">Interests</h3>
+        <h3 className="font-bold">Interests</h3>
         {user.interests ? (
-          <ul className="flex items-center gap-4 mt-2">
+          <ul className="flex items-center gap-2 mt-2">
             {user.interests.split(",").map((interest, i) => (
               <li
                 key={i}
-                className="border border-primary rounded-full px-2 py-1 text-primary"
+                className="border border-primary rounded-full p-1 text-primary text-sm"
               >
                 {interest.trim()}
               </li>
@@ -76,7 +93,7 @@ const OwnProfileCard = ({ user }) => {
       </div>
       <span className="flex flex-col justify-center items-center mt-3 border-t">
         <Link
-          className="text-primary text-lg mt-3 cursor-pointer hover:underline"
+          className="text-primary mt-3 cursor-pointer hover:underline"
           to="/devices-locations"
         >
           Manage Devices and Locations

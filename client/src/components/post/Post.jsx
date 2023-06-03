@@ -68,7 +68,7 @@ const Post = ({ post }) => {
               state: { from: location.pathname },
             });
           }}
-          className="text-md text-justify mt-2 whitespace-normal cursor-pointer break-words"
+          className="text-md mt-2 whitespace-normal cursor-pointer break-words"
         >
           {content}
         </p>
@@ -88,7 +88,7 @@ const Post = ({ post }) => {
                   src={fileUrl}
                   alt={content}
                   loading="lazy"
-                  className="cursor-pointer h-auto rounded-xl mt-3"
+                  className="cursor-pointer h-auto rounded-md mt-3"
                 />
               </PhotoView>
             </PhotoProvider>
