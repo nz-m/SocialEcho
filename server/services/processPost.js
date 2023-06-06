@@ -44,7 +44,8 @@ const processPost = async (req, res, next) => {
   } catch (error) {
     const errorMessage = `Error processing post: ${error.message}`;
     await saveLogInfo(null, errorMessage, serviceProvider, "error");
-    return res.status(500).json({ message: "Error processing post" });
+    req.failedDetection = true;
+    next();
   }
 };
 

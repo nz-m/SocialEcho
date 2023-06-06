@@ -46,7 +46,7 @@ const signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const existingUser = await User.findOne({
-      email: {$eq: email},
+      email: { $eq: email },
     });
     if (!existingUser) {
       await saveLogInfo(
@@ -292,12 +292,6 @@ const addUser = async (req, res, next) => {
    */
   const isConsentGiven = JSON.parse(req.body.isConsentGiven);
 
-  const fileUrl = req.files?.[0]?.filename
-    ? `${req.protocol}://${req.get("host")}/assets/userAvatars/${
-        req.files[0].filename
-      }`
-    : null;
-
   const emailDomain = req.body.email.split("@")[1];
   const role = emailDomain === "mod.socialecho.com" ? "moderator" : "general";
 
@@ -306,7 +300,7 @@ const addUser = async (req, res, next) => {
     email: req.body.email,
     password: hashedPassword,
     role: role,
-    avatar: fileUrl,
+    avatar: req.fileUrl,
   });
 
   try {
@@ -357,7 +351,7 @@ const refreshToken = async (req, res) => {
     const { refreshToken } = req.body;
 
     const existingToken = await Token.findOne({
-      refreshToken : { $eq: refreshToken },
+      refreshToken: { $eq: refreshToken },
     });
     if (!existingToken) {
       return res.status(401).json({

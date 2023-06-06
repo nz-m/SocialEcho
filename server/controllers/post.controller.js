@@ -10,12 +10,11 @@ const User = require("../models/user.model");
 const Relationship = require("../models/relationship.model");
 const Report = require("../models/report.model");
 const PendingPost = require("../models/pendingPost.model");
-const fs = require("fs");
 
 const createPost = async (req, res) => {
   try {
     const { communityId, content } = req.body;
-    const { userId, files } = req;
+    const { userId, fileUrl, fileType } = req;
 
     const community = await Community.findOne({
       _id: { $eq: communityId },
@@ -23,14 +22,20 @@ const createPost = async (req, res) => {
     });
 
     if (!community) {
-      if (files && files.length > 0) {
-        const file = files[0];
-        const filePath = `./assets/userFiles/${file.filename}`;
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.error(err);
-          }
-        });
+      if (fileUrl) {
+        const AZURE_CONNECTION_STRING = process.env.AZURE_CONNECTION_STRING;
+        const blobServiceClient = BlobServiceClient.fromConnectionString(
+          AZURE_CONNECTION_STRING
+        );
+        const containerName = "userfiles";
+        const containerClient =
+          blobServiceClient.getContainerClient(containerName);
+        const blobName = path.basename(fileUrl);
+        const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+        const deleteResponse = await blockBlobClient.delete();
+        console.log(
+          `Blob deleted from Azure Blob Storage: ${deleteResponse.requestId}`
+        );
       }
 
       return res.status(401).json({
@@ -38,17 +43,12 @@ const createPost = async (req, res) => {
       });
     }
 
-    const file = files && files.length > 0 ? files[0] : null;
-
-    const fileUrl = file
-      ? `${req.protocol}://${req.get("host")}/assets/userFiles/${file.filename}`
-      : null;
-
     const newPost = new Post({
       user: userId,
       community: communityId,
       content,
-      fileUrl,
+      fileUrl: fileUrl ? fileUrl : null,
+      fileType: fileType ? fileType : null,
     });
 
     const savedPost = await newPost.save();

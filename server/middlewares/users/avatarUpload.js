@@ -1,23 +1,16 @@
-const fs = require("fs");
+const { BlobServiceClient } = require("@azure/storage-blob");
+const multer = require("multer");
+const path = require("path");
+
 function avatarUpload(req, res, next) {
-  const multer = require("multer");
-  const path = require("path");
-  const up_folder = path.join(__dirname, "../../assets/userAvatars");
+  const AZURE_CONNECTION_STRING = process.env.AZURE_CONNECTION_STRING;
+  const blobServiceClient = BlobServiceClient.fromConnectionString(
+    AZURE_CONNECTION_STRING
+  );
+  const containerName = "profile";
+  const containerClient = blobServiceClient.getContainerClient(containerName);
 
-  const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      if (!fs.existsSync(up_folder)) {
-        fs.mkdirSync(up_folder, { recursive: true });
-      }
-      cb(null, up_folder);
-    },
-    filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      const ext = path.extname(file.originalname);
-      cb(null, file.fieldname + "-" + uniqueSuffix + ext);
-    },
-  });
-
+  const storage = multer.memoryStorage();
   const upload = multer({
     storage: storage,
     limits: {
@@ -36,7 +29,7 @@ function avatarUpload(req, res, next) {
     },
   });
 
-  upload.any()(req, res, (err) => {
+  upload.single("avatar")(req, res, async (err) => {
     if (err) {
       res.status(500).json({
         success: false,
@@ -44,6 +37,17 @@ function avatarUpload(req, res, next) {
         error: err.message,
       });
     } else {
+      const blobName = `${Date.now()}-${path.basename(req.file.originalname)}`;
+      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+      const uploadResponse = await blockBlobClient.upload(
+        req.file.buffer,
+        req.file.buffer.length
+      );
+      console.log(
+        `File uploaded to Azure Blob Storage: ${uploadResponse.requestId}`
+      );
+      const fileUrl = blockBlobClient.url;
+      req.fileUrl = fileUrl;
       next();
     }
   });

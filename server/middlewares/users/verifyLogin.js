@@ -101,7 +101,7 @@ const verifyLogin = async (req, res) => {
 
     await newContextData.save();
     await SuspiciousLogin.findOneAndUpdate(
-        { _id: { $eq: id } },
+      { _id: { $eq: id } },
       { $set: { isTrusted: true, isBlocked: false } },
       { new: true }
     );
@@ -123,14 +123,14 @@ const blockLogin = async (req, res) => {
     }
 
     await SuspiciousLogin.findOneAndUpdate(
-        { _id: { $eq: id } },
-        { $set: { isBlocked: true, isTrusted: false } },
-        { new: true }
+      { _id: { $eq: id } },
+      { $set: { isBlocked: true, isTrusted: false } },
+      { new: true }
     );
 
     res.status(200).json({ message: "Login blocked" });
   } catch (err) {
-    res.status(500).json({ message: "Could not block your login" });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 

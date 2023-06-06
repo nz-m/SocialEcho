@@ -45,6 +45,7 @@ const search = async (req, res) => {
 
     res.status(200).json({ posts, users, community, joinedCommunity });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "An error occurred" });
   }
 };

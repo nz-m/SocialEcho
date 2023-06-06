@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
  * @param {Function} next - Express middleware function.
  */
 const decodeToken = (req, res, next) => {
+  
   const authHeader = req.headers.authorization;
   const token = authHeader.split(" ")[1];
   try {

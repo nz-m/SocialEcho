@@ -27,21 +27,14 @@ db.connect().catch((err) =>
   console.error("Error connecting to database:", err)
 );
 
-// use middlewares
 app.use(cors());
 app.use(morgan("dev"));
-app.use("/assets/userFiles", express.static(__dirname + "/assets/userFiles"));
-app.use(
-  "/assets/userAvatars",
-  express.static(__dirname + "/assets/userAvatars")
-);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 require("./config/passport.js");
 
-//routes
 app.get("/server-status", (req, res) => {
   res.status(200).json({ message: "Server is up and running!" });
 });
