@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { PhotoProvider, PhotoView } from "react-photo-view";
@@ -15,13 +15,8 @@ const Post = ({ post }) => {
   const location = useLocation();
   const userData = useSelector((state) => state.auth?.userData);
 
-  const { content, fileUrl, user, community, createdAt, comments } = post;
-
-  const isImageFile = useMemo(() => {
-    const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
-    const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
-    return validExtensions.includes(fileExtension);
-  }, [fileUrl]);
+  const { content, fileUrl, fileType, user, community, createdAt, comments } =
+    post;
 
   const [showModal, setShowModal] = useState(false);
   const toggleModal = (value) => {
@@ -73,7 +68,7 @@ const Post = ({ post }) => {
           {content}
         </p>
         <div className="flex justify-center">
-          {fileUrl && isImageFile ? (
+          {fileUrl && fileType === "image" ? (
             <PhotoProvider
               overlayRender={() => (
                 <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-10 text-white px-3 py-2">
