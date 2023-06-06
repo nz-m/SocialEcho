@@ -26,6 +26,7 @@ const PostView = ({ post, userData }) => {
   const {
     content,
     fileUrl,
+    fileType,
     user,
     community,
     dateTime,
@@ -33,12 +34,6 @@ const PostView = ({ post, userData }) => {
     savedByCount,
     isReported,
   } = post;
-
-  const isImageFile = useMemo(() => {
-    const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
-    const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
-    return validExtensions.includes(fileExtension);
-  }, [fileUrl]);
 
   useEffect(() => {
     dispatch(getCommunityAction(community.name)).then(() => setLoading(false));
@@ -113,7 +108,7 @@ const PostView = ({ post, userData }) => {
       <div>
         <p className="mt-3">{content}</p>
         <div className="flex justify-center">
-          {fileUrl && isImageFile ? (
+          {fileUrl && fileType === "image" ? (
             <PhotoProvider
               overlayRender={() => (
                 <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-10 text-white px-3 py-2">
