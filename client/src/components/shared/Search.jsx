@@ -89,7 +89,7 @@ const Search = () => {
           value={inputValue}
           onChange={handleInputChange}
           placeholder="Search for people, communities, and posts."
-          className="h-10 py-1 bg-white border w-[660px] rounded-full text-sm shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-500 transition duration-300 pl-3 pr-10"
+          className="h-10 py-1 bg-white border w-full md:w-[660px] rounded-full text-sm shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-500 transition duration-300 pl-3 pr-10"
           aria-label="Search"
           autoComplete="off"
         />
@@ -106,7 +106,7 @@ const Search = () => {
       {inputValue !== "" && (
         <div
           onBlur={() => !community && clearValues()}
-          className="absolute w-[660px] z-30 rounded-md mt-1 border bg-white"
+          className="absolute top-12 w-full md:w-[660px] bg-white border rounded-md shadow-md z-30"
         >
           {loading && (
             <div className="flex items-center justify-center py-2 px-2">

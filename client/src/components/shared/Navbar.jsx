@@ -7,6 +7,7 @@ import { logoutAction } from "../../redux/actions/authActions";
 import { useDispatch } from "react-redux";
 import { IoLogOutOutline } from "react-icons/io5";
 import { Transition } from "@headlessui/react";
+import { AiOutlineBars } from "react-icons/ai";
 
 const Navbar = ({ userData }) => {
   const dispatch = useDispatch();
@@ -25,17 +26,23 @@ const Navbar = ({ userData }) => {
     setLoggingOut(false);
   };
 
+  const toggleLeftbar = () => {
+    const leftbar = document.querySelector(".leftbar");
+    leftbar.classList.toggle("hidden");
+  };
+
   return (
-    <nav className="flex items-center justify-between bg-white px-36 p-2 sticky top-0 z-10 mb-5 border">
-      <div className="w-36">
-        <Link to="/">
-          <img src={Logo} alt="" />
-        </Link>
-      </div>
+    <nav className="flex md:items-center md:justify-between bg-white md:px-36 p-2 sticky top-0 z-10 mb-5 border">
+      <button className="block md:hidden" onClick={toggleLeftbar}>
+        <AiOutlineBars />
+      </button>
+      <Link to="/" className="hidden md:inline-block">
+        <img className="md:w-36" src={Logo} alt="" />
+      </Link>
 
       <Search />
 
-      <div className="w-36 flex justify-end relative">
+      <div className="hidden md:block md:w-36 flex justify-end relative">
         <button
           type="button"
           className="inline-flex items-center justify-center h-8 w-8 rounded-full cursor-pointer"

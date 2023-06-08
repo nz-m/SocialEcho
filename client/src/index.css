@@ -54,11 +54,11 @@ body {
 }
 
 .main-section {
-  @apply col-span-2 rounded-md mt-1;
+  @apply mx-2 md:col-span-2 rounded-md mt-1;
 }
 
 .leftbar {
-  @apply col-span-1 bg-white sticky top-20 pt-5 h-[85vh] rounded-md border;
+  @apply w-1/2 md:w-full md:col-span-1 bg-white sticky top-20 pt-5 md:h-[85vh] rounded-md border;
 }
 
 .rightbar {

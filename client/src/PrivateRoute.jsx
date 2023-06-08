@@ -45,7 +45,7 @@ const PrivateRoute = ({ userData }) => {
     <div className="scroll-smooth">
       <Navbar userData={userData} />
 
-      <div className="grid grid-cols-4 gap-6 w-10/12 mx-auto">
+      <div className="md:grid md:grid-cols-4 md:gap-6 md:w-10/12 md:mx-auto">
         <Leftbar />
 
         <Outlet />
