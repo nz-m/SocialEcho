@@ -82,12 +82,13 @@ const confirmPost = async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    const { user, community, content, fileUrl } = pendingPost;
+    const { user, community, content, fileUrl, fileType } = pendingPost;
     const newPost = new Post({
       user,
       community,
       content,
       fileUrl,
+      fileType,
     });
 
     await PendingPost.findOneAndDelete({
