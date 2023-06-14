@@ -15,7 +15,7 @@ const fs = require("fs");
 const createPost = async (req, res) => {
   try {
     const { communityId, content } = req.body;
-    const { userId, files } = req;
+    const { userId, file, fileUrl, fileType } = req;
 
     const community = await Community.findOne({
       _id: { $eq: communityId },
@@ -23,8 +23,7 @@ const createPost = async (req, res) => {
     });
 
     if (!community) {
-      if (files && files.length > 0) {
-        const file = files[0];
+      if (file) {
         const filePath = `./assets/userFiles/${file.filename}`;
         fs.unlink(filePath, (err) => {
           if (err) {
@@ -38,17 +37,12 @@ const createPost = async (req, res) => {
       });
     }
 
-    const file = files && files.length > 0 ? files[0] : null;
-
-    const fileUrl = file
-      ? `${req.protocol}://${req.get("host")}/assets/userFiles/${file.filename}`
-      : null;
-
     const newPost = new Post({
       user: userId,
       community: communityId,
       content,
-      fileUrl,
+      fileUrl: fileUrl ? fileUrl : null,
+      fileType: fileType ? fileType : null,
     });
 
     const savedPost = await newPost.save();
@@ -82,12 +76,13 @@ const confirmPost = async (req, res) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    const { user, community, content, fileUrl } = pendingPost;
+    const { user, community, content, fileUrl, fileType } = pendingPost;
     const newPost = new Post({
       user,
       community,
       content,
       fileUrl,
+      fileType,
     });
 
     await PendingPost.findOneAndDelete({
@@ -144,7 +139,6 @@ const clearPendingPosts = async (req, res) => {
     const date = new Date();
     date.setHours(date.getHours() - 1);
 
-    // Delete pending posts older than 1 hour
     await PendingPost.deleteMany({ createdAt: { $lte: date } });
 
     res.status(200).json({ message: "Pending posts cleared" });

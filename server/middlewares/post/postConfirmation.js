@@ -12,7 +12,7 @@ const postConfirmation = async (req, res, next) => {
 
     try {
       const { content, communityId } = req.body;
-      const { userId, files } = req;
+      const { userId, file, fileUrl, filetype } = req;
 
       const community = await Community.findOne({
         _id: { $eq: communityId },
@@ -20,8 +20,7 @@ const postConfirmation = async (req, res, next) => {
       });
 
       if (!community) {
-        if (files && files.length > 0) {
-          const file = files[0];
+        if (file) {
           const filePath = `./assets/userFiles/${file.filename}`;
           fs.unlink(filePath, (err) => {
             if (err) {
@@ -35,19 +34,12 @@ const postConfirmation = async (req, res, next) => {
         });
       }
 
-      const file = files && files.length > 0 ? files[0] : null;
-
-      const fileUrl = file
-        ? `${req.protocol}://${req.get("host")}/assets/userFiles/${
-            file.filename
-          }`
-        : null;
-
       const newPendingPost = new PendingPost({
         user: userId,
         community: communityId,
         content,
-        fileUrl,
+        fileUrl: fileUrl ? fileUrl : null,
+        fileType: filetype ? filetype : null,
         confirmationToken,
         status: "pending",
       });

@@ -1,7 +1,8 @@
 const fs = require("fs");
+const multer = require("multer");
+const path = require("path");
+
 function fileUpload(req, res, next) {
-  const multer = require("multer");
-  const path = require("path");
   const up_folder = path.join(__dirname, "../../assets/userFiles");
 
   const storage = multer.diskStorage({
@@ -37,14 +38,27 @@ function fileUpload(req, res, next) {
 
   upload.any()(req, res, (err) => {
     if (err) {
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         message: "Error uploading file",
         error: err.message,
       });
-    } else {
-      next();
     }
+
+    if (!req.files || req.files.length === 0) {
+      return next();
+    }
+
+    const file = req.files[0];
+    const fileUrl = `${req.protocol}://${req.get("host")}/assets/userFiles/${
+      file.filename
+    }`;
+
+    req.file = file;
+    req.fileUrl = fileUrl;
+    req.fileType = file.mimetype.split("/")[0];
+
+    next();
   });
 }
 

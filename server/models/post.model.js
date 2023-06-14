@@ -15,6 +15,9 @@ const postSchema = new Schema(
       type: String,
       trim: true,
     },
+    fileType: {
+      type: String,
+    },
     community: {
       type: Schema.Types.ObjectId,
       ref: "Community",
