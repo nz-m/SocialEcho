@@ -44,7 +44,11 @@ const UserProfile = ({ userData }) => {
           </h3>
 
           {postToShow?.length === 0 ? (
-            <p className="text-gray-600 text-center">No posts available.</p>
+             <div className="text-center text-gray-700 flex justify-center items-center flex-col">
+             
+             <img src="/nopost.jpg" alt="no post" />
+             <p className="text-lg font-semibold py-5">No Post available</p>
+           </div>
           ) : (
             postToShow
           )}

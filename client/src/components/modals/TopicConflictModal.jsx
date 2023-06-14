@@ -13,7 +13,7 @@ const TopicConflictModal = ({
   return (
     <div
       className={`fixed inset-0 flex items-center justify-center transition-opacity duration-300 ${
-        showTopicConflictModal ? "opacity-100 z-10" : "opacity-0 hidden"
+        showTopicConflictModal ? "opacity-100 z-50" : "opacity-0 hidden"
       }`}
     >
       <div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-0"></div>

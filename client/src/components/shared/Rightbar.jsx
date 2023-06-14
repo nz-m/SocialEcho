@@ -76,7 +76,7 @@ const Rightbar = () => {
   const currentLocation = useLocation().pathname;
 
   return (
-    <div className="hidden rightbar">
+    <div className="hidden rightbar overflow-y-auto">
       {currentLocation !== "/communities" && (
         <div>
           <div className="flex items-end justify-between mb-4">

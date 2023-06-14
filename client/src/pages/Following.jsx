@@ -37,9 +37,13 @@ const Following = () => {
               ))}
             </div>
           ) : (
-            <div className="text-gray-500 py-5 text-center">
-              <p>You're not following anyone yet.</p>
-            </div>
+            <div className="text-center text-gray-700 flex justify-center items-center flex-col">
+             
+            <img className="" src="/nofollow.jpg" alt="no post" />
+            <p className="text-lg font-semibold py-5">You're not following anyone yet.
+            later!</p>
+          </div>
+           
           )}
         </div>
       )}

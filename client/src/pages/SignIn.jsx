@@ -54,13 +54,13 @@ const SignIn = () => {
           <div className="flex items-center justify-center mt-6">
             <Link
               to={"/signin"}
-              className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500 text-gray-300"
+              className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500 "
             >
               sign in
             </Link>
             <Link
               to={"/signup"}
-              className="w-1/3 pb-4 font-medium text-center text-gray-500 capitalize border-b border-gray-400 text-gray-300"
+              className="w-1/3 pb-4 font-medium text-center text-gray-500 capitalize border-b border-gray-400 "
             >
               sign up
             </Link>

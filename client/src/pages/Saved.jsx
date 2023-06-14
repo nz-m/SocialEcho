@@ -26,9 +26,11 @@ const Saved = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center text-gray-500 font-medium mt-6">
-            You have not saved any posts yet.
-          </div>
+          <div className="text-center text-gray-700 flex justify-center items-center flex-col">
+             
+          <img src="/nopost.jpg" alt="no post" />
+          <p className="text-lg font-semibold py-5">You have not saved any post yet</p>
+        </div>
         )}
       </div>
     </div>

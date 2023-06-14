@@ -28,7 +28,7 @@ const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
   };
 
   return (
-    <nav className="flex md:items-center md:justify-between bg-white md:px-36 p-2 sticky top-0 z-10 mb-5 border">
+    <nav className="flex md:items-center justify-center gap-10 md:justify-between bg-white md:px-36 p-2 sticky top-0 z-10 mb-5 border">
       <Link to="/" className="hidden md:inline-block">
         <img className="w-36" src={Logo} alt="" />
       </Link>
@@ -39,7 +39,7 @@ const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
 
       <Search />
 
-      <div className="w-36 flex justify-end relative">
+      <div className="md:w-36 flex justify-end relative">
         <button
           type="button"
           className="inline-flex items-center justify-center h-8 w-8 rounded-full cursor-pointer"

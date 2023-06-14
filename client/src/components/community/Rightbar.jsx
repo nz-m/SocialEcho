@@ -49,7 +49,7 @@ const Rightbar = () => {
   }
 
   return (
-    <div className="bg-white rounded-md">
+    <div className="bg-white rounded-md ">
       <div className="flex flex-col ">
         <h2 className="text-lg font-bold">{name}</h2>
         <div className="flex items-center gap-2 text-primary mb-4">

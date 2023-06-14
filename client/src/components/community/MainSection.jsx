@@ -75,7 +75,7 @@ const MainSection = () => {
 
   return (
     <div className="flex flex-col">
-      <ul className="flex ">
+      <ul className="flex">
         <li
           className={`${
             activeTab === "All posts"
