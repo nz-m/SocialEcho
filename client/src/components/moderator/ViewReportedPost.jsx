@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { deletePostAction } from "../../redux/actions/postActions";
 import { removeReportedPostAction } from "../../redux/actions/communityActions";
 import { useDispatch } from "react-redux";
@@ -19,13 +18,8 @@ const ViewReportedPost = ({ post }) => {
     navigate(-1);
   };
 
-  let fileUrl = post?.fileUrl;
-
-  const isImageFile = useMemo(() => {
-    const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
-    const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
-    return validExtensions.includes(fileExtension);
-  }, [fileUrl]);
+  const fileUrl = post?.fileUrl;
+  const fileType = post?.fileType;
 
   if (!post) return <CommonLoading />;
 
@@ -45,7 +39,7 @@ const ViewReportedPost = ({ post }) => {
         <div className="text-sm text-gray-500">{dateTime}</div>
       </div>
       <div className="text-lg mb-4">{content}</div>
-      {fileUrl && isImageFile ? (
+      {fileUrl && fileType === "image" ? (
         <img
           className="w-[800px] h-auto rounded-md mt-3"
           src={fileUrl}

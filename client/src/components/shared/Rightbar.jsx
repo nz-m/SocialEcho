@@ -76,7 +76,7 @@ const Rightbar = () => {
   const currentLocation = useLocation().pathname;
 
   return (
-    <div className="hidden md:block rightbar">
+    <div className="hidden rightbar">
       {currentLocation !== "/communities" && (
         <div>
           <div className="flex items-end justify-between mb-4">

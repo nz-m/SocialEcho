@@ -17,7 +17,7 @@ const CommentSidebar = ({ comments }) => {
   };
 
   return (
-    <div className="col-span-1 bg-white sticky top-20 h-[85vh] p-3 rounded-md border overflow-y-auto">
+    <div className="col-span-1 bg-white sticky top-20 h-[85vh] p-5 rounded-md border overflow-y-auto">
       {currentComments.length > 0 && (
         <div>
           <h2 className="font-semibold mb-4 text-center border-b py-3">
@@ -26,7 +26,7 @@ const CommentSidebar = ({ comments }) => {
           {currentComments.map((comment) => (
             <div
               key={comment._id}
-              className="flex flex-col bg-white p-3 shadow-md border rounded-md my-4 shadow-[#f2f5fc]"
+              className="flex flex-col bg-white p-3 shadow-md border rounded-md my-4 shadow-[#f2f5fc] w-full"
             >
               <div className="flex gap-2">
                 <img

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   HiOutlineArchiveBox,
   HiOutlineInformationCircle,
@@ -26,6 +26,7 @@ const PostView = ({ post, userData }) => {
   const {
     content,
     fileUrl,
+    fileType,
     user,
     community,
     dateTime,
@@ -33,12 +34,6 @@ const PostView = ({ post, userData }) => {
     savedByCount,
     isReported,
   } = post;
-
-  const isImageFile = useMemo(() => {
-    const validExtensions = [".jpg", ".png", ".jpeg", ".gif", ".webp", ".svg"];
-    const fileExtension = fileUrl?.slice(fileUrl.lastIndexOf("."));
-    return validExtensions.includes(fileExtension);
-  }, [fileUrl]);
 
   useEffect(() => {
     dispatch(getCommunityAction(community.name)).then(() => setLoading(false));
@@ -113,7 +108,7 @@ const PostView = ({ post, userData }) => {
       <div>
         <p className="mt-3">{content}</p>
         <div className="flex justify-center">
-          {fileUrl && isImageFile ? (
+          {fileUrl && fileType === "image" ? (
             <PhotoProvider
               overlayRender={() => (
                 <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-10 text-white px-3 py-2">
@@ -146,36 +141,49 @@ const PostView = ({ post, userData }) => {
           <div className="flex items-center space-x-2">
             <Like post={post} />
             <button className="flex items-center space-x-1">
-              <HiOutlineChatBubbleOvalLeft />
-              <span>{comments.length}</span>
+              <HiOutlineChatBubbleOvalLeft className="text-2xl" />
+              <span className="text-lg">{comments.length}</span>
             </button>
           </div>
           <div className="flex items-center space-x-2">
             <Save postId={post._id} />
-            <span>
-              Saved by {savedByCount} {savedByCount === 1 ? "person" : "people"}
+
+            <span
+              className="transititext-black flex items-center gap-1 text-lg text-black transition duration-150 ease-in-out  "
+              data-te-toggle="tooltip"
+              title=" Saved By"
+            >
+              <HiOutlineArchiveBox className="text-2xl" />
+              {savedByCount}
             </span>
             {isReportedPost ? (
-              <button disabled className="flex items-center space-x-1">
-                <HiOutlineInformationCircle />
-                <span>Reported</span>
+              <button
+                disabled
+                className="transititext-black  text-black transition duration-150 ease-in-out "
+                data-te-toggle="tooltip"
+                title="Hi! I'm tooltip"
+              >
+                <HiOutlineInformationCircle className="text-2xl" />
+                <span className="text-xs md:text-base">Reported</span>
               </button>
             ) : (
               <button
                 onClick={handleReportClick}
-                className="flex items-center space-x-1"
+                className="transititext-amber-500 text-amber-500 transition duration-150 ease-in-out "
+                data-te-toggle="tooltip"
+                title="Report"
               >
-                <HiOutlineInformationCircle />
-                <span>Report</span>
+                <HiOutlineInformationCircle className="text-2xl" />
               </button>
             )}
             {userData?._id === post.user._id && (
               <button
                 onClick={() => toggleModal(true)}
-                className="flex items-center space-x-1"
+                className="transititext-red-500 text-red-500 transition duration-150 ease-in-out "
+                data-te-toggle="tooltip"
+                title="Delete"
               >
-                <HiOutlineArchiveBox />
-                <span>Delete</span>
+                <HiOutlineArchiveBox className="text-2xl" />
               </button>
             )}
             {showModal && (

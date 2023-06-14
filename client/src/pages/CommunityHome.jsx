@@ -34,7 +34,7 @@ const CommunityHome = () => {
       <div className="main-section">
         <CommunityMainSection />
       </div>
-      <div className="rightbar overflow-y-auto">
+      <div className="col-span-1 bg-white sticky top-20 h-[85vh] p-5 rounded-md border overflow-y-auto">
         <CommunityRightbar />
       </div>
     </>

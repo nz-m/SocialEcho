@@ -8,8 +8,9 @@ import { useDispatch } from "react-redux";
 import { IoLogOutOutline } from "react-icons/io5";
 import { Transition } from "@headlessui/react";
 import { AiOutlineBars } from "react-icons/ai";
+import { RxCross1 } from "react-icons/rx";
 
-const Navbar = ({ userData }) => {
+const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
   const dispatch = useDispatch();
   const [loggingOut, setLoggingOut] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -26,23 +27,19 @@ const Navbar = ({ userData }) => {
     setLoggingOut(false);
   };
 
-  const toggleLeftbar = () => {
-    const leftbar = document.querySelector(".leftbar");
-    leftbar.classList.toggle("hidden");
-  };
-
   return (
     <nav className="flex md:items-center md:justify-between bg-white md:px-36 p-2 sticky top-0 z-10 mb-5 border">
-      <button className="block md:hidden" onClick={toggleLeftbar}>
-        <AiOutlineBars />
-      </button>
       <Link to="/" className="hidden md:inline-block">
-        <img className="md:w-36" src={Logo} alt="" />
+        <img className="w-36" src={Logo} alt="" />
       </Link>
+
+      <button className="inline-block md:hidden" onClick={toggleLeftbar}>
+        {showLeftbar ? <RxCross1 /> : <AiOutlineBars />}
+      </button>
 
       <Search />
 
-      <div className="hidden md:block md:w-36 flex justify-end relative">
+      <div className="w-36 flex justify-end relative">
         <button
           type="button"
           className="inline-flex items-center justify-center h-8 w-8 rounded-full cursor-pointer"

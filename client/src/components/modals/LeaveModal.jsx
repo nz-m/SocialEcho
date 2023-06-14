@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import LoadingSpinner from "../loader/ButtonLoadingSpinner";
-
 import { leaveFetchData } from "../../redux/actions/communityActions";
 
 const LeaveModal = ({ show, communityName, toggle }) => {
@@ -20,7 +19,7 @@ const LeaveModal = ({ show, communityName, toggle }) => {
 
   return (
     <div
-      className={`fixed z-10 inset-0 overflow-y-auto ${show ? "" : "hidden"}`}
+      className={`fixed z-50 inset-0 overflow-y-auto ${show ? "" : "hidden"}`}
     >
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div
