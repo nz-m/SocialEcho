@@ -24,7 +24,7 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="px-6 py-6 rounded-md border bg-white mb-6 hover:shadow duration-300 shadow-2xl shadow-[#f2f5fc]">
+    <div className="border rounded bg-white mb-6 hover:shadow duration-300 p-4 m-2">
       <div className="flex items-start justify-between">
         <div className="flex gap-2">
           <img
@@ -90,7 +90,7 @@ const Post = ({ post }) => {
           ) : (
             fileUrl && (
               <video
-                className="block mx-auto rounded-md focus:outline-none max-w-full h-auto"
+                className="block mx-auto rounded-md focus:outline-none max-w-full max-h-screen"
                 src={fileUrl}
                 controls
               />
@@ -103,9 +103,9 @@ const Post = ({ post }) => {
         <div className="flex items-center gap-2">
           <Like post={post} />
           <Link to={`/post/${post._id}`}>
-            <button className="flex items-center gap-1">
+            <button className="flex items-center text-lg gap-1">
               {" "}
-              <HiOutlineChatBubbleOvalLeft />
+              <HiOutlineChatBubbleOvalLeft className="text-2xl" />
               {comments.length}
             </button>
           </Link>
@@ -118,7 +118,7 @@ const Post = ({ post }) => {
                 className="flex items-center text-xl gap-1"
               >
                 {" "}
-                <HiOutlineArchiveBox className="text-red-500" />
+                <HiOutlineArchiveBox className="text-red-500 text-2xl" />
               </button>
             )}
           </div>

@@ -16,15 +16,15 @@ const ReportedPost = ({ reportedPost }) => {
 
   return (
     <div
-      className="p-4 flex items-center gap-4 cursor-pointer"
+      className="flex items-center gap-4 cursor-pointer p-3"
       onClick={handleNavigateToPost}
     >
-      <div className="flex items-center">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col">
+        <div className="flex">
           {reportedBy.slice(0, 3).map((user) => (
             <img
               key={user._id}
-              className="w-4 h-4 rounded-full border-2 border-white"
+              className="w-8 rounded-full border-2 border-white flex-shrink-0"
               src={user.avatar}
               alt="user avatar"
             />
@@ -36,23 +36,22 @@ const ReportedPost = ({ reportedPost }) => {
               </span>
             </div>
           )}
-        </div>
-        <div className="ml-4">
-          <span className="text-sm">{reportedBy[0].name} </span>
-          {reportedBy.length > 1 && (
-            <span className="text-xs text-gray-600">
-              and {reportedBy.length - 1} others reported this
+          <div className="ml-4">
+            <span className="text-sm">{reportedBy[0].name} </span>
+            {reportedBy.length > 1 && (
+              <span className="text-xs text-gray-600">
+                and {reportedBy.length - 1} others reported this
+              </span>
+            )}
+            <span className="text-xs flex items-center gap-1 text-gray-600">
+              <IoTimerOutline />
+              {reportDate}
             </span>
-          )}
-          <span className="text-xs flex items-center gap-1 text-gray-600">
-            <IoTimerOutline />
-            {reportDate}
-          </span>
+          </div>
         </div>
-      </div>
-
-      <div className="text-sm text-red-700 font-semibold">
-        <span className="font-semibold">Reason:</span> {reportReason}
+        <div className="text-sm text-red-500 font-semibold mt-2">
+          <span className="font-semibold">Reason:</span> {reportReason}
+        </div>
       </div>
     </div>
   );

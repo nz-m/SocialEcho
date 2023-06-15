@@ -39,12 +39,12 @@ const ReportPostModal = ({
     <Dialog
       open={isOpen}
       onClose={onClose}
-      className="fixed inset-0 z-10 overflow-y-auto"
+      className="fixed inset-0 z-50 overflow-y-auto"
     >
       <div className="fixed inset-0 flex items-center justify-center">
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
-        <div className="inline-block align-middle bg-white rounded-md text-left shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+        <div className="inline-block align-middle bg-white rounded-md text-left shadow-xl transform transition-all w-full mx-4 md:max-w-lg">
           <Dialog.Title
             as="h3"
             className="text-lg font-medium leading-6 text-gray-900 p-4"

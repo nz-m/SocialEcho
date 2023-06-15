@@ -39,10 +39,10 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed z-10 inset-0 overflow-y-auto"
+        className="fixed z-50 inset-0 overflow-y-auto"
         onClose={onClose}
       >
-        <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div className="flex items-center justify-center min-h-screen px-4 pt-4 md:pb-20 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -71,8 +71,8 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-              <div className="sm:flex sm:items-start">
+            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full md:max-w-xl sm:p-6">
+              <div className=" w-full">
                 <div className="mt-3 text-center sm:mt-0 sm:text-left">
                   <Dialog.Title
                     as="h3"
@@ -81,7 +81,7 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
                     Update Profile
                   </Dialog.Title>
 
-                  <div className="mt-4">
+                  <div className="mt-4 w-full">
                     <label className="block text-sm font-medium text-gray-700">
                       Bio
                     </label>

@@ -9,8 +9,9 @@ import {
   HiOutlineTag,
 } from "react-icons/hi2";
 import { HiOutlineUserGroup } from "react-icons/hi2";
+import { GiTeamIdea } from "react-icons/gi";
 
-const Leftbar = () => {
+const Leftbar = ({ showLeftbar }) => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.auth?.userData);
@@ -34,7 +35,7 @@ const Leftbar = () => {
   }, [visibleCommunities]);
 
   return (
-    <div className="leftbar">
+    <div className={`${showLeftbar ? "" : "hidden"} leftbar`}>
       <div className="flex flex-col justify-start items-center">
         <div className="flex flex-col items-start gap-4 w-full p-5">
           <Link
@@ -73,8 +74,8 @@ const Leftbar = () => {
 
           {communityLinks && communityLinks.length > 0 ? (
             <div className="w-full">
-              <div className="flex items-center justify-between ">
-                <div className="flex gap-1 font-medium items-center ">
+              <div className="flex items-center justify-between">
+                <div className="flex gap-1 font-medium items-center">
                   <HiOutlineUserGroup className="text-xl" />
                   Communities
                 </div>
@@ -105,6 +106,17 @@ const Leftbar = () => {
             </div>
           ) : (
             <div>No communities found.</div>
+          )}
+          {user && user.role === "general" && (
+            <div className="md:hidden">
+              <hr className="w-full my-4 border-gray-300" />
+              <div className="flex justify-center gap-1 items-center">
+                <GiTeamIdea />
+                <Link to="/communities" className="text-primary font-medium">
+                  See all communities
+                </Link>
+              </div>
+            </div>
           )}
         </div>
       </div>

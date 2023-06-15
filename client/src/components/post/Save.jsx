@@ -1,5 +1,8 @@
 import { useEffect, useState, memo } from "react";
-import { HiOutlineFolderOpen } from "react-icons/hi2";
+import {
+  HiOutlineArchiveBoxArrowDown,
+  HiOutlineArchiveBoxXMark,
+} from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import {
   savePostAction,
@@ -54,11 +57,26 @@ const Save = ({ postId }) => {
   return (
     <button
       onClick={saved ? handleUnsave : handleSave}
-      className="flex items-center gap-1"
+      className="transititext-black flex items-center gap-1 text-black transition duration-150 ease-in-out  mr-2"
+      data-te-toggle="tooltip"
+      title=" Save"
       disabled={isSaving}
     >
-      <HiOutlineFolderOpen />
-      {isSaving ? "Saving..." : saved ? "Remove from Saved" : "Save"}
+      {isSaving ? (
+        "Saving..."
+      ) : saved ? (
+        <HiOutlineArchiveBoxXMark
+          className="transititext-black text-2xl text-black transition duration-150 ease-in-out  "
+          data-te-toggle="tooltip"
+          title=" Remove From Saved"
+        />
+      ) : (
+        <HiOutlineArchiveBoxArrowDown
+          className="transititext-black text-2xl text-black transition duration-150 ease-in-out  "
+          data-te-toggle="tooltip"
+          title="Save Post"
+        />
+      )}
     </button>
   );
 };

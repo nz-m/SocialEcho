@@ -75,7 +75,7 @@ const MainSection = () => {
 
   return (
     <div className="flex flex-col">
-      <ul className="flex ">
+      <ul className="flex">
         <li
           className={`${
             activeTab === "All posts"
@@ -106,7 +106,11 @@ const MainSection = () => {
                 communityName={communityData.name}
               />
             </div>
-            {postError && <div className="text-red-500">{postError}</div>}
+            {postError && (
+              <div className="text-red-500 bg-red-100 border border-red-500 p-3 rounded-md text-center mx-auto">
+                {postError}
+              </div>
+            )}
 
             <div>{memoizedCommunityPosts}</div>
             {communityPosts.length < totalCommunityPosts && (

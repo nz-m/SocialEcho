@@ -12,7 +12,7 @@ import PublicPost from "../components/profile/PublicPost";
 import LoadingSpinner from "../components/loader/ButtonLoadingSpinner";
 import { CiLocationOn } from "react-icons/ci";
 import { AiOutlineFieldTime } from "react-icons/ai";
-import { FiUsers, FiUser, FiUserMinus } from "react-icons/fi";
+import { FiUsers, FiUser, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import { HiOutlineDocumentText } from "react-icons/hi2";
 import CommonLoading from "../components/loader/CommonLoading";
 
@@ -59,7 +59,7 @@ const PublicProfile = () => {
 
   if (!userProfile) {
     return (
-      <div className="w-6/12 flex justify-center items-center">
+      <div className="col-span-2 flex justify-center items-center">
         <CommonLoading />
       </div>
     );
@@ -83,9 +83,34 @@ const PublicProfile = () => {
     commonCommunities,
   } = userProfile;
 
+  const FollowButton = ({ loading, onClick }) => (
+    <button
+      onClick={onClick}
+      type="button"
+      className="bg-white absolute right-0 bottom-0 text-primary border border-primary rounded-full py-2 px-2 text-sm font-semibold"
+    >
+      {loading ? <LoadingSpinner loadingText="Following..." /> : <FiUserPlus />}
+    </button>
+  );
+
+  const UnfollowButton = ({ loading, onClick }) => (
+    <button
+      onClick={onClick}
+      type="button"
+      className="bg-white absolute right-0 bottom-0 text-red-500 border border-red-500 rounded-full py-2 px-2 text-sm font-semibold"
+      disabled={isModerator}
+    >
+      {loading ? (
+        <LoadingSpinner loadingText="Unfollowing..." />
+      ) : (
+        <FiUserMinus />
+      )}
+    </button>
+  );
+
   return (
     <div className="main-section">
-      <div className="bg-white px-6 py-6 border">
+      <div className="bg-white px-6 py-6 border rounded">
         <div className="flex flex-col items-center justify-center bg-white py-6">
           <div className="relative">
             <img
@@ -94,42 +119,39 @@ const PublicProfile = () => {
               alt="Profile"
               loading="lazy"
             />
-            <button
+            <UnfollowButton
+              loading={unfollowLoading}
               onClick={() => handleUnfollow(publicUserId)}
-              type="button"
-              className="bg-white absolute right-0 bottom-0 text-red-500 border border-red-500 rounded-full py-2 px-2 text-sm font-semibold"
-            >
-              {unfollowLoading ? (
-                <LoadingSpinner loadingText="Unfollowing..." />
-              ) : (
-                <FiUserMinus />
-              )}
-            </button>
-          </div>
-
-          <div className="bg-white">
-            <h1 className="text-lg text-center capitalize font-bold mt-3">
-              {name}
-            </h1>
-            <p className="text-gray-500 text-center flex justify-center items-center ga-2">
-              <CiLocationOn className="text-lg" />
-              {userLocation}
-            </p>
-            {role === "moderator" ? (
-              <p className="text-sky-700 text-center text-sm font-semibold bg-sky-200 rounded-md py-1 px-2">
-                Moderator
-              </p>
-            ) : null}
+            />
+            {!isModerator && !isFollowing && (
+              <FollowButton
+                loading={followLoading}
+                onClick={() => handleFollow(publicUserId)}
+              />
+            )}
           </div>
         </div>
 
-        <div className="space-y-1">
+        <div>
+          <h1 className="text-lg text-center capitalize font-bold mt-3">
+            {name}
+          </h1>
+          <p className="text-gray-500 text-center flex justify-center items-center ga-2">
+            <CiLocationOn className="text-lg" />
+            {userLocation}
+          </p>
+          {role === "moderator" ? (
+            <p className="text-sky-700 text-center text-sm font-semibold bg-sky-200 rounded-md py-1 px-2">
+              Moderator
+            </p>
+          ) : null}
+        </div>
+        <div>
           <p>{bio}</p>
           <p className="flex gap-2 items-center">
             <AiOutlineFieldTime />
             Joined on {joinedOn}
           </p>
-
           <p className="flex items-center gap-2">
             <HiOutlineDocumentText />
             {totalPosts} posts
@@ -147,101 +169,87 @@ const PublicProfile = () => {
             {totalFollowing} following
           </p>
         </div>
-        <div className="space-y-1">
-          <p className="flex items-center gap-2">
-            <HiOutlineDocumentText />
-            {postsLast30Days} posts in last 30 days
+
+        <p className="flex items-center gap-2">
+          <HiOutlineDocumentText />
+          {postsLast30Days} {postsLast30Days === 1 ? "post" : "posts"} in last
+          30 days
+        </p>
+
+        {isFollowing && role !== "moderator" ? (
+          <>
+            {totalFollowers === 1 ? (
+              <p className="flex items-center gap-2">
+                <FiUser />
+                Followed by you
+              </p>
+            ) : (
+              <p className="flex items-center gap-2">
+                <FiUser />
+                {`Followed by you and `}
+                <span className="font-semibold">
+                  {totalFollowers - 1} others
+                </span>
+              </p>
+            )}
+            <p>
+              You are following
+              <span className="font-semibold text-sky-700"> {name} </span>
+              since {followingSince}
+            </p>
+          </>
+        ) : (
+          <p>
+            {role === "moderator" ? null : totalFollowers === 1 ? (
+              <span className="font-semibold">{totalFollowers} follower</span>
+            ) : (
+              <span className="font-semibold">{totalFollowers} followers</span>
+            )}
           </p>
-          {commonCommunities?.length === 0 ? (
-            <p>You have no communities in common.</p>
-          ) : (
-            <p className="flex items-start gap-2">
-              <FiUsers />
-              <>
-                You both are members of{" "}
-                {commonCommunities?.slice(0, 2).map((c, index) => (
-                  <Fragment key={c._id}>
-                    <Link
-                      className="text-sky-700 font-bold hover:underline"
-                      to={`/community/${c.name}`}
-                    >
-                      {c.name}
-                    </Link>
-                    {index === 0 && commonCommunities.length > 2 ? ", " : ""}
-                    {index === 0 && commonCommunities.length > 1 ? " and " : ""}
-                  </Fragment>
-                ))}
-                {commonCommunities?.length > 2 && (
-                  <span>
-                    {" and "}
-                    <span className="tooltip">
-                      {`${commonCommunities?.length - 2} other ${
-                        commonCommunities?.length - 2 === 1
-                          ? "community"
-                          : "communities"
-                      }`}
-                      <span className="tooltiptext">
-                        {commonCommunities
-                          ?.slice(2)
-                          .map((c) => `${c.name}`)
-                          .join(", ")}
-                      </span>
+        )}
+
+        {commonCommunities?.length === 0 ? (
+          <p>You have no communities in common.</p>
+        ) : (
+          <p className="flex items-start gap-2">
+            <FiUsers />
+            <>
+              You both are members of{" "}
+              {commonCommunities?.slice(0, 2).map((c, index) => (
+                <Fragment key={c._id}>
+                  <Link
+                    className="text-sky-700 font-bold hover:underline"
+                    to={`/community/${c.name}`}
+                  >
+                    {c.name}
+                  </Link>
+                  {index === 0 && commonCommunities.length > 2 ? ", " : ""}
+                  {index === 0 && commonCommunities.length > 1 ? " and " : ""}
+                </Fragment>
+              ))}
+              {commonCommunities?.length > 2 && (
+                <span>
+                  {" and "}
+                  <span className="tooltip">
+                    {`${commonCommunities?.length - 2} other ${
+                      commonCommunities?.length - 2 === 1
+                        ? "community"
+                        : "communities"
+                    }`}
+                    <span className="tooltiptext">
+                      {commonCommunities
+                        ?.slice(2)
+                        .map((c) => `${c.name}`)
+                        .join(", ")}
                     </span>
                   </span>
-                )}
-              </>
-            </p>
-          )}
-
-          {isFollowing && role !== "moderator" ? (
-            <>
-              {totalFollowers === 1 ? (
-                <p className="flex items-center gap-2">
-                  <FiUser />
-                  Followed by you
-                </p>
-              ) : (
-                <p className="flex items-center gap-2">
-                  <FiUser />
-                  {`Followed by you and `}
-                  <span className="font-semibold">
-                    {totalFollowers - 1} others
-                  </span>
-                </p>
-              )}
-              <p>
-                You are following
-                <span className="font-semibold text-sky-700"> {name} </span>
-                since {followingSince}
-              </p>
-            </>
-          ) : (
-            <p>
-              {role === "moderator" ? null : totalFollowers === 1 ? (
-                <span className="font-semibold">{totalFollowers} follower</span>
-              ) : (
-                <span className="font-semibold">
-                  {totalFollowers} followers
                 </span>
               )}
-            </p>
-          )}
-          {!isModerator && !isFollowing && (
-            <button
-              onClick={() => handleFollow(publicUserId)}
-              type="button"
-              className="bg-blue-500 text-white border border-blue-500 rounded-full py-1 px-4 text-sm font-semibold"
-            >
-              {followLoading ? (
-                <LoadingSpinner loadingText="following..." />
-              ) : (
-                "Follow"
-              )}
-            </button>
-          )}
-        </div>
+            </>
+          </p>
+        )}
 
-        <div className="flex flex-col bg-white">
+        <div className="flex flex-col">
           <p className="mt-2 font-semibold">Interests </p>
           {interests ? (
             <ul className="flex items-center gap-3">
@@ -259,7 +267,6 @@ const PublicProfile = () => {
           )}
         </div>
       </div>
-
       {isUserFollowing && <PublicPost publicUserId={publicUserId} />}
     </div>
   );

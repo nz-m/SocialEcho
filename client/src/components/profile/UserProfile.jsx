@@ -5,6 +5,7 @@ import PostOnProfile from "../post/PostOnProfile";
 import OwnProfileCard from "./OwnProfileCard";
 import CommonLoading from "../loader/CommonLoading";
 import OwnInfoCard from "./OwnInfoCard";
+import NoPost from "../../assets/nopost.jpg";
 
 const UserProfile = ({ userData }) => {
   const dispatch = useDispatch();
@@ -44,7 +45,16 @@ const UserProfile = ({ userData }) => {
           </h3>
 
           {postToShow?.length === 0 ? (
-            <p className="text-gray-600 text-center">No posts available.</p>
+            <div className="text-center text-gray-700 flex justify-center items-center flex-col">
+              <p className="font-semibold py-5 text-gray-500">
+                You haven't posted anything yet
+              </p>
+              <img
+                className="max-w-md rounded-full"
+                src={NoPost}
+                alt="no post"
+              />
+            </div>
           ) : (
             postToShow
           )}

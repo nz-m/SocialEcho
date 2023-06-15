@@ -54,15 +54,15 @@ body {
 }
 
 .main-section {
-  @apply col-span-2 rounded-md mt-1;
+  @apply mx-2 md:col-span-2 rounded-md mt-1;
 }
 
 .leftbar {
-  @apply col-span-1 bg-white sticky top-20 pt-5 h-[85vh] rounded-md border;
+  @apply w-2/3 md:block md:w-full md:col-span-1 bg-white fixed md:sticky top-20 pt-5 h-[85vh] rounded-md border;
 }
 
 .rightbar {
-  @apply col-span-1 bg-white sticky top-20 h-[85vh] p-5 rounded-md border;
+  @apply hidden md:block md:col-span-1 bg-white sticky top-20 h-[85vh] p-5 rounded-md border;
 }
 .loader {
   width: 20px;

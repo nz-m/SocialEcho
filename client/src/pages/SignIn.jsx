@@ -27,8 +27,8 @@ const SignIn = () => {
   const signInError = useSelector((state) => state.auth?.signInError);
   const successMessage = useSelector((state) => state.auth?.successMessage);
   return (
-    <section className="bg-white">
-      <div className="container flex flex-col items-center justify-center md:h-screen px-6 mx-auto">
+    <section className="bg-white ">
+      <div className="container flex flex-col items-center justify-center min-h-screen px-6 mx-auto">
         <form className="w-full max-w-md">
           <div className="flex justify-center mx-auto">
             <img className="w-auto h-7 sm:h-8" src={Logo} alt="" />
@@ -54,13 +54,13 @@ const SignIn = () => {
           <div className="flex items-center justify-center mt-6">
             <Link
               to={"/signin"}
-              className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500 text-gray-300"
+              className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500 "
             >
               sign in
             </Link>
             <Link
               to={"/signup"}
-              className="w-1/3 pb-4 font-medium text-center text-gray-500 capitalize border-b border-gray-400 text-gray-300"
+              className="w-1/3 pb-4 font-medium text-center text-gray-500 capitalize border-b border-gray-400 "
             >
               sign up
             </Link>

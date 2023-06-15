@@ -30,6 +30,11 @@ const BannerMembersList = () => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-col">
+        {bannedUsers && bannedUsers.length === 0 && (
+          <p className="text-center text-gray-500 font-semibold">
+            No banned users to show
+          </p>
+        )}
         {bannedUsers &&
           bannedUsers.map((bannedMember) => (
             <div

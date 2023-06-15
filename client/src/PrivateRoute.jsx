@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setInitialAuthState } from "./redux/actions/authActions";
@@ -41,12 +41,22 @@ const PrivateRoute = ({ userData }) => {
     regex.test(location.pathname)
   );
 
+  const [showLeftbar, setShowLeftbar] = useState(false);
+
+  const toggleLeftbar = () => {
+    setShowLeftbar(!showLeftbar);
+  };
+
   return isAuthenticated(userData, accessToken) ? (
     <div className="scroll-smooth">
-      <Navbar userData={userData} />
+      <Navbar
+        userData={userData}
+        toggleLeftbar={toggleLeftbar}
+        showLeftbar={showLeftbar}
+      />
 
-      <div className="grid grid-cols-4 gap-6 w-10/12 mx-auto">
-        <Leftbar />
+      <div className="md:grid md:grid-cols-4 md:gap-6 md:w-10/12 md:mx-auto">
+        <Leftbar showLeftbar={showLeftbar} />
 
         <Outlet />
 

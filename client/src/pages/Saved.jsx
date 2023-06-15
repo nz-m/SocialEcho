@@ -2,6 +2,7 @@ import { getSavedPostsAction } from "../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import SavedPost from "../components/post/SavedPost";
+import NoSavedPost from "../assets/nopost.jpg";
 
 const Saved = () => {
   const dispatch = useDispatch();
@@ -26,8 +27,11 @@ const Saved = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center text-gray-500 font-medium mt-6">
-            You have not saved any posts yet.
+          <div className="text-center flex justify-center items-center flex-col">
+            <p className="text-gray-500 py-5">
+              You haven't saved any post yet.
+            </p>
+            <img loading="lazy" src={NoSavedPost} alt="no post" />
           </div>
         )}
       </div>

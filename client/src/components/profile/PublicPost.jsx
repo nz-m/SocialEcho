@@ -20,7 +20,7 @@ const PublicPost = ({ publicUserId }) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center">
+      <div className="flex mt-5 justify-center items-center">
         <CommonLoading />
       </div>
     );

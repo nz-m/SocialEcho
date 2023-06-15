@@ -46,10 +46,13 @@ const DevicesLocations = () => {
 
   if (!userPreferences || !contextAuthData) {
     return (
-      <div className="main-section text-center">
-        Context-based authentication is disabled for your account. By enabling
-        context-based authentication, you will be able to manage your devices
-        and their locations, as well as manage your trusted and blocked devices.
+      <div className="main-section bg-white border flex justify-center items-center text-gray-700 py-5 font-semibold text-center">
+        <p>
+          Context-based authentication is disabled for your account. By enabling
+          context-based authentication, you will be able to manage your devices
+          and their locations, as well as manage your trusted and blocked
+          devices.
+        </p>
       </div>
     );
   }

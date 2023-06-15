@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getFollowingUsersAction } from "../redux/actions/userActions";
 import PublicProfileCard from "../components/profile/PublicProfileCard";
 import CommonLoading from "../components/loader/CommonLoading";
+import noFollow from "../assets/nofollow.jpg";
 
 const Following = () => {
   const dispatch = useDispatch();
@@ -31,14 +32,17 @@ const Following = () => {
             People you're following
           </h2>
           {followingUsers?.length > 0 ? (
-            <div className="grid grid-cols-2 gap-5 items-center px-3 py-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-center px-3 py-3">
               {followingUsers.map((user) => (
                 <PublicProfileCard key={user._id} user={user} />
               ))}
             </div>
           ) : (
-            <div className="text-gray-500 py-5 text-center">
-              <p>You're not following anyone yet.</p>
+            <div className="text-center text-gray-700 flex justify-center items-center flex-col">
+              <p className="font-semibold py-5">
+                You're not following anyone yet.
+              </p>
+              <img src={noFollow} alt="no post" className="max-w-md" />
             </div>
           )}
         </div>

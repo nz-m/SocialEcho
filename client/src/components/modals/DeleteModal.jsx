@@ -79,9 +79,9 @@ const DeleteModal = memo(({ showModal, postId, onClose, prevPath }) => {
                 <div className="px-4 py-3 sm:flex sm:flex-row-reverse justify-center gap-5 sm:px-6">
                   <button
                     type="button"
-                    className="text-red-500 border border-dashed border-red-500
+                    className="text-red-500 border  border-red-500
                     hover:bg-red-500 
-                     rounded-md py-1 px-2 text-sm font-semibold hover:text-white transition duration-300"
+                     rounded-md py-1 px-2 text-sm w-full sm:w-auto font-semibold hover:text-white transition duration-300"
                     onClick={deleteHandler}
                     disabled={loading}
                   >
@@ -94,7 +94,7 @@ const DeleteModal = memo(({ showModal, postId, onClose, prevPath }) => {
                   <button
                     disabled={loading}
                     type="button"
-                    className="mt-3 inline-flex w-full border-dashed border justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-500 shadow-sm  hover:bg-slate-100 sm:mt-0 sm:w-auto"
+                    className="mt-3 inline-flex w-full border-dashed border justify-center rounded-md bg-white px-3  py-2 text-sm font-semibold text-gray-500 shadow-sm  hover:bg-slate-100 sm:mt-0 sm:w-auto"
                     onClick={() => {
                       onClose();
                     }}

@@ -76,7 +76,7 @@ const Rightbar = () => {
   const currentLocation = useLocation().pathname;
 
   return (
-    <div className="rightbar">
+    <div className="hidden rightbar overflow-auto">
       {currentLocation !== "/communities" && (
         <div>
           <div className="flex items-end justify-between mb-4">
@@ -109,7 +109,7 @@ const Rightbar = () => {
                 <div className="flex items-center">
                   <img
                     src={community.banner || placeholder}
-                    className="h-8 w-8 rounded-full mr-4"
+                    className="h-8 w-8 rounded-full mr-4 object-cover"
                     alt="community"
                   />
                   <div className="text-base font-medium flex flex-col">
@@ -145,7 +145,7 @@ const Rightbar = () => {
       )}
 
       <hr className="my-3" />
-      <h5 className=" mb-4 text-sm font-semibold">Popular Users to Follow</h5>
+      <h5 className="mb-4 text-sm font-semibold">Popular Users to Follow</h5>
 
       {publicUsersFetched && recommendedUsers?.length === 0 && (
         <div className="text-center italic text-gray-400">
@@ -161,7 +161,7 @@ const Rightbar = () => {
             >
               <div className="flex justify-content-between items-center gap-1">
                 <img
-                  className="h-7 w-7 rounded-full flex-shrink-0"
+                  className="h-7 w-7 rounded-full flex-shrink-0 object-cover"
                   src={user.avatar}
                   alt={user.name}
                 />
@@ -180,9 +180,7 @@ const Rightbar = () => {
               <button
                 disabled={followLoading[user._id]}
                 onClick={() => followUserHandler(user._id)}
-                className="text-primary border border-dashed border-blue-500
-                        hover:bg-primary
-                         rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
+                className="text-primary border border-dashed border-blue-500 hover:bg-primary rounded-md py-1 px-2 text-sm font-semibold group transition duration-300"
               >
                 {followLoading[user._id] ? (
                   <div className="group-hover:text-white flex items-center gap-2 justify-center">

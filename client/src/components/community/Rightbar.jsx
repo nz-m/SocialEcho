@@ -49,12 +49,15 @@ const Rightbar = () => {
   }
 
   return (
-    <div className="bg-white rounded-md">
+    <div className="bg-white rounded-md ">
       <div className="flex flex-col ">
         <h2 className="text-lg font-bold">{name}</h2>
         <div className="flex items-center gap-2 text-primary mb-4">
           <HiUserGroup />
-          <span className="mr-2">{members?.length || 0} members</span>
+          <span className="mr-2">
+            {members?.length || 0}{" "}
+            {members?.length === 1 ? "member" : "members"}
+          </span>
         </div>
       </div>
 
@@ -104,7 +107,7 @@ const Rightbar = () => {
         }
       </div>
       {rules && rules.length > 0 && (
-        <div className="text-slate-900 mb-4 ">
+        <div className="text-slate-900 mb-4">
           <span className="font-bold">Community Guidelines:</span>
           <ul className="flex flex-col gap-2 ">
             {rules.map((rule) => (

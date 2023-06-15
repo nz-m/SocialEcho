@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { deletePostAction } from "../../redux/actions/postActions";
 import { removeReportedPostAction } from "../../redux/actions/communityActions";
 import { useDispatch } from "react-redux";
@@ -27,7 +26,7 @@ const ViewReportedPost = ({ post }) => {
   const { content, user, dateTime, comments, savedByCount } = post;
 
   return (
-    <div className="border px-6 py-6 my-5 rounded-md bg-white mx-10">
+    <div className="border p-3 rounded-md bg-white mx-auto mb-2">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center">
           <img

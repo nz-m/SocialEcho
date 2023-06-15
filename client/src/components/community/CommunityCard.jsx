@@ -13,7 +13,7 @@ const CommunityCard = ({ community }) => {
   };
   return (
     <div className="px-3 py-3 rounded-md border bg-white shadow-2xl shadow-[#f2f5fc] flex justify-between">
-      <div className="w-full flex items-start ">
+      <div className="w-full flex items-start">
         <img
           className="object-cover rounded-full w-10 h-10 mr-4"
           src={community.banner || placeholder}

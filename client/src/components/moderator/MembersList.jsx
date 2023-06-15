@@ -31,6 +31,11 @@ const MembersList = () => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-col">
+        {communityMembers && communityMembers.length === 0 && (
+          <p className="text-center text-gray-500 font-semibold">
+            No members to show
+          </p>
+        )}
         {communityMembers &&
           communityMembers.map((member) => {
             const modalVisible = banUserModalVisibility[member._id] || false;

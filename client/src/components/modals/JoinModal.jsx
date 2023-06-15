@@ -42,7 +42,7 @@ const JoinModal = memo(({ show, onClose, community }) => {
       <Transition appear show={show} as={Fragment}>
         <Dialog
           as="div"
-          className="relative z-10"
+          className="relative z-50"
           onClose={onClose}
           initialFocus={cancelButtonRef}
         >
@@ -74,7 +74,7 @@ const JoinModal = memo(({ show, onClose, community }) => {
                     as="h3"
                     className="text-xl font-medium leading-6 flex gap-2 items-center text-primary"
                   >
-                    <IoIosPeople className="text-xl text-primary" />
+                    <IoIosPeople className="text-base md:text-xl text-primary" />
                     <div className="relative">
                       {community.name}
                       <p className="absolute -top-3 -right-4 bg-primary text-white w-5 h-5 flex justify-center items-center text-xs rounded-full">
@@ -83,13 +83,13 @@ const JoinModal = memo(({ show, onClose, community }) => {
                     </div>
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-base text-center text-gray-700">
+                    <p className="text-sm md:text-base text-center text-gray-700">
                       Are you sure you want to join this community? You can
                       always leave later.
                     </p>
                   </div>
 
-                  <div className=" px-4 py-3 sm:flex gap-6 sm:px-6">
+                  <div className="flex flex-col md:flex-row px-4 py-3 sm:flex gap-2 md:gap-6 sm:px-6">
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
