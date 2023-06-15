@@ -15,10 +15,6 @@ module.exports = {
         "2xl": "4rem",
       },
     },
-    fontFamily: {
-      helvetica: ["Helvetica", "sans-serif"],
-      sans: ["Colfax Regular", "sans-serif"],
-    },
     extend: {
       boxShadow: {
         "3xl": "-1px 34px 47px -29px rgb(32 32 32 / 100%)",
