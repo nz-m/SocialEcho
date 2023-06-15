@@ -1,6 +1,6 @@
 # Classifier API Server
 
-This Flask app utilizes the Hugging Face Transformers library to classify text into multiple categories. It is intended to be run locally on your machine. Please keep in mind that text classification is a computationally demanding task that heavily relies on your machine's hardware.
+This Flask app utilizes the Hugging Face Transformers library to classify text into multiple categories. It is intended to be run locally on your machine.
 
 ## Prerequisites
 
