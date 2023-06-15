@@ -3,7 +3,6 @@ const SuspiciousLogin = require("../../models/suspiciousLogin.model");
 const UserContext = require("../../models/context.model");
 const EmailVerification = require("../../models/email.model");
 const { query, validationResult } = require("express-validator");
-const { decryptData } = require("../../utils/encryption");
 const { verifyLoginHTML } = require("../../utils/emailTemplates");
 
 const CLIENT_URL = process.env.CLIENT_URL;

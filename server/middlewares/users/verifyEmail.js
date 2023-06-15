@@ -3,7 +3,6 @@ const UserPreference = require("../../models/preference.model");
 const User = require("../../models/user.model");
 const EmailVerification = require("../../models/email.model");
 const { query, validationResult } = require("express-validator");
-const { decryptData } = require("../../utils/encryption");
 const { verifyEmailHTML } = require("../../utils/emailTemplates");
 
 const CLIENT_URL = process.env.CLIENT_URL;
