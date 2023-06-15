@@ -26,7 +26,7 @@ const CommentSidebar = ({ comments }) => {
           {currentComments.map((comment) => (
             <div
               key={comment._id}
-              className="flex flex-col bg-white p-3 shadow-md border rounded-md my-4 shadow-[#f2f5fc] w-full"
+              className="flex flex-col bg-white p-3  border-b w-full"
             >
               <div className="flex gap-2">
                 <img

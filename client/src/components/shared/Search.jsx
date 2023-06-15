@@ -106,7 +106,7 @@ const Search = () => {
       {inputValue !== "" && (
         <div
           onBlur={() => !community && clearValues()}
-          className="absolute top-12 w-full left-0  md:right-0 md:w-[660px] bg-white border rounded-md shadow-md z-50"
+          className="absolute top-12 w-full start-0 md:start-60 md:w-[660px] bg-white border rounded-md shadow-md z-50"
         >
           {loading && (
             <div className="flex items-center justify-center py-2 px-2">

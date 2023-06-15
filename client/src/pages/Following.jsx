@@ -32,7 +32,7 @@ const Following = () => {
             People you're following
           </h2>
           {followingUsers?.length > 0 ? (
-            <div className="grid grid-cols-2 gap-5 items-center px-3 py-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-center px-3 py-3">
               {followingUsers.map((user) => (
                 <PublicProfileCard key={user._id} user={user} />
               ))}

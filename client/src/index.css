@@ -58,7 +58,7 @@ body {
 }
 
 .leftbar {
-  @apply w-1/2 md:block md:w-full md:col-span-1 bg-white fixed md:sticky top-20 pt-5 h-[85vh] rounded-md border z-30;
+  @apply w-2/3 md:block md:w-full md:col-span-1 bg-white fixed md:sticky top-20 pt-5 h-[85vh] rounded-md border z-30;
 }
 
 .rightbar {

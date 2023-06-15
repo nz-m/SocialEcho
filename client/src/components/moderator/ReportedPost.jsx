@@ -19,12 +19,12 @@ const ReportedPost = ({ reportedPost }) => {
       className="p-4 flex items-center gap-4 cursor-pointer"
       onClick={handleNavigateToPost}
     >
-      <div className="flex items-center">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col">
+        <div className="flex">
           {reportedBy.slice(0, 3).map((user) => (
             <img
               key={user._id}
-              className="w-4 h-4 rounded-full border-2 border-white"
+              className="w-12 h-12 rounded-full border-2 border-white flex-shrink-0"
               src={user.avatar}
               alt="user avatar"
             />
@@ -36,8 +36,7 @@ const ReportedPost = ({ reportedPost }) => {
               </span>
             </div>
           )}
-        </div>
-        <div className="ml-4">
+            <div className="ml-4">
           <span className="text-sm">{reportedBy[0].name} </span>
           {reportedBy.length > 1 && (
             <span className="text-xs text-gray-600">
@@ -49,11 +48,13 @@ const ReportedPost = ({ reportedPost }) => {
             {reportDate}
           </span>
         </div>
-      </div>
-
-      <div className="text-sm text-red-700 font-semibold">
+        </div>
+        <div className="text-sm md:text-lg text-red-700 font-semibold mt-2">
         <span className="font-semibold">Reason:</span> {reportReason}
       </div>
+      </div>
+
+     
     </div>
   );
 };

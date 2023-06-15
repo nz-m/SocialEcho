@@ -8,7 +8,7 @@ const MainSection = () => {
 
   return (
     <div className="flex flex-col  bg-white shadow-2xl shadow-[#F3F8FF] px-5 py-5 my-2 rounded-lg">
-      <ul className="flex border-b">
+      <ul className="flex flex-col md:flex-row border-b">
         <li
           className={`${
             activeTab === "Reported Posts"
