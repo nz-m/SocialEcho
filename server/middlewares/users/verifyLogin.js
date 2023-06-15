@@ -21,11 +21,8 @@ const verifyLoginValidation = [
   },
 ];
 const sendLoginVerificationEmail = async (req, res) => {
-  const USER = decryptData(process.env.EMAIL);
-  const PASS = decryptData(process.env.PASSWORD);
-
-  // const USER = process.env.EMAIL;
-  // const PASS = process.env.PASSWORD;
+  const USER = process.env.EMAIL;
+  const PASS = process.env.PASSWORD;
 
   const currentContextData = req.currentContextData;
 
