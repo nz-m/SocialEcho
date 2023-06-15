@@ -72,10 +72,10 @@ const MainSection = ({ userData }) => {
 
       {posts.length === 0 && (
         <div className="text-center text-gray-700 flex justify-center items-center flex-col">
-          <img src={Home} alt="no post" />
-          <p className="text-lg font-semibold py-5">
+          <p className="py-5 font-semibold">
             No posts to show. Join a community and post something.
           </p>
+          <img loading="lazy" src={Home} alt="no post" />
         </div>
       )}
     </>

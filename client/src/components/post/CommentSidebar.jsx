@@ -20,22 +20,22 @@ const CommentSidebar = ({ comments }) => {
     <div className="col-span-1 bg-white sticky top-20 h-[85vh] p-5 rounded-md border overflow-y-auto">
       {currentComments.length > 0 && (
         <div>
-          <h2 className="font-semibold mb-4 text-center border-b py-3">
+          <h2 className="font-semibold mb-4 text-center py-2 border-b-2">
             Recent Comments
           </h2>
           {currentComments.map((comment) => (
             <div
               key={comment._id}
-              className="flex flex-col bg-white p-3  border-b w-full"
+              className="flex flex-col bg-white p-2 border-b w-full"
             >
-              <div className="flex gap-2">
+              <div className="flex gap-1">
                 <img
                   src={comment.user.avatar}
                   alt="User Avatar"
-                  className="w-9 h-9 rounded-full"
+                  className="rounded-full overflow-hidden w-[30px] h-[30px] object-cover"
                 />
 
-                <div className="flex flex-col ">
+                <div className="flex flex-col">
                   <span className="text-md font-semibold hover:underline">
                     <Link to={`/user/${comment.user._id}`}>
                       {comment.user.name}
@@ -46,7 +46,6 @@ const CommentSidebar = ({ comments }) => {
                   </p>
                 </div>
               </div>
-
               <p className="text-sm mt-2 whitespace-normal break-words">
                 {comment.content}
               </p>

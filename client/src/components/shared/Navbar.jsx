@@ -1,14 +1,14 @@
 import { useRef, useState } from "react";
-import Logo from "../../assets/SocialEcho.png";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import { memo } from "react";
 import { logoutAction } from "../../redux/actions/authActions";
-import { useDispatch } from "react-redux";
 import { IoLogOutOutline } from "react-icons/io5";
 import { Transition } from "@headlessui/react";
 import { AiOutlineBars } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
+import Logo from "../../assets/SocialEcho.png";
 
 const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
   };
 
   return (
-    <nav className="flex md:items-center justify-center gap-10 md:justify-between bg-white md:px-36 p-2 sticky top-0 z-10 mb-5 border">
+    <nav className="flex md:items-center justify-center gap-10 md:justify-between bg-white md:px-36 p-2 sticky top-0 mb-5 border z-20">
       <Link to="/" className="hidden md:inline-block">
         <img className="w-36" src={Logo} alt="" />
       </Link>
@@ -48,7 +48,7 @@ const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
           <img
             src={userData.avatar}
             alt="profile"
-            className="h-8 w-8 rounded-full"
+            className="rounded-full overflow-hidden w-[40px] h-[40px] object-cover"
           />
         </button>
         <Transition

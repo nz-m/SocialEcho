@@ -39,10 +39,10 @@ const Following = () => {
             </div>
           ) : (
             <div className="text-center text-gray-700 flex justify-center items-center flex-col">
-              <img className="" src={noFollow} alt="no post" />
-              <p className="text-lg font-semibold py-5">
-                You're not following anyone yet. later!
+              <p className="font-semibold py-5">
+                You're not following anyone yet.
               </p>
+              <img src={noFollow} alt="no post" className="max-w-md" />
             </div>
           )}
         </div>

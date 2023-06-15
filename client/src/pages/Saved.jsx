@@ -27,11 +27,11 @@ const Saved = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center text-gray-700 flex justify-center items-center flex-col">
-            <img src={NoSavedPost} alt="no post" />
-            <p className="text-lg font-semibold py-5">
-              You have not saved any post yet
+          <div className="text-center flex justify-center items-center flex-col">
+            <p className="text-gray-500 py-5">
+              You haven't saved any post yet.
             </p>
+            <img loading="lazy" src={NoSavedPost} alt="no post" />
           </div>
         )}
       </div>

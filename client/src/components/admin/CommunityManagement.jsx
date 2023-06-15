@@ -85,7 +85,9 @@ const CommunityManagement = () => {
                 alt={community.name}
                 className="w-10 h-10 rounded-full mr-2 md:mr-4"
               />
-              <span className="text-gray-700 text-xs md:text-base">{community.name}</span>
+              <span className="text-gray-700 text-xs md:text-base">
+                {community.name}
+              </span>
             </div>
           ))}
         </div>
@@ -94,10 +96,9 @@ const CommunityManagement = () => {
       {/* Right column */}
       <div className="flex flex-col w-full bg-white rounded-md px-5 py-5 border-l">
         {isChangingCommunity ? (
-            <div className='flex justify-center items-center h-screen'>
-              <span className="admin-loader"></span>
-            </div>
-
+          <div className="flex justify-center items-center h-screen">
+            <span className="admin-loader"></span>
+          </div>
         ) : selectedCommunityData ? (
           <>
             <h1 className="font-bold text-lg border-b border-black pb-1 mb-2">
@@ -127,12 +128,12 @@ const CommunityManagement = () => {
                   {selectedCommunityData.moderators?.map((moderator) => (
                     <div
                       key={moderator._id}
-                      className={`p-2 cursor-pointer border flex flex-col md:flex-row gap-2 justify-between items-center  ${
+                      className={`p-2 cursor-pointer border flex flex-col md:flex-row gap-2 justify-between items-center rounded ${
                         selectedModerator?._id === moderator._id ? "" : ""
                       }`}
                       onClick={() => handleModeratorSelect(moderator)}
                     >
-                      <span className="font-medium text-xl">{moderator.name}</span>
+                      <span className="font-medium">{moderator.name}</span>
                       <button
                         disabled={isUpdating}
                         className={` bg-red-500 px-4 py-1 text-sm  text-white rounded hover:bg-red-700 ${

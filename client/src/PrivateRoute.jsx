@@ -55,7 +55,7 @@ const PrivateRoute = ({ userData }) => {
         showLeftbar={showLeftbar}
       />
 
-      <div className="md:grid md:grid-cols-4 md:gap-6 md:w-10/12 md:mx-auto">
+      <div className="flex-col-reverse md:grid md:grid-cols-4 md:gap-6 md:w-10/12 md:mx-auto">
         <Leftbar showLeftbar={showLeftbar} />
 
         <Outlet />

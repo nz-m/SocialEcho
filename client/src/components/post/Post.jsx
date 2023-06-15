@@ -24,7 +24,7 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="px-6 py-6 rounded-md border bg-white mb-6 hover:shadow duration-300 shadow-2xl shadow-[#f2f5fc]">
+    <div className="border rounded bg-white mb-6 hover:shadow duration-300 p-4 m-2">
       <div className="flex items-start justify-between">
         <div className="flex gap-2">
           <img

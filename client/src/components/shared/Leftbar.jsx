@@ -107,16 +107,17 @@ const Leftbar = ({ showLeftbar }) => {
           ) : (
             <div>No communities found.</div>
           )}
-
-          <div className="md:hidden">
-            <hr className="w-full my-4 border-gray-300" />
-            <div className="flex justify-center gap-1 items-center">
-              <GiTeamIdea />
-              <Link to="/communities" className="text-primary font-medium">
-                See all communities
-              </Link>
+          {user && user.role === "general" && (
+            <div className="md:hidden">
+              <hr className="w-full my-4 border-gray-300" />
+              <div className="flex justify-center gap-1 items-center">
+                <GiTeamIdea />
+                <Link to="/communities" className="text-primary font-medium">
+                  See all communities
+                </Link>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

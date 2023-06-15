@@ -20,9 +20,9 @@ const ReportedPosts = () => {
   }
 
   return (
-    <div className="border border-slate-200 rounded-lg mt-3">
+    <div className="border border-slate-200 rounded mt-1">
       {reportedPosts.length === 0 ? (
-        <p>No posts to show</p>
+        <p className="text-center">No posts to show</p>
       ) : (
         reportedPosts.map((reportedPost) => (
           <ReportedPost key={reportedPost._id} reportedPost={reportedPost} />
