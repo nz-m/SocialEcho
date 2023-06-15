@@ -27,8 +27,8 @@ const SignIn = () => {
   const signInError = useSelector((state) => state.auth?.signInError);
   const successMessage = useSelector((state) => state.auth?.successMessage);
   return (
-    <section className="bg-white mt-36 md:mt-0">
-      <div className="container flex flex-col items-center justify-center md:h-screen px-6 mx-auto">
+    <section className="bg-white ">
+      <div className="container flex flex-col items-center justify-center min-h-screen px-6 mx-auto">
         <form className="w-full max-w-md">
           <div className="flex justify-center mx-auto">
             <img className="w-auto h-7 sm:h-8" src={Logo} alt="" />

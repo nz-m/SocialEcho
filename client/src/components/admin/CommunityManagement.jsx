@@ -83,9 +83,9 @@ const CommunityManagement = () => {
               <img
                 src={community.banner}
                 alt={community.name}
-                className="w-10 h-10 rounded-full mr-4"
+                className="w-10 h-10 rounded-full mr-2 md:mr-4"
               />
-              <span className="text-gray-700">{community.name}</span>
+              <span className="text-gray-700 text-xs md:text-base">{community.name}</span>
             </div>
           ))}
         </div>
@@ -116,9 +116,9 @@ const CommunityManagement = () => {
               Total Members: {selectedCommunityData.memberCount}
             </span>
 
-            <div className="flex flex-row p-4">
+            <div className="flex flex-col md:flex-row gap-5">
               {/* Moderators list */}
-              <div className="flex flex-col w-1/2">
+              <div className="flex flex-col gap-2 w-full md:w-1/2">
                 <h2 className="font-medium mb-2">Moderators</h2>
                 {selectedCommunityData.moderators?.length === 0 && (
                   <span>No moderators</span>
@@ -127,15 +127,15 @@ const CommunityManagement = () => {
                   {selectedCommunityData.moderators?.map((moderator) => (
                     <div
                       key={moderator._id}
-                      className={`p-2 cursor-pointer  ${
+                      className={`p-2 cursor-pointer border flex flex-col md:flex-row gap-2 justify-between items-center  ${
                         selectedModerator?._id === moderator._id ? "" : ""
                       }`}
                       onClick={() => handleModeratorSelect(moderator)}
                     >
-                      <span className="font-medium">{moderator.name}</span>
+                      <span className="font-medium text-xl">{moderator.name}</span>
                       <button
                         disabled={isUpdating}
-                        className={`ml-2 bg-red-500 px-4 py-1 text-sm text-white rounded hover:bg-red-700 ${
+                        className={` bg-red-500 px-4 py-1 text-sm  text-white rounded hover:bg-red-700 ${
                           isUpdating ? "opacity-50 cursor-not-allowed" : ""
                         }`}
                         onClick={() => handleRemoveModerator(moderator)}
@@ -148,9 +148,9 @@ const CommunityManagement = () => {
               </div>
 
               {/* Add moderator form */}
-              <div className="flex flex-col w-1/2">
+              <div className="flex flex-col w-full gap-2 md:w-1/2">
                 <h2 className="font-medium mb-2">Add Moderator</h2>
-                <div className="flex flex-row">
+                <div className="flex flex-col gap-2 md:flex-row">
                   <select
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                     value={newModerator}
