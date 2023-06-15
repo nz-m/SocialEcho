@@ -3,7 +3,6 @@ const UserPreference = require("../../models/preference.model");
 const User = require("../../models/user.model");
 const EmailVerification = require("../../models/email.model");
 const { query, validationResult } = require("express-validator");
-const { decryptData } = require("../../utils/encryption");
 const { verifyEmailHTML } = require("../../utils/emailTemplates");
 
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -22,11 +21,8 @@ const verifyEmailValidation = [
 ];
 
 const sendVerificationEmail = async (req, res) => {
-  const USER = decryptData(process.env.EMAIL);
-  const PASS = decryptData(process.env.PASSWORD);
-
-  // const USER = process.env.EMAIL;
-  // const PASS = process.env.PASSWORD;
+  const USER = process.env.EMAIL;
+  const PASS = process.env.PASSWORD;
   const { email, name } = req.body;
 
   const verificationCode = Math.floor(10000 + Math.random() * 90000);
@@ -73,8 +69,11 @@ const verifyEmail = async (req, res, next) => {
 
   try {
     const [isVerified, verification] = await Promise.all([
-      User.findOne({ email:{ $eq: email }, isEmailVerified: true }),
-        EmailVerification.findOne( { email: { $eq: email } , verificationCode: { $eq: code } }),
+      User.findOne({ email: { $eq: email }, isEmailVerified: true }),
+      EmailVerification.findOne({
+        email: { $eq: email },
+        verificationCode: { $eq: code },
+      }),
     ]);
 
     if (isVerified) {
@@ -88,13 +87,13 @@ const verifyEmail = async (req, res, next) => {
     }
 
     const updatedUser = await User.findOneAndUpdate(
-        { email: { $eq: email } },
-        { isEmailVerified: true },
-        { new: true }
+      { email: { $eq: email } },
+      { isEmailVerified: true },
+      { new: true }
     ).exec();
 
     await Promise.all([
-        EmailVerification.deleteMany({ email: { $eq: email } }).exec(),
+      EmailVerification.deleteMany({ email: { $eq: email } }).exec(),
       new UserPreference({
         user: updatedUser,
         enableContextBasedAuth: true,

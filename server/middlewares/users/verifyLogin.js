@@ -3,7 +3,6 @@ const SuspiciousLogin = require("../../models/suspiciousLogin.model");
 const UserContext = require("../../models/context.model");
 const EmailVerification = require("../../models/email.model");
 const { query, validationResult } = require("express-validator");
-const { decryptData } = require("../../utils/encryption");
 const { verifyLoginHTML } = require("../../utils/emailTemplates");
 
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -21,11 +20,8 @@ const verifyLoginValidation = [
   },
 ];
 const sendLoginVerificationEmail = async (req, res) => {
-  const USER = decryptData(process.env.EMAIL);
-  const PASS = decryptData(process.env.PASSWORD);
-
-  // const USER = process.env.EMAIL;
-  // const PASS = process.env.PASSWORD;
+  const USER = process.env.EMAIL;
+  const PASS = process.env.PASSWORD;
 
   const currentContextData = req.currentContextData;
 
@@ -101,7 +97,7 @@ const verifyLogin = async (req, res) => {
 
     await newContextData.save();
     await SuspiciousLogin.findOneAndUpdate(
-        { _id: { $eq: id } },
+      { _id: { $eq: id } },
       { $set: { isTrusted: true, isBlocked: false } },
       { new: true }
     );
@@ -123,9 +119,9 @@ const blockLogin = async (req, res) => {
     }
 
     await SuspiciousLogin.findOneAndUpdate(
-        { _id: { $eq: id } },
-        { $set: { isBlocked: true, isTrusted: false } },
-        { new: true }
+      { _id: { $eq: id } },
+      { $set: { isBlocked: true, isTrusted: false } },
+      { new: true }
     );
 
     res.status(200).json({ message: "Login blocked" });
