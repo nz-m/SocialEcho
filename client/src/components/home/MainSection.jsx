@@ -70,12 +70,12 @@ const MainSection = ({ userData }) => {
       )}
 
       {posts.length === 0 && (
-         <div className="text-center text-gray-700 flex justify-center items-center flex-col">
-             
-         <img src="/home.jpg" alt="no post" />
-         <p className="text-lg font-semibold py-5">No posts to show. Join a community and post something.</p>
-       </div>
-      
+        <div className="text-center text-gray-700 flex justify-center items-center flex-col">
+          <img src="/client/src/assets/home.jpg" alt="no post" />
+          <p className="text-lg font-semibold py-5">
+            No posts to show. Join a community and post something.
+          </p>
+        </div>
       )}
     </>
   );

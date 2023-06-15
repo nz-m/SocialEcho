@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getFollowingUsersAction } from "../redux/actions/userActions";
 import PublicProfileCard from "../components/profile/PublicProfileCard";
@@ -38,12 +38,15 @@ const Following = () => {
             </div>
           ) : (
             <div className="text-center text-gray-700 flex justify-center items-center flex-col">
-             
-            <img className="" src="/nofollow.jpg" alt="no post" />
-            <p className="text-lg font-semibold py-5">You're not following anyone yet.
-            later!</p>
-          </div>
-           
+              <img
+                className=""
+                src="/client/src/assets/nofollow.jpg"
+                alt="no post"
+              />
+              <p className="text-lg font-semibold py-5">
+                You're not following anyone yet. later!
+              </p>
+            </div>
           )}
         </div>
       )}

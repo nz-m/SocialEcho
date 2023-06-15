@@ -27,10 +27,11 @@ const Saved = () => {
           </div>
         ) : (
           <div className="text-center text-gray-700 flex justify-center items-center flex-col">
-             
-          <img src="/nopost.jpg" alt="no post" />
-          <p className="text-lg font-semibold py-5">You have not saved any post yet</p>
-        </div>
+            <img src="/client/src/assets/nopost.jpg" alt="no post" />
+            <p className="text-lg font-semibold py-5">
+              You have not saved any post yet
+            </p>
+          </div>
         )}
       </div>
     </div>
