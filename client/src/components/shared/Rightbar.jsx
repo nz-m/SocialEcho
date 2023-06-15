@@ -109,7 +109,7 @@ const Rightbar = () => {
                 <div className="flex items-center">
                   <img
                     src={community.banner || placeholder}
-                    className="h-8 w-8 rounded-full mr-4"
+                    className="h-8 w-8 rounded-full mr-4 object-cover"
                     alt="community"
                   />
                   <div className="text-base font-medium flex flex-col">
@@ -161,7 +161,7 @@ const Rightbar = () => {
             >
               <div className="flex justify-content-between items-center gap-1">
                 <img
-                  className="h-7 w-7 rounded-full flex-shrink-0"
+                  className="h-7 w-7 rounded-full flex-shrink-0 object-cover"
                   src={user.avatar}
                   alt={user.name}
                 />

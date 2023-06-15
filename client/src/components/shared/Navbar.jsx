@@ -48,7 +48,7 @@ const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
           <img
             src={userData.avatar}
             alt="profile"
-            className="rounded-full overflow-hidden w-[40px] h-[40px] object-cover"
+            className="h-8 w-8 rounded-full object-cover"
           />
         </button>
         <Transition
@@ -73,7 +73,7 @@ const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
                   <img
                     src={userData.avatar}
                     alt="profile"
-                    className="h-16 w-16 rounded-full mb-2"
+                    className="h-16 w-16 rounded-full mb-2 object-cover"
                   />
                   <div className="text-sm text-gray-700 font-semibold hover:underline">
                     <Link to={`/profile`}>{userData.name}</Link>
