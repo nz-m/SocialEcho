@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getFollowingUsersAction } from "../redux/actions/userActions";
 import PublicProfileCard from "../components/profile/PublicProfileCard";
 import CommonLoading from "../components/loader/CommonLoading";
+import noFollow from "../assets/nofollow.jpg";
 
 const Following = () => {
   const dispatch = useDispatch();
@@ -38,11 +39,7 @@ const Following = () => {
             </div>
           ) : (
             <div className="text-center text-gray-700 flex justify-center items-center flex-col">
-              <img
-                className=""
-                src="/client/src/assets/nofollow.jpg"
-                alt="no post"
-              />
+              <img className="" src={noFollow} alt="no post" />
               <p className="text-lg font-semibold py-5">
                 You're not following anyone yet. later!
               </p>

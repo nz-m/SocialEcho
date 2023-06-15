@@ -5,6 +5,7 @@ import PostOnProfile from "../post/PostOnProfile";
 import OwnProfileCard from "./OwnProfileCard";
 import CommonLoading from "../loader/CommonLoading";
 import OwnInfoCard from "./OwnInfoCard";
+import NoPost from "../../assets/nopost.jpg";
 
 const UserProfile = ({ userData }) => {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ const UserProfile = ({ userData }) => {
 
           {postToShow?.length === 0 ? (
             <div className="text-center text-gray-700 flex justify-center items-center flex-col">
-              <img src="/client/src/assets/nopost.jpg" alt="no post" />
+              <img src={NoPost} alt="no post" />
               <p className="text-lg font-semibold py-5">No Post available</p>
             </div>
           ) : (
