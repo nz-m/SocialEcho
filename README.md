@@ -1,2 +1,2 @@
 # SocialEcho
-(In progress) A social networking platform to share ideas and thoughts with like-minded individuals while adhering to guidelines set by pre-defined communities.
+A social networking platform with automated content moderation and context-based authentication system.
