@@ -12,7 +12,7 @@ const postConfirmation = async (req, res, next) => {
 
     try {
       const { content, communityId } = req.body;
-      const { userId, file, fileUrl, filetype } = req;
+      const { userId, file, fileUrl, fileType } = req;
 
       const community = await Community.findOne({
         _id: { $eq: communityId },
@@ -39,7 +39,7 @@ const postConfirmation = async (req, res, next) => {
         community: communityId,
         content,
         fileUrl: fileUrl ? fileUrl : null,
-        fileType: filetype ? filetype : null,
+        fileType: fileType ? fileType : null,
         confirmationToken,
         status: "pending",
       });
