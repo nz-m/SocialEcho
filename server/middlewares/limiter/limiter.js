@@ -1,50 +1,21 @@
 const rateLimit = require("express-rate-limit");
+const MESSAGE = "Too many requests, please try again later.";
 
-const configLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 100000, // for development
-  message: {
-    message: "Too many requests, please try again later.",
-  },
-});
+const createLimiter = (windowMs, max, message) => {
+  return rateLimit({
+    windowMs,
+    max,
+    message: { message: message },
+  });
+};
 
-const logLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 100000,
-  message: {
-    message: "Too many requests, please try again later.",
-  },
-});
-
-const createPostLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 5 minutes
-  max: 100000,
-  message: { message: "Too many requests, please try again later." },
-});
-
-const likeSaveLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 100000, // allow 250 requests per 10 minutes combined for like,unlike,save,unsave
-  message: { message: "Too many requests, please try again later." },
-});
-
-const followLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 100000,
-  message: { message: "Too many requests, please try again later." },
-});
-
-const signUpSignInLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 100000,
-  message: { message: "Too many requests, please try again later." },
-});
-
-const commentLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 5 minutes
-  max: 100000,
-  message: { message: "Too many comments, please try again later." },
-});
+const configLimiter = createLimiter(60 * 60 * 1000, 3500, MESSAGE);
+const logLimiter = createLimiter(60 * 60 * 1000, 3500, MESSAGE);
+const createPostLimiter = createLimiter(5 * 60 * 1000, 20, MESSAGE);
+const likeSaveLimiter = createLimiter(10 * 60 * 1000, 250, MESSAGE);
+const followLimiter = createLimiter(10 * 60 * 1000, 100, MESSAGE);
+const signUpSignInLimiter = createLimiter(10 * 60 * 1000, 100, MESSAGE);
+const commentLimiter = createLimiter(5 * 60 * 1000, 100, MESSAGE);
 
 module.exports = {
   configLimiter,
