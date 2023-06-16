@@ -14,6 +14,7 @@ import "react-photo-view/dist/react-photo-view.css";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import ReportPostModal from "../modals/ReportPostModal";
 import { VscReport } from "react-icons/vsc";
+import Tooltip from "../shared/Tooltip";
 const PostView = ({ post, userData }) => {
   const [loading, setLoading] = useState(true);
 
@@ -143,42 +144,36 @@ const PostView = ({ post, userData }) => {
           <div className="flex items-center space-x-2">
             <Save postId={post._id} />
 
-            <span
-              className="transititext-black flex items-center gap-1 text-lg text-black transition duration-150 ease-in-out  "
-              data-te-toggle="tooltip"
-              title="Saved By"
-            >
-              <HiOutlineArchiveBox className="text-2xl" />
-              {savedByCount}
-            </span>
-            {isReportedPost ? (
-              <button
-                disabled
-                className="transititext-black  text-green-500 transition duration-150 ease-in-out "
-                data-te-toggle="tooltip"
-                title="reported!"
-              >
-                <VscReport className="text-2xl" />
-              </button>
-            ) : (
-              <button
-                onClick={handleReportClick}
-                className="transititext-amber-500 text-amber-500 transition duration-150 ease-in-out "
-                data-te-toggle="tooltip"
-                title="Report"
-              >
-                <VscReport className="text-2xl" />
-              </button>
-            )}
-            {userData?._id === post.user._id && (
-              <button
-                onClick={() => toggleModal(true)}
-                className="transititext-red-500 text-red-500 transition duration-150 ease-in-out "
-                data-te-toggle="tooltip"
-                title="Delete"
-              >
+            <Tooltip text="Saved by">
+              <span className="flex justify-center items-center">
                 <HiOutlineArchiveBox className="text-2xl" />
-              </button>
+                {savedByCount}
+              </span>
+            </Tooltip>
+
+            {isReportedPost ? (
+              <Tooltip text="Reported">
+                <button disabled className="text-green-500">
+                  <VscReport className="text-2xl" />
+                </button>
+              </Tooltip>
+            ) : (
+              <Tooltip text="Report">
+                <button onClick={handleReportClick}>
+                  <VscReport className="text-2xl" />
+                </button>
+              </Tooltip>
+            )}
+
+            {userData?._id === post.user._id && (
+              <Tooltip text="Delete">
+                <button
+                  onClick={() => toggleModal(true)}
+                  className="text-red-500"
+                >
+                  <HiOutlineArchiveBox className="text-2xl" />
+                </button>
+              </Tooltip>
             )}
             {showModal && (
               <DeleteModal

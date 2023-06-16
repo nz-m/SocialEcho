@@ -9,6 +9,7 @@ import {
 import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
 import "react-photo-view/dist/react-photo-view.css";
+import Tooltip from "../shared/Tooltip";
 
 const Post = ({ post }) => {
   const navigate = useNavigate();
@@ -113,13 +114,15 @@ const Post = ({ post }) => {
         <div className="flex justify-center items-center gap-4 cursor-pointer">
           <div className="flex items-center gap-2">
             {userData?._id === post.user._id && (
-              <button
-                onClick={() => toggleModal(true)}
-                className="flex items-center text-xl gap-1"
-              >
-                {" "}
-                <HiOutlineArchiveBox className="text-red-500 text-2xl" />
-              </button>
+              <Tooltip text="Delete post">
+                <button
+                  onClick={() => toggleModal(true)}
+                  className="flex items-center text-xl gap-1"
+                >
+                  {" "}
+                  <HiOutlineArchiveBox className="text-red-500 text-2xl" />
+                </button>
+              </Tooltip>
             )}
           </div>
         </div>

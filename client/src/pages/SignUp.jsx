@@ -9,6 +9,7 @@ import Logo from "../assets/SocialEcho.png";
 
 const SignUpNew = () => {
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,6 +68,7 @@ const SignUpNew = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setLoadingText("Signing up...");
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
@@ -74,9 +76,17 @@ const SignUpNew = () => {
     formData.append("avatar", avatar);
     formData.append("role", "general");
     formData.append("isConsentGiven", isConsentGiven.toString());
+
+    const timeout = setTimeout(() => {
+      setLoadingText(
+        "This is taking longer than usual. Please wait while backend services are getting started."
+      );
+    }, 5000);
+
     await dispatch(signUpAction(formData, navigate, isConsentGiven, email));
     setLoading(false);
     setIsConsentGiven(false);
+    clearTimeout(timeout);
   };
 
   return (
@@ -245,7 +255,7 @@ const SignUpNew = () => {
               }`}
             >
               {loading ? (
-                <ButtonLoadingSpinner loadingText={"Signing Up..."} />
+                <ButtonLoadingSpinner loadingText={loadingText} />
               ) : (
                 <span>Sign Up</span>
               )}

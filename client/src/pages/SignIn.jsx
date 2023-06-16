@@ -9,19 +9,27 @@ import Logo from "../assets/SocialEcho.png";
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
-    setLoading(true);
     event.preventDefault();
+    setLoading(true);
+    setLoadingText("Signing in...");
     const formData = new FormData();
     formData.append("email", email);
     formData.append("password", password);
+    const timeout = setTimeout(() => {
+      setLoadingText(
+        "This is taking longer than usual. Please wait while backend services are getting started."
+      );
+    }, 5000);
     await dispatch(signInAction(formData, navigate));
     setLoading(false);
+    clearTimeout(timeout);
   };
 
   const signInError = useSelector((state) => state.auth?.signInError);
@@ -131,7 +139,7 @@ const SignIn = () => {
               }`}
             >
               {loading ? (
-                <ButtonLoadingSpinner loadingText={"Signing in..."} />
+                <ButtonLoadingSpinner loadingText={loadingText} />
               ) : (
                 "Sign in"
               )}

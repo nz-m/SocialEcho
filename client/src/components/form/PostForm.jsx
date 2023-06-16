@@ -233,7 +233,7 @@ const PostForm = ({ communityId, communityName }) => {
         </div>
 
         <button
-          className={`bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
+          className={`bg-primary hover:bg-blue-700 text-white py-1 px-4 rounded ${
             formData.loading ? "opacity-50 cursor-not-allowed" : ""
           }`}
           type="submit"
@@ -242,7 +242,7 @@ const PostForm = ({ communityId, communityName }) => {
             display: formData.content || formData.file ? "block" : "none",
           }}
         >
-          {formData.loading ? "Loading..." : "Post"}
+          {formData.loading ? "Processing..." : "Create post"}
         </button>
       </form>
     </>

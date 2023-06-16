@@ -57,25 +57,21 @@ const Save = ({ postId }) => {
   return (
     <button
       onClick={saved ? handleUnsave : handleSave}
-      className="transititext-black flex items-center gap-1 text-black transition duration-150 ease-in-out  mr-2"
-      data-te-toggle="tooltip"
-      title=" Save"
+      className="flex items-center gap-1 mr-2 tooltip"
       disabled={isSaving}
     >
       {isSaving ? (
         "Saving..."
       ) : saved ? (
-        <HiOutlineArchiveBoxXMark
-          className="transititext-black text-2xl text-black transition duration-150 ease-in-out  "
-          data-te-toggle="tooltip"
-          title=" Remove From Saved"
-        />
+        <>
+          <span className="tooltiptext">Remove from saved</span>
+          <HiOutlineArchiveBoxXMark className="text-2xl" />
+        </>
       ) : (
-        <HiOutlineArchiveBoxArrowDown
-          className="transititext-black text-2xl text-black transition duration-150 ease-in-out  "
-          data-te-toggle="tooltip"
-          title="Save Post"
-        />
+        <>
+          <span className="tooltiptext">Save post</span>
+          <HiOutlineArchiveBoxArrowDown className="text-2xl" />
+        </>
       )}
     </button>
   );

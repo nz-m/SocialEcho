@@ -54,7 +54,7 @@ const EligibilityDetectionFailModal = ({
             onClick={handleDiscard}
             disabled={isProcessing}
           >
-            {isProcessing ? "Discarding..." : "Discard"}
+            Discard
           </button>
           <button
             className={`bg-primary hover:bg-blue-600 text-white px-2 py-1 rounded focus:outline-none focus:shadow-outline ${

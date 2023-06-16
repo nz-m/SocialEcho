@@ -15,6 +15,7 @@ import { AiOutlineFieldTime } from "react-icons/ai";
 import { FiUsers, FiUser, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import { HiOutlineDocumentText } from "react-icons/hi2";
 import CommonLoading from "../components/loader/CommonLoading";
+import Tooltip from "../components/shared/Tooltip";
 
 const PublicProfile = () => {
   const location = useLocation();
@@ -89,7 +90,13 @@ const PublicProfile = () => {
       type="button"
       className="bg-white absolute right-0 bottom-0 text-primary border border-primary rounded-full py-2 px-2 text-sm font-semibold"
     >
-      {loading ? <LoadingSpinner loadingText="Following..." /> : <FiUserPlus />}
+      {loading ? (
+        <LoadingSpinner loadingText="Following..." />
+      ) : (
+        <Tooltip text={`Follow ${name}`}>
+          <FiUserPlus />
+        </Tooltip>
+      )}
     </button>
   );
 
@@ -103,7 +110,9 @@ const PublicProfile = () => {
       {loading ? (
         <LoadingSpinner loadingText="Unfollowing..." />
       ) : (
-        <FiUserMinus />
+        <Tooltip text={`Unfollow ${name}`}>
+          <FiUserMinus />
+        </Tooltip>
       )}
     </button>
   );
@@ -223,8 +232,8 @@ const PublicProfile = () => {
                   >
                     {c.name}
                   </Link>
-                  {index === 0 && commonCommunities.length > 2 ? ", " : ""}
-                  {index === 0 && commonCommunities.length > 1 ? " and " : ""}
+                  {index === 0 && commonCommunities.length === 2 ? " and " : ""}
+                  {index === 0 && commonCommunities.length > 1 ? ", " : ""}
                 </Fragment>
               ))}
               {commonCommunities?.length > 2 && (
