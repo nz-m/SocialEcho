@@ -32,7 +32,7 @@ The system allows flexibility in choosing different services for API usage or di
 
 When a user posts content, it undergoes a thorough filtering process to ensure compliance with the community guidelines. Additionally, users have the ability to report posts that they find inappropriate, which triggers a manual review process.
 
-### Context-Based Authentication**
+### Context-Based Authentication
 
 The platform implements context-based authentication to enhance user account security. It takes into consideration user location, IP address, and device information for authentication purposes. Users can conveniently manage their devices directly from the platform. To ensure data privacy, this information is encrypted using the AES algorithm and securely stored in the database.
 
