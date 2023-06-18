@@ -91,7 +91,7 @@ const PublicProfile = () => {
       className="bg-white absolute right-0 bottom-0 text-primary border border-primary rounded-full py-2 px-2 text-sm font-semibold w-9 h-9"
     >
       {loading ? (
-        <LoadingSpinner  />
+        <LoadingSpinner />
       ) : (
         <Tooltip text={`Follow ${name}`}>
           <FiUserPlus />
@@ -108,7 +108,7 @@ const PublicProfile = () => {
       disabled={isModerator}
     >
       {loading ? (
-        <LoadingSpinner  />
+        <LoadingSpinner />
       ) : (
         <Tooltip text={`Unfollow ${name}`}>
           <FiUserMinus />
@@ -216,41 +216,46 @@ const PublicProfile = () => {
             )}
           </p>
         )}
-{commonCommunities?.length === 0 ? (
-  <p>You have no communities in common.</p>
-) : (
-  <p className="flex flex-col md:flex-row items-start">
-    <FiUsers className="flex-shrink-0"/>
-    <>
-    <p className="px-1"> You both are members of</p>
-   
-      <Link
-        className="text-sky-700 font-bold hover:underline "
-        to={`/community/${commonCommunities[0].name}`}
-      >
-        {commonCommunities[0].name}
-      </Link>
-      <p className="">and</p>
-      {commonCommunities?.length > 1 && (
-        <span className="flex gap-2">
-         
-          <span className="tooltip">
-            {`${commonCommunities?.length - 1} other ${
-              commonCommunities?.length - 1 === 1 ? "community" : "communities"
-            }`}
-            <span className="tooltiptext">
-              {commonCommunities
-                ?.slice(1)
-                .map((c) => `${c.name}`)
-                .join(", ")}
-            </span>
-          </span>
-        </span>
-      )}
-    </>
-  </p>
-)}
-     
+        {commonCommunities?.length === 0 ? (
+          <p>You have no communities in common.</p>
+        ) : (
+          <p className="flex items-start gap-2">
+            <FiUsers />
+            <>
+              You both are members of{" "}
+              {commonCommunities?.slice(0, 2).map((c, index) => (
+                <Fragment key={c._id}>
+                  <Link
+                    className="text-sky-700 font-bold hover:underline"
+                    to={`/community/${c.name}`}
+                  >
+                    {c.name}
+                  </Link>
+                  {index === 0 && commonCommunities.length === 2 ? " and " : ""}
+                  {index === 0 && commonCommunities.length > 1 ? ", " : ""}
+                </Fragment>
+              ))}
+              {commonCommunities?.length > 2 && (
+                <span>
+                  {" and "}
+                  <span className="tooltip">
+                    {`${commonCommunities?.length - 2} other ${
+                      commonCommunities?.length - 2 === 1
+                        ? "community"
+                        : "communities"
+                    }`}
+                    <span className="tooltiptext">
+                      {commonCommunities
+                        ?.slice(2)
+                        .map((c) => `${c.name}`)
+                        .join(", ")}
+                    </span>
+                  </span>
+                </span>
+              )}
+            </>
+          </p>
+        )}
 
         <div className="flex flex-col">
           <p className="mt-2 font-semibold">Interests </p>
