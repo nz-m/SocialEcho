@@ -9,6 +9,7 @@ import Logo from "../assets/SocialEcho.png";
 
 const SignUpNew = () => {
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,6 +68,7 @@ const SignUpNew = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setLoadingText("Signing up...");
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
@@ -74,9 +76,17 @@ const SignUpNew = () => {
     formData.append("avatar", avatar);
     formData.append("role", "general");
     formData.append("isConsentGiven", isConsentGiven.toString());
+
+    const timeout = setTimeout(() => {
+      setLoadingText(
+        "This is taking longer than usual. Please wait while backend services are getting started."
+      );
+    }, 5000);
+
     await dispatch(signUpAction(formData, navigate, isConsentGiven, email));
     setLoading(false);
     setIsConsentGiven(false);
+    clearTimeout(timeout);
   };
 
   return (
@@ -245,7 +255,7 @@ const SignUpNew = () => {
               }`}
             >
               {loading ? (
-                <ButtonLoadingSpinner loadingText={"Signing Up..."} />
+                <ButtonLoadingSpinner loadingText={loadingText} />
               ) : (
                 <span>Sign Up</span>
               )}
@@ -253,15 +263,16 @@ const SignUpNew = () => {
 
             <div onClick={() => setIsModalOpen(true)} className="mt-6">
               {isConsentGiven && !isModerator ? (
-                <p className="mt-2 text-center font-bold text-sm text-green-600 cursor-pointer">
-                  Context-Based Authentication is enabled.
+                <p className="mt-2 text-center font-semibold text-green-600 text-sm px-4 py-3 rounded-lg cursor-pointer border border-green-500 rounded-lg">
+                  Context-Based Authentication is enabled
                 </p>
               ) : (
-                <p className="mt-2 text-center font-bold text-sm text-orange-400 cursor-pointer">
-                  Context-Based Authentication is disabled.
+                <p className="mt-2 text-center font-semibold border text-sm px-4 py-3 cursor-pointer rounded-lg">
+                  Context-Based Authentication is disabled
                 </p>
               )}
             </div>
+
             <div>
               <ContextAuthModal
                 isModalOpen={isModalOpen}

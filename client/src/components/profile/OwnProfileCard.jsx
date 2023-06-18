@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { RiEditCircleLine } from "react-icons/ri";
-import { CiLocationOn } from "react-icons/ci";
+import { CiEdit, CiLocationOn } from "react-icons/ci";
 import { GrContactInfo } from "react-icons/gr";
 import { useState } from "react";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";
+import Tooltip from "../shared/Tooltip";
 
 const OwnProfileCard = ({ user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,20 +18,23 @@ const OwnProfileCard = ({ user }) => {
 
   return (
     <div className="bg-white rounded-md p-6 border">
-      <div className="flex flex-col justify-between items-center ">
-        <div className="  flex flex-col justify-center items-center">
-          <div className="relative">
+      <div
+        className="cursor-pointer text-xl flex justify-end"
+        onClick={handleOpenModal}
+      >
+        <Tooltip text="Edit profile">
+          <CiEdit />
+        </Tooltip>
+      </div>
+      <div className="flex flex-col justify-between items-center">
+        <div className="flex flex-col justify-center items-center">
+          <div className="">
             <img
-              className="w-28 h-28 rounded-full mr-4"
+              className="w-28 h-28 rounded-full mr-4 object-cover"
               src={user.avatar}
               alt="Profile"
             ></img>
-            <span
-              onClick={handleOpenModal}
-              className="bg-primary py-3  px-3 rounded-full absolute -bottom-2 shadow-lg hover:bg-blue-700 right-3"
-            >
-              <RiEditCircleLine className="text-lg text-white" />
-            </span>
+
             <ProfileUpdateModal
               user={user}
               isOpen={isModalOpen}

@@ -14,6 +14,7 @@ import "react-photo-view/dist/react-photo-view.css";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import ReportPostModal from "../modals/ReportPostModal";
 import { VscReport } from "react-icons/vsc";
+import Tooltip from "../shared/Tooltip";
 const PostView = ({ post, userData }) => {
   const [loading, setLoading] = useState(true);
 
@@ -115,7 +116,7 @@ const PostView = ({ post, userData }) => {
             >
               <PhotoView src={fileUrl}>
                 <img
-                  className="w-full h-auto rounded-md mt-3 cursor-pointer"
+                  className="w-full aspect-square object-cover rounded-md mt-3 cursor-pointer"
                   src={fileUrl}
                   alt={content}
                   loading="lazy"
@@ -125,7 +126,7 @@ const PostView = ({ post, userData }) => {
           ) : (
             fileUrl && (
               <video
-                className="max-w-sm h-auto rounded-md mt-3"
+                className="w-full aspect-video rounded-md mt-3"
                 src={fileUrl}
                 controls
               />
@@ -140,46 +141,46 @@ const PostView = ({ post, userData }) => {
               <span className="text-lg">{comments.length}</span>
             </button>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
+            <div>
             <Save postId={post._id} />
-
-            <span
-              className="transititext-black flex items-center gap-1 text-lg text-black transition duration-150 ease-in-out  "
-              data-te-toggle="tooltip"
-              title="Saved By"
-            >
-              <HiOutlineArchiveBox className="text-2xl" />
-              {savedByCount}
-            </span>
-            {isReportedPost ? (
-              <button
-                disabled
-                className="transititext-black  text-green-500 transition duration-150 ease-in-out "
-                data-te-toggle="tooltip"
-                title="reported!"
-              >
-                <VscReport className="text-2xl" />
-              </button>
-            ) : (
-              <button
-                onClick={handleReportClick}
-                className="transititext-amber-500 text-amber-500 transition duration-150 ease-in-out "
-                data-te-toggle="tooltip"
-                title="Report"
-              >
-                <VscReport className="text-2xl" />
-              </button>
-            )}
-            {userData?._id === post.user._id && (
-              <button
-                onClick={() => toggleModal(true)}
-                className="transititext-red-500 text-red-500 transition duration-150 ease-in-out "
-                data-te-toggle="tooltip"
-                title="Delete"
-              >
+            <Tooltip text="Saved by" className='items-center'>
+              <div className="flex justify-center items-center">
                 <HiOutlineArchiveBox className="text-2xl" />
-              </button>
+                {savedByCount}
+              </div>
+            </Tooltip>
+            </div>
+          
+
+          
+<div className="flex items-center gap-2">
+{isReportedPost ? (
+              <Tooltip text="Reported" className='items-center'>
+                <button disabled className="text-green-500">
+                  <VscReport className="text-2xl" />
+                </button>
+              </Tooltip>
+            ) : (
+              <Tooltip text="Report">
+                <button onClick={handleReportClick}>
+                  <VscReport className="text-2xl" />
+                </button>
+              </Tooltip>
             )}
+
+            {userData?._id === post.user._id && (
+              <Tooltip text="Delete">
+                <button
+                  onClick={() => toggleModal(true)}
+                  className="text-red-500"
+                >
+                  <HiOutlineArchiveBox className="text-2xl" />
+                </button>
+              </Tooltip>
+            )}
+</div>
+          
             {showModal && (
               <DeleteModal
                 showModal={showModal}
