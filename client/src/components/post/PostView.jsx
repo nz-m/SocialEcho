@@ -116,7 +116,7 @@ const PostView = ({ post, userData }) => {
             >
               <PhotoView src={fileUrl}>
                 <img
-                  className="w-full h-auto rounded-md mt-3 cursor-pointer"
+                  className="w-full aspect-square object-cover rounded-md mt-3 cursor-pointer"
                   src={fileUrl}
                   alt={content}
                   loading="lazy"
@@ -126,7 +126,7 @@ const PostView = ({ post, userData }) => {
           ) : (
             fileUrl && (
               <video
-                className="max-w-sm h-auto rounded-md mt-3"
+                className="w-full aspect-video rounded-md mt-3"
                 src={fileUrl}
                 controls
               />
