@@ -84,7 +84,7 @@ const Post = ({ post }) => {
                   src={fileUrl}
                   alt={content}
                   loading="lazy"
-                  className="cursor-pointer h-auto rounded-md mt-3"
+                  className="cursor-pointer w-full aspect-square object-cover rounded-md mt-3"
                 />
               </PhotoView>
             </PhotoProvider>

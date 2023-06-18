@@ -1,9 +1,9 @@
 const Tooltip = ({ text, children }) => {
   return (
-    <span className="tooltip">
+    <div className="tooltip">
       {children}
       <span className="tooltiptext">{text}</span>
-    </span>
+    </div>
   );
 };
 

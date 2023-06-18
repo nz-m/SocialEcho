@@ -116,7 +116,7 @@ const PostView = ({ post, userData }) => {
             >
               <PhotoView src={fileUrl}>
                 <img
-                  className="w-full h-auto rounded-md mt-3 cursor-pointer"
+                  className="w-full aspect-square object-cover rounded-md mt-3 cursor-pointer"
                   src={fileUrl}
                   alt={content}
                   loading="lazy"
@@ -126,7 +126,7 @@ const PostView = ({ post, userData }) => {
           ) : (
             fileUrl && (
               <video
-                className="max-w-sm h-auto rounded-md mt-3"
+                className="w-full aspect-video rounded-md mt-3"
                 src={fileUrl}
                 controls
               />
@@ -141,18 +141,22 @@ const PostView = ({ post, userData }) => {
               <span className="text-lg">{comments.length}</span>
             </button>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
+            <div>
             <Save postId={post._id} />
-
-            <Tooltip text="Saved by">
-              <span className="flex justify-center items-center">
+            <Tooltip text="Saved by" className='items-center'>
+              <div className="flex justify-center items-center">
                 <HiOutlineArchiveBox className="text-2xl" />
                 {savedByCount}
-              </span>
+              </div>
             </Tooltip>
+            </div>
+          
 
-            {isReportedPost ? (
-              <Tooltip text="Reported">
+          
+<div className="flex items-center gap-2">
+{isReportedPost ? (
+              <Tooltip text="Reported" className='items-center'>
                 <button disabled className="text-green-500">
                   <VscReport className="text-2xl" />
                 </button>
@@ -175,6 +179,8 @@ const PostView = ({ post, userData }) => {
                 </button>
               </Tooltip>
             )}
+</div>
+          
             {showModal && (
               <DeleteModal
                 showModal={showModal}
