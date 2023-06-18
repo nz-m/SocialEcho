@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getPublicUserAction,
   getPublicUsersAction,
@@ -215,24 +215,28 @@ const PublicProfile = () => {
             )}
           </p>
         )}
+
         {commonCommunities?.length === 0 ? (
           <p>You have no communities in common.</p>
         ) : (
           <p>
             You both are members of{" "}
-            {commonCommunities?.length === 1 ? (
-              <span className="text-sky-700 font-bold">
-                {commonCommunities[0].name}
-              </span>
-            ) : (
-              <>
-                <span className="text-sky-700 font-bold">
-                  {commonCommunities[0].name}
-                </span>
+            {commonCommunities?.slice(0, 1).map((c) => (
+              <Fragment key={c._id}>
+                <Link
+                  className="text-sky-700 font-bold hover:underline"
+                  to={`/community/${c.name}`}
+                >
+                  {c.name}
+                </Link>
+              </Fragment>
+            ))}
+            {commonCommunities?.length > 1 && (
+              <span>
                 {" and "}
                 <span className="tooltip">
-                  {`${commonCommunities.length - 1} other ${
-                    commonCommunities.length - 1 === 1
+                  {`${commonCommunities?.length - 1} other ${
+                    commonCommunities?.length - 1 === 1
                       ? "community"
                       : "communities"
                   }`}
@@ -243,11 +247,10 @@ const PublicProfile = () => {
                       .join(", ")}
                   </span>
                 </span>
-              </>
+              </span>
             )}
           </p>
         )}
-
         <div className="flex flex-col">
           <p className="mt-2 font-semibold">Interests </p>
           {interests ? (
