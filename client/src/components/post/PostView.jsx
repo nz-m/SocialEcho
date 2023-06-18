@@ -143,44 +143,42 @@ const PostView = ({ post, userData }) => {
           </div>
           <div className="flex items-center gap-2">
             <div>
-            <Save postId={post._id} />
-            <Tooltip text="Saved by" className='items-center'>
-              <div className="flex justify-center items-center">
-                <HiOutlineArchiveBox className="text-2xl" />
-                {savedByCount}
-              </div>
-            </Tooltip>
-            </div>
-          
-
-          
-<div className="flex items-center gap-2">
-{isReportedPost ? (
-              <Tooltip text="Reported" className='items-center'>
-                <button disabled className="text-green-500">
-                  <VscReport className="text-2xl" />
-                </button>
-              </Tooltip>
-            ) : (
-              <Tooltip text="Report">
-                <button onClick={handleReportClick}>
-                  <VscReport className="text-2xl" />
-                </button>
-              </Tooltip>
-            )}
-
-            {userData?._id === post.user._id && (
-              <Tooltip text="Delete">
-                <button
-                  onClick={() => toggleModal(true)}
-                  className="text-red-500"
-                >
+              <Save postId={post._id} />
+              <Tooltip text="Saved by" className="items-center">
+                <div className="flex justify-center items-center">
                   <HiOutlineArchiveBox className="text-2xl" />
-                </button>
+                  {savedByCount}
+                </div>
               </Tooltip>
-            )}
-</div>
-          
+            </div>
+
+            <div className="flex items-center gap-2">
+              {isReportedPost ? (
+                <Tooltip text="Reported" className="items-center">
+                  <button disabled className="text-green-500">
+                    <VscReport className="text-2xl" />
+                  </button>
+                </Tooltip>
+              ) : (
+                <Tooltip text="Report">
+                  <button onClick={handleReportClick}>
+                    <VscReport className="text-2xl" />
+                  </button>
+                </Tooltip>
+              )}
+
+              {userData?._id === post.user._id && (
+                <Tooltip text="Delete">
+                  <button
+                    onClick={() => toggleModal(true)}
+                    className="text-red-500"
+                  >
+                    <HiOutlineArchiveBox className="text-2xl" />
+                  </button>
+                </Tooltip>
+              )}
+            </div>
+
             {showModal && (
               <DeleteModal
                 showModal={showModal}
