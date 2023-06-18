@@ -34,7 +34,7 @@ const PublicPost = ({ publicUserId }) => {
           User has not posted anything yet. Check back later!
         </p>
       ) : (
-        <div className="flex gap-4 flex-wrap">
+        <div className="">
           {publicPosts?.map((post) => (
             <Post key={post._id} post={post} />
           ))}

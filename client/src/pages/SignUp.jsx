@@ -263,11 +263,11 @@ const SignUpNew = () => {
 
             <div onClick={() => setIsModalOpen(true)} className="mt-6">
               {isConsentGiven && !isModerator ? (
-                <p className="mt-2 text-center font-bold text-sm text-green-600 cursor-pointer">
+                <p className="mt-2 text-center font-bold bg-green-400 text-sm text-white px-4 py-3 rounded-lg cursor-pointer">
                   Context-Based Authentication is enabled.
                 </p>
               ) : (
-                <p className="mt-2 text-center font-bold text-sm text-orange-400 cursor-pointer">
+                <p className="mt-2 text-center font-bold bg-orange-400 text-sm text-white px-4 py-3 rounded-lg cursor-pointer">
                   Context-Based Authentication is disabled.
                 </p>
               )}

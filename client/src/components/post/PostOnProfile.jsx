@@ -38,7 +38,7 @@ const PostOnProfile = ({ post }) => {
         {content && <p className="mb-4">{content}</p>}
         {fileUrl && isImageFile ? (
           <img
-            className="w-[800px] h-auto rounded-md my-3"
+            className="w-full aspect-square object-cover rounded-md my-3"
             src={fileUrl}
             alt={content}
             loading="lazy"
@@ -46,7 +46,7 @@ const PostOnProfile = ({ post }) => {
         ) : (
           fileUrl && (
             <video
-              className="w-[800px] h-auto rounded-md my-3"
+              className="w-full aspect-video rounded-md my-3"
               src={fileUrl}
               controls
             />
