@@ -30,7 +30,7 @@ const OwnProfileCard = ({ user }) => {
         <div className="flex flex-col justify-center items-center">
           <div className="">
             <img
-              className="w-28 h-28 rounded-full mr-4"
+              className="w-28 h-28 rounded-full mr-4 object-cover"
               src={user.avatar}
               alt="Profile"
             ></img>

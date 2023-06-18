@@ -1,7 +1,7 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   getPublicUserAction,
   getPublicUsersAction,
@@ -9,7 +9,6 @@ import {
   followUserAction,
 } from "../redux/actions/userActions";
 import PublicPost from "../components/profile/PublicPost";
-import LoadingSpinner from "../components/loader/ButtonLoadingSpinner";
 import { CiLocationOn } from "react-icons/ci";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import { FiUsers, FiUser, FiUserMinus, FiUserPlus } from "react-icons/fi";
@@ -91,7 +90,7 @@ const PublicProfile = () => {
       className="bg-white absolute right-0 bottom-0 text-primary border border-primary rounded-full py-2 px-2 text-sm font-semibold w-9 h-9"
     >
       {loading ? (
-        <LoadingSpinner />
+        <span>Wait...</span>
       ) : (
         <Tooltip text={`Follow ${name}`}>
           <FiUserPlus />
@@ -108,7 +107,7 @@ const PublicProfile = () => {
       disabled={isModerator}
     >
       {loading ? (
-        <LoadingSpinner />
+        <span>Wait...</span>
       ) : (
         <Tooltip text={`Unfollow ${name}`}>
           <FiUserMinus />
@@ -147,7 +146,7 @@ const PublicProfile = () => {
           </h1>
           <p className="text-gray-500 text-center flex justify-center items-center ga-2">
             <CiLocationOn className="text-lg" />
-            {userLocation}
+            {userLocation === "" ? "N/A" : userLocation}
           </p>
           {role === "moderator" ? (
             <p className="text-sky-700 text-center text-sm font-semibold bg-sky-200 rounded-md py-1 px-2">
@@ -219,41 +218,33 @@ const PublicProfile = () => {
         {commonCommunities?.length === 0 ? (
           <p>You have no communities in common.</p>
         ) : (
-          <p className="flex items-start gap-2">
-            <FiUsers />
-            <>
-              You both are members of{" "}
-              {commonCommunities?.slice(0, 2).map((c, index) => (
-                <Fragment key={c._id}>
-                  <Link
-                    className="text-sky-700 font-bold hover:underline"
-                    to={`/community/${c.name}`}
-                  >
-                    {c.name}
-                  </Link>
-                  {index === 0 && commonCommunities.length === 2 ? " and " : ""}
-                  {index === 0 && commonCommunities.length > 1 ? ", " : ""}
-                </Fragment>
-              ))}
-              {commonCommunities?.length > 2 && (
-                <span>
-                  {" and "}
-                  <span className="tooltip">
-                    {`${commonCommunities?.length - 2} other ${
-                      commonCommunities?.length - 2 === 1
-                        ? "community"
-                        : "communities"
-                    }`}
-                    <span className="tooltiptext">
-                      {commonCommunities
-                        ?.slice(2)
-                        .map((c) => `${c.name}`)
-                        .join(", ")}
-                    </span>
+          <p>
+            You both are members of{" "}
+            {commonCommunities?.length === 1 ? (
+              <span className="text-sky-700 font-bold">
+                {commonCommunities[0].name}
+              </span>
+            ) : (
+              <>
+                <span className="text-sky-700 font-bold">
+                  {commonCommunities[0].name}
+                </span>
+                {" and "}
+                <span className="tooltip">
+                  {`${commonCommunities.length - 1} other ${
+                    commonCommunities.length - 1 === 1
+                      ? "community"
+                      : "communities"
+                  }`}
+                  <span className="tooltiptext">
+                    {commonCommunities
+                      ?.slice(1)
+                      .map((c) => `${c.name}`)
+                      .join(", ")}
                   </span>
                 </span>
-              )}
-            </>
+              </>
+            )}
           </p>
         )}
 
@@ -264,14 +255,14 @@ const PublicProfile = () => {
               {interests.split(",").map((interest, i) => (
                 <li
                   key={i}
-                  className="border mt-2 border-primary px-2 py-1 text-primary rounded-full"
+                  className="border mt-2 border-primary p-1 text-primary rounded-full"
                 >
                   {interest.trim()}
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">No interests added</p>
+            <p className="text-gray-500">{name} has not added any interests.</p>
           )}
         </div>
       </div>
