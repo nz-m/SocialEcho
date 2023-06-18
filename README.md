@@ -76,6 +76,7 @@ There are three distinct user roles within the system:
 - JWT Authentication
 - Passport.js
 - Nodemailer
+- Crypto-js
 - Azure Blob Storage
 - Flask
 - Hugging Face Transformers
@@ -88,6 +89,23 @@ There are three distinct user roles within the system:
 
 
 ## Getting Started
+
+### Prerequisites
+
+- Node.js
+- MongoDB
+
+
+### Installation
+
+
+### Configuration
+
+
+
+
+
+
 
 
 ## Usage
