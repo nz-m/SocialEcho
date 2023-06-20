@@ -62,15 +62,15 @@ const SignIn = () => {
           <div className="flex items-center justify-center mt-6">
             <Link
               to={"/signin"}
-              className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500 "
+              className="w-1/3 pb-4 font-medium text-center text-gray-800 border-b-2 border-blue-500 "
             >
-              sign in
+              Sign In
             </Link>
             <Link
               to={"/signup"}
-              className="w-1/3 pb-4 font-medium text-center text-gray-500 capitalize border-b border-gray-400 "
+              className="w-1/3 pb-4 font-medium text-center text-gray-500 border-b border-gray-400 "
             >
-              sign up
+              Sign Up
             </Link>
           </div>
 
@@ -100,6 +100,7 @@ const SignIn = () => {
               className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               placeholder="Email address"
               required
+              autoComplete="off"
             />
           </div>
           <div className="relative flex items-center mt-4">
@@ -128,6 +129,7 @@ const SignIn = () => {
               className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               placeholder="Password"
               required
+              autoComplete="off"
             />
           </div>
           <div className="mt-6">

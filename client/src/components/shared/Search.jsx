@@ -116,10 +116,6 @@ const Search = () => {
           )}
           {posts.length > 0 && (
             <ul className="z-30">
-              <div className="border-b text-sm text-gray-500 p-2">
-                <span>Posts</span>
-              </div>
-
               {posts.map((post) => (
                 <li key={post._id} className="border-b py-2 px-4">
                   <div
@@ -157,9 +153,6 @@ const Search = () => {
           )}
           {users.length > 0 && (
             <ul className="z-30">
-              <div className="border-b text-sm text-gray-500 p-2">
-                <span>Users</span>
-              </div>
               {users.map((user) => (
                 <li key={user._id} className="border-b py-2 px-4">
                   <div
@@ -193,9 +186,6 @@ const Search = () => {
           )}
           {community && (
             <div className="border-b py-2 px-4">
-              <div className="border-b text-sm text-gray-500 p-2">
-                <span>Communities</span>
-              </div>
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <img
