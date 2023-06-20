@@ -148,6 +148,7 @@ const SignUpNew = () => {
               className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               placeholder="Username"
               required
+              autoComplete="off"
             />
           </div>
           <label
@@ -177,6 +178,7 @@ const SignUpNew = () => {
               accept="image/*"
               onChange={handleAvatarChange}
               required
+              autoComplete="off"
             />
           </label>
           {avatar && (
@@ -216,6 +218,7 @@ const SignUpNew = () => {
               className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               placeholder="Email address"
               required
+              autoComplete="off"
             />
           </div>
           <div className="relative flex items-center mt-4">
@@ -244,13 +247,14 @@ const SignUpNew = () => {
               className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               placeholder="Password"
               required
+              autoComplete="off"
             />
           </div>
           <div className="mt-6">
             <button
               disabled={loading}
               type="submit"
-              className={`w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 ${
+              className={`w-full px-6 py-3 text-sm font-medium tracking-wide text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 ${
                 loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
