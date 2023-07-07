@@ -6,6 +6,10 @@ export const setInitialAuthState = (navigate) => async (dispatch) => {
   navigate("/signin");
 };
 
+export const clearMessage = () => async (dispatch) => {
+  dispatch({ type: types.CLEAR_MESSAGE });
+};
+
 export const logoutAction = () => async (dispatch) => {
   try {
     const { data } = await api.logout();

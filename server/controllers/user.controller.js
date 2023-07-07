@@ -46,7 +46,7 @@ const signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const existingUser = await User.findOne({
-      email: {$eq: email},
+      email: { $eq: email },
     });
     if (!existingUser) {
       await saveLogInfo(
@@ -278,8 +278,6 @@ const getUser = async (req, res, next) => {
  * assigned the role of "moderator" by default, but not necessarily as a moderator of any community.
  * Otherwise, the user will be assigned the role of "general" user.
  *
- * @param req - Express request object
- * @param res - Express response object
  * @param {Object} req.files - The files attached to the request object (for avatar).
  * @param {string} req.body.isConsentGiven - Indicates whether the user has given consent to enable context based auth.
  * @param {Function} next - The next middleware function to call if consent is given by the user to enable context based auth.
@@ -292,11 +290,13 @@ const addUser = async (req, res, next) => {
    */
   const isConsentGiven = JSON.parse(req.body.isConsentGiven);
 
+  const defaultAvatar =
+    "https://raw.githubusercontent.com/nz-m/public-files/main/dp.jpg";
   const fileUrl = req.files?.[0]?.filename
     ? `${req.protocol}://${req.get("host")}/assets/userAvatars/${
         req.files[0].filename
       }`
-    : null;
+    : defaultAvatar;
 
   const emailDomain = req.body.email.split("@")[1];
   const role = emailDomain === "mod.socialecho.com" ? "moderator" : "general";
@@ -357,7 +357,7 @@ const refreshToken = async (req, res) => {
     const { refreshToken } = req.body;
 
     const existingToken = await Token.findOne({
-      refreshToken : { $eq: refreshToken },
+      refreshToken: { $eq: refreshToken },
     });
     if (!existingToken) {
       return res.status(401).json({
