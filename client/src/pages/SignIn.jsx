@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signInAction } from "../redux/actions/authActions";
+import { signInAction, clearMessage } from "../redux/actions/authActions";
 import { AiFillGithub } from "react-icons/ai";
+import { RxCross1 } from "react-icons/rx";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
 import Logo from "../assets/SocialEcho.png";
@@ -34,51 +35,70 @@ const SignIn = () => {
 
   const signInError = useSelector((state) => state.auth?.signInError);
   const successMessage = useSelector((state) => state.auth?.successMessage);
+
+  const handleClearMessage = () => {
+    dispatch(clearMessage());
+  };
+
   return (
     <section className="bg-white ">
-      <div className="container flex flex-col items-center justify-center min-h-screen px-6 mx-auto">
+      <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-6">
         <form className="w-full max-w-md">
-          <div className="flex justify-center mx-auto">
-            <img className="w-auto h-7 sm:h-8" src={Logo} alt="" />
+          <div className="mx-auto flex justify-center">
+            <img className="h-7 w-auto sm:h-8" src={Logo} alt="" />
           </div>
           {signInError && (
             <div
-              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-6"
+              className="mt-6 flex items-center justify-between rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700"
               role="alert"
             >
-              <strong className="font-bold">Error! </strong>
-              <span className="block sm:inline">{signInError}</span>
+              <div>
+                <span className="block sm:inline">{signInError}</span>
+              </div>
+              <button
+                className="font-bold text-red-700"
+                onClick={handleClearMessage}
+              >
+                <RxCross1 className="h-3 w-3" />
+              </button>
             </div>
           )}
           {successMessage && (
             <div
-              className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-6"
+              className="mt-6 flex items-center justify-between rounded border border-green-400 bg-green-100 px-4 py-3 text-green-700"
               role="alert"
             >
-              <strong className="font-bold">Success! </strong>
-              <span className="block sm:inline">{successMessage}</span>
+              <div>
+                <span className="block sm:inline">{successMessage}</span>
+              </div>
+              <button
+                className="font-bold text-green-700"
+                onClick={handleClearMessage}
+              >
+                <RxCross1 className="h-3 w-3" />
+              </button>
             </div>
           )}
-          <div className="flex items-center justify-center mt-6">
+          <div className="mt-6 flex items-center justify-center">
             <Link
               to={"/signin"}
-              className="w-1/3 pb-4 font-medium text-center text-gray-800 border-b-2 border-blue-500 "
+              className="w-1/3 border-b-2 border-blue-500 pb-4 text-center font-medium text-gray-800 "
             >
               Sign In
             </Link>
             <Link
               to={"/signup"}
-              className="w-1/3 pb-4 font-medium text-center text-gray-500 border-b border-gray-400 "
+              className="w-1/3 border-b border-gray-400 pb-4 text-center font-medium text-gray-500 "
             >
               Sign Up
             </Link>
           </div>
 
-          <div className="relative flex items-center mt-6">
+          <div className="relative mt-6 flex items-center">
             <span className="absolute">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 mx-3 text-gray-300"
+                className="mx-3 h-6 w-6 text-gray-300"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -97,17 +117,17 @@ const SignIn = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              className="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
               placeholder="Email address"
               required
               autoComplete="off"
             />
           </div>
-          <div className="relative flex items-center mt-4">
+          <div className="relative mt-4 flex items-center">
             <span className="absolute">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 mx-3 text-gray-300"
+                className="mx-3 h-6 w-6 text-gray-300"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -126,7 +146,7 @@ const SignIn = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              className="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
               placeholder="Password"
               required
               autoComplete="off"
@@ -136,8 +156,8 @@ const SignIn = () => {
             <button
               disabled={loading}
               onClick={handleSubmit}
-              className={`w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 ${
-                loading ? "opacity-50 cursor-not-allowed" : ""
+              className={`w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium tracking-wide text-white transition-colors duration-300 hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 ${
+                loading ? "cursor-not-allowed opacity-50" : ""
               }`}
             >
               {loading ? (
@@ -148,21 +168,21 @@ const SignIn = () => {
             </button>
           </div>
         </form>
-        <span className="flex items-center justify-center py-4 text-gray-600 text-sm ">
+        <span className="flex items-center justify-center py-4 text-sm text-gray-600 ">
           <a
             href="https://github.com/nz-m/SocialEcho"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center hover:text-blue-500"
           >
-            <AiFillGithub className="w-5 h-5 mr-2" />
+            <AiFillGithub className="mr-2 h-5 w-5" />
             <span>GitHub</span>
           </a>
           <Link
             to="/admin"
-            className="flex items-center ml-8 hover:text-blue-500"
+            className="ml-8 flex items-center hover:text-blue-500"
           >
-            <MdOutlineAdminPanelSettings className="w-5 h-5 mr-2" />
+            <MdOutlineAdminPanelSettings className="mr-2 h-5 w-5" />
             <span>Admin</span>
           </Link>
         </span>

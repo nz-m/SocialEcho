@@ -277,9 +277,7 @@ const getUser = async (req, res, next) => {
  * @description If the email domain of the user's email is "mod.socialecho.com", the user will be
  * assigned the role of "moderator" by default, but not necessarily as a moderator of any community.
  * Otherwise, the user will be assigned the role of "general" user.
- *
- * @param req - Express request object
- * @param res - Express response object
+
  * @param {Object} req.files - The files attached to the request object (for avatar).
  * @param {string} req.body.isConsentGiven - Indicates whether the user has given consent to enable context based auth.
  * @param {Function} next - The next middleware function to call if consent is given by the user to enable context based auth.

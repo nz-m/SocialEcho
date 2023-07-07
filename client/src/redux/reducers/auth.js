@@ -168,6 +168,14 @@ const authReducer = (state = initialState, action) => {
         contextAuthError: payload ? payload : null,
       };
 
+    case types.CLEAR_MESSAGE:
+      return {
+        ...state,
+        successMessage: null,
+        signInError: null,
+        signUpError: [],
+      };
+
     default:
       return state;
   }

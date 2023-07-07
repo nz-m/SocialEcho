@@ -37,6 +37,13 @@ function avatarUpload(req, res, next) {
         error: err.message,
       });
     } else {
+      if (!req.file) {
+        // No file was provided, use a default avatar URL
+        req.fileUrl =
+          "https://raw.githubusercontent.com/nz-m/public-files/main/dp.jpg";
+        return next();
+      }
+
       const blobName = `${Date.now()}-${path.basename(req.file.originalname)}`;
       const blockBlobClient = containerClient.getBlockBlobClient(blobName);
       const uploadResponse = await blockBlobClient.upload(
