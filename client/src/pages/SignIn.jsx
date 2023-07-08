@@ -16,7 +16,8 @@ const SignIn = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleSubmit = async (event) => {
+
+  const handleSignIn = async (event, email, password) => {
     event.preventDefault();
     setLoading(true);
     setLoadingText("Signing in...");
@@ -28,9 +29,22 @@ const SignIn = () => {
         "This is taking longer than usual. Please wait while backend services are getting started."
       );
     }, 5000);
-    await dispatch(signInAction(formData, navigate));
-    setLoading(false);
-    clearTimeout(timeout);
+    try {
+      await dispatch(signInAction(formData, navigate));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+      clearTimeout(timeout);
+    }
+  };
+
+  const handleSubmit = (event) => {
+    handleSignIn(event, email, password);
+  };
+
+  const handleDemoUserSignIn = (event) => {
+    handleSignIn(event, "demo@socialecho.com", "socialechodemo");
   };
 
   const signInError = useSelector((state) => state.auth?.signInError);
@@ -168,7 +182,17 @@ const SignIn = () => {
             </button>
           </div>
         </form>
-        <span className="flex items-center justify-center py-4 text-sm text-gray-600 ">
+
+        <p
+          onClick={handleDemoUserSignIn}
+          className={`mt-3 cursor-pointer text-sm text-blue-500 hover:font-semibold ${
+            loading ? "hidden" : ""
+          }`}
+        >
+          Sign in as Demo User
+        </p>
+
+        <span className="flex items-center justify-center py-4 text-sm text-gray-600">
           <a
             href="https://github.com/nz-m/SocialEcho"
             target="_blank"

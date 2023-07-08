@@ -64,6 +64,7 @@ router.post(
   signin,
   sendLoginVerificationEmail
 );
+
 router.post("/logout", logout);
 
 router.put("/:id", requireAuth, decodeToken, updateInfo);
