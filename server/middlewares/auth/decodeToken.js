@@ -1,13 +1,10 @@
 const jwt = require("jsonwebtoken");
 
 /**
- * Decodes a JWT token in the Authorization header.
- * If the token is valid, the decoded user ID is added to the request object.
- *
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @param {Function} next - Express middleware function.
+ * NOTE: This middleware for decoding JWT is not necessary when using Passport's JWT strategy.
+ * Passport handles token decoding and user extraction automatically.
  */
+
 const decodeToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader.split(" ")[1];
