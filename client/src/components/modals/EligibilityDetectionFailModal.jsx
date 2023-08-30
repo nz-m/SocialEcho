@@ -50,14 +50,14 @@ const EligibilityDetectionFailModal = ({
         </p>
         <div className="flex justify-end">
           <button
-            className="bg-gray-300 hover:bg-gray-400  text-gray-800  px-2 py-1 rounded mr-4 focus:outline-none focus:shadow-outline"
+            className="bg-gray-300 hover:bg-gray-400  text-gray-800  px-2 py-1 rounded-md mr-4 focus:outline-none focus:shadow-outline"
             onClick={handleDiscard}
             disabled={isProcessing}
           >
             Discard
           </button>
           <button
-            className={`bg-primary hover:bg-blue-600 text-white px-2 py-1 rounded focus:outline-none focus:shadow-outline ${
+            className={`bg-primary hover:bg-blue-600 text-white px-2 py-1 rounded-md focus:outline-none focus:shadow-outline ${
               isProcessing ? "opacity-50 cursor-not-allowed" : ""
             }`}
             onClick={handleProcess}

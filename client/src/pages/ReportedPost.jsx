@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import CommonLoading from "../components/loader/CommonLoading";
 import ViewReportedPost from "../components/moderator/ViewReportedPost";
 import CommentSidebar from "../components/post/CommentSidebar";
+
 const ReportedPost = () => {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -21,10 +22,11 @@ const ReportedPost = () => {
 
   if (!post)
     return (
-      <div className="col-span-3 flex justify-center items-center h-screen">
+      <div className="col-span-3 flex h-screen items-center justify-center">
         <CommonLoading />
       </div>
     );
+
   return (
     <>
       <div className="main-section">

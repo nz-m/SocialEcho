@@ -37,7 +37,7 @@ const UnbanUserModal = ({ show, onClose, userId, communityName }) => {
         </span>
 
         <div
-          className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full"
+          className="inline-block align-bottom bg-white rounded-md px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-headline"

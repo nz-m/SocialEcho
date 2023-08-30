@@ -39,10 +39,10 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed z-50 inset-0 overflow-y-auto"
+        className="fixed inset-0 z-50 overflow-y-auto"
         onClose={onClose}
       >
-        <div className="flex items-center justify-center min-h-screen px-4 pt-4 md:pb-20 text-center sm:block sm:p-0">
+        <div className="flex min-h-screen items-center justify-center px-4 pt-4 text-center sm:block sm:p-0 md:pb-20">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -56,7 +56,7 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
           </Transition.Child>
 
           <span
-            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+            className="hidden sm:inline-block sm:h-screen sm:align-middle"
             aria-hidden="true"
           >
             &#8203;
@@ -71,12 +71,12 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full md:max-w-xl sm:p-6">
+            <div className="inline-block w-full transform overflow-hidden rounded-md bg-white px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:p-6 sm:align-middle md:max-w-xl">
               <div className=" w-full">
                 <div className="mt-3 text-center sm:mt-0 sm:text-left">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg leading-6 font-medium text-gray-900"
+                    className="text-lg font-medium leading-6 text-gray-900"
                   >
                     Update Profile
                   </Dialog.Title>
@@ -87,7 +87,7 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
                     </label>
                     <input
                       type="text"
-                      className="mt-1 block w-full rounded-md border-gray-300 border-b outline-none p-2"
+                      className="mt-1 block w-full rounded-md border-b border-gray-300 p-2 outline-none"
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
                     />
@@ -99,7 +99,7 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
                     </label>
                     <input
                       type="text"
-                      className="mt-1 block w-full rounded-md border-gray-300 border-b outline-none p-2"
+                      className="mt-1 block w-full rounded-md border-b border-gray-300 p-2 outline-none"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                     />
@@ -111,7 +111,7 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
                     </label>
                     <input
                       type="text"
-                      className="mt-1 block w-full rounded-md border-gray-300 border-b outline-none p-2"
+                      className="mt-1 block w-full rounded-md border-b border-gray-300 p-2 outline-none"
                       value={interests}
                       onChange={(e) => setInterests(e.target.value)}
                     />
@@ -123,10 +123,10 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
                 <button
                   disabled={isUpdating}
                   type="button"
-                  className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none sm:ml-3 sm:w-auto sm:text-sm ${
+                  className={`inline-flex w-full justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:outline-none sm:ml-3 sm:w-auto sm:text-sm ${
                     isUpdating
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      ? "cursor-not-allowed bg-gray-400"
+                      : "bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   }`}
                   onClick={handleUpdateProfile}
                 >
@@ -138,7 +138,7 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
                 </button>
                 <button
                   type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:mt-0 sm:w-auto sm:text-sm"
                   onClick={onClose}
                 >
                   Cancel

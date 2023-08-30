@@ -2,13 +2,11 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CommonLoading from "../components/loader/CommonLoading";
-
 import MainSection from "../components/moderator/MainSection";
 import ModeratorsList from "../components/moderator/ModeratorsList";
 
 const Moderator = () => {
   const navigate = useNavigate();
-
   const userRole = useSelector((state) => state.auth?.userData?.role);
 
   useEffect(() => {
@@ -17,19 +15,20 @@ const Moderator = () => {
     }
   }, [userRole, navigate]);
 
-  if (userRole !== "moderator")
+  if (userRole !== "moderator") {
     return (
-      <div className="col-span-3 flex items-center justify-center h-screen">
+      <div className="col-span-3 flex h-screen items-center justify-center">
         <CommonLoading />
       </div>
     );
+  }
 
   return (
     <>
-      <div className="main-section bg-white rounded border">
+      <div className="main-section rounded border bg-white">
         <MainSection />
       </div>
-      <div className="col-span-1 bg-white sticky top-20 border h-screen-20 p-5 rounded">
+      <div className="h-screen-20 sticky top-20 col-span-1 rounded border bg-white p-5">
         <ModeratorsList />
       </div>
     </>

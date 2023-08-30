@@ -16,6 +16,7 @@ const SignUpNew = () => {
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [avatarError, setAvatarError] = useState(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -277,7 +278,7 @@ const SignUpNew = () => {
 
             <div onClick={() => setIsModalOpen(true)} className="mt-6">
               {isConsentGiven && !isModerator ? (
-                <p className="mt-2 cursor-pointer rounded-lg rounded-lg border border-green-500 px-4 py-3 text-center text-sm font-semibold text-green-600">
+                <p className="mt-2 cursor-pointer rounded-lg border border-green-500 px-4 py-3 text-center text-sm font-semibold text-green-600">
                   Context-Based Authentication is enabled
                 </p>
               ) : (

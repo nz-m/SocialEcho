@@ -29,7 +29,7 @@ const InappropriatePost = ({
           &#8203;
         </span>
 
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div className="inline-block align-bottom bg-white rounded-md text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <h2 className="text-lg font-bold mb-4 text-red-600">
               Warning: Inappropriate Content
@@ -41,7 +41,7 @@ const InappropriatePost = ({
               compliance with our guidelines.
             </p>
             <button
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
               onClick={handleClose}
             >
               Close

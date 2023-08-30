@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router";
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import {
   getPublicUserAction,
   getPublicUsersAction,
@@ -59,7 +58,7 @@ const PublicProfile = () => {
 
   if (!userProfile) {
     return (
-      <div className="col-span-2 flex justify-center items-center">
+      <div className="col-span-2 flex items-center justify-center">
         <CommonLoading />
       </div>
     );
@@ -83,46 +82,48 @@ const PublicProfile = () => {
     commonCommunities,
   } = userProfile;
 
-  const FollowButton = ({ loading, onClick }) => (
+  const Button = ({ loading, onClick, tooltipText, icon, color }) => (
     <button
       onClick={onClick}
       type="button"
-      className="bg-white absolute right-0 bottom-0 text-primary border border-primary rounded-full py-2 px-2 text-sm font-semibold w-9 h-9"
+      className={`absolute bottom-0 right-0 h-9 w-9 rounded-full border px-2 py-2 text-sm font-semibold ${color} bg-white`}
+      disabled={loading}
     >
       {loading ? (
-        <span>Wait...</span>
+        <span className="text-xs">Wait</span>
       ) : (
-        <Tooltip text={`Follow ${name}`}>
-          <FiUserPlus />
-        </Tooltip>
+        <Tooltip text={tooltipText}>{icon}</Tooltip>
       )}
     </button>
   );
 
-  const UnfollowButton = ({ loading, onClick }) => (
-    <button
+  const FollowButton = ({ loading, onClick, name }) => (
+    <Button
+      loading={loading}
       onClick={onClick}
-      type="button"
-      className="bg-white absolute right-0 bottom-0 text-red-500 border border-red-500 rounded-full py-2 px-2 text-sm font-semibold w-9 h-9"
-      disabled={isModerator}
-    >
-      {loading ? (
-        <span>Wait...</span>
-      ) : (
-        <Tooltip text={`Unfollow ${name}`}>
-          <FiUserMinus />
-        </Tooltip>
-      )}
-    </button>
+      tooltipText={`Follow ${name}`}
+      icon={<FiUserPlus />}
+      color="text-primary border-primary"
+    />
+  );
+
+  const UnfollowButton = ({ loading, onClick, name }) => (
+    <Button
+      loading={loading}
+      onClick={onClick}
+      tooltipText={`Unfollow ${name}`}
+      icon={<FiUserMinus />}
+      color="text-red-500 border-red-500"
+    />
   );
 
   return (
     <div className="main-section">
-      <div className="bg-white px-6 py-6 border rounded">
+      <div className="rounded border bg-white px-6 py-6">
         <div className="flex flex-col items-center justify-center bg-white py-6">
           <div className="relative">
             <img
-              className="h-20 w-20 rounded-full object-cover mr-4"
+              className="mr-4 h-20 w-20 rounded-full object-cover"
               src={avatar}
               alt="Profile"
               loading="lazy"
@@ -141,22 +142,22 @@ const PublicProfile = () => {
         </div>
 
         <div>
-          <h1 className="text-lg text-center capitalize font-bold mt-3">
+          <h1 className="mt-3 text-center text-lg font-bold capitalize">
             {name}
           </h1>
-          <p className="text-gray-500 text-center flex justify-center items-center ga-2">
+          <p className="ga-2 flex items-center justify-center text-center text-gray-500">
             <CiLocationOn className="text-lg" />
             {userLocation === "" ? "N/A" : userLocation}
           </p>
           {role === "moderator" ? (
-            <p className="text-sky-700 text-center text-sm font-semibold bg-sky-200 rounded-md py-1 px-2">
+            <p className="rounded-md bg-sky-200 px-2 py-1 text-center text-sm font-semibold text-sky-700">
               Moderator
             </p>
           ) : null}
         </div>
         <div>
           <p>{bio}</p>
-          <p className="flex gap-2 items-center">
+          <p className="flex items-center gap-2">
             <AiOutlineFieldTime />
             Joined on {joinedOn}
           </p>
@@ -164,7 +165,7 @@ const PublicProfile = () => {
             <HiOutlineDocumentText />
             {totalPosts} posts
           </p>
-          <p className="flex gap-2 items-center">
+          <p className="flex items-center gap-2">
             <FiUsers />
             {totalCommunities === 0
               ? "Not a member of any communities"
@@ -172,7 +173,7 @@ const PublicProfile = () => {
               ? "1 community"
               : `${totalCommunities} communities`}
           </p>
-          <p className="flex gap-2 items-center">
+          <p className="flex items-center gap-2">
             <FiUser />
             {totalFollowing} following
           </p>
@@ -224,7 +225,7 @@ const PublicProfile = () => {
             {commonCommunities?.slice(0, 1).map((c) => (
               <Fragment key={c._id}>
                 <Link
-                  className="text-sky-700 font-bold hover:underline"
+                  className="font-bold text-sky-700 hover:underline"
                   to={`/community/${c.name}`}
                 >
                   {c.name}
@@ -258,7 +259,7 @@ const PublicProfile = () => {
               {interests.split(",").map((interest, i) => (
                 <li
                   key={i}
-                  className="border mt-2 border-primary p-1 text-primary rounded-full"
+                  className="mt-2 rounded-full border border-primary p-1 text-primary"
                 >
                   {interest.trim()}
                 </li>

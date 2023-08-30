@@ -56,10 +56,10 @@ const VerifyEmail = () => {
   }
 
   return (
-    <div className="fixed z-10 inset-0 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="bg-white rounded-md shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">Verify your email address</h2>
+    <div className="fixed inset-0 z-10 overflow-y-auto">
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="rounded-md bg-white p-6 shadow-md">
+          <h2 className="mb-4 text-2xl font-bold">Verify your email address</h2>
 
           {!codeFromUrl && !emailFromUrl && (
             <p className="mb-4">
@@ -75,15 +75,15 @@ const VerifyEmail = () => {
             <input
               type="text"
               placeholder="Verification code"
-              className="border-2 border-gray-200 rounded-lg p-2 w-full"
+              className="w-full rounded-lg border-2 border-gray-200 p-2"
               value={code}
               onChange={handleCodeChange}
             />
           </div>
-          {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+          {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
           <button
             disabled={loading}
-            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+            className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
             onClick={handleVerify}
           >
             {loading ? (
@@ -93,7 +93,7 @@ const VerifyEmail = () => {
             )}
           </button>
           <button
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 ml-4 rounded-lg"
+            className="ml-4 rounded-lg bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400"
             onClick={() => {
               navigate("/signup");
             }}

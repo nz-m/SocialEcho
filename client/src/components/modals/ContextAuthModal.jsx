@@ -12,7 +12,7 @@ const ContextAuthModal = ({
     <>
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg max-w-lg w-full">
+          <div className="bg-white p-8 rounded-md max-w-lg w-full">
             <h2 className="text-xl font-bold mb-4 text-gray-800">
               Context-Based Authentication
             </h2>

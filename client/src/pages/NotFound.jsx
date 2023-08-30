@@ -2,18 +2,19 @@ import { useNavigate, Link } from "react-router-dom";
 
 const NotFound = () => {
   const navigate = useNavigate();
+
   return (
     <section className="bg-white">
-      <div className="container flex items-center min-h-screen px-6 py-12 mx-auto">
-        <div className="flex flex-col items-center max-w-sm mx-auto text-center">
-          <p className="p-3 text-sm font-medium text-blue-500 rounded-full bg-blue-50">
+      <div className="container mx-auto flex min-h-screen items-center px-6 py-12">
+        <div className="mx-auto flex max-w-sm flex-col items-center text-center">
+          <p className="rounded-full bg-blue-50 p-3 text-sm font-medium text-blue-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2}
               stroke="currentColor"
-              className="w-6 h-6"
+              className="h-6 w-6"
             >
               <path
                 strokeLinecap="round"
@@ -28,15 +29,15 @@ const NotFound = () => {
           <p className="mt-4 text-gray-500">
             The page you are looking for doesn't exist.
           </p>
-          <div className="flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto">
-            <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto hover:bg-gray-100">
+          <div className="mt-6 flex w-full shrink-0 items-center gap-x-3 sm:w-auto">
+            <button className="flex w-1/2 items-center justify-center gap-x-2 rounded-lg border bg-white px-5 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-100 sm:w-auto">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-5 h-5 rtl:rotate-180"
+                className="h-5 w-5 rtl:rotate-180"
               >
                 <path
                   strokeLinecap="round"
@@ -46,7 +47,7 @@ const NotFound = () => {
               </svg>
               <span onClick={() => navigate(-1)}>Go back</span>
             </button>
-            <button className="w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto hover:bg-blue-600">
+            <button className="w-1/2 shrink-0 rounded-lg bg-blue-500 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 hover:bg-blue-600 sm:w-auto">
               <Link to="/">Take me home</Link>
             </button>
           </div>
