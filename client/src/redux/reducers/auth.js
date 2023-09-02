@@ -23,6 +23,22 @@ const authReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case types.SET_ACCESS_TOKEN:
+      return {
+        ...state,
+        accessToken: payload ? payload : null,
+      };
+    case types.SET_REFRESH_TOKEN:
+      return {
+        ...state,
+        refreshToken: payload ? payload : null,
+      };
+    case types.SET_USER_DATA:
+      return {
+        ...state,
+        userData: payload ? payload : null,
+      };
+
     case types.SIGNUP_SUCCESS:
       return {
         ...state,
