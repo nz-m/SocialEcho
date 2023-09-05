@@ -14,8 +14,8 @@ while true; do
   echo "1. Create an admin"
   echo "2. Add communities and rules to the database"
   echo "3. Add rules to communities"
-  echo "4. Add moderators to communities"
-  echo "5. Remove moderators from communities"
+  echo "4. Add moderators to communities (also available from the admin panel)"
+  echo "5. Remove moderators from communities (also available from the admin panel)"
 
   echo "Press 'c' and Enter to exit or any other key to continue..."
 
