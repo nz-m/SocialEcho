@@ -131,11 +131,13 @@ const PublicProfile = () => {
             <UnfollowButton
               loading={unfollowLoading}
               onClick={() => handleUnfollow(publicUserId)}
+              name={name}
             />
             {!isModerator && !isFollowing && (
               <FollowButton
                 loading={followLoading}
                 onClick={() => handleFollow(publicUserId)}
+                name={name}
               />
             )}
           </div>
