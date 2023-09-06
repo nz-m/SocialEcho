@@ -19,7 +19,7 @@ export const tokenMiddleware = (store) => (next) => async (action) => {
       const refreshToken = state.auth.refreshToken;
       try {
         await store.dispatch(refreshTokenAction(refreshToken));
-        const newToken = store.getState().auth.accessToken;
+        const newToken = store?.getState().auth.accessToken;
 
         if (!newToken) {
           throw new Error("Access token not found after refresh");
