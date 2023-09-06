@@ -257,16 +257,16 @@ const PublicProfile = () => {
         <div className="flex flex-col">
           <p className="mt-2 font-semibold">Interests </p>
           {interests ? (
-            <ul className="flex items-center gap-3">
+            <div className="flex flex-wrap gap-2">
               {interests.split(",").map((interest, i) => (
-                <li
+                <span
                   key={i}
-                  className="mt-2 rounded-full border border-primary p-1 text-primary"
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   {interest.trim()}
-                </li>
+                </span>
               ))}
-            </ul>
+            </div>
           ) : (
             <p className="text-gray-500">{name} has not added any interests.</p>
           )}

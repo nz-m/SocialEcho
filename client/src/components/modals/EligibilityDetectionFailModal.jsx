@@ -33,38 +33,36 @@ const EligibilityDetectionFailModal = ({
 
   return (
     <div className={modalClass}>
-      <div className="fixed inset-0 bg-gray-900 bg-opacity-50"></div>
-      <div className="bg-white rounded-md shadow-sm p-8 max-w-md mx-auto z-10">
-        <h2 className="text-lg font-bold mb-4">
-          Unable to Determine Post Eligibility
-        </h2>
-        <p className="text-gray-600 mb-8">
-          We apologize for the inconvenience, but our system couldn't determine
-          the eligibility of your post for this community. While it may not meet
-          the specific criteria, we acknowledge that it could still be relevant.
-          You are welcome to proceed with posting it if you believe it is
-          relevant to this community. However, please be aware that community
-          moderators reserve the right to remove posts that do not align well
-          with the community guidelines. Continuous violations may result in a
-          ban from this community. Thank you for your understanding.
-        </p>
-        <div className="flex justify-end">
-          <button
-            className="bg-gray-300 hover:bg-gray-400  text-gray-800  px-2 py-1 rounded-md mr-4 focus:outline-none focus:shadow-outline"
-            onClick={handleDiscard}
-            disabled={isProcessing}
-          >
-            Discard
-          </button>
-          <button
-            className={`bg-primary hover:bg-blue-600 text-white px-2 py-1 rounded-md focus:outline-none focus:shadow-outline ${
-              isProcessing ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            onClick={handleProcess}
-            disabled={isProcessing}
-          >
-            {isProcessing ? "Posting..." : "Post Anyway"}
-          </button>
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div className="z-10 mx-auto max-w-md rounded-md bg-white p-8 shadow-lg">
+          <h2 className="mb-4 text-xl font-semibold">
+            Unable to Determine Post Eligibility
+          </h2>
+          <p className="mb-4 text-gray-600">
+            We apologize, but our system couldn't determine the eligibility of
+            your post for this community. You can still proceed with posting it
+            if you believe it's relevant. Community moderators may remove posts
+            that don't align with guidelines, potentially resulting in a ban.
+            Thank you for understanding.
+          </p>
+          <div className="flex justify-end">
+            <button
+              className="focus:shadow-outline mr-4 rounded bg-gray-300 px-4 py-2 text-sm text-gray-800 hover:bg-gray-400 focus:outline-none"
+              onClick={handleDiscard}
+              disabled={isProcessing}
+            >
+              Discard
+            </button>
+            <button
+              className={`focus:shadow-outline rounded bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600 focus:outline-none ${
+                isProcessing ? "cursor-not-allowed opacity-50" : ""
+              }`}
+              onClick={handleProcess}
+              disabled={isProcessing}
+            >
+              {isProcessing ? "Posting..." : "Post Anyway"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

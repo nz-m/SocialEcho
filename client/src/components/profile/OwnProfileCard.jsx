@@ -74,26 +74,27 @@ const OwnProfileCard = ({ user }) => {
         )}
       </div>
 
-      <div className="">
-        <h3 className="font-bold">Interests</h3>
+      <div className="mt-4 h-20 overflow-y-auto">
+        <h3 className="font-bold text-xl mb-2">Interests</h3>
         {user.interests ? (
-          <ul className="mt-2 flex items-center gap-2">
+          <div className="flex flex-wrap gap-2">
             {user.interests.split(",").map((interest, i) => (
-              <li
+              <span
                 key={i}
-                className="rounded-full border border-primary p-1 text-sm text-primary"
+                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 {interest.trim()}
-              </li>
+              </span>
             ))}
-          </ul>
+          </div>
         ) : (
-          <p className="text-gray-600">
+          <p className="text-gray-600 mt-2">
             No interests have been set yet. Add some interests to let people
             know more about you.
           </p>
         )}
       </div>
+
       <span className="mt-3 flex flex-col items-center justify-center border-t">
         <Link
           className="mt-3 cursor-pointer text-primary hover:underline"

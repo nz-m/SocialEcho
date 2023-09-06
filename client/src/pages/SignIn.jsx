@@ -16,7 +16,7 @@ const SignIn = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -42,7 +42,7 @@ const SignIn = () => {
   };
 
   return (
-    <section className="bg-white ">
+    <section className="bg-white">
       <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-6">
         <form className="w-full max-w-md">
           <div className="mx-auto flex justify-center">

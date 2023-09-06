@@ -51,11 +51,11 @@ const SavedPost = ({ post }) => {
           });
         }}
       >
-        <p className="text-lg mt-3">{content}</p>
+        <p className="mt-3">{content}</p>
         <div className="flex justify-center">
           {fileUrl && isImageFile ? (
             <img
-              className="w-[800px] h-auto rounded-xl mt-3"
+              className="w-[800px] h-auto rounded-md mt-3"
               src={fileUrl}
               alt={content}
               loading="lazy"
@@ -63,7 +63,7 @@ const SavedPost = ({ post }) => {
           ) : (
             fileUrl && (
               <video
-                className="w-[800px] h-auto rounded-xl mt-3"
+                className="w-[800px] h-auto rounded-md mt-3"
                 src={fileUrl}
                 controls
               />

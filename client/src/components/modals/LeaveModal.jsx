@@ -18,9 +18,7 @@ const LeaveModal = ({ show, communityName, toggle }) => {
   };
 
   return (
-    <div
-      className={`fixed inset-0 overflow-y-auto ${show ? "" : "hidden"} z-50`}
-    >
+    <div className={`fixed inset-0 overflow-y-auto ${show ? "" : "hidden"}`}>
       <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
         <div
           className={`fixed inset-0 transition-opacity ${show ? "" : "hidden"}`}
@@ -38,7 +36,7 @@ const LeaveModal = ({ show, communityName, toggle }) => {
         </span>
 
         <div
-          className="inline-block transform overflow-hidden rounded-md bg-white px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:align-middle"
+          className="inline-block transform overflow-hidden rounded-md bg-white px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:align-middle z-50"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-headline"

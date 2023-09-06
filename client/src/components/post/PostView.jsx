@@ -15,6 +15,7 @@ import { PhotoProvider, PhotoView } from "react-photo-view";
 import ReportPostModal from "../modals/ReportPostModal";
 import { VscReport } from "react-icons/vsc";
 import Tooltip from "../shared/Tooltip";
+
 const PostView = ({ post, userData }) => {
   const [loading, setLoading] = useState(true);
 
@@ -63,18 +64,18 @@ const PostView = ({ post, userData }) => {
   }
 
   return (
-    <div className="main-section border p-5 bg-white">
+    <div className="main-section border p-5 bg-white rounded-lg shadow-md">
       <p className="border border-dashed border-primary cursor-pointer px-2 py-2 w-7 h-7 flex justify-center items-center mb-3 rounded-full">
         <IoIosArrowBack
-          className="text-primary text-sm font-semibold"
+          className="text-primary text-lg font-semibold"
           onClick={() => navigate(location.state?.from || "/")}
         />
       </p>
 
-      <div className="flex justify-between">
-        <div className="flex gap-2">
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center gap-2">
           <img
-            className="rounded-full overflow-hidden w-[50px] h-[50px] object-cover"
+            className="rounded-full overflow-hidden w-12 h-12 object-cover"
             src={user.avatar}
             alt="user avatar"
             loading="lazy"
@@ -101,8 +102,8 @@ const PostView = ({ post, userData }) => {
         <span className="text-gray-500 text-sm self-center">{dateTime}</span>
       </div>
 
-      <div>
-        <p className="mt-3">{content}</p>
+      <div className="mb-4">
+        <p className="my-2">{content}</p>
         <div className="flex justify-center">
           {fileUrl && fileType === "image" ? (
             <PhotoProvider
@@ -115,81 +116,79 @@ const PostView = ({ post, userData }) => {
               )}
             >
               <PhotoView src={fileUrl}>
-                <img
-                  className="w-full aspect-square object-cover rounded-md mt-3 cursor-pointer"
-                  src={fileUrl}
-                  alt={content}
-                  loading="lazy"
-                />
+                <div className="w-full aspect-w-1 aspect-h-1">
+                  <img
+                    src={fileUrl}
+                    alt={content}
+                    loading="lazy"
+                    className="cursor-pointer object-cover rounded-md"
+                  />
+                </div>
               </PhotoView>
             </PhotoProvider>
           ) : (
             fileUrl && (
-              <video
-                className="w-full aspect-video rounded-md mt-3"
-                src={fileUrl}
-                controls
-              />
+              <div className="w-full aspect-w-16 aspect-h-9">
+                <video
+                  className="block mx-auto rounded-md focus:outline-none"
+                  src={fileUrl}
+                  controls
+                />
+              </div>
             )
           )}
         </div>
-        <div className="flex items-center justify-between mt-4">
-          <div className="flex items-center space-x-2">
-            <Like post={post} />
-            <button className="flex items-center space-x-1">
-              <HiOutlineChatBubbleOvalLeft className="text-2xl" />
-              <span className="text-lg">{comments.length}</span>
-            </button>
-          </div>
-          <div className="flex items-center gap-2">
-            <div>
-              <Save postId={post._id} />
-              <Tooltip text="Saved by" className="items-center">
-                <div className="flex justify-center items-center">
-                  <HiOutlineArchiveBox className="text-2xl" />
-                  {savedByCount}
-                </div>
-              </Tooltip>
+      </div>
+
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center space-x-4">
+          <Like post={post} />
+          <button className="flex items-center space-x-1">
+            <HiOutlineChatBubbleOvalLeft className="text-2xl" />
+            <span className="text-lg">{comments.length}</span>
+          </button>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Save postId={post._id} />
+          <Tooltip text="Saved by" className="items-center">
+            <div className="flex items-center">
+              <HiOutlineArchiveBox className="text-2xl" />
+              {savedByCount}
             </div>
-
-            <div className="flex items-center gap-2">
-              {isReportedPost ? (
-                <Tooltip text="Reported" className="items-center">
-                  <button disabled className="text-green-500">
-                    <VscReport className="text-2xl" />
-                  </button>
-                </Tooltip>
-              ) : (
-                <Tooltip text="Report">
-                  <button onClick={handleReportClick}>
-                    <VscReport className="text-2xl" />
-                  </button>
-                </Tooltip>
-              )}
-
-              {userData?._id === post.user._id && (
-                <Tooltip text="Delete">
-                  <button
-                    onClick={() => toggleModal(true)}
-                    className="text-red-500"
-                  >
-                    <HiOutlineArchiveBox className="text-2xl" />
-                  </button>
-                </Tooltip>
-              )}
-            </div>
-
-            {showModal && (
-              <DeleteModal
-                showModal={showModal}
-                postId={post._id}
-                onClose={() => toggleModal(false)}
-                prevPath={location.state.from || "/"}
-              />
-            )}
-          </div>
+          </Tooltip>
+          {isReportedPost ? (
+            <Tooltip text="Reported" className="items-center">
+              <button disabled className="text-green-500">
+                <VscReport className="text-2xl" />
+              </button>
+            </Tooltip>
+          ) : (
+            <Tooltip text="Report">
+              <button onClick={handleReportClick}>
+                <VscReport className="text-2xl" />
+              </button>
+            </Tooltip>
+          )}
+          {userData?._id === post.user._id && (
+            <Tooltip text="Delete">
+              <button
+                onClick={() => toggleModal(true)}
+                className="text-red-500"
+              >
+                <HiOutlineArchiveBox className="text-2xl" />
+              </button>
+            </Tooltip>
+          )}
         </div>
       </div>
+
+      {/* Delete Modal */}
+      <DeleteModal
+        showModal={showModal}
+        postId={post._id}
+        onClose={() => toggleModal(false)}
+        prevPath={location.state.from || "/"}
+      />
 
       <ReportPostModal
         isOpen={isReportModalOpen}
