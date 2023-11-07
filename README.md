@@ -164,7 +164,7 @@ The admin dashboard can be accessed at the `/admin` route. Use the `admin_tool.s
 
 ### Moderator
 
-Moderators have specific email domains (`@mod.socialecho.com`). When registering with an email from this domain, the user is automatically assigned the moderator role. Moderators can be assigned to different communities from the admin dashboard.
+Moderators have a specific email domain (`@mod.socialecho.com`). When registering with an email from this domain, the user is automatically assigned the moderator role. Moderators can be assigned to different communities from the admin dashboard.
 
 #### Demo
 
