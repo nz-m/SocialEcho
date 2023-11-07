@@ -32,7 +32,7 @@ A Flask application has been developed to provide similar functionality as the H
 
 The system allows flexibility in choosing different services for API usage or disabling them without affecting overall functionality by using a common interface for interacting with the APIs.
 
-When a user posts content, it undergoes a thorough filtering process to ensure compliance with the community guidelines. Additionally, users have the ability to report posts that they find inappropriate, which triggers a manual review process.
+When a user posts content, it undergoes a thorough filtering process to ensure compliance with the community guidelines. Additionally, users can report posts that they find inappropriate, which triggers a manual review process.
 
 ### Context-Based Authentication
 
@@ -46,7 +46,7 @@ There are three distinct user roles within the system:
 
 1. Admin: The admin role manages the overall system, including moderator management, community management, content moderation, monitoring user activity, and more.
 2. Moderators: Moderators manage communities, manually review reported posts, and perform other moderation-related tasks.
-3. General Users: General users have the ability to make posts, like comments, and perform other actions within the platform.
+3. General Users: General users can make posts, like comments, and perform other actions within the platform.
 
 ## Features
 
