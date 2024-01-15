@@ -1,7 +1,5 @@
 import { createContext, useContext, useState } from "react";
 
-
-
 export const Nightcontext =createContext()
 
 export const Nightprovider = ({children})=>{
