@@ -8,11 +8,13 @@ import PostForm from "../form/PostForm";
 import Post from "../post/Post";
 import FollowingUsersPosts from "./FollowingUsersPosts";
 import CommonLoading from "../loader/CommonLoading";
+import { useNightMode } from "../../context/NightModeContext";
 
 const MemoizedPost = memo(Post);
 
 const MainSection = () => {
   const dispatch = useDispatch();
+ const {Night} = useNightMode()
 
   const communityData = useSelector((state) => state.community?.communityData);
   const communityPosts = useSelector((state) => state.posts?.communityPosts);
@@ -74,24 +76,36 @@ const MainSection = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className={Night ? "flex flex-col bg-slate-800" : "flex flex-col"}>
       <ul className="flex">
         <li
-          className={`${
+          className={Night ? `${
+            activeTab === "All posts"
+              ? "border-blue-500 bg-primary rounded-md text-white"
+              : "border-transparent text-gray-300 hover:text-gray-700 hover:border-gray-300"
+          } flex-1 cursor-pointer text-center py-2 px-1 border-b-2 font-medium` :
+          `${
             activeTab === "All posts"
               ? "border-blue-500 bg-primary rounded-md text-white"
               : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-          } flex-1 cursor-pointer text-center py-2 px-1 border-b-2 font-medium`}
+          } flex-1 cursor-pointer text-center py-2 px-1 border-b-2 font-medium`
+        }
           onClick={() => setActiveTab("All posts")}
         >
           All post
         </li>
         <li
-          className={`${
+          className={Night ? `${
+            activeTab === "You're following"
+              ? "border-blue-500 bg-primary rounded-md text-white"
+              : "border-transparent text-gray-300 hover:text-gray-700 hover:border-gray-300"
+          } flex-1 cursor-pointer text-center py-2 px-1 border-b-2 font-medium` :
+          `${
             activeTab === "You're following"
               ? "border-blue-500 bg-primary rounded-md text-white"
               : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-          } flex-1 cursor-pointer text-center py-2 px-1 border-b-2 font-medium`}
+          } flex-1 cursor-pointer text-center py-2 px-1 border-b-2 font-medium`
+        }
           onClick={() => setActiveTab("You're following")}
         >
           You're following

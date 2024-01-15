@@ -7,12 +7,14 @@ import { RxCross1 } from "react-icons/rx";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
 import Logo from "../assets/SocialEcho.png";
+import { useNightMode } from "../context/NightModeContext";
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {Night} = useNightMode()
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,7 +44,7 @@ const SignIn = () => {
   };
 
   return (
-    <section className="bg-white">
+    <section className={Night ? "bg-slate-800" : "bg-white" }>
       <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-6">
         <form className="w-full max-w-md">
           <div className="mx-auto flex justify-center">
@@ -83,13 +85,13 @@ const SignIn = () => {
           <div className="mt-6 flex items-center justify-center">
             <Link
               to={"/signin"}
-              className="w-1/3 border-b-2 border-blue-500 pb-4 text-center font-medium text-gray-800 "
+              className={Night ? "w-1/3 border-b-2 border-blue-500 pb-4 text-center font-medium text-white" : "w-1/3 border-b-2 border-blue-500 pb-4 text-center font-medium text-gray-800 "}
             >
               Sign In
             </Link>
             <Link
               to={"/signup"}
-              className="w-1/3 border-b border-gray-400 pb-4 text-center font-medium text-gray-500 "
+              className={Night ? "w-1/3 border-b border-gray-400 pb-4 text-center font-medium text-white " : "w-1/3 border-b border-gray-400 pb-4 text-center font-medium text-gray-500 "}
             >
               Sign Up
             </Link>
@@ -118,7 +120,7 @@ const SignIn = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+              className={Night ? "block w-full text-white rounded-lg bg-slate-900 px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40" : "block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"}
               placeholder="Email address"
               required
               autoComplete="off"
@@ -147,7 +149,7 @@ const SignIn = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+              className={Night ? "block w-full text-white rounded-lg bg-slate-900 px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40" : "block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"}
               placeholder="Password"
               required
               autoComplete="off"

@@ -14,6 +14,7 @@ import { FiUsers, FiUser, FiUserMinus, FiUserPlus } from "react-icons/fi";
 import { HiOutlineDocumentText } from "react-icons/hi2";
 import CommonLoading from "../components/loader/CommonLoading";
 import Tooltip from "../components/shared/Tooltip";
+import { useNightMode } from "../context/NightModeContext";
 
 const PublicProfile = () => {
   const location = useLocation();
@@ -22,6 +23,7 @@ const PublicProfile = () => {
 
   const [followLoading, setFollowLoading] = useState(false);
   const [unfollowLoading, setUnfollowLoading] = useState(false);
+  const {Night} = useNightMode()
 
   const userData = useSelector((state) => state.auth?.userData);
   const userProfile = useSelector((state) => state.user?.publicUserProfile);
@@ -119,8 +121,8 @@ const PublicProfile = () => {
 
   return (
     <div className="main-section">
-      <div className="rounded border bg-white px-6 py-6">
-        <div className="flex flex-col items-center justify-center bg-white py-6">
+      <div className={Night ? "rounded  bg-slate-800 px-6 py-6" : "rounded border bg-white px-6 py-6"}>
+        <div className={Night ? "flex flex-col items-center justify-center bg-slate-800 py-6" : "flex flex-col items-center justify-center bg-white py-6"}>
           <div className="relative">
             <img
               className="mr-4 h-20 w-20 rounded-full object-cover"
@@ -144,10 +146,10 @@ const PublicProfile = () => {
         </div>
 
         <div>
-          <h1 className="mt-3 text-center text-lg font-bold capitalize">
+          <h1 className={Night ? "mt-3 text-center text-lg font-bold capitalize text-white" : "mt-3 text-center text-lg font-bold capitalize"}>
             {name}
           </h1>
-          <p className="ga-2 flex items-center justify-center text-center text-gray-500">
+          <p className="gap-2 flex items-center justify-center text-center text-gray-500">
             <CiLocationOn className="text-lg" />
             {userLocation === "" ? "N/A" : userLocation}
           </p>
@@ -158,16 +160,16 @@ const PublicProfile = () => {
           ) : null}
         </div>
         <div>
-          <p>{bio}</p>
-          <p className="flex items-center gap-2">
+          <p className={Night ? "text-white" : "text-black"}>{bio}</p>
+          <p className={Night ? "flex items-center gap-2 text-white" : "flex items-center gap-2"}>
             <AiOutlineFieldTime />
             Joined on {joinedOn}
           </p>
-          <p className="flex items-center gap-2">
+          <p className={Night ? "flex items-center gap-2 text-white" : "flex items-center gap-2"}>
             <HiOutlineDocumentText />
             {totalPosts} posts
           </p>
-          <p className="flex items-center gap-2">
+          <p className={Night ? "flex items-center gap-2 text-white" : "flex items-center gap-2"}>
             <FiUsers />
             {totalCommunities === 0
               ? "Not a member of any communities"
@@ -175,13 +177,13 @@ const PublicProfile = () => {
               ? "1 community"
               : `${totalCommunities} communities`}
           </p>
-          <p className="flex items-center gap-2">
+          <p className={Night ? "flex items-center gap-2 text-white" : "flex items-center gap-2"}>
             <FiUser />
             {totalFollowing} following
           </p>
         </div>
 
-        <p className="flex items-center gap-2">
+        <p className={Night ? "flex items-center gap-2 text-white" : "flex items-center gap-2"}>
           <HiOutlineDocumentText />
           {postsLast30Days} {postsLast30Days === 1 ? "post" : "posts"} in last
           30 days
@@ -190,20 +192,20 @@ const PublicProfile = () => {
         {isFollowing && role !== "moderator" ? (
           <>
             {totalFollowers === 1 ? (
-              <p className="flex items-center gap-2">
+              <p className={Night ? "flex items-center gap-2 text-white" : "flex items-center gap-2"}>
                 <FiUser />
                 Followed by you
               </p>
             ) : (
-              <p className="flex items-center gap-2">
+              <p className={Night ? "flex items-center gap-2 text-white" : "flex items-center gap-2"}>
                 <FiUser />
                 {`Followed by you and `}
-                <span className="font-semibold">
+                <span className={Night ? "font-semibold bg-white" : "font-semibold"}>
                   {totalFollowers - 1} others
                 </span>
               </p>
             )}
-            <p>
+            <p className={Night ? "text-white" : "text-black"}>
               You are following
               <span className="font-semibold text-sky-700"> {name} </span>
               since {followingSince}
@@ -220,9 +222,9 @@ const PublicProfile = () => {
         )}
 
         {commonCommunities?.length === 0 ? (
-          <p>You have no communities in common.</p>
+          <p className={Night ? "text-white" : "text-black"}>You have no communities in common.</p>
         ) : (
-          <p>
+          <p className={Night ? "text-white" : "text-black"}>
             You both are members of{" "}
             {commonCommunities?.slice(0, 1).map((c) => (
               <Fragment key={c._id}>
@@ -255,13 +257,13 @@ const PublicProfile = () => {
           </p>
         )}
         <div className="flex flex-col">
-          <p className="mt-2 font-semibold">Interests </p>
+          <p className={Night ? "mt-2 font-semibold text-white" : "mt-2 font-semibold"}>Interests </p>
           {interests ? (
             <div className="flex flex-wrap gap-2">
               {interests.split(",").map((interest, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className={Night? "inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-200 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500":"inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"}
                 >
                   {interest.trim()}
                 </span>

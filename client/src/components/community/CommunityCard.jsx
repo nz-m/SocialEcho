@@ -2,8 +2,10 @@ import { useState } from "react";
 import JoinModal from "../modals/JoinModal";
 import placeholder from "../../assets/placeholder.png";
 import { MdOutlineGroupAdd } from "react-icons/md";
+import { useNightMode } from "../../context/NightModeContext";
 const CommunityCard = ({ community }) => {
   const [joinModalVisibility, setJoinModalVisibility] = useState({});
+  const {Night} = useNightMode()
 
   const toggleJoinModal = (communityId, visible) => {
     setJoinModalVisibility((prev) => ({
@@ -12,7 +14,7 @@ const CommunityCard = ({ community }) => {
     }));
   };
   return (
-    <div className="px-3 py-3 rounded-md border bg-white shadow-2xl shadow-[#f2f5fc] flex justify-between">
+    <div className={Night ? "px-3 py-3 rounded-md bg-slate-900 shadow-2xl shadow-[#f2f5fc] flex justify-between" : "px-3 py-3 rounded-md border bg-white shadow-2xl shadow-[#f2f5fc] flex justify-between"}>
       <div className="w-full flex items-start">
         <img
           className="object-cover rounded-full w-10 h-10 mr-4"
@@ -21,8 +23,8 @@ const CommunityCard = ({ community }) => {
           loading="lazy"
         />
         <div className="">
-          <h4 className="text-base font-semibold line-clamp-1">{community.name}</h4>
-          <p className="text-gray-700 ">
+          <h4 className={Night ? "text-base font-semibold line-clamp-1 text-white" : "text-base font-semibold line-clamp-1"}>{community.name}</h4>
+          <p className={Night ? "text-gray-300 " : "text-gray-700 "}>
             {community.members.length} members
           </p>
         </div>

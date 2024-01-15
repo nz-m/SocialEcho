@@ -7,6 +7,7 @@ import Leftbar from "./components/shared/Leftbar";
 import Rightbar from "./components/shared/Rightbar";
 
 import ModeratorRightbar from "./components/moderator/Rightbar";
+import { useNightMode } from "./context/NightModeContext";
 
 const noRightbarRoutes = [
   /\/post\/[^/]+$/,
@@ -46,9 +47,9 @@ const PrivateRoute = ({ userData }) => {
   const toggleLeftbar = () => {
     setShowLeftbar(!showLeftbar);
   };
-
+  const {Night} = useNightMode()
   return isAuthenticated(userData, accessToken) ? (
-    <div className="scroll-smooth">
+    <div className={Night ? "scroll-smooth h-fit bg-slate-900 text-white pb-10" :"scroll-smooth h-screen" }>
       <Navbar
         userData={userData}
         toggleLeftbar={toggleLeftbar}

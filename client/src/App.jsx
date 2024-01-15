@@ -26,7 +26,7 @@ const App = () => {
   )?.accessToken;
 
   return (
-    <Suspense fallback={<FallbackLoading />}>
+    <Suspense fallback={<FallbackLoading />} >
       <Routes>
         <Route element={<PrivateRoute userData={userData} />}>
           {privateRoutes.map((route) => (

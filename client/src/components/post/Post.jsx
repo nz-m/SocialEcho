@@ -10,11 +10,13 @@ import DeleteModal from "../modals/DeleteModal";
 import Like from "./Like";
 import "react-photo-view/dist/react-photo-view.css";
 import Tooltip from "../shared/Tooltip";
+import { useNightMode } from "../../context/NightModeContext";
 
 const Post = ({ post }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const userData = useSelector((state) => state.auth?.userData);
+  const {Night} = useNightMode()
 
   const { content, fileUrl, fileType, user, community, createdAt, comments } =
     post;
@@ -25,7 +27,7 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="border rounded bg-white p-4 m-2 hover:shadow-lg duration-300">
+    <div className={Night ? "border rounded bg-slate-800 p-4 m-2 hover:shadow-lg duration-300" : "border rounded bg-white p-4 m-2 hover:shadow-lg duration-300"}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img
@@ -36,26 +38,26 @@ const Post = ({ post }) => {
           />
           <div className="flex flex-col">
             {userData._id === user._id ? (
-              <Link to="/profile" className="font-semibold text-lg capitalize">
+              <Link to="/profile" className={Night ? "font-semibold text-lg capitalize text-white" : "font-semibold text-lg capitalize"}>
                 {user.name}
               </Link>
             ) : (
               <Link
                 to={`/user/${user._id}`}
-                className="font-semibold text-lg capitalize"
+                className={Night ? "font-semibold text-lg capitalize text-white" : "font-semibold text-lg capitalize"}
               >
                 {user.name}
               </Link>
             )}
             <Link
               to={`/community/${community.name}`}
-              className="text-sm text-gray-500"
+              className={Night ? "text-sm text-gray-300" : "text-sm text-gray-500"}
             >
               {community.name}
             </Link>
           </div>
         </div>
-        <p className="text-sm text-gray-500">{createdAt}</p>
+        <p className={Night ? "text-sm text-gray-300" : "text-sm text-gray-500"}>{createdAt}</p>
       </div>
       <div>
         <p
@@ -104,18 +106,18 @@ const Post = ({ post }) => {
         </div>
       </div>
       <div className="flex items-center justify-between mt-4">
-        <div className="flex items-center gap-4">
+        <div className={Night ? "flex items-center gap-4 text-white" : "flex items-center gap-4"}>
           <Like post={post} />
 
           <button
-            className="flex items-center text-lg gap-1"
+            className={Night ? "flex items-center text-lg gap-1 text-white" : "flex items-center text-lg gap-1"}
             onClick={() => {
               navigate(`/post/${post._id}`, {
                 state: { from: location.pathname },
               });
             }}
           >
-            <HiOutlineChatBubbleOvalLeft className="text-2xl" />
+            <HiOutlineChatBubbleOvalLeft className={Night ? "text-2xl text-white"  : "text-2xl" }/>
             {comments.length}
           </button>
         </div>

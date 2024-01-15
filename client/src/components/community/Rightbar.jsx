@@ -11,9 +11,11 @@ import {
   useIsModeratorUpdated,
 } from "../../hooks/useCommunityData";
 import { HiUserGroup, HiOutlineCheckBadge } from "react-icons/hi2";
+import { useNightMode } from "../../context/NightModeContext";
 
 const Rightbar = () => {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const {Night} = useNightMode()
 
   const dispatch = useDispatch();
   const { communityName } = useParams();
@@ -49,9 +51,9 @@ const Rightbar = () => {
   }
 
   return (
-    <div className="bg-white rounded-md ">
+    <div className={Night ? "bg-slate-800 rounded-md " : "bg-white rounded-md "}>
       <div className="flex flex-col ">
-        <h2 className="text-lg font-bold">{name}</h2>
+        <h2 className={Night ? "text-lg font-bold text-white" : "text-lg font-bold"}>{name}</h2>
         <div className="flex items-center gap-2 text-primary mb-4">
           <HiUserGroup />
           <span className="mr-2">
@@ -78,7 +80,7 @@ const Rightbar = () => {
         />
       )}
 
-      <h3>{description}</h3>
+      <h3 className={Night ? "text-white" : "text-black"}>{description}</h3>
 
       <div className="my-4">
         {isModeratorOfThisCommunity && (
@@ -108,7 +110,7 @@ const Rightbar = () => {
       </div>
       {rules && rules.length > 0 && (
         <div className="text-slate-900 mb-4">
-          <span className="font-bold">Community Guidelines:</span>
+          <span className={Night? "font-bold text-white" : "font-bold"}>Community Guidelines:</span>
           <ul className="flex flex-col gap-2 ">
             {rules.map((rule) => (
               <li key={rule._id} className="flex items-start gap-2 ">

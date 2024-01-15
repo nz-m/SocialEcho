@@ -7,6 +7,7 @@ import {
 import { useDispatch } from "react-redux";
 import ButtonLoadingSpinner from "../loader/ButtonLoadingSpinner";
 import { FiUser, FiMapPin, FiEdit } from "react-icons/fi";
+import { useNightMode } from "../../context/NightModeContext";
 
 const suggestedInterests = [
   "🎨 Art",
@@ -40,7 +41,7 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
   const [interests, setInterests] = useState(
     user.interests ? user.interests : ""
   );
-
+  const {Night} = useNightMode()
   const handleUpdateProfile = async () => {
     setIsUpdating(true);
 
@@ -62,7 +63,7 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 z-50" onClose={onClose}>
-        <div className="flex min-h-screen items-center justify-center px-4 pt-4 text-center sm:block sm:p-0 md:pb-20">
+        <div className={Night ? "flex min-h-screen items-center justify-center px-4 pt-4 text-center  text-white sm:block sm:p-0 md:pb-20" : "flex min-h-screen items-center justify-center px-4 pt-4 text-center sm:block sm:p-0 md:pb-20" }>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -91,26 +92,26 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block w-full transform overflow-hidden rounded-md bg-white px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:p-6 sm:align-middle md:max-w-xl">
+            <div className={Night ?"inline-block w-full transform overflow-hidden rounded-md bg-slate-800 px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:p-6 sm:align-middle md:max-w-xl" : "inline-block w-full transform overflow-hidden rounded-md bg-white px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:my-8 sm:p-6 sm:align-middle md:max-w-xl" }>
               <div className="w-full">
                 <div className="mt-3 text-center sm:mt-0 sm:text-left">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+                    className={Night ? "text-lg font-medium leading-6 text-white" : "text-lg font-medium leading-6 text-gray-900"}
                   >
                     Update Profile
                   </Dialog.Title>
 
                   <div className="mt-4">
                     <div className="flex items-center space-x-2">
-                      <FiUser className="text-gray-600" />
-                      <label className="block text-sm font-medium text-gray-700">
+                      <FiUser className={Night ? "text-white" : "text-gray-600" }/>
+                      <label className={Night ? "block text-sm font-medium text-white" : "block text-sm font-medium text-gray-700"}>
                         Bio
                       </label>
                     </div>
                     <input
                       type="text"
-                      className="mt-1 block w-full rounded-md border-b border-gray-300 p-2 outline-none"
+                      className={Night ? "mt-1 block w-full bg-slate-900 rounded-md p-2 outline-none" : "mt-1 block w-full rounded-md border-b border-gray-300 p-2 outline-none"}
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
                     />
@@ -118,14 +119,14 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
 
                   <div className="mt-4">
                     <div className="flex items-center space-x-2">
-                      <FiMapPin className="text-gray-600" />
-                      <label className="block text-sm font-medium text-gray-700">
+                      <FiMapPin className={Night ? "text-white" : "text-gray-600" } />
+                      <label className={Night ? "block text-sm font-medium text-white" : "block text-sm font-medium text-gray-700"}>
                         Location
                       </label>
                     </div>
                     <input
                       type="text"
-                      className="mt-1 block w-full rounded-md border-b border-gray-300 p-2 outline-none"
+                      className={Night ? "mt-1 block w-full bg-slate-900 rounded-md p-2 outline-none" : "mt-1 block w-full rounded-md border-b border-gray-300 p-2 outline-none"}
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                     />
@@ -133,14 +134,14 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
 
                   <div className="mt-4">
                     <div className="flex items-center space-x-2">
-                      <FiEdit className="text-gray-600" />
-                      <label className="block text-sm font-medium text-gray-700">
+                      <FiEdit className={Night ? "text-white" : "text-gray-600" } />
+                      <label className={Night ? "block text-sm font-medium text-white" : "block text-sm font-medium text-gray-700"}>
                         Interests (Separated by comma)
                       </label>
                     </div>
                     <input
                       type="text"
-                      className="mt-1 block w-full rounded-md border-b border-gray-300 p-2 outline-none"
+                      className={Night ? "mt-1 block w-full bg-slate-900 rounded-md p-2 outline-none" : "mt-1 block w-full rounded-md border-b border-gray-300 p-2 outline-none"}
                       value={interests}
                       onChange={(e) => {
                         if (e.target.value.length <= 50) {
@@ -157,7 +158,7 @@ const ProfileUpdateModal = ({ user, isOpen, onClose }) => {
                             key={index}
                             type="button"
                             disabled={isUpdating || interests.length >= 50}
-                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            className={Night ? "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-900 text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" : "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"}
                             onClick={() =>
                               setInterests(
                                 interests === ""

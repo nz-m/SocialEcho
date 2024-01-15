@@ -12,10 +12,12 @@ import {
   getBlockedAuthContextDataAction,
   getContextAuthDataAction,
 } from "../redux/actions/authActions";
+import { useNightMode } from "../context/NightModeContext";
 
 const DevicesLocations = () => {
   const dispatch = useDispatch();
   const [dateFetched, setDateFetched] = useState(false);
+  const {Night} = useNightMode()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,11 +48,11 @@ const DevicesLocations = () => {
 
   if (!userPreferences || !contextAuthData) {
     return (
-      <div className="bg-white border p-5 text-gray-700 text-center main-section">
-        <p className="text-lg font-semibold mb-4">
+      <div className={Night ? "bg-slate-800 p-5 text-gray-700 text-center main-section" : "bg-white border p-5 text-gray-700 text-center main-section"}>
+        <p className={Night ? "text-lg font-semibold mb-4 text-white" : "text-lg font-semibold mb-4"}>
           Context-based authentication is currently disabled for your account.
         </p>
-        <p className="text-sm">
+        <p className={Night ? "text-sm text-white" : "text-sm"}>
           By enabling context-based authentication, you will gain control over
           your devices, their locations, and manage trusted and blocked devices.
         </p>

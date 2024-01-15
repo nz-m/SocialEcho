@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import SavedPost from "../components/post/SavedPost";
 import NoSavedPost from "../assets/nopost.jpg";
+import { useNightMode } from "../context/NightModeContext";
 
 const Saved = () => {
   const dispatch = useDispatch();
+  const {Night} = useNightMode()
 
   useEffect(() => {
     dispatch(getSavedPostsAction());
@@ -14,9 +16,9 @@ const Saved = () => {
   const savedPosts = useSelector((state) => state.posts?.savedPosts);
 
   return (
-    <div className="main-section bg-white border">
+    <div className={Night ? "main-section bg-slate-800 text-white" : "main-section bg-white border"}>
       <div className="flex flex-col mb-3">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center border-b py-3">
+        <h2 className={Night ? "text-lg font-semibold text-white mb-4 text-center border-b py-3" : "text-lg font-semibold text-gray-700 mb-4 text-center border-b py-3"}>
           Your saved posts
         </h2>
 

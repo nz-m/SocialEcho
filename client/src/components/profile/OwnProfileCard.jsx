@@ -4,9 +4,11 @@ import { GrContactInfo } from "react-icons/gr";
 import { useState } from "react";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";
 import Tooltip from "../shared/Tooltip";
+import { useNightMode } from "../../context/NightModeContext";
 
 const OwnProfileCard = ({ user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const {Night} = useNightMode()
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -17,7 +19,7 @@ const OwnProfileCard = ({ user }) => {
   };
 
   return (
-    <div className="rounded-md border bg-white p-6">
+    <div className={Night ? "rounded-md bg-slate-800 p-6 text-white" : "rounded-md border bg-white p-6 text-black" }>
       <div
         className="flex cursor-pointer justify-end text-xl"
         onClick={handleOpenModal}
@@ -45,7 +47,7 @@ const OwnProfileCard = ({ user }) => {
           <div>
             <h2 className="mt-5 text-center text-lg font-bold">{user.name}</h2>
             {user.bio ? (
-              <p className="flex items-center justify-center gap-2 text-gray-600">
+              <p className={Night ? "flex items-center justify-center gap-2 text-white":"flex items-center justify-center gap-2 text-gray-600"}>
                 <GrContactInfo className="text-gray-500" />
                 {user.bio}
               </p>
@@ -62,7 +64,7 @@ const OwnProfileCard = ({ user }) => {
       <div className="my-3 flex flex-col justify-start">
         <p className="font-semibold">Location</p>
         {user.location ? (
-          <p className="flex items-center gap-2 text-gray-700">
+          <p className={Night ? "flex items-center gap-2 text-white" : "flex items-center gap-2 text-gray-700"}>
             <CiLocationOn className="font-semibold" />
             {user.location}
           </p>
