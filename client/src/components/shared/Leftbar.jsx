@@ -1,5 +1,5 @@
-import { useMemo, useEffect, memo } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useEffect, memo, useState } from "react";
+import { NavLink,Link } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux";
 import { getJoinedCommunitiesAction } from "../../redux/actions/communityActions";
 import {
@@ -10,15 +10,23 @@ import {
 } from "react-icons/hi2";
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { GiTeamIdea } from "react-icons/gi";
+import { CgDetailsMore } from "react-icons/cg";
+import { useNightMode } from "../../context/NightModeContext";
+import { IoCloseSharp } from "react-icons/io5";
+import { MdOutlineNightlight } from "react-icons/md";
+import { WiDaySunny } from "react-icons/wi";
 
 const Leftbar = ({ showLeftbar }) => {
   const dispatch = useDispatch();
-
+  const [Settings,setSettings] = useState(false)
+  const {Night,handlenightmode} = useNightMode ()
   const user = useSelector((state) => state.auth?.userData);
   const joinedCommunities = useSelector(
     (state) => state.community?.joinedCommunities
   );
-
+ const handleSettings = ()=>{
+  setSettings((prev)=>!prev)
+ }
   useEffect(() => {
     dispatch(getJoinedCommunitiesAction());
   }, [dispatch]);
@@ -35,41 +43,60 @@ const Leftbar = ({ showLeftbar }) => {
   }, [visibleCommunities]);
 
   return (
-    <div className={`${showLeftbar ? "" : "hidden"} leftbar`}>
-      <div className="flex flex-col justify-start items-center">
-        <div className="flex flex-col items-start gap-4 w-full p-5">
-          <Link
-            className="flex items-center gap-2 text-lg font-medium hover:text-primary"
-            to="/home"
+    <div className={Night ? `${showLeftbar ? "" : "hidden"}  leftbarnight`:`${showLeftbar ? "" : "hidden"} leftbar`}>
+      <div className={Night ?"flex bg-slate-800 flex-col justify-start items-center" : "flex flex-col justify-start items-center" }>
+        <div className={Night ?"flex flex-col bg-slate-800 items-start gap-4 w-full p-5":"flex flex-col items-start gap-4 w-full p-5" }>
+          <NavLink
+            className={({isActive})=> isActive ? "flex items-center gap-2 text-lg font-medium text-primary":"flex items-center gap-2 text-lg font-medium hover:text-primary"}
+            to={"/home"}
           >
             <HiOutlineHome className="text-xl" />
             <p>Home</p>
-          </Link>
-          <Link
-            className="flex items-center gap-2 text-lg font-medium hover:text-primary"
-            to="/profile"
+          </NavLink>
+          <NavLink
+            className={({isActive})=> isActive ? "flex items-center gap-2 text-lg font-medium text-primary":"flex items-center gap-2 text-lg font-medium hover:text-primary"}
+            to={"/profile"}
           >
             <HiOutlineUserCircle className="text-xl" />
             <p>Profile</p>
-          </Link>
-          <Link
-            className="flex items-center gap-2 text-lg font-medium hover:text-primary"
-            to="/saved"
+          </NavLink>
+          <NavLink
+            className={({isActive})=> isActive ? "flex items-center gap-2 text-lg font-medium text-primary":"flex items-center gap-2 text-lg font-medium hover:text-primary"}
+            to={"/saved"}
           >
             <HiOutlineTag className="text-xl" />
             <p>Saved</p>
-          </Link>
+          </NavLink>
 
           {user && user.role === "general" && (
-            <Link
-              className="flex items-center gap-2 text-lg font-medium hover:text-primary"
-              to="/following"
+            <NavLink
+              className={({isActive})=> isActive ? "flex items-center gap-2 text-lg font-medium text-primary":"flex items-center gap-2 text-lg font-medium hover:text-primary"}
+              to={"/following"}
             >
               <HiOutlineRectangleStack className="text-xl" />
               <p>Following</p>
-            </Link>
+            </NavLink>
           )}
+        <div className="flex flex-col gap-2">
+         
 
+          <NavLink
+            className="flex items-center gap-2 text-lg font-medium hover:text-primary"
+            onClick={handleSettings}
+            >
+            <CgDetailsMore className="text-xl" />
+            <p>More</p>
+          </NavLink>
+          
+        {Settings ?
+          <div className={Night ? "flex flex-col gap-1 pl-6 pr-6 bg-slate-900 pt-4 pb-4 rounded-xl" : "flex flex-col gap-1 pl-6 pr-6 bg-[#f7fafc] pt-4 pb-4 rounded-xl"}>
+            <div className="flex justify-end items-center hover:text-white border-gray-300 border-b-[1px] pb-2"> <IoCloseSharp onClick={handleSettings} className="bg-primary" /> </div>
+          <p className="flex justify-center items-center gap-2 pt-2">{Night ? <MdOutlineNightlight/> : <WiDaySunny/>} Night Mode <button className="bg-primary pl-2 pr-2 text-sm" onClick={handlenightmode}>{Night ? "OFF" : "ON"}</button></p>
+        </div>
+          : ''}
+          </div>
+    
+          
           <hr className="w-full my-4 border-gray-300" />
 
           {communityLinks && communityLinks.length > 0 ? (
@@ -80,7 +107,7 @@ const Leftbar = ({ showLeftbar }) => {
                   Communities
                 </div>
 
-                <Link
+                <NavLink
                   className="flex relative items-center text-sm font-medium text-primary mr-4"
                   to="/my-communities"
                 >
@@ -89,7 +116,7 @@ const Leftbar = ({ showLeftbar }) => {
                     {" "}
                     {joinedCommunities.length}
                   </p>
-                </Link>
+                </NavLink>
               </div>
               <ul className="w-full mt-3">
                 {communityLinks.map((communityLink) => (

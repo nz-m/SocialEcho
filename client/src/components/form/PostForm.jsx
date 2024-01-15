@@ -7,6 +7,7 @@ import {
 import InappropriatePostModal from "../modals/InappropriatePostModal";
 import TopicConflictModal from "../modals/TopicConflictModal";
 import EligibilityDetectionFailModal from "../modals/EligibilityDetectionFailModal";
+import { useNightMode } from "../../context/NightModeContext";
 
 const PostForm = ({ communityId, communityName }) => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const PostForm = ({ communityId, communityName }) => {
     showEligibilityDetectionFailModal,
     setShowEligibilityDetectionFailModal,
   ] = useState(false);
+  const {Night} = useNightMode()
 
   const [formData, setFormData] = useState({
     content: "",
@@ -145,16 +147,16 @@ const PostForm = ({ communityId, communityName }) => {
         confirmationToken={confirmationToken}
       />
 
-      <form onSubmit={handleSubmit} className="border-b bg-white p-6">
+      <form onSubmit={handleSubmit} className={Night ? "border-b bg-slate-800 p-6" : "border-b bg-white p-6"}>
         <div className="mb-4">
           <label
             htmlFor="content"
-            className="mb-2 block font-bold text-gray-700"
+            className={Night ? "mb-2 block font-bold text-gray-200" : "mb-2 block font-bold text-gray-700"}
           >
             Share something with your community:
           </label>
           <textarea
-            className="w-full resize-none rounded-md border p-2"
+            className={Night ? "w-full resize-none rounded-md  p-2 bg-slate-900 text-white" : "w-full resize-none rounded-md border p-2"}
             name="content"
             id="content"
             value={formData.content}
@@ -168,7 +170,7 @@ const PostForm = ({ communityId, communityName }) => {
         <div className="mb-4">
           <label
             htmlFor="file"
-            className="mx-auto mt-6 flex cursor-pointer items-center rounded-lg border-2 border-dashed bg-white px-3 py-3 text-center"
+            className={Night ? "mx-auto mt-6 flex cursor-pointer items-center rounded-lg border-2 border-dashed bg-slate-900 px-3 py-3 text-center" : "mx-auto mt-6 flex cursor-pointer items-center rounded-lg border-2 border-dashed bg-white px-3 py-3 text-center"}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

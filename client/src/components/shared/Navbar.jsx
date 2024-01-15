@@ -9,11 +9,13 @@ import { Transition } from "@headlessui/react";
 import { AiOutlineBars } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
 import Logo from "../../assets/SocialEcho.png";
+import { useNightMode } from "../../context/NightModeContext";
 
 const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
   const dispatch = useDispatch();
   const [loggingOut, setLoggingOut] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const {Night} = useNightMode()
 
   const dropdownRef = useRef(null);
 
@@ -42,7 +44,7 @@ const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
   }, []);
 
   return (
-    <nav className="sticky top-0 z-20 mb-5 flex justify-center gap-10 border bg-white p-2 md:items-center md:justify-between md:px-36">
+    <nav className={Night ? "sticky top-0 z-20 mb-5 flex justify-center gap-10  bg-slate-800 p-2 md:items-center md:justify-between md:px-36" :"sticky top-0 z-20 mb-5 flex justify-center gap-10 border bg-white p-2 md:items-center md:justify-between md:px-36" }>
       <Link to="/" className="hidden md:inline-block">
         <img className="w-36" src={Logo} alt="" />
       </Link>
@@ -82,17 +84,17 @@ const Navbar = ({ userData, toggleLeftbar, showLeftbar }) => {
               aria-orientation="vertical"
               aria-labelledby="user-menu"
             >
-              <div className="py-1" role="none">
+              <div className={Night ? "py-1 bg-slate-700" : "py-1"} role="none">
                 <div className="flex flex-col items-center">
                   <img
                     src={userData.avatar}
                     alt="profile"
                     className="mb-2 h-16 w-16 rounded-full object-cover"
                   />
-                  <div className="text-sm font-semibold text-gray-700 hover:underline">
+                  <div className={Night ? "text-sm font-semibold text-gray-200 hover:underline" : "text-sm font-semibold text-gray-700 hover:underline"}>
                     <Link to={`/profile`}>{userData.name}</Link>
                   </div>
-                  <div className="text-sm text-gray-500">{userData.email}</div>
+                  <div className={Night ? "text-sm text-gray-300" :"text-sm text-gray-500"}>{userData.email}</div>
                 </div>
                 <hr className="my-2" />
                 <div className="flex justify-center">

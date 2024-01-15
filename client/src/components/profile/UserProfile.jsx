@@ -6,12 +6,14 @@ import OwnProfileCard from "./OwnProfileCard";
 import CommonLoading from "../loader/CommonLoading";
 import OwnInfoCard from "./OwnInfoCard";
 import NoPost from "../../assets/nopost.jpg";
+import { useNightMode } from "../../context/NightModeContext";
 
 const UserProfile = ({ userData }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.user?.user);
   const posts = user?.posts;
+  const {Night} = useNightMode()
 
   useEffect(() => {
     setLoading(true);
@@ -32,7 +34,7 @@ const UserProfile = ({ userData }) => {
   return (
     <>
       {loading || !user || !posts ? (
-        <div className="flex justify-center items-center h-screen">
+        <div className={Night ? "flex justify-center bg-slate-800 items-center h-screen" : "flex justify-center items-center h-screen"}>
           <CommonLoading />
         </div>
       ) : (

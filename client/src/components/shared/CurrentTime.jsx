@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNightMode } from "../../context/NightModeContext";
 
 const CurrentTime = () => {
   const [time, setTime] = useState(new Date().toLocaleString());
+  const {Night} = useNightMode()
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -23,7 +25,7 @@ const CurrentTime = () => {
   const timeString = `${hours}:${minutes}:${seconds} ${amPm}`;
 
   return (
-    <div className="text-sm text-gray-800 mt-1">
+    <div className={Night ? "text-sm text-gray-300 mt-1" : "text-sm text-gray-800 mt-1"}>
       {`${weekday}, ${month} ${day}, ${year} ${timeString}`}
     </div>
   );

@@ -10,11 +10,13 @@ import JoinModal from "../modals/JoinModal";
 import { BsPersonPlusFill } from "react-icons/bs";
 import { IoIosPeople, IoMdPeople } from "react-icons/io";
 import placeholder from "../../assets/placeholder.png";
+import { useNightMode } from "../../context/NightModeContext";
 
 const Rightbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [joinModalVisibility, setJoinModalVisibility] = useState({});
+  const {Night} = useNightMode()
   const [notJoinedCommunitiesFetched, setNotJoinedCommunitiesFetched] =
     useState(false);
   const [publicUsersFetched, setPublicUsersFetched] = useState(false);
@@ -76,7 +78,7 @@ const Rightbar = () => {
   const currentLocation = useLocation().pathname;
 
   return (
-    <div className="hidden rightbar overflow-auto">
+    <div className={Night ? "hidden rightbarnight overflow-auto" :"hidden rightbar overflow-auto"}>
       {currentLocation !== "/communities" && (
         <div>
           <div className="flex items-end justify-between mb-4">
@@ -96,7 +98,7 @@ const Rightbar = () => {
           </div>
 
           {notJoinedCommunitiesFetched && visibleCommunities.length === 0 && (
-            <div className="text-center italic text-gray-400">
+            <div className={Night ?"text-center italic text-white" :"text-center italic text-gray-400"}>
               No communities to join. Check back later
             </div>
           )}
@@ -104,7 +106,7 @@ const Rightbar = () => {
             {visibleCommunities?.map((community) => (
               <li
                 key={community._id}
-                className="flex items-center justify-between bg-white px-2 py-1 rounded-md"
+                className={Night ? "flex items-center justify-between bg-slate-800 px-2 py-1 rounded-md" : "flex items-center justify-between bg-white px-2 py-1 rounded-md"}
               >
                 <div className="flex items-center">
                   <img
@@ -112,10 +114,10 @@ const Rightbar = () => {
                     className="h-8 w-8 rounded-full mr-4 object-cover"
                     alt="community"
                   />
-                  <div className="text-base font-medium flex flex-col">
-                    <p className="line-clamp-1"> {community.name}</p>
+                  <div className={Night ? "text-base font-medium flex flex-col text-white" : "text-base font-medium flex flex-col"}>
+                    <p className={Night ? "line-clamp-1 text-white" : "line-clamp-1"}> {community.name}</p>
 
-                    <p className="text-xs text-gray-500 flex items-center gap-1">
+                    <p className={Night ? "text-xs text-gray-300 flex items-center gap-1" : "text-xs text-gray-500 flex items-center gap-1"}>
                       <IoMdPeople />
                       {community.members.length}
                     </p>
@@ -148,7 +150,7 @@ const Rightbar = () => {
       <h5 className="mb-4 text-sm font-semibold">Popular Users to Follow</h5>
 
       {publicUsersFetched && recommendedUsers?.length === 0 && (
-        <div className="text-center italic text-gray-400">
+        <div className={Night ? "text-center italic text-white" : "text-center italic text-gray-400"}>
           No users to follow. Check back later
         </div>
       )}
@@ -157,7 +159,7 @@ const Rightbar = () => {
           recommendedUsers.map((user) => (
             <li
               key={user._id}
-              className="flex justify-between items-center gap-5 bg-white shadow-2xl shadow-[#f2f5fc]  border border-slate-100 px-2 py-1 rounded-lg"
+              className={Night ? "flex justify-between items-center gap-5 bg-slate-800 shadow-2xl shadow-[#f2f5fc]  border border-slate-100 px-2 py-1 rounded-lg" : "flex justify-between items-center gap-5 bg-white shadow-2xl shadow-[#f2f5fc]  border border-slate-100 px-2 py-1 rounded-lg"}
             >
               <div className="flex justify-content-between items-center gap-1">
                 <img
@@ -168,7 +170,7 @@ const Rightbar = () => {
                 <div>
                   <Link
                     to={`/user/${user._id}`}
-                    className="font-medium text-base line-clamp-1"
+                    className={Night ? "font-medium text-base line-clamp-1 text-white" : "font-medium text-base line-clamp-1"}
                   >
                     {user.name}
                   </Link>

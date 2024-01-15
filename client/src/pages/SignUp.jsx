@@ -7,6 +7,7 @@ import ContextAuthModal from "../components/modals/ContextAuthModal";
 import { RxCross1 } from "react-icons/rx";
 import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
 import Logo from "../assets/SocialEcho.png";
+import { useNightMode } from "../context/NightModeContext";
 
 const SignUpNew = () => {
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ const SignUpNew = () => {
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [avatarError, setAvatarError] = useState(null);
-
+  const {Night} = useNightMode()
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -96,7 +97,7 @@ const SignUpNew = () => {
   };
 
   return (
-    <section className="bg-white">
+    <section className={Night ? "bg-slate-800" : "bg-white"}>
       <div className="container mx-auto flex min-h-screen items-center justify-center px-6">
         <form className="w-full max-w-md" onSubmit={handleSubmit}>
           <div className="mx-auto flex justify-center">
@@ -123,13 +124,13 @@ const SignUpNew = () => {
           <div className="mt-6 flex items-center justify-center">
             <Link
               to={"/signin"}
-              className="w-1/3 border-b border-gray-400 pb-4 text-center font-medium text-gray-800"
+              className={Night ? "w-1/3 border-b border-gray-400 pb-4 text-center font-medium text-white" : "w-1/3 border-b border-gray-400 pb-4 text-center font-medium text-gray-800"}
             >
               Sign In
             </Link>
             <Link
               to={"/signup"}
-              className="text-cente w-1/3 border-b-2 border-blue-500 pb-4 font-medium text-gray-800"
+              className={Night ? "text-cente w-1/3 border-b-2 border-blue-500 pb-4 font-medium text-white" : "text-cente w-1/3 border-b-2 border-blue-500 pb-4 font-medium text-gray-800"}
             >
               Sign Up
             </Link>
@@ -157,7 +158,7 @@ const SignUpNew = () => {
               type="text"
               value={name}
               onChange={handleNameChange}
-              className="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+              className={Night ? "block w-full text-white rounded-lg bg-slate-900 px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40" : "block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"}
               placeholder="Username"
               required
               autoComplete="off"
@@ -165,7 +166,7 @@ const SignUpNew = () => {
           </div>
           <label
             htmlFor="avatar"
-            className="mx-auto mt-6 flex cursor-pointer items-center rounded-lg border-2 border-dashed bg-white px-3 py-3 text-center"
+            className={Night ? "mx-auto mt-6 flex cursor-pointer items-center rounded-lg  bg-slate-900 px-3 py-3 text-center" : "mx-auto mt-6 flex cursor-pointer items-center rounded-lg border-2 border-dashed bg-white px-3 py-3 text-center"}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -226,7 +227,7 @@ const SignUpNew = () => {
               value={email}
               onChange={handleEmailChange}
               type="email"
-              className="block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+              className={Night ? "block w-full text-white rounded-lg bg-slate-900 px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40" : "block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"}
               placeholder="Email address"
               required
               autoComplete="off"
@@ -255,7 +256,7 @@ const SignUpNew = () => {
               type="password"
               value={password}
               onChange={handlePasswordChange}
-              className="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+              className={Night ? "block w-full text-white rounded-lg bg-slate-900 px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40" : "block w-full rounded-lg border bg-white px-11 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"}
               placeholder="Password"
               required
               autoComplete="off"
@@ -282,7 +283,7 @@ const SignUpNew = () => {
                   Context-Based Authentication is enabled
                 </p>
               ) : (
-                <p className="mt-2 cursor-pointer rounded-lg border px-4 py-3 text-center text-sm font-semibold">
+                <p className="mt-2 cursor-pointer rounded-lg  px-4 py-3 text-center text-sm font-semibold">
                   Context-Based Authentication is disabled
                 </p>
               )}

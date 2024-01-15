@@ -7,6 +7,7 @@ import App from "./App";
 import { getTitleFromRoute } from "./utils/docTitle";
 import { Helmet } from "react-helmet";
 import { useLocation } from "react-router-dom";
+import "./index.css"
 
 const ErrorComponent = ({ errorMessage }) => (
   <div className="text-red-500 font-bold text-center">{errorMessage}</div>
@@ -52,7 +53,7 @@ const AppContainer = () => {
 
   if (loading || error) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen" >
         {loading ? <CommonLoading /> : <ErrorComponent errorMessage={error} />}
       </div>
     );

@@ -4,11 +4,13 @@ import { getFollowingUsersPostsAction } from "../../redux/actions/postActions";
 import CommonLoading from "../loader/CommonLoading";
 import Post from "../post/Post";
 import NoPost from "../../assets/nopost.jpg";
+import { useNightMode } from "../../context/NightModeContext";
 
 const MemoizedPost = memo(Post);
 
 const FollowingUsersPosts = ({ communityData }) => {
   const dispatch = useDispatch();
+  const {Night} = useNightMode()
 
   const followingUsersPosts = useSelector(
     (state) => state.posts?.followingUsersPosts
@@ -44,8 +46,8 @@ const FollowingUsersPosts = ({ communityData }) => {
           {followingUsersPosts.length > 0 ? (
             <div>{memoizedFollowingUsersPost}</div>
           ) : (
-            <div className="text-center flex justify-center items-center flex-col">
-              <p className="py-5 text-gray-500">
+            <div className={Night ? "text-center flex justify-center items-center flex-col bg-slate-800" : "text-center flex justify-center items-center flex-col"}>
+              <p className={Night ? "py-5 text-gray-200" : "py-5 text-gray-500"}>
                 None of your following users have posted anything yet. Check
                 back later!
               </p>

@@ -4,11 +4,13 @@ import { getFollowingUsersAction } from "../redux/actions/userActions";
 import PublicProfileCard from "../components/profile/PublicProfileCard";
 import CommonLoading from "../components/loader/CommonLoading";
 import noFollow from "../assets/nofollow.jpg";
+import { useNightMode } from "../context/NightModeContext";
 
 const Following = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const followingUsers = useSelector((state) => state.user?.followingUsers);
+  const {Night} = useNightMode()
 
   useEffect(() => {
     const fetchFollowingUsers = async () => {
@@ -21,14 +23,14 @@ const Following = () => {
   }, [dispatch]);
 
   return (
-    <div className="main-section bg-white border">
+    <div className={Night ? "main-section bg-slate-800 " : "main-section bg-white border"}>
       {loading ? (
         <div className="flex items-center justify-center h-screen">
           <CommonLoading />
         </div>
       ) : (
         <div>
-          <h2 className="font-semibold text-gray-700 mb-4 text-center border-b py-3">
+          <h2 className= {Night ? "font-semibold text-white mb-4 text-center border-b py-3" : "font-semibold text-gray-700 mb-4 text-center border-b py-3"}>
             People you're following
           </h2>
           {followingUsers?.length > 0 ? (

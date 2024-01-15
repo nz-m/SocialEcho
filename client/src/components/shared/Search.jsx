@@ -5,6 +5,7 @@ import debounce from "lodash/debounce";
 import JoinModal from "../modals/JoinModal";
 import { MoonLoader } from "react-spinners";
 import { MdClear } from "react-icons/md";
+import { useNightMode } from "../../context/NightModeContext";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -17,6 +18,7 @@ const Search = () => {
   const [joinedCommunity, setJoinedCommunity] = useState(null);
   const [loading, setLoading] = useState(false);
   const accessToken = JSON.parse(localStorage.getItem("profile"))?.accessToken;
+  const {Night} = useNightMode()
   const setInitialValue = () => {
     setUsers([]);
     setPosts([]);
@@ -89,7 +91,7 @@ const Search = () => {
           value={inputValue}
           onChange={handleInputChange}
           placeholder="Search for people, posts or communities"
-          className="h-10 py-1 bg-white border w-full md:w-[660px] rounded-full text-sm shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-500 transition duration-300 pl-3 pr-10"
+          className={Night ? "h-10 py-1 bg-slate-900  w-full md:w-[660px] rounded-full text-sm shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-500 transition duration-300 pl-3 pr-10" :"h-10 py-1 bg-white border w-full md:w-[660px] rounded-full text-sm shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-500 transition duration-300 pl-3 pr-10"}
           aria-label="Search"
           autoComplete="off"
         />

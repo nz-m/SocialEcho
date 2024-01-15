@@ -3,9 +3,11 @@ import { getNotJoinedCommunitiesAction } from "../redux/actions/communityActions
 import { useDispatch, useSelector } from "react-redux";
 import CommonLoading from "../components/loader/CommonLoading";
 import CommunityCard from "../components/community/CommunityCard";
+import { useNightMode } from "../context/NightModeContext";
 
 const AllCommunities = () => {
   const dispatch = useDispatch();
+  const {Night} = useNightMode()
 
   const notJoinedCommunities = useSelector(
     (state) => state.community?.notJoinedCommunities
@@ -24,7 +26,7 @@ const AllCommunities = () => {
   }
 
   return (
-    <div className="main-section grid grid-cols-1 items-center gap-5 bg-white px-4 py-4 md:grid-cols-2 border">
+    <div className={Night ? "main-section grid grid-cols-1 items-center gap-5 bg-slate-800 px-4 py-4 md:grid-cols-2" : "main-section grid grid-cols-1 items-center gap-5 bg-white px-4 py-4 md:grid-cols-2 border"}>
       {notJoinedCommunities?.map((community) => (
         <CommunityCard key={community._id} community={community} />
       ))}
