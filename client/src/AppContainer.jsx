@@ -9,13 +9,14 @@ import { Helmet } from "react-helmet";
 import { useLocation } from "react-router-dom";
 
 const ErrorComponent = ({ errorMessage }) => (
-  <div className="text-red-500 font-bold text-center">{errorMessage}</div>
+  <div className="text-center font-bold text-red-500">{errorMessage}</div>
 );
 
 const AppContainer = () => {
   const location = useLocation();
   const [store, setStore] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [storeloading, setStoreloading] = useState(true);
+  const [serverStatus, setServerStatus] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -25,7 +26,7 @@ const AppContainer = () => {
       } catch (err) {
         setError("Server is down. Please try again later.");
       } finally {
-        setLoading(false);
+        setServerStatus(false);
       }
     };
 
@@ -43,17 +44,21 @@ const AppContainer = () => {
       } catch (err) {
         setError(`Error initializing the app: ${err.message}`);
       } finally {
-        setLoading(false);
+        setStoreloading(false);
       }
     };
 
     initializeStore();
   }, []);
 
-  if (loading || error) {
+  if ((storeloading && serverStatus && !error) || error) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        {loading ? <CommonLoading /> : <ErrorComponent errorMessage={error} />}
+      <div className="flex h-screen items-center justify-center">
+        {storeloading && serverStatus && !error ? (
+          <CommonLoading />
+        ) : (
+          <ErrorComponent errorMessage={error} />
+        )}
       </div>
     );
   }
