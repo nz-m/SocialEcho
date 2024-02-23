@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { signUpAction, clearMessage } from "../redux/actions/authActions";
-import { Link } from "react-router-dom";
-import ContextAuthModal from "../components/modals/ContextAuthModal";
+import { useEffect, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 import Logo from "../assets/SocialEcho.png";
+import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
+import ContextAuthModal from "../components/modals/ContextAuthModal";
+import { clearMessage, signUpAction } from "../redux/actions/authActions";
 
 const SignUpNew = () => {
   const [loading, setLoading] = useState(false);
@@ -14,6 +14,8 @@ const SignUpNew = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [avatarError, setAvatarError] = useState(null);
 
@@ -39,6 +41,16 @@ const SignUpNew = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
+
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+  
+    if (event.target.value !== password) {
+      setConfirmPasswordError("Passwords don't match!");
+    } else {
+      setConfirmPasswordError(null);
+    }
+  };  
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -67,8 +79,24 @@ const SignUpNew = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModerator, setIsModerator] = useState(false);
 
+  useEffect(() => {
+    if (confirmPasswordError) {
+      const submitButton = document.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+    } else {
+      const submitButton = document.querySelector('button[type="submit"]');
+      submitButton.disabled = false;
+    }
+  }, [confirmPasswordError]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords don't match!");
+      return; // Stop submission if passwords don't match
+    }
+
     setLoading(true);
     setLoadingText("Signing up...");
     const formData = new FormData();
@@ -261,6 +289,40 @@ const SignUpNew = () => {
               autoComplete="off"
             />
           </div>
+
+          <div className="relative mt-4 flex items-center">
+            <span className="absolute">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="mx-3 h-6 w-6 text-gray-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </span>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              className="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+              placeholder="Password"
+              required
+              autoComplete="off"
+            />
+            {confirmPasswordError && (
+              <div className="mt-2 text-red-500">{confirmPasswordError}</div>
+            )}
+          </div>
+
           <div className="mt-6">
             <button
               disabled={loading}
