@@ -12,7 +12,6 @@
 - [Schema Diagram](#schema-diagram)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
-- [License](#license)
 
 ## Project Overview
 
