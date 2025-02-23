@@ -16,6 +16,8 @@ const SignUpNew = () => {
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [avatarError, setAvatarError] = useState(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -39,6 +41,13 @@ const SignUpNew = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
+
+  const handleConfirmPasswordChange = (e) =>{
+    setConfirmPassword(e.target.value);
+    if(password !== confirmPassword){
+      setConfirmPasswordError("Password and Confirm Password Should be Same");
+    }
+  }
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -68,6 +77,12 @@ const SignUpNew = () => {
   const [isModerator, setIsModerator] = useState(false);
 
   const handleSubmit = async (e) => {
+
+    if(password !== confirmPassword){
+      setConfirmPasswordError("Password and Confirm Password Should be Same");
+      return;
+    }
+
     e.preventDefault();
     setLoading(true);
     setLoadingText("Signing up...");
@@ -261,6 +276,42 @@ const SignUpNew = () => {
               autoComplete="off"
             />
           </div>
+
+          <div className="relative mt-4 flex items-center">
+            <span className="absolute">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="mx-3 h-6 w-6 text-gray-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </span>
+            <input
+              id="cofirmpassword"
+              name="confirmpassword"
+              type="password"
+              value={password}
+              onChange={handleConfirmPasswordChange}
+              className="block w-full rounded-lg border bg-white px-10 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+              placeholder="Confirm Password"
+              required
+              autoComplete="off"
+            />
+            {confirmPasswordError && (
+            <div className="mt-2 flex items-center justify-center">
+              <span className="text-red-500">{confirmPasswordError}</span>
+            </div>
+          )}
+          </div>
+
           <div className="mt-6">
             <button
               disabled={loading}
