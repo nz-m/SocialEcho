@@ -24,7 +24,7 @@
     "react-redux": "^8.0.5",
     "react-router": "^6.8.1",
     "react-router-dom": "^6.8.1",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^0.0.0",
     "react-select": "^5.7.4",
     "react-spinners": "^0.13.8",
     "redux": "^4.2.1",
