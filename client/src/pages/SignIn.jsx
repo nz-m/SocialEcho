@@ -6,6 +6,7 @@ import { AiFillGithub } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
+import GoogleSignIn from "../components/auth/GoogleSignIn";
 import Logo from "../assets/SocialEcho.png";
 
 const SignIn = () => {
@@ -39,6 +40,31 @@ const SignIn = () => {
 
   const handleClearMessage = () => {
     dispatch(clearMessage());
+  };
+
+  const handleGoogleSuccess = (data) => {
+    // Store tokens in localStorage
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+    
+    // Store user data in Redux
+    dispatch({
+      type: "SIGNIN_SUCCESS",
+      payload: {
+        userData: data.user,
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      },
+    });
+    
+    // Navigate to home page
+    navigate("/");
+  };
+
+  const handleGoogleError = (error) => {
+    // Handle Google authentication errors
+    console.error("Google auth error:", error);
+    // You can dispatch an action to show error message
   };
 
   return (
@@ -167,6 +193,25 @@ const SignIn = () => {
                 "Sign in"
               )}
             </button>
+          </div>
+
+          <div className="mt-4">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-2 text-gray-500">Or continue with</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <GoogleSignIn
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              buttonText="Continue with Google"
+            />
           </div>
         </form>
         <span className="flex items-center justify-center py-4 text-sm text-gray-600 ">

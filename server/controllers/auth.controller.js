@@ -1,9 +1,13 @@
 const UserContext = require("../models/context.model");
 const UserPreference = require("../models/preference.model");
 const SuspiciousLogin = require("../models/suspiciousLogin.model");
+const User = require("../models/user.model");
+const Token = require("../models/token.model");
+const jwt = require("jsonwebtoken");
 const geoip = require("geoip-lite");
 const { saveLogInfo } = require("../middlewares/logger/logInfo");
 const formatCreatedAt = require("../utils/timeConverter");
+const { verifyGoogleToken } = require("../config/googleOAuth");
 
 const types = {
   NO_CONTEXT_DATA: "no_context_data",
@@ -509,6 +513,135 @@ const unblockContextAuthData = async (req, res) => {
   }
 };
 
+/**
+ * Google Sign-In/Sign-Up handler
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+const googleAuth = async (req, res) => {
+  try {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+      return res.status(400).json({
+        message: "Google access token is required",
+      });
+    }
+
+    // Verify Google token
+    const verificationResult = await verifyGoogleToken(idToken);
+    
+    if (!verificationResult.success) {
+      return res.status(401).json({
+        message: "Invalid Google token",
+        error: verificationResult.error,
+      });
+    }
+
+    const { payload } = verificationResult;
+    const { email, name, picture, sub: googleId } = payload;
+
+    // Check if user already exists
+    let existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      // User exists, check if they have a password (regular user) or just Google auth
+      if (existingUser.password) {
+        // Regular user trying to sign in with Google - link accounts
+        existingUser.googleId = googleId;
+        existingUser.avatar = picture || existingUser.avatar;
+        await existingUser.save();
+      }
+      
+      // Generate JWT tokens
+      const accessToken = jwt.sign(
+        { _id: existingUser._id, email: existingUser.email },
+        process.env.SECRET,
+        { expiresIn: "6h" }
+      );
+
+      const refreshToken = jwt.sign(
+        { _id: existingUser._id, email: existingUser.email },
+        process.env.REFRESH_SECRET,
+        { expiresIn: "7d" }
+      );
+
+      // Save refresh token
+      await Token.findOneAndUpdate(
+        { user: existingUser._id },
+        { refreshToken },
+        { upsert: true, new: true }
+      );
+
+      return res.status(200).json({
+        message: "Google sign-in successful",
+        user: {
+          _id: existingUser._id,
+          name: existingUser.name,
+          email: existingUser.email,
+          role: existingUser.role,
+          avatar: existingUser.avatar,
+        },
+        accessToken,
+        refreshToken,
+      });
+    } else {
+      // New user, create account
+      const emailDomain = email.split("@")[1];
+      const role = emailDomain === "mod.socialecho.com" ? "moderator" : "general";
+
+      const newUser = new User({
+        name: name || "Google User",
+        email,
+        googleId,
+        role,
+        avatar: picture || "https://raw.githubusercontent.com/nz-m/public-files/main/dp.jpg",
+        isEmailVerified: true, // Google accounts are pre-verified
+      });
+
+      await newUser.save();
+
+      // Generate JWT tokens
+      const accessToken = jwt.sign(
+        { _id: newUser._id, email: newUser.email },
+        process.env.SECRET,
+        { expiresIn: "6h" }
+      );
+
+      const refreshToken = jwt.sign(
+        { _id: newUser._id, email: newUser.email },
+        process.env.REFRESH_SECRET,
+        { expiresIn: "7d" }
+      );
+
+      // Save refresh token
+      await Token.create({
+        user: newUser._id,
+        refreshToken,
+      });
+
+      return res.status(201).json({
+        message: "Google sign-up successful",
+        user: {
+          _id: newUser._id,
+          name: newUser.name,
+          email: newUser.email,
+          role: newUser.role,
+          avatar: newUser.avatar,
+        },
+        accessToken,
+        refreshToken,
+      });
+    }
+  } catch (error) {
+    console.error("Google auth error:", error);
+    return res.status(500).json({
+      message: "Internal server error during Google authentication",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   verifyContextData,
   addContextData,
@@ -520,4 +653,5 @@ module.exports = {
   blockContextAuthData,
   unblockContextAuthData,
   types,
+  googleAuth,
 };

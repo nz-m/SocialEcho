@@ -13,6 +13,8 @@ const {
   updateInfo,
 } = require("../controllers/user.controller");
 
+const { googleAuth } = require("../controllers/auth.controller");
+
 const {
   getPublicUsers,
   followUser,
@@ -65,6 +67,7 @@ router.post(
   sendLoginVerificationEmail
 );
 router.post("/logout", logout);
+router.post("/google-auth", signUpSignInLimiter, googleAuth);
 
 router.put("/:id", requireAuth, decodeToken, updateInfo);
 
