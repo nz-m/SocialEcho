@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import ContextAuthModal from "../components/modals/ContextAuthModal";
 import { RxCross1 } from "react-icons/rx";
 import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
+import GoogleSignIn from "../components/auth/GoogleSignIn";
 import Logo from "../assets/SocialEcho.png";
 
 const SignUpNew = () => {
@@ -93,6 +94,31 @@ const SignUpNew = () => {
 
   const handleClearError = () => {
     dispatch(clearMessage());
+  };
+
+  const handleGoogleSuccess = (data) => {
+    // Store tokens in localStorage
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+    
+    // Store user data in Redux
+    dispatch({
+      type: "SIGNUP_SUCCESS",
+      payload: {
+        userData: data.user,
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      },
+    });
+    
+    // Navigate to home page
+    navigate("/");
+  };
+
+  const handleGoogleError = (error) => {
+    // Handle Google authentication errors
+    console.error("Google auth error:", error);
+    // You can dispatch an action to show error message
   };
 
   return (
@@ -275,6 +301,25 @@ const SignUpNew = () => {
                 <span>Sign Up</span>
               )}
             </button>
+
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <GoogleSignIn
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                buttonText="Sign up with Google"
+              />
+            </div>
 
             <div onClick={() => setIsModalOpen(true)} className="mt-6">
               {isConsentGiven && !isModerator ? (
