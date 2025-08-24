@@ -15,7 +15,13 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: function() {
+        return !this.googleId; // Password is only required if no Google ID
+      },
+    },
+    googleId: {
+      type: String,
+      sparse: true, // Allows multiple null values
     },
     avatar: {
       type: String,
