@@ -23,6 +23,7 @@
     "express-useragent": "^1.0.15",
     "express-validator": "^6.14.3",
     "geoip-lite": "^1.4.7",
+    "google-auth-library": "^10.2.1",
     "googleapis": "^118.0.0",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.0",

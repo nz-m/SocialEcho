@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Provider } from "react-redux";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import createAppStore from "./redux/store";
 import axios from "axios";
 import CommonLoading from "./components/loader/CommonLoading";
@@ -59,12 +60,14 @@ const AppContainer = () => {
   }
 
   return (
-    <Provider store={store}>
-      <Helmet>
-        <title>{getTitleFromRoute(location.pathname)}</title>
-      </Helmet>
-      <App />
-    </Provider>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+      <Provider store={store}>
+        <Helmet>
+          <title>{getTitleFromRoute(location.pathname)}</title>
+        </Helmet>
+        <App />
+      </Provider>
+    </GoogleOAuthProvider>
   );
 };
 
