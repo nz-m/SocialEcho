@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signInAction, clearMessage } from "../redux/actions/authActions";
@@ -7,6 +7,7 @@ import { RxCross1 } from "react-icons/rx";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import ButtonLoadingSpinner from "../components/loader/ButtonLoadingSpinner";
 import Logo from "../assets/SocialEcho.png";
+import * as types from "../redux/constants/authConstants";
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,41 @@ const SignIn = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const accessToken = params.get("accessToken");
+    const refreshToken = params.get("refreshToken");
+    const accessTokenUpdatedAt = params.get("accessTokenUpdatedAt");
+    const user = params.get("user");
+
+    if (!accessToken || !refreshToken || !user) {
+      return;
+    }
+
+    try {
+      const parsedUser = JSON.parse(user);
+      const profile = {
+        user: parsedUser,
+        accessToken,
+        refreshToken,
+        accessTokenUpdatedAt,
+      };
+
+      localStorage.setItem("profile", JSON.stringify(profile));
+      dispatch({
+        type: types.SIGNIN_SUCCESS,
+        payload: profile,
+      });
+      window.history.replaceState({}, "", "/signin");
+      navigate("/");
+    } catch (error) {
+      dispatch({
+        type: types.SIGNIN_FAIL,
+        payload: "Google sign in failed",
+      });
+    }
+  }, [dispatch, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -168,25 +204,62 @@ const SignIn = () => {
               )}
             </button>
           </div>
+
         </form>
-        <span className="flex items-center justify-center py-4 text-sm text-gray-600 ">
-          <a
-            href="https://github.com/nz-m/SocialEcho"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center hover:text-blue-500"
+        <div className="mt-4 flex items-center justify-center gap-6 py-2 text-sm text-gray-600">
+          <button
+            type="button"
+            onClick={() => {
+              window.open("https://github.com/nz-m/SocialEcho", "_blank");
+            }}
+            className="flex items-center transition-colors duration-300 hover:text-blue-500"
           >
             <AiFillGithub className="mr-2 h-5 w-5" />
             <span>GitHub</span>
-          </a>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              const backendUrl =
+                process.env.REACT_APP_API_URL &&
+                process.env.REACT_APP_API_URL !== "undefined"
+                  ? process.env.REACT_APP_API_URL
+                  : "http://localhost:4000";
+
+              window.location.href = `${backendUrl}/auth/google`;
+            }}
+            className="flex items-center transition-colors duration-300 hover:text-blue-500"
+          >
+            <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="#EA4335"
+                d="M12 10.2v3.9h5.4c-.2 1.3-1.5 3.9-5.4 3.9-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.2.8 4 1.5l2.7-2.7C16.9 3.5 14.8 2.7 12 2.7 6.9 2.7 2.8 6.8 2.8 12S6.9 21.3 12 21.3c6.9 0 11.5-4.8 11.5-11.6 0-.8-.1-1.4-.2-2H12z"
+              />
+              <path
+                fill="#34A853"
+                d="M3.8 7.2l3.8 2.8c1-.9 2.4-1.6 4.4-1.6 1.9 0 3.2.8 4 1.5l2.7-2.7C16.9 3.5 14.8 2.7 12 2.7 8.2 2.7 5 4.9 3.8 7.2z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M3.8 16.8c1.2 2.3 4.1 3.9 8.2 3.9 2.4 0 4.4-.8 5.8-2.1l-2.8-2.4c-.8.6-1.9 1-3 1-2.9 0-5.2-2-6-4.7l-3 2.3z"
+              />
+              <path
+                fill="#4285F4"
+                d="M12 21.3c2.4 0 4.4-.8 5.8-2.1l-2.8-2.4c-.8.6-1.9 1-3 1-2.9 0-5.2-2-6-4.7l-3 2.3C2.6 18.9 6.8 21.3 12 21.3z"
+              />
+            </svg>
+            <span>Google</span>
+          </button>
+
           <Link
             to="/admin"
-            className="ml-8 flex items-center hover:text-blue-500"
+            className="flex items-center transition-colors duration-300 hover:text-blue-500"
           >
             <MdOutlineAdminPanelSettings className="mr-2 h-5 w-5" />
             <span>Admin</span>
           </Link>
-        </span>
+        </div>
       </div>
     </section>
   );

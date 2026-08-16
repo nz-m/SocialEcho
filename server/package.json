@@ -33,6 +33,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "request-ip": "^3.3.0"
   },
