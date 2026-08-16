@@ -15,17 +15,17 @@ const ErrorComponent = ({ errorMessage }) => (
 const AppContainer = () => {
   const location = useLocation();
   const [store, setStore] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [serverReady, setServerReady] = useState(false);
+  const [storeReady, setStoreReady] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const checkServerStatus = async () => {
       try {
         await axios.get("/server-status");
+        setServerReady(true);
       } catch (err) {
         setError("Server is down. Please try again later.");
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -36,24 +36,33 @@ const AppContainer = () => {
   // while displaying a loading indicator. Making sure that the store is initialized with credentials and data before rendering the app.
 
   useEffect(() => {
+    if (!serverReady) return;
+
     const initializeStore = async () => {
       try {
         const appStore = await createAppStore();
         setStore(appStore);
+        setStoreReady(true);
       } catch (err) {
         setError(`Error initializing the app: ${err.message}`);
-      } finally {
-        setLoading(false);
       }
     };
 
     initializeStore();
-  }, []);
+  }, [serverReady]);
 
-  if (loading || error) {
+  if (error) {
     return (
       <div className="flex items-center justify-center h-screen">
-        {loading ? <CommonLoading /> : <ErrorComponent errorMessage={error} />}
+        <ErrorComponent errorMessage={error} />
+      </div>
+    );
+  }
+
+  if (!storeReady || !store) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <CommonLoading />
       </div>
     );
   }

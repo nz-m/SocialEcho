@@ -3,9 +3,11 @@ const User = require("../models/user.model");
 const Token = require("../models/token.model");
 const JwtStrategy = require("passport-jwt").Strategy,
   ExtractJwt = require("passport-jwt").ExtractJwt;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const passport = require("passport");
-const opts = {};
 const jwt = require("jsonwebtoken");
+
+const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET;
 
@@ -55,4 +57,62 @@ passport.use(
       return done(err, false);
     }
   })
+);
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      passReqToCallback: true,
+    },
+    async (req, accessToken, refreshToken, profile, done) => {
+      try {
+        const email = profile.emails?.[0]?.value;
+
+        if (!email) {
+          return done(new Error("Google account email not available"), false);
+        }
+
+        let user = await User.findOne({ email: { $regex: new RegExp(`^${email}$`, "i") } });
+
+        if (!user) {
+          const defaultAvatar =
+            "https://raw.githubusercontent.com/nz-m/public-files/main/dp.jpg";
+
+          user = await new User({
+            name: profile.displayName || "Google User",
+            email,
+            password: "",
+            avatar: profile.photos?.[0]?.value || defaultAvatar,
+            googleId: profile.id,
+            authProvider: "google",
+            role: email.endsWith("mod.socialecho.com") ? "moderator" : "general",
+            isEmailVerified: true,
+          }).save();
+        } else {
+          const needsUpdate =
+            !user.googleId ||
+            user.authProvider !== "google" ||
+            !user.isEmailVerified ||
+            (!user.avatar && profile.photos?.[0]?.value);
+
+          if (needsUpdate) {
+            user.googleId = user.googleId || profile.id;
+            user.authProvider = "google";
+            user.isEmailVerified = true;
+            if (profile.photos?.[0]?.value) {
+              user.avatar = profile.photos[0].value;
+            }
+            await user.save();
+          }
+        }
+
+        return done(null, user);
+      } catch (error) {
+        return done(error, false);
+      }
+    }
+  )
 );

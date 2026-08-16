@@ -119,6 +119,31 @@ npm install
 ```
 
 3. Create a `.env` file in both the `client` and `server` directories and add the environment variables as shown in the `.env.example` files.
+
+### Required Environment Variables
+
+Before starting the backend, create a `.env` file inside the `server` directory and ensure the following variables are configured:
+
+```env
+MONGO_URI=<your mongodb connection string>
+SECRET=<your jwt secret>
+REFRESH_SECRET=<your refresh jwt secret>
+```
+
+Example:
+
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/socialecho
+SECRET=mySuperSecretKey
+REFRESH_SECRET=myRefreshSecretKey
+```
+
+If using MongoDB Atlas:
+
+```env
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/socialecho
+```
+
 4. Start the server
 
 ```bash
